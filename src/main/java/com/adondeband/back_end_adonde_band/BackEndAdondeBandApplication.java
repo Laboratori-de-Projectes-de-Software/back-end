@@ -1,13 +1,13 @@
-package com.adondeband.adondeband_api;
+package com.adondeband.back_end_adonde_band;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AdondeBandApiApplication {
+public class BackEndAdondeBandApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AdondeBandApiApplication.class, args);
+		SpringApplication.run(BackEndAdondeBandApplication.class, args);
 	}
 
 }

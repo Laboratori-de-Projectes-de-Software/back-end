@@ -1,10 +1,10 @@
-package com.adondeband.adondeband_api;
+package com.adondeband.back_end_adonde_band;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AdondeBandApiApplicationTests {
+class BackEndAdondeBandApplicationTests {
 
 	@Test
 	void contextLoads() {
