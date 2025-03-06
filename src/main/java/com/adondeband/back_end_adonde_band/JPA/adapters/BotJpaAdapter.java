@@ -2,8 +2,8 @@ package com.adondeband.back_end_adonde_band.JPA.adapters;
 
 import com.adondeband.back_end_adonde_band.JPA.mappers.BotMapper;
 import com.adondeband.back_end_adonde_band.JPA.repositories.BotJpaRepository;
-import com.adondeband.back_end_adonde_band.api.dominio.modelos.Bot;
-import com.adondeband.back_end_adonde_band.api.dominio.puertos.BotPort;
+import com.adondeband.back_end_adonde_band.dominio.modelos.Bot;
+import com.adondeband.back_end_adonde_band.dominio.puertos.out.BotPort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

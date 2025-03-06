@@ -11,7 +11,7 @@ public class EnfrentamientoEntity {
     private long id;
 
     private ESTADO estado;
-    private boolean ganador;
+    private RESULTADO resultado;
 
     @ManyToOne
     private BotEntity bot1;
@@ -24,8 +24,4 @@ public class EnfrentamientoEntity {
 
     @ManyToOne
     private JornadaEntity jornada;
-
-    BotEntity getGanador() {
-        return ganador ? bot1 : bot2;
-    }
 }

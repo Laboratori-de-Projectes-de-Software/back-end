@@ -1,12 +1,13 @@
 package com.adondeband.back_end_adonde_band.JPA.mappers;
 
-
-import com.adondeband.back_end_adonde_band.api.dominio.modelos.Bot;
+import com.adondeband.back_end_adonde_band.dominio.modelos.Bot;
 import com.adondeband.back_end_adonde_band.JPA.entities.BotEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+import java.util.List;
+
+@Mapper(uses =   {EnfrentamientoMapper.class, ParticipacionMapper.class}, componentModel = "spring")
 public interface BotMapper {
     BotMapper INSTANCE = Mappers.getMapper(BotMapper.class);
 

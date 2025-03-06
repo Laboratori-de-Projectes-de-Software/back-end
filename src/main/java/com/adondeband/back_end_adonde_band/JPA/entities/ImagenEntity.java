@@ -11,10 +11,4 @@ public class ImagenEntity {
     private int id;
 
     private String ruta;
-
-    /*
-
-     * QUIZÁ HABRÍA QUE GUARDAR LISTAS DE LIGAS, USUARIOS Y BOTS? (Edu)
-
-     */
 }

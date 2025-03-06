@@ -27,13 +27,13 @@ public class BotEntity {
     @ManyToOne
     private UsuarioEntity usuario;
 
-    @ManyToOne
+    @OneToOne
     private ImagenEntity imagen;
 
     @OneToMany(mappedBy = "bot")
     private List<ParticipacionEntity> participaciones;
 
-    @OneToMany(mappedBy = "bot")
+    @OneToMany(mappedBy = "bot1")
     private List<EnfrentamientoEntity> enfrentamientos;
 
     public BotEntity(String nombre, String cualidad) {
