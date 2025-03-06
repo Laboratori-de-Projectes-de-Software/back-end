@@ -1,4 +1,4 @@
-package com.adondeband.back_end_adonde_band.api.modelos;
+package com.adondeband.back_end_adonde_band.api.dominio.modelos;
 
 public enum ESTADO {
     PENDIENTE,

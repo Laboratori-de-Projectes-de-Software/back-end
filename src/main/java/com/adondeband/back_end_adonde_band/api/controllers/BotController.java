@@ -1,8 +1,7 @@
 package com.adondeband.back_end_adonde_band.api.controllers;
 
 import com.adondeband.back_end_adonde_band.api.DTO.BotDTO;
-import com.adondeband.back_end_adonde_band.api.modelos.Bot;
-import com.adondeband.back_end_adonde_band.services.BotService;
+import com.adondeband.back_end_adonde_band.api.dominio.services.BotService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

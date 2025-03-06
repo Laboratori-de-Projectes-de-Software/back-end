@@ -1,6 +1,7 @@
-package com.adondeband.back_end_adonde_band.api.modelos;
+package com.adondeband.back_end_adonde_band.JPA.entities;
 
 
+import com.adondeband.back_end_adonde_band.api.dominio.modelos.Bot;
 import jakarta.persistence.*;
 
 @Entity

@@ -1,4 +1,4 @@
-package com.adondeband.back_end_adonde_band.api.modelos;
+package com.adondeband.back_end_adonde_band.JPA.entities;
 
 import jakarta.persistence.*;
 
@@ -21,11 +21,6 @@ public class Liga {
 
     private LocalDateTime fechaFin;
 
-    @ManyToMany
-    @JoinTable(
-            name = "participacion",
-            joinColumns = @JoinColumn(name = "liga_id"),
-            inverseJoinColumns = @JoinColumn(name = "equipo_id")
-    )
-    private List<Bot> bots;
+    @OneToMany(mappedBy = "liga")
+    private List<Participacion> participaciones;
 }

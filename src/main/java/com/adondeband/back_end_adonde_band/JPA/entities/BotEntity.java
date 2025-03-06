@@ -1,7 +1,8 @@
-package com.adondeband.back_end_adonde_band.api.modelos;
+package com.adondeband.back_end_adonde_band.JPA.entities;
 
+import com.adondeband.back_end_adonde_band.api.dominio.modelos.*;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -9,7 +10,8 @@ import java.util.List;
 @Entity
 @Table
 @NoArgsConstructor
-public class Bot {
+@Getter
+public class BotEntity {
 
     @Id
     @Column(unique=true, nullable = false)
@@ -21,20 +23,20 @@ public class Bot {
 
     private Integer numDerrotas;
 
-    private String defensa;
+    private String cualidad;
 
     @ManyToOne
     private Usuario usuario;
 
-    @ManyToMany(mappedBy = "bots")
-    private List<Liga> ligas;
+    @OneToMany(mappedBy = "bot")
+    private List<Participacion> participaciones;
 
-    @OneToMany
-    private List<Conversacion> conversaciones;
+    @OneToMany(mappedBy = "bot")
+    private List<Enfrentamiento> enfrentamientos;
 
-    public Bot (String nombre, String defensa) {
+    public BotEntity(String nombre, String cualidad) {
         this.nombre = nombre;
-        this.defensa = defensa;
+        this.cualidad = cualidad;
         this.numVictorias = 0;
         this.numEmpates = 0;
         this.numDerrotas = 0;
