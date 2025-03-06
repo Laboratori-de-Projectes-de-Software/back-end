@@ -1,7 +1,5 @@
 package com.adondeband.back_end_adonde_band.JPA.adapters;
 
-
-import com.adondeband.back_end_adonde_band.JPA.entities.BotEntity;
 import com.adondeband.back_end_adonde_band.JPA.mappers.BotMapper;
 import com.adondeband.back_end_adonde_band.JPA.repositories.BotJpaRepository;
 import com.adondeband.back_end_adonde_band.api.dominio.modelos.Bot;

@@ -1,13 +1,12 @@
 package com.adondeband.back_end_adonde_band.JPA.entities;
 
-import com.adondeband.back_end_adonde_band.api.dominio.modelos.Bot;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
 @Table
-public class Usuario {
+public class UsuarioEntity {
 
     @Id
     @Column(nullable = false, unique = true, length = 36)
@@ -20,10 +19,10 @@ public class Usuario {
     private String contrasena;
 
     @OneToMany(mappedBy = "usuario")
-    private List<Bot> bots;
+    private List<BotEntity> bots;
 
-    @OneToOne
-    private Imagen imagen;
+    @ManyToOne
+    private ImagenEntity imagen;
 
     @ManyToMany
     @JoinTable(
@@ -31,5 +30,5 @@ public class Usuario {
         joinColumns = @JoinColumn(name = "usuario_id"),
         inverseJoinColumns = @JoinColumn(name = "rol_id")
     )
-    private List<Rol> roles;
+    private List<RolEntity> roles;
 }

@@ -6,15 +6,15 @@ import java.util.List;
 
 @Entity
 @Table
-public class Jornada {
+public class JornadaEntity {
 
     @Id
     @Column(unique=true, nullable = false)
     private int numJornada;
 
     @ManyToOne
-    private Liga liga;
+    private LigaEntity liga;
 
     @OneToMany(mappedBy = "jornada")
-    private List<Enfrentamiento> enfrentamiento;
+    private List<EnfrentamientoEntity> enfrentamientos;
 }

@@ -6,12 +6,12 @@ import java.util.List;
 
 @Entity
 @Table
-public class Rol {
+public class RolEntity {
     @Id
     @Column(nullable = false, unique = true, length = 36)
     private String nombre;
     private String descripcion;
 
     @ManyToMany
-    private List<Usuario> usuarios;
+    private List<UsuarioEntity> usuarios;
 }

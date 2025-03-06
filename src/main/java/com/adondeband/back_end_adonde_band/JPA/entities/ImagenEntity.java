@@ -1,18 +1,20 @@
 package com.adondeband.back_end_adonde_band.JPA.entities;
 
-
 import jakarta.persistence.*;
 
 @Entity
 @Table
-public class Conversacion {
+public class ImagenEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
-    private String ficheroRuta;
+    private String ruta;
 
-    @OneToOne
-    private Enfrentamiento enfrentamiento;
+    /*
+
+     * QUIZÁ HABRÍA QUE GUARDAR LISTAS DE LIGAS, USUARIOS Y BOTS? (Edu)
+
+     */
 }

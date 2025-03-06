@@ -1,6 +1,5 @@
 package com.adondeband.back_end_adonde_band.JPA.entities;
 
-import com.adondeband.back_end_adonde_band.api.dominio.modelos.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,13 +25,16 @@ public class BotEntity {
     private String cualidad;
 
     @ManyToOne
-    private Usuario usuario;
+    private UsuarioEntity usuario;
+
+    @ManyToOne
+    private ImagenEntity imagen;
 
     @OneToMany(mappedBy = "bot")
-    private List<Participacion> participaciones;
+    private List<ParticipacionEntity> participaciones;
 
     @OneToMany(mappedBy = "bot")
-    private List<Enfrentamiento> enfrentamientos;
+    private List<EnfrentamientoEntity> enfrentamientos;
 
     public BotEntity(String nombre, String cualidad) {
         this.nombre = nombre;

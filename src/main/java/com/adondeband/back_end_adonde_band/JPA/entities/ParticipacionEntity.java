@@ -1,6 +1,5 @@
 package com.adondeband.back_end_adonde_band.JPA.entities;
 
-import com.adondeband.back_end_adonde_band.api.dominio.modelos.Bot;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +8,7 @@ import lombok.Setter;
 @Table
 @Getter
 @Setter
-public class Participacion {
+public class ParticipacionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,11 +16,11 @@ public class Participacion {
 
     @ManyToOne
     @JoinColumn(name = "bot_id")
-    private Bot bot;
+    private BotEntity bot;
 
     @ManyToOne
     @JoinColumn(name = "liga_id")
-    private Liga liga;
+    private LigaEntity liga;
 
     private int posicion;
     private int puntuacion;

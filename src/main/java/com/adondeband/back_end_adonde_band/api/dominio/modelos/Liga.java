@@ -1,16 +1,13 @@
 package com.adondeband.back_end_adonde_band.api.dominio.modelos;
 
-import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Table
+@Getter
 public class Liga {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String nombre;
@@ -21,6 +18,7 @@ public class Liga {
 
     private LocalDateTime fechaFin;
 
-    @OneToMany(mappedBy = "liga")
+    private Imagen imagen;
+
     private List<Participacion> participaciones;
 }

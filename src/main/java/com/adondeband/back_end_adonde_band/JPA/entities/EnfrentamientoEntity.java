@@ -1,12 +1,10 @@
 package com.adondeband.back_end_adonde_band.JPA.entities;
 
-
-import com.adondeband.back_end_adonde_band.api.dominio.modelos.Bot;
 import jakarta.persistence.*;
 
 @Entity
 @Table
-public class Enfrentamiento {
+public class EnfrentamientoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,18 +14,18 @@ public class Enfrentamiento {
     private boolean ganador;
 
     @ManyToOne
-    private Bot bot1;
+    private BotEntity bot1;
 
     @ManyToOne
-    private Bot bot2;
+    private BotEntity bot2;
 
     @OneToOne
-    private Conversacion conversacion;
+    private ConversacionEntity conversacion;
 
     @ManyToOne
-    private Jornada jornada;
+    private JornadaEntity jornada;
 
-    Bot getGanador() {
+    BotEntity getGanador() {
         return ganador ? bot1 : bot2;
     }
 }

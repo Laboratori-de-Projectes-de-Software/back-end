@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table
-public class Liga {
+public class LigaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +21,9 @@ public class Liga {
 
     private LocalDateTime fechaFin;
 
+    @ManyToOne
+    private ImagenEntity imagen;
+
     @OneToMany(mappedBy = "liga")
-    private List<Participacion> participaciones;
+    private List<ParticipacionEntity> participaciones;
 }
