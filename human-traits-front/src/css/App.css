@@ -1,41 +1,41 @@
 /* 1. Dark page styling */
 body {
-    background-color: #121212;
-    /* Dark background */
-    color: #ffffff;
-    /* Light text for contrast */
-    margin: 0;
-    font-family: 'Roboto', Courier, monospace;
-    /* Use any preferred font */
-    font-size: 1.5rem;
+  background-color: #121212;
+  /* Dark background */
+  color: #ffffff;
+  /* Light text for contrast */
+  margin: 0;
+  font-family: "Roboto";
+  /* Use any preferred font */
+  font-size: 1.5rem;
 }
 
 /* 2. Container that centers content */
 .container {
 
-    display: flex;
-    /* Establishes a flex container */
-    flex-direction: column;
-    /* Stacks children (h1, p) vertically */
-    align-items: center;
-    /* Horizontally centers children */
-    /* justify-content: center; */
-    /* Vertically centers children */
-    height: 100vh;
-    /* Make container fill entire viewport height */
-    text-align: center;
-    /* Centers text within h1, p */
+  display: flex;
+  /* Establishes a flex container */
+  flex-direction: column;
+  /* Stacks children (h1, p) vertically */
+  align-items: center;
+  /* Horizontally centers children */
+  /* justify-content: center; */
+  /* Vertically centers children */
+  height: 100vh;
+  /* Make container fill entire viewport height */
+  text-align: center;
+  /* Centers text within h1, p */
 
-    /* My stuff */
-    padding: 80px 340px;
-    
+  /* My stuff */
+  padding: 80px 340px;
+
 }
 
-.page_container{
+.page_container {
   display: flex;
   text-align: center;
   gap: 2rem;
-  flex:1;
+  flex: 1;
 }
 
 .content_container {
@@ -79,6 +79,23 @@ ul.footer {
     background-color: #111;
   }
 
+
+li.footer {
+  float: left;
+}
+
+li.footer a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 35px 20px;
+  text-decoration: none;
+}
+
+li.footer a:hover {
+  background-color: #111;
+}
+
   .sidebar {
     /*height: 69vh;*/
     width: 8rem;
@@ -120,117 +137,165 @@ ul.footer {
     background-color: #B91C1C;
     border-color: #F87171;
   }
+.sidebar {
+  height: 69vh;
+  width: 8rem;
+  background-color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+}
 
-  .account_save{
-    flex:1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
+.sidebar-blocks {
+  display: flex;
+  flex-direction: column;
+}
 
-  .imagen_usuario {
-    width: 150px; 
-    height: 160px;
-  }
-  .user-image{
-    width: 160px; 
-    height: 160px;
-  }
+.sidebar-item,
+.sidebar-exit {
+  padding: 1rem;
+  background-color: #374151;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: background-color 0.3s, border-color 0.3s;
+  color: #ccc;
+  /* Hereda el color del texto del elemento padre */
+}
 
-  .account_save h2 {
-    font-size: 1.5rem;
-    color: #fff;
-    margin-left: 10px;
-  }
-  
-  .login_content {
-    flex: 1; /* Ocupa el resto del espacio */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    flex-direction: column;
-    padding-bottom: 1rem;
-  }
-  
-  .input_group {
-    display: flex;
-    gap: 2rem;  /* Espacio entre los inputs */
-    margin: 1rem;
-    background-color: #333;
-    border: 1rem solid #333;
-    border-radius: 0.3rem;
-  }
-  
-  .input_group input {
-    border: 0.2rem solid #ccc;
-    border-radius: 0.25rem;
-    width: 8rem;  /* Ajusta el tamaño de los inputs */
-  }
-  
-  .scores_container {
-    width: 50rem;
-    margin: auto;
-    padding: 20px;
-    color: white;
-    font-family: Arial, sans-serif;
-  }
-  
-  .title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 15px;
-  }
-  
-  .match_card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #1e1e1e;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .match-info {
-    flex-grow: 1;
-  }
-  
-  .winner {
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  .date {
-    font-size: 14px;
-    color: #ccc;
-  }
-  
-  .points {
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  .match_link {
-    color: #00bfff;
-    text-decoration: none;
-    font-weight: bold;
-    padding-left: 15px;
-    border-left: 2px solid rgba(255, 255, 255, 1);
-  }
-  
-  .match_link:hover {
-    text-decoration: underline;
-  }
-  
+.sidebar-exit {
+  background-color: #DC2626;
+}
+
+.sidebar-item:hover {
+  background-color: #4B5563;
+  border-color: #9CA3AF;
+}
+
+.sidebar-exit:hover {
+  background-color: #B91C1C;
+  border-color: #F87171;
+}
+
+.account_save {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.imagen_usuario {
+  width: 150px;
+  height: 160px;
+}
+
+.user-image {
+  width: 160px;
+  height: 160px;
+}
+
+.account_save h2 {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-left: 10px;
+}
+
+.login_content {
+  flex: 1;
+  /* Ocupa el resto del espacio */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+
+.input_group {
+  display: flex;
+  gap: 2rem;
+  /* Espacio entre los inputs */
+  margin: 1rem;
+  background-color: #333;
+  border: 1rem solid #333;
+  border-radius: 0.3rem;
+}
+
+.input_group input {
+  border: 0.2rem solid #ccc;
+  border-radius: 0.25rem;
+  width: 8rem;
+  /* Ajusta el tamaño de los inputs */
+}
+
+.scores_container {
+  width: 50rem;
+  margin: auto;
+  padding: 20px;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.match_card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1e1e1e;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.match-info {
+  flex-grow: 1;
+}
+
+.winner {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.date {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.points {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.match_link {
+  color: #00bfff;
+  text-decoration: none;
+  font-weight: bold;
+  padding-left: 15px;
+  border-left: 2px solid rgba(255, 255, 255, 1);
+}
+
+.match_link:hover {
+  text-decoration: underline;
+}
+
 /* Common styles for all round buttons */
 .button-round {
-  border-radius: 50px;  /* Makes buttons round */
-  padding: 10px 20px;
-  font-family: Arial, sans-serif;
-  font-size: 16px;
+  border-radius: 2rem;
+  /* Makes buttons round */
+  padding: 0.75rem 2rem;
+  
+  font-size: 1rem;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -241,66 +306,76 @@ ul.footer {
 
 /* Blue round buttons */
 .button-blue {
-  background-color: #3498db;  /* Blue color */
+  background-color: #3498db;
+  /* Blue color */
   color: white;
   box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
 }
 
 .button-blue:hover {
-  background-color: #2980b9;  /* Darker blue on hover */
+  background-color: #2980b9;
+  /* Darker blue on hover */
   transform: translateY(-2px);
 }
 
 /* Grey round buttons */
 .button-grey {
-  background-color: #7f8c8d;  /* Grey color */
+  background-color: #7f8c8d;
+  /* Grey color */
   color: white;
   box-shadow: 0 4px 6px rgba(127, 140, 141, 0.3);
 }
 
 .button-grey:hover {
-  background-color: #6c7a7b;  /* Darker grey on hover */
+  background-color: #6c7a7b;
+  /* Darker grey on hover */
   transform: translateY(-2px);
 }
 
-/* Container for form elements */
+/* General form styling */
+form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  /* background: #f9f9f9; */
+  border-radius: 8px;
+  /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); */
+}
+
+/* Form group for each label + input */
 .form-group {
-  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 400px;
+  margin-bottom: 1rem;
 }
 
-/* Style for the labels */
+/* Label styling */
 .form-label {
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  margin-bottom: 6px;
-  font-weight: 600;
-  color: #333;
+  font-weight: bold;
+  margin-bottom: 0.5px;
+
+  font-size: 1.25rem;
+  /* color: #333; */
 }
 
-/* Common styles for inputs */
+/* Input styling */
 .form-input {
-  width: 100%;
-  padding: 10px 12px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box; /* Makes sure padding doesn't affect width */
-  transition: border-color 0.3s ease;
+  padding:0.5rem;
+  border: 0.1rem solid #ccc;
+  border-radius: 0.5rem;
+  transition: border-color 4s ease-in-out;
 }
 
+/* Input focus effect */
 .form-input:focus {
   outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 4px rgba(52, 152, 219, 0.5);
+  border-color: #007BFF;
+  box-shadow: 0rem 0rem 0.1rem rgba(0, 123, 255, 0.5);
 }
 
-/* Container to keep everything aligned */
-.form-container {
+.content_home{
   display: flex;
+  align-items:start;
   flex-direction: column;
   gap: 20px;
 }
@@ -381,7 +456,7 @@ ul.footer {
   padding: 0.5rem;
   border-radius: 0.4rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition:  0.2s;
 }
 
 .option-item:hover {
@@ -419,14 +494,14 @@ h2 {
   margin-bottom: 0.6rem;
 }
 
-input {
-  margin-bottom: 0.6rem;
-  padding: 0.5rem;
-  border: 0.1rem solid #555;
-  border-radius: 0.2rem;
+/* input {
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #555;
+  border-radius: 4px;
   background: #333;
   color: white;
-}
+} */
 
 .auth-button {
   background-color: #6366f1;
