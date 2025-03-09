@@ -1,61 +1,44 @@
 import Footer from "./Footer";
-import SideBar from"./SideBar";
+import SideBar from "./SideBar";
 import { useState } from "react";
-import Usuario from "../assets/icono_usuario.png";
+import Usuario from "../assets/user-picture.png";
+import InputField from "./InputField";
 
-interface InputFieldProps {
-    label: string;
-    type: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  }
-  
-  const InputField: React.FC<InputFieldProps> = ({ label, type, value, onChange }) => (
-    <div>
-      <label>{label}</label>
-      <input type={type} value={value} onChange={onChange}/>
-    </div>
-  );
-  
-  interface ButtonProps {
-    text: string;
-    onClick?: () => void;
-  }
-  
-  const Button: React.FC<ButtonProps> = ({ text, onClick }) => (
-    <button onClick={onClick}>
-      {text}
-    </button>
-  );
 
-  export default function Account(){
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+export default function Account() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  return (
+    <>
+      <div>
+        <div className="page_container">
+          <SideBar />
+          <div className="content_container">
+            <div className="account_save">
+              <h2> Account Settings</h2>
+              <img src={Usuario} alt="Representación visual del usuario" className="user-image" />
+              <div className="form-container">
+                <form>
 
-    return (
-        <>
-        <div>
-            <div className="page_container">        
-                <SideBar/>
-                <div className="content_container">
-                    <div className="account_save">
-                    <h2> Account Settings</h2>
-                        <img src={Usuario} alt="Representación visual del usuario" className="imagen_usuario"/>
-                        <div className="input_group">
-                          <form>
-                              <InputField label="Cambiar nombre " type="text" value={username} onChange={(e) => setUsername(e.target.value)}/>
-                              <InputField label="Cambiar contraseña " type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
-                              <Button text="Save"/>
-                          </form>
-                        </div>
-                    </div>
-                    <div className="IAs_container">
 
-                    </div>
-                </div>
+                  <InputField label="Username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+                  <InputField label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                  <InputField label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <button className="button-round button-blue">
+                    Save
+                  </button>
+
+                </form>
+              </div>
             </div>
-            <Footer/>
+            <div className="IAs_container">
+
+            </div>
+          </div>
         </div>
-        </>
-    )
-  }
+        <Footer />
+      </div>
+    </>
+  )
+}
