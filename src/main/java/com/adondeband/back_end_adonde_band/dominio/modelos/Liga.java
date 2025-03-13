@@ -1,5 +1,7 @@
 package com.adondeband.back_end_adonde_band.dominio.modelos;
 
+import com.adondeband.back_end_adonde_band.dominio.Ids.LigaId;
+import com.adondeband.back_end_adonde_band.dominio.Ids.ParticipacionId;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +12,7 @@ import java.util.List;
 @Setter
 public class Liga {
 
-    private long id;
+    private LigaId id;
 
     private String nombre;
 
@@ -22,5 +24,7 @@ public class Liga {
 
     private Imagen imagen;
 
-    private List<Participacion> participaciones;
+    private List<ParticipacionId> participaciones;
+
+    // private List<Jornada> jornadas;
 }

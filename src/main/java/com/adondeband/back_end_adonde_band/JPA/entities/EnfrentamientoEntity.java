@@ -1,23 +1,25 @@
 package com.adondeband.back_end_adonde_band.JPA.entities;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
-@Table
+@Getter
+@Setter
 public class EnfrentamientoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private ESTADO estado;
-    private RESULTADO resultado;
+    private ESTADO_Entity estado;
+    private RESULTADO_Entity resultado;
 
     @ManyToOne
-    private BotEntity bot1;
+    private BotEntity local;
 
     @ManyToOne
-    private BotEntity bot2;
+    private BotEntity visitante;
 
     @OneToOne
     private ConversacionEntity conversacion;

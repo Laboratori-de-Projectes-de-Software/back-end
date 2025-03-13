@@ -12,9 +12,10 @@ public class Enfrentamiento {
     private ESTADO estado;
     private RESULTADO resultado;
 
-    private Bot bot1;
+    private Bot local;
 
-    private Bot bot2;
+    private Bot visitante;
+
 
     private Conversacion conversacion;
 
@@ -23,8 +24,8 @@ public class Enfrentamiento {
     Bot getGanador() {
         return switch (resultado) {
             case EMPATE -> null;
-            case VICTORIA -> bot1;
-            case DERROTA -> bot2;
+            case VICTORIA -> local;
+            case DERROTA -> visitante;
         };
     }
 }

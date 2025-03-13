@@ -1,14 +1,13 @@
 package com.adondeband.back_end_adonde_band.JPA.entities;
 
-import com.adondeband.back_end_adonde_band.dominio.modelos.Liga;
 import jakarta.persistence.*;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table
+@Getter
 @Setter
 public class LigaEntity {
 
@@ -18,7 +17,7 @@ public class LigaEntity {
 
     private String nombre;
 
-    private ESTADO estado;
+    private ESTADO_Entity estado;
 
     private LocalDateTime fechaInicio;
 
@@ -29,6 +28,62 @@ public class LigaEntity {
 
     @OneToMany(mappedBy = "liga")
     private List<ParticipacionEntity> participaciones;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public ESTADO_Entity getEstado() {
+        return estado;
+    }
+
+    public void setEstado(ESTADO_Entity estado) {
+        this.estado = estado;
+    }
+
+    public LocalDateTime getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(LocalDateTime fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public LocalDateTime getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(LocalDateTime fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public ImagenEntity getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(ImagenEntity imagen) {
+        this.imagen = imagen;
+    }
+
+    public List<ParticipacionEntity> getParticipaciones() {
+        return participaciones;
+    }
+
+    public void setParticipaciones(List<ParticipacionEntity> participaciones) {
+        this.participaciones = participaciones;
+    }
 
     /*
     public LigaEntity map(Liga liga) {

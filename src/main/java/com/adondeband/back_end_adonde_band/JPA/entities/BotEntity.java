@@ -1,15 +1,14 @@
 package com.adondeband.back_end_adonde_band.JPA.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
-@Table
-@NoArgsConstructor
 @Getter
+@Setter
 public class BotEntity {
 
     @Id
@@ -33,8 +32,6 @@ public class BotEntity {
     @OneToMany(mappedBy = "bot")
     private List<ParticipacionEntity> participaciones;
 
-    @OneToMany(mappedBy = "bot1")
-    private List<EnfrentamientoEntity> enfrentamientos;
 
     public BotEntity(String nombre, String cualidad) {
         this.nombre = nombre;
@@ -42,5 +39,73 @@ public class BotEntity {
         this.numVictorias = 0;
         this.numEmpates = 0;
         this.numDerrotas = 0;
+    }
+
+    public BotEntity() {
+
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Integer getNumVictorias() {
+        return numVictorias;
+    }
+
+    public void setNumVictorias(Integer numVictorias) {
+        this.numVictorias = numVictorias;
+    }
+
+    public Integer getNumEmpates() {
+        return numEmpates;
+    }
+
+    public void setNumEmpates(Integer numEmpates) {
+        this.numEmpates = numEmpates;
+    }
+
+    public Integer getNumDerrotas() {
+        return numDerrotas;
+    }
+
+    public void setNumDerrotas(Integer numDerrotas) {
+        this.numDerrotas = numDerrotas;
+    }
+
+    public String getCualidad() {
+        return cualidad;
+    }
+
+    public void setCualidad(String cualidad) {
+        this.cualidad = cualidad;
+    }
+
+    public UsuarioEntity getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioEntity usuario) {
+        this.usuario = usuario;
+    }
+
+    public ImagenEntity getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(ImagenEntity imagen) {
+        this.imagen = imagen;
+    }
+
+    public List<ParticipacionEntity> getParticipaciones() {
+        return participaciones;
+    }
+
+    public void setParticipaciones(List<ParticipacionEntity> participaciones) {
+        this.participaciones = participaciones;
     }
 }

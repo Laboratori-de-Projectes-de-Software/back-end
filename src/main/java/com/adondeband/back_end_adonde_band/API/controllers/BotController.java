@@ -1,7 +1,7 @@
 package com.adondeband.back_end_adonde_band.API.controllers;
 
 import com.adondeband.back_end_adonde_band.API.DTO.BotDTO;
-import com.adondeband.back_end_adonde_band.API.mappers.BotMapper;
+import com.adondeband.back_end_adonde_band.API.mappers.BotDtoMapper;
 import com.adondeband.back_end_adonde_band.dominio.modelos.Bot;
 import com.adondeband.back_end_adonde_band.dominio.puertos.in.BotService;
 import com.adondeband.back_end_adonde_band.dominio.services.BotServiceImpl;
@@ -18,12 +18,12 @@ import java.util.List;
 public class BotController {
 
     private final BotService botService;
-    private final BotMapper botMapper;
+    private final BotDtoMapper botMapper;
 
     @Autowired
-    public BotController(BotServiceImpl botService, BotMapper botMapper) {
+    public BotController(BotServiceImpl botService, BotDtoMapper botDtoMapper) {
         this.botService = botService;
-        this.botMapper = botMapper;
+        this.botMapper = botDtoMapper;
     }
 
     @GetMapping("/hola")

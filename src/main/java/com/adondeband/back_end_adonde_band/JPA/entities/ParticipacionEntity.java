@@ -1,13 +1,13 @@
 package com.adondeband.back_end_adonde_band.JPA.entities;
 
+import lombok.*;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
-@Entity
-@Table
+
+
 @Getter
 @Setter
+@Entity
 public class ParticipacionEntity {
 
     @Id
@@ -24,4 +24,8 @@ public class ParticipacionEntity {
 
     private int posicion;
     private int puntuacion;
+
+    public long getId() {
+        return id;
+    }
 }

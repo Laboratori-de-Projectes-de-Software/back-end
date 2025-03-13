@@ -1,0 +1,33 @@
+package com.adondeband.back_end_adonde_band.JPA.mappers;
+
+import com.adondeband.back_end_adonde_band.JPA.entities.BotEntity;
+import com.adondeband.back_end_adonde_band.JPA.entities.LigaEntity;
+import com.adondeband.back_end_adonde_band.JPA.entities.ParticipacionEntity;
+import com.adondeband.back_end_adonde_band.dominio.Ids.BotId;
+import com.adondeband.back_end_adonde_band.dominio.Ids.LigaId;
+import com.adondeband.back_end_adonde_band.dominio.modelos.Participacion;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
+@Mapper(componentModel = "spring")
+public interface ParticipacionJpaMapper {
+    ParticipacionJpaMapper INSTANCE = Mappers.getMapper(ParticipacionJpaMapper.class);
+
+    // Mapea de ParticipacionEntity a Participacion
+    Participacion toDomain(ParticipacionEntity participacionEntity);
+
+    // Mapea de Participacion a ParticipacionEntity
+    ParticipacionEntity toEntity(Participacion participacion);
+
+    // Mapeo de atributos
+    default BotId toBotId(BotEntity entity) {
+
+        int victorias = entity.getNumVictorias();
+
+        return new BotId(entity.getNombre());
+    }
+
+    default LigaId toLigaId(LigaEntity entity) {
+        return new LigaId(entity.getId());
+    }
+}

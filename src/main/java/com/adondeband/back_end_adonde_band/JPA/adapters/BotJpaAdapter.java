@@ -1,6 +1,6 @@
 package com.adondeband.back_end_adonde_band.JPA.adapters;
 
-import com.adondeband.back_end_adonde_band.JPA.mappers.BotMapper;
+import com.adondeband.back_end_adonde_band.JPA.mappers.BotJpaMapper;
 import com.adondeband.back_end_adonde_band.JPA.repositories.BotJpaRepository;
 import com.adondeband.back_end_adonde_band.dominio.modelos.Bot;
 import com.adondeband.back_end_adonde_band.dominio.puertos.out.BotPort;
@@ -14,25 +14,25 @@ public class BotJpaAdapter implements BotPort {
 
     private final BotJpaRepository botJpaRepository;
 
-    private final BotMapper botMapper;
+    private final BotJpaMapper botJpaMapper;
 
-    public BotJpaAdapter(final BotJpaRepository botJpaRepository, final BotMapper botMapper) {
+    public BotJpaAdapter(final BotJpaRepository botJpaRepository, final BotJpaMapper botJpaMapper) {
         this.botJpaRepository = botJpaRepository;
-        this.botMapper = botMapper;
+        this.botJpaMapper = botJpaMapper;
     }
 
     @Override
-    public Bot save(Bot Bot) {
-        return botMapper.toDomain(
+    public Bot save(Bot bot) {
+        return botJpaMapper.toDomain(
                 botJpaRepository.save(
-                        botMapper.toEntity(Bot)));
+                        botJpaMapper.toEntity(bot)));
     }
 
     @Override
     public List<Bot> findByNombre(String s) {
         return botJpaRepository.findByNombre(s)
                 .stream()
-                .map(botMapper::toDomain)
+                .map(botJpaMapper::toDomain)
                 .collect(Collectors.toList());
     }
 }

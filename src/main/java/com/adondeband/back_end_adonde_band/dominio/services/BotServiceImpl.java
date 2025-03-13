@@ -15,7 +15,7 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public Bot crearBot(Bot bot) {
-        if (botPort.findByNombre(bot.getNombre()).isEmpty()) {
+        if (botPort.findByNombre(bot.getNombre().value()).isEmpty()) {
             return botPort.save(bot);
         } else {
             throw new IllegalArgumentException("El nombre del bot ya existe");

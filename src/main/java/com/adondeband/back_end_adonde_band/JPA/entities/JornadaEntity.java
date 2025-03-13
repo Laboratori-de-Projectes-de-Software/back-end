@@ -1,11 +1,13 @@
 package com.adondeband.back_end_adonde_band.JPA.entities;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Table
+@Getter
+@Setter
 public class JornadaEntity {
 
     @Id

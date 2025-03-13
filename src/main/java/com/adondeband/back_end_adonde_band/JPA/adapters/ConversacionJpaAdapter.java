@@ -1,6 +1,6 @@
 package com.adondeband.back_end_adonde_band.JPA.adapters;
 
-import com.adondeband.back_end_adonde_band.JPA.mappers.ConversacionMapper;
+import com.adondeband.back_end_adonde_band.JPA.mappers.ConversacionJpaMapper;
 import com.adondeband.back_end_adonde_band.JPA.repositories.ConversacionJpaRepository;
 import com.adondeband.back_end_adonde_band.dominio.modelos.Conversacion;
 import com.adondeband.back_end_adonde_band.dominio.puertos.out.ConversacionPort;
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 public class ConversacionJpaAdapter implements ConversacionPort {
     private final ConversacionJpaRepository conversacionJpaRepository;
 
-    private final ConversacionMapper conversacionMapper;
+    private final ConversacionJpaMapper conversacionMapper;
 
-    public ConversacionJpaAdapter(final ConversacionJpaRepository conversacionJpaRepository, final ConversacionMapper conversacionMapper) {
+    public ConversacionJpaAdapter(final ConversacionJpaRepository conversacionJpaRepository, final ConversacionJpaMapper conversacionMapper) {
         this.conversacionJpaRepository = conversacionJpaRepository;
         this.conversacionMapper = conversacionMapper;
     }

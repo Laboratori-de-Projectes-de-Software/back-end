@@ -1,5 +1,6 @@
 package com.adondeband.back_end_adonde_band.API.DTO;
 
+import com.adondeband.back_end_adonde_band.dominio.Ids.UsuarioId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -7,11 +8,16 @@ import lombok.Getter;
 public class BotDTO {
 
     private String nombre;
-    private String cualidad;
-    private String UsuarioDTO;
+
     private Integer numVictorias;
+
     private Integer numEmpates;
+
     private Integer numDerrotas;
+
+    private String cualidad;
+
+    private UsuarioId usuario;
 
     public BotDTO(String nombre, String cualidad) {
         this.nombre = nombre;
@@ -19,6 +25,6 @@ public class BotDTO {
         this.numVictorias = 0;
         this.numEmpates = 0;
         this.numDerrotas = 0;
-        this.UsuarioDTO = null;
+        this.usuario = null;
     }
 }

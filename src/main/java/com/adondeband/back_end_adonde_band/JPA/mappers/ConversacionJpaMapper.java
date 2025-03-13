@@ -6,8 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
-public interface ConversacionMapper {
-    ConversacionMapper INSTANCE = Mappers.getMapper(ConversacionMapper.class);
+public interface ConversacionJpaMapper {
+    ConversacionJpaMapper INSTANCE = Mappers.getMapper(ConversacionJpaMapper.class);
 
     // Mapea de BotEntity a Bot
     Conversacion toDomain(ConversacionEntity enfrentamientoEntity);
