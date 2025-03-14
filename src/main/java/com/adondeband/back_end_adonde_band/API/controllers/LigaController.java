@@ -1,7 +1,7 @@
 package com.adondeband.back_end_adonde_band.API.controllers;
 
 import com.adondeband.back_end_adonde_band.API.DTO.LigaDTO;
-import com.adondeband.back_end_adonde_band.dominio.services.LigaService;
+import com.adondeband.back_end_adonde_band.dominio.services.LigaImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 @RequestMapping("/liga")
 public class LigaController {
 
-    private final LigaService ligaService;
+    private final LigaImpl ligaImpl;
 
-    public LigaController(LigaService ligaService) {
+    public LigaController(LigaImpl ligaImpl) {
 
-        this.ligaService = ligaService;
+        this.ligaImpl = ligaImpl;
     }
 
     @GetMapping("/hola")

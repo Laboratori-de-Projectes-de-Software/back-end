@@ -4,7 +4,7 @@ import com.adondeband.back_end_adonde_band.API.DTO.BotDTO;
 import com.adondeband.back_end_adonde_band.API.mappers.BotDtoMapper;
 import com.adondeband.back_end_adonde_band.dominio.modelos.Bot;
 import com.adondeband.back_end_adonde_band.dominio.puertos.in.BotService;
-import com.adondeband.back_end_adonde_band.dominio.services.BotServiceImpl;
+import com.adondeband.back_end_adonde_band.dominio.services.BotImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class BotController {
     private final BotDtoMapper botMapper;
 
     @Autowired
-    public BotController(BotServiceImpl botService, BotDtoMapper botDtoMapper) {
+    public BotController(BotImpl botService, BotDtoMapper botDtoMapper) {
         this.botService = botService;
         this.botMapper = botDtoMapper;
     }

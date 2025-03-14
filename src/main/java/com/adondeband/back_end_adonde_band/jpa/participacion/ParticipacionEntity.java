@@ -27,7 +27,17 @@ public class ParticipacionEntity {
     private int posicion;
     private int puntuacion;
 
+    public ParticipacionEntity(long id) {
+        this.id = id;
+    }
+
+    public ParticipacionEntity() {
+
+    }
+
     public long getId() {
         return id;
     }
+
+
 }

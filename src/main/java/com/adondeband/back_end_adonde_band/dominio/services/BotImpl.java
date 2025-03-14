@@ -9,7 +9,7 @@ import java.util.List;
 
 
 @Service
-public class BotServiceImpl implements BotService {
+public class BotImpl implements BotService {
 
     private BotPort botPort;
 

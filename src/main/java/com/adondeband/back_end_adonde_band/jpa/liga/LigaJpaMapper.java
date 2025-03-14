@@ -24,6 +24,10 @@ public interface LigaJpaMapper {
     // Mapea de Liga a LigaEntity
     LigaEntity toEntity(Liga liga);
 
+    default  long map(LigaId value){
+        return value.value();
+    }
+
     // Mapeo de atributos
     default LigaId toLigaId(long value) {
         return new LigaId(value);
@@ -31,6 +35,10 @@ public interface LigaJpaMapper {
 
     default ParticipacionId toParticipacionId(ParticipacionEntity entity) {
         return new ParticipacionId(entity.getId());
+    }
+
+    default ParticipacionEntity map(ParticipacionId value){
+        return new ParticipacionEntity(value.value());
     }
 
     default ESTADO toESTADO(ESTADO_Entity estado_entity) {
