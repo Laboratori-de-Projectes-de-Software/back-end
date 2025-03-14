@@ -8,11 +8,11 @@ public class UserMapperImpl implements UserMapper{
 
     @Override
     public User toDomain(UserEntity entity) {
-        return new User(entity.getUsername(),entity.getMail(),entity.getPassword(),entity.getFoto(),entity.getBot());
+        return new User(entity.getUsername(),entity.getMail(),entity.getPassword(),entity.getFoto(),entity.getRole());
     }
 
     @Override
     public UserEntity toEntity(User user) {
-        return new UserEntity(user.getUsername(), user.getMail(), user.getPassword(), user.getFoto(), user.getBot());
+        return new UserEntity(user.getUsername(), user.getMail(), user.getPassword(), user.getFoto(),user.getRole());
     }
 }

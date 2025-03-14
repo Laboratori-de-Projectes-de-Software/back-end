@@ -1,6 +1,6 @@
 package com.alia.back_end_service.jpa.user;
 
-import com.alia.back_end_service.jpa.bot.BotEntity;
+import com.alia.back_end_service.domain.user.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +30,7 @@ public class UserEntity {
     @Column(name = "foto")
     private String foto;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BotEntity> bot;
+    @Column(name = "role")
+    private Role role;
 
 }

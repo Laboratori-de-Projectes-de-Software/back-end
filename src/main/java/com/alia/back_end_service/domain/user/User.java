@@ -23,5 +23,5 @@ public class User {
 
     private String foto;
 
-    private List<Bot> bot;
+    private Role role;
 }
