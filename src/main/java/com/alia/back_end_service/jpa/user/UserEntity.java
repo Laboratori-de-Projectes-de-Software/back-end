@@ -14,17 +14,17 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class UserEntity {
 
     @Id
     @Column(name = "username")
     private String username;
 
-    @Column(name = "mail")
+    @Column(name = "mail", unique = true, nullable = false)
     private String mail;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "foto")
