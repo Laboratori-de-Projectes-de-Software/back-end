@@ -1,0 +1,42 @@
+services:
+  mysql_lab:
+    image: mysql:8
+    container_name: mysql_lab
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: lab_db
+      MYSQL_USER: lab_user
+      MYSQL_PASSWORD: lab_pass
+    ports:
+      - "3306:3306"
+    networks:
+      - lab-network
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "lab_user", "-pLab_pass"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  back_lab:
+    build: 
+      context: ./back
+    container_name: back_lab
+    working_dir: /usr/src/lab
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql_lab:3306/lab_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+      SPRING_DATASOURCE_USERNAME: "lab_user"
+      SPRING_DATASOURCE_PASSWORD: "lab_pass"
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: "com.mysql.cj.jdbc.Driver"
+    networks:
+      - lab-network
+    depends_on:
+      mysql_lab:
+        condition: service_healthy
+    restart: always
+
+networks:
+  lab-network:
+    driver: bridge
