@@ -1,0 +1,39 @@
+package com.adondeband.back_end_adonde_band.jpa.liga;
+
+import com.adondeband.back_end_adonde_band.jpa.entities.ESTADO_Entity;
+import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionEntity;
+import com.adondeband.back_end_adonde_band.dominio.Ids.LigaId;
+import com.adondeband.back_end_adonde_band.dominio.Ids.ParticipacionId;
+import com.adondeband.back_end_adonde_band.dominio.modelos.ESTADO;
+import com.adondeband.back_end_adonde_band.dominio.modelos.Liga;
+import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaMapper;
+import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
+@Mapper(uses =  {
+            ParticipacionJpaMapper.class,
+            ImagenJpaMapper.class
+        }, componentModel = "spring")
+public interface LigaJpaMapper {
+    LigaJpaMapper INSTANCE = Mappers.getMapper(LigaJpaMapper.class);
+
+    // Mapea de LigaEntity a Liga
+    Liga toDomain(LigaEntity ligaEntity);
+
+    // Mapea de Liga a LigaEntity
+    LigaEntity toEntity(Liga liga);
+
+    // Mapeo de atributos
+    default LigaId toLigaId(long value) {
+        return new LigaId(value);
+    }
+
+    default ParticipacionId toParticipacionId(ParticipacionEntity entity) {
+        return new ParticipacionId(entity.getId());
+    }
+
+    default ESTADO toESTADO(ESTADO_Entity estado_entity) {
+        return ESTADO.valueOf(estado_entity.name());
+    }
+}
