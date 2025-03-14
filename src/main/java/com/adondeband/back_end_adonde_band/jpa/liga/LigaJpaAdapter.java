@@ -1,7 +1,7 @@
 package com.adondeband.back_end_adonde_band.jpa.liga;
 
-import com.adondeband.back_end_adonde_band.dominio.modelos.Liga;
-import com.adondeband.back_end_adonde_band.dominio.puertos.out.LigaPort;
+import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
+import com.adondeband.back_end_adonde_band.dominio.liga.LigaPort;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,7 +1,7 @@
 package com.adondeband.back_end_adonde_band.jpa.bot;
 
-import com.adondeband.back_end_adonde_band.dominio.modelos.Bot;
-import com.adondeband.back_end_adonde_band.dominio.puertos.out.BotPort;
+import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
+import com.adondeband.back_end_adonde_band.dominio.bot.BotPort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

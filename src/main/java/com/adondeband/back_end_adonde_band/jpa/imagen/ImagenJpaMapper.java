@@ -1,6 +1,6 @@
 package com.adondeband.back_end_adonde_band.jpa.imagen;
 
-import com.adondeband.back_end_adonde_band.dominio.modelos.Imagen;
+import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

@@ -1,7 +1,7 @@
 package com.adondeband.back_end_adonde_band.jpa.participacion;
 
-import com.adondeband.back_end_adonde_band.dominio.modelos.Participacion;
-import com.adondeband.back_end_adonde_band.dominio.puertos.out.ParticipacionPort;
+import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
+import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionPort;
 import org.springframework.stereotype.Component;
 
 @Component

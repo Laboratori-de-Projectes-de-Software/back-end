@@ -2,10 +2,10 @@ package com.adondeband.back_end_adonde_band.jpa.bot;
 
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionEntity;
 import com.adondeband.back_end_adonde_band.jpa.entities.UsuarioEntity;
-import com.adondeband.back_end_adonde_band.dominio.Ids.BotId;
-import com.adondeband.back_end_adonde_band.dominio.Ids.ParticipacionId;
-import com.adondeband.back_end_adonde_band.dominio.Ids.UsuarioId;
-import com.adondeband.back_end_adonde_band.dominio.modelos.Bot;
+import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
+import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionId;
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
+import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
 import com.adondeband.back_end_adonde_band.jpa.enfrentamiento.EnfrentamientoJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;

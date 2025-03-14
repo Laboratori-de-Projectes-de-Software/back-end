@@ -1,7 +1,7 @@
 package com.adondeband.back_end_adonde_band.jpa.conversacion;
 
-import com.adondeband.back_end_adonde_band.dominio.modelos.Conversacion;
-import com.adondeband.back_end_adonde_band.dominio.puertos.out.ConversacionPort;
+import com.adondeband.back_end_adonde_band.dominio.conversacion.Conversacion;
+import com.adondeband.back_end_adonde_band.dominio.conversacion.ConversacionPort;
 import org.springframework.stereotype.Component;
 
 @Component

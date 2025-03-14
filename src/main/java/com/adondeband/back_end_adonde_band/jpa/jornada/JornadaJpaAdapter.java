@@ -1,7 +1,7 @@
 package com.adondeband.back_end_adonde_band.jpa.jornada;
 
-import com.adondeband.back_end_adonde_band.dominio.modelos.Jornada;
-import com.adondeband.back_end_adonde_band.dominio.puertos.out.JornadaPort;
+import com.adondeband.back_end_adonde_band.dominio.jornada.Jornada;
+import com.adondeband.back_end_adonde_band.dominio.jornada.JornadaPort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

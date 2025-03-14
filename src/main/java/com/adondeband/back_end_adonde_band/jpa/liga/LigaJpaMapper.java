@@ -2,10 +2,10 @@ package com.adondeband.back_end_adonde_band.jpa.liga;
 
 import com.adondeband.back_end_adonde_band.jpa.entities.ESTADO_Entity;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionEntity;
-import com.adondeband.back_end_adonde_band.dominio.Ids.LigaId;
-import com.adondeband.back_end_adonde_band.dominio.Ids.ParticipacionId;
-import com.adondeband.back_end_adonde_band.dominio.modelos.ESTADO;
-import com.adondeband.back_end_adonde_band.dominio.modelos.Liga;
+import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
+import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionId;
+import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
+import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
 import org.mapstruct.Mapper;

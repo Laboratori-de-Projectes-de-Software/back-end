@@ -1,10 +1,10 @@
 package com.adondeband.back_end_adonde_band.jpa.jornada;
 
-import com.adondeband.back_end_adonde_band.dominio.Ids.EnfrentamientoId;
-import com.adondeband.back_end_adonde_band.dominio.Ids.JornadaId;
-import com.adondeband.back_end_adonde_band.dominio.Ids.LigaId;
-import com.adondeband.back_end_adonde_band.dominio.Ids.ParticipacionId;
-import com.adondeband.back_end_adonde_band.dominio.modelos.Jornada;
+import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
+import com.adondeband.back_end_adonde_band.dominio.jornada.JornadaId;
+import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
+import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionId;
+import com.adondeband.back_end_adonde_band.dominio.jornada.Jornada;
 import com.adondeband.back_end_adonde_band.jpa.enfrentamiento.EnfrentamientoEntity;
 import com.adondeband.back_end_adonde_band.jpa.enfrentamiento.EnfrentamientoJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.liga.LigaEntity;

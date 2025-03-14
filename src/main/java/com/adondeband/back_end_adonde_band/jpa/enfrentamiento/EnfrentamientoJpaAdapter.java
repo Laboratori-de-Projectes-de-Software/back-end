@@ -1,7 +1,7 @@
 package com.adondeband.back_end_adonde_band.jpa.enfrentamiento;
 
-import com.adondeband.back_end_adonde_band.dominio.modelos.Enfrentamiento;
-import com.adondeband.back_end_adonde_band.dominio.puertos.out.EnfrentamientoPort;
+import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento;
+import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoPort;
 import org.springframework.stereotype.Component;
 
 @Component

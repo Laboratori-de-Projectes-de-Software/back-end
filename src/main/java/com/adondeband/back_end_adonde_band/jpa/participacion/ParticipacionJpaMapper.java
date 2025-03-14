@@ -2,9 +2,9 @@ package com.adondeband.back_end_adonde_band.jpa.participacion;
 
 import com.adondeband.back_end_adonde_band.jpa.bot.BotEntity;
 import com.adondeband.back_end_adonde_band.jpa.liga.LigaEntity;
-import com.adondeband.back_end_adonde_band.dominio.Ids.BotId;
-import com.adondeband.back_end_adonde_band.dominio.Ids.LigaId;
-import com.adondeband.back_end_adonde_band.dominio.modelos.Participacion;
+import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
+import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
+import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
