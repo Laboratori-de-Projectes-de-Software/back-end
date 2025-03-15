@@ -14,6 +14,17 @@ public class MessageEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String contents;
 
+    @Column(nullable = false)
+    private Date timestamp;
+
+    @ManyToOne
+    @JoinColumn(name = "ai_id", nullable = false) // clave foranea ai_id al id de AIEntity
+    private AIEntity ai;
+
+    @ManyToOne
+    @JoinColumn(name = "combat_id", nullable = false) // clave foranea combat_id al id de CombatEntity
+    private CombatEntity combat;
+
     public Integer getId() {
         return id;
     }
@@ -54,14 +65,4 @@ public class MessageEntity {
         this.combat = combat;
     }
 
-    @Column(nullable = false)
-    private Date timestamp;
-
-    @ManyToOne
-    @JoinColumn(name = "ai_id", nullable = false) // clave foranea ai_id al id de AIEntity
-    private AIEntity ai;
-
-    @ManyToOne
-    @JoinColumn(name = "combat_id", nullable = false) // clave foranea combat_id al id de CombatEntity
-    private CombatEntity combat;
 }

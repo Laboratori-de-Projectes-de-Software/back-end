@@ -1,7 +1,7 @@
 package com.debateia.domain;
 
 public class UsuarioDto {
-    private long id;
+    private Integer id;
     private String name;
     private String email;
     private String password;
@@ -11,7 +11,7 @@ public class UsuarioDto {
     public void setPassword(String password) {
         this.password = password;
     }
-    public long getId() {
+    public Integer getId() {
         return id;
     }
     public UsuarioDto(){
@@ -22,7 +22,7 @@ public class UsuarioDto {
         this.email = email;
         this.password=password;
     }
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     public String getName() {

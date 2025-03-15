@@ -13,7 +13,7 @@ public class UserEntity {
     private Integer id;
 
     @Column(nullable = false, unique = true)
-    private String userName;
+    private String username;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -31,17 +31,17 @@ public class UserEntity {
     public void setPassword(String password) {
         this.password = password;
     }
-    public long getId() {
+    public Integer getId() {
         return id;
     }
     public void setId(Integer id) {
         this.id = id;
     }
     public String getNameUser() {
-        return userName;
+        return username;
     }
     public void setNameUser(String nameUser) {
-        this.userName = nameUser;
+        this.username = nameUser;
     }
     public String getEmail() {
         return email;

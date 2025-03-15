@@ -1,7 +1,7 @@
 package com.debateia.domain;
 
 public class LoginResponseDto {
-    private Long id;
+    private Integer id;
     private String nombre;
     private String email;
     private boolean success;
@@ -12,17 +12,17 @@ public class LoginResponseDto {
         this.success = success;
         this.message = message;
     }
-    public LoginResponseDto(Long id, String nombre, String email, boolean success, String message) {
+    public LoginResponseDto(Integer id, String nombre, String email, boolean success, String message) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
         this.success = success;
         this.message = message;
     }
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     public String getNombre() {

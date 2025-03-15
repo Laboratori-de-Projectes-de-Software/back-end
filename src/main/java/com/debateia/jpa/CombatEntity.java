@@ -14,6 +14,11 @@ public class CombatEntity {
 
     @ManyToOne
     @JoinColumn(name = "match_id", nullable = false) // clave foranea a match
+
+    // mappedBy mapea a "combat" como atributo de MessageEntity
+    @OneToMany(mappedBy = "combat", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // relacion 1 combate -> * msgs
+    private List<MessageEntity> messages = new ArrayList<>();
+
     private MatchEntity match;
 
     public Integer getId() {
@@ -39,9 +44,5 @@ public class CombatEntity {
     public void setMessages(List<MessageEntity> messages) {
         this.messages = messages;
     }
-
-    // mappedBy mapea a "combat" como atributo de MessageEntity
-    @OneToMany(mappedBy = "combat", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // relacion 1 combate -> * msgs
-    private List<MessageEntity> messages = new ArrayList<>();
 
 }
