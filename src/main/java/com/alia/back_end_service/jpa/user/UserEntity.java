@@ -1,12 +1,14 @@
 package com.alia.back_end_service.jpa.user;
 
 import com.alia.back_end_service.domain.user.Role;
+import com.alia.back_end_service.jpa.bot.BotEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -27,10 +29,12 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "foto")
-    private String foto;
+    @Column(name = "photo")
+    private String photo;
 
     @Column(name = "role")
     private Role role;
 
+    //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<BotEntity> bots = new ArrayList<>();
 }

@@ -28,7 +28,7 @@ public class UserJpaAdapter implements UserPortDB {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        Optional<UserEntity> userEntity = userJpaRepository.findByEmail(email);
+        Optional<UserEntity> userEntity = userJpaRepository.findByMail(email);
         return userEntity.map(userMapper::toDomain);
     }
 
