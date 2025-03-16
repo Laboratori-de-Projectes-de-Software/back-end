@@ -2,7 +2,7 @@ package com.alia.back_end_service.jpa.user;
 
 
 import com.alia.back_end_service.domain.user.User;
-import com.alia.back_end_service.domain.user.UserPortDB;
+import com.alia.back_end_service.domain.user.ports.UserPortDB;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

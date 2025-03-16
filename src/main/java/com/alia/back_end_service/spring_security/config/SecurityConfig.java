@@ -1,5 +1,6 @@
 package com.alia.back_end_service.spring_security.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,15 +14,12 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public SecurityConfig(UserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder) {
-        this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     // Configura el proveedor de autenticación usando el UserDetailsService y el PasswordEncoder
     @Bean
@@ -43,18 +41,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-
-                .csrf(csrf -> csrf.disable())
-                // Define las reglas de autorización para las rutas
+                .csrf(csrf -> csrf.disable()) // Deshabilita CSRF para la consola H2
+                .headers(headers -> headers.disable()) // Deshabilita todas las restricciones de encabezados
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/h2-console/**").permitAll() // Permite acceso a la consola H2
                         .anyRequest().permitAll()
                 )
-                // Configura la página de login
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
                 )
-                // Configura el logout
                 .logout(logout -> logout.permitAll());
 
         return http.build();
