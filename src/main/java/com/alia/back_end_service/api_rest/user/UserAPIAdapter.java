@@ -17,14 +17,14 @@ public class UserAPIAdapter implements UserPortAPI {
 
     @Override
     public UserDTOGet registerUser(UserDTOPost userDTOPost) {
-        User user = new User(userDTOPost.username(), userDTOPost.mail(), userDTOPost.password(), userDTOPost.photo(), Role.USER);
+        User user = new User(userDTOPost.getUsername(), userDTOPost.getMail(), userDTOPost.getPassword(), userDTOPost.getPhoto(), Role.USER);
         User savedUser = registerUserUseCase.execute(user);
         return new UserDTOGet(savedUser);
     }
 
     @Override
     public UserDTOGet loginUser(LoginDTO loginDTO) {
-        User authenticatedUser = loginUserUseCase.execute(loginDTO.username(), loginDTO.password());
+        User authenticatedUser = loginUserUseCase.execute(loginDTO.getUsername(), loginDTO.getPassword());
         return new UserDTOGet(authenticatedUser);
     }
 }
