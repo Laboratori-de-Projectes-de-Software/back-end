@@ -1,12 +1,17 @@
-package com.adondeband.back_end_adonde_band.jpa.entities;
+package com.adondeband.back_end_adonde_band.jpa.usuario;
 
 import com.adondeband.back_end_adonde_band.jpa.bot.BotEntity;
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenEntity;
+import com.adondeband.back_end_adonde_band.jpa.rol.RolEntity;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 public class UsuarioEntity {
 
     @Id

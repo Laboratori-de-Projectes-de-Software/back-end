@@ -2,7 +2,7 @@ package com.adondeband.back_end_adonde_band.dominio.usuario;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
-import com.adondeband.back_end_adonde_band.dominio.rol.Rol;
+import com.adondeband.back_end_adonde_band.dominio.rol.RolId;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 public class Usuario {
 
-    private String nombre;
+    private UsuarioId nombre;
 
     private String correo;
 
@@ -21,5 +21,5 @@ public class Usuario {
 
     private List<BotId> bots;
 
-    private List<Rol> roles;
+    private List<RolId> roles;
 }

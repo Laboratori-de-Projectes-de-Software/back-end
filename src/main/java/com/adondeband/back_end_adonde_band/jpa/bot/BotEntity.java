@@ -2,7 +2,7 @@ package com.adondeband.back_end_adonde_band.jpa.bot;
 
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenEntity;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionEntity;
-import com.adondeband.back_end_adonde_band.jpa.entities.UsuarioEntity;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

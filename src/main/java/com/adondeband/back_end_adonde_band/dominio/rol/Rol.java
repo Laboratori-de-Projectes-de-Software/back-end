@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Rol {
-    private String nombre;
+    private RolId nombre;
     private String descripcion;
 
     private List<Usuario> usuarios;
