@@ -1,4 +1,6 @@
-package com.alia.back_end_service.domain.user;
+package com.alia.back_end_service.domain.user.ports;
+
+import com.alia.back_end_service.domain.user.User;
 
 import java.util.Optional;
 

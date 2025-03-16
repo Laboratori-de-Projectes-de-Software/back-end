@@ -2,7 +2,7 @@ package com.alia.back_end_service.jpa.user;
 
 
 import com.alia.back_end_service.domain.user.User;
-import com.alia.back_end_service.domain.user.UserPortDB;
+import com.alia.back_end_service.domain.user.ports.UserPortDB;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -28,7 +28,7 @@ public class UserJpaAdapter implements UserPortDB {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        Optional<UserEntity> userEntity = userJpaRepository.findByEmail(email);
+        Optional<UserEntity> userEntity = userJpaRepository.findByMail(email);
         return userEntity.map(userMapper::toDomain);
     }
 
