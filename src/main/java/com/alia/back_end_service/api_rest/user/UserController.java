@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
     private final UserPortAPI userPortAPI;
+    
 
     @PostMapping("/register")
     public ResponseEntity<UserDTOGet> registerUser(@Valid @RequestBody UserDTOPost userDTOPost) {
