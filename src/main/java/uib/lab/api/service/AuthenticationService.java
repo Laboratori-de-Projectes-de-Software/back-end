@@ -61,6 +61,11 @@ public class AuthenticationService {
         var user = strictMapper.map(userRegistrationRequest, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        user.setEnabled(true); 
+        user.setRoles(Set.of(User.Role.USER));
+
+        userRepository.save(user);
+
         return ApiMessage.builder()
                 .status(HttpStatus.CREATED)
                 .message(messageConverter.getMessage(Message.ENABLED, Set.of(userRegistrationRequest.getName()), locale))
