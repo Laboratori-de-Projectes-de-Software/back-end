@@ -56,7 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .exceptionHandling(handler ->
                         handler
-                                .authenticationEntryPoint(accessDeniedHandler))
+                                .authenticationEntryPoint(accessDeniedHandler)
+                );
     }
 
     @Bean
