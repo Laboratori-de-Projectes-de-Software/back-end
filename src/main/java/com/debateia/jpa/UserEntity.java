@@ -21,6 +21,10 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
+    @OneToOne
+    @JoinColumn(name = "match_id", nullable = false) // clave foranea a id de match
+    private MatchEntity match;
+
     // mapeo al atributo "user" de la clase AIEntity
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AIEntity> aiList = new ArrayList<>();
