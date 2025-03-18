@@ -16,6 +16,9 @@ public class MatchEntity {
     @Column(nullable = false)
     private Date date;
 
+    @Column(nullable = false)
+    private Boolean enabled;
+
     // mappedBy mapea a "match" como atributo de CombatEntity
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CombatEntity> combats = new ArrayList<>();
@@ -34,6 +37,14 @@ public class MatchEntity {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public List<CombatEntity> getCombats() {
