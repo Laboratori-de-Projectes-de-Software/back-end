@@ -11,13 +11,8 @@ public class UserMapper {
     }
 
     public static User toAppObject(UserDto userDto) {
-        User user = new User();
-        user.setId(userDto.getId());
-        user.setUsername(userDto.getUsername());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setCreatedAt(userDto.getCreatedAt());
-        user.setUpdatedAt(userDto.getUpdatedAt());
+        User user = new User(userDto.getId(), userDto.getUsername(), userDto.getEmail(), userDto.getPassword(),
+                userDto.getCreatedAt(), userDto.getUpdatedAt());
         return user;
     }
 }

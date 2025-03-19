@@ -36,4 +36,8 @@ public class UserService implements GetUser, CreateUser {
     public User getUserByUsername(String username) {
         return userRepository.getUserByUsername(username);
     }
+
+    public User getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email);
+    }
 }

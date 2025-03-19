@@ -10,21 +10,6 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Constructors
-    public User() {
-    }
-
-    public User(Long id, String username, String email, String password, LocalDateTime createdAt,
-            LocalDateTime updatedAt) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -70,6 +55,16 @@ public class User {
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public User(Long id, String username, String email, String password, LocalDateTime createdAt,
+            LocalDateTime updatedAt) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 }

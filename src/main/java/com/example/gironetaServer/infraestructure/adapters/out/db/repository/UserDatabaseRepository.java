@@ -41,6 +41,12 @@ public class UserDatabaseRepository implements UserRepository {
         return userEntity != null ? toDomain(userEntity) : null;
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+        UserEntity userEntity = userJpaRepository.findByEmail(email);
+        return userEntity != null ? toDomain(userEntity) : null;
+    }
+
     private User toDomain(UserEntity userEntity) {
         return new User(
                 userEntity.getId(),

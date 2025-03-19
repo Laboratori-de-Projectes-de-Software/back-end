@@ -58,4 +58,14 @@ public class UserController {
         UserDto userDto = UserMapper.toUserDto(user);
         return ResponseEntity.ok(userDto);
     }
+
+    @GetMapping("/user/email/{email}")
+    public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
+        User user = userService.getUserByEmail(email);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        UserDto userDto = UserMapper.toUserDto(user);
+        return ResponseEntity.ok(userDto);
+    }
 }
