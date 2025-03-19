@@ -30,6 +30,7 @@ public class JwtService {
                 .getSubject();
     }
 
+    /*
     public String generateToken( UserDto user) {
         return buildToken(user, refreshExpiration);
     }
@@ -37,6 +38,7 @@ public class JwtService {
     public String generateRefreshToken(UserDto user) {
         return buildToken(user, refreshExpiration);
     }
+
 
     private String buildToken( UserDto user, final long expiration) {
         
@@ -50,11 +52,13 @@ public class JwtService {
                 .compact();
     }
 
+
+
     public boolean isTokenValid(String token, User user) {
         final String username = extractUsername(token);
         return (username.equals(user.getEmail())) && !isTokenExpired(token);
     }
-
+*/
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
