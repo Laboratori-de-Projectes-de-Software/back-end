@@ -18,7 +18,7 @@ import com.debateia.dto_viejo.UpdateCredRequest;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService service;
+    private final AuthService service = null;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
