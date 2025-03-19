@@ -2,7 +2,9 @@ package uib.lab.api.service;
 
 import uib.lab.api.dto.user.UserRegistrationRequest;
 import uib.lab.api.entity.User;
-import uib.lab.api.repository.UserRepository;
+import uib.lab.api.entity.jpa_user.UserJpaAdapter;
+import uib.lab.api.entity.jpa_user.UserMapper;
+import uib.lab.api.entity.jpa_user.UserJpaRepository;
 import uib.lab.api.util.ApiMessage;
 import uib.lab.api.util.jwt.JwtVerificationProvider;
 import uib.lab.api.util.message.MessageCode;
@@ -26,7 +28,9 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository userRepository;
+    private final UserJpaRepository userRepository;
+    private final UserMapper userMapper;
+    private final UserJpaAdapter userJpaAdapter;
 
     private final JwtVerificationProvider jwtVerificationProvider;
 
@@ -64,7 +68,7 @@ public class AuthenticationService {
         user.setEnabled(true); 
         user.setRoles(Set.of(User.Role.USER));
 
-        userRepository.save(user);
+        userJpaAdapter.save(userMapper.toDomain(user));
 
         return ApiMessage.builder()
                 .status(HttpStatus.CREATED)

@@ -41,6 +41,23 @@ public class User implements UserDetails {
 
     private boolean enabled;
 
+    public User(long id, String u, String n, String p){
+        this.id = id;
+        this.username = u;
+        this.name = n; 
+        this.password = p;
+    }
+
+    public User(String u, String n, String p){
+        this.username = u;
+        this.name = n; 
+        this.password = p;
+    }
+
+    public User(){
+
+    }
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream().map(Role::getAuthority).collect(Collectors.toSet());
