@@ -16,9 +16,9 @@ import java.util.List;
 
     private List<Bot> bot;
 }*/
-public record UserDTOGet(String username, String email, String photo) {
+public record UserDTOGet(String username, String email, String photo, List<Bot> bots) {
     public UserDTOGet(User user) {
-        this(user.getUsername(), user.getMail(), user.getPhoto()); // He quitado el rol, de momento no lo necesitamos
+        this(user.getUsername(), user.getMail(), user.getPhoto(), user.getBots()); // He quitado el rol, de momento no lo necesitamos
     }
 }
 

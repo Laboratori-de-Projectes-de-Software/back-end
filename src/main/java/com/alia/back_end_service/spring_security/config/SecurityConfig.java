@@ -60,7 +60,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout.permitAll())
                 .authenticationProvider(authenticationProvider())
-                .addFilter(jwtAuthenticationFilter)
+                //.addFilter(jwtAuthenticationFilter)
                 .cors(cors -> corsConfigurationSource());
 
         return http.build();

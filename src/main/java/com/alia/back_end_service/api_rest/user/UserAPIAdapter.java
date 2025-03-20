@@ -10,6 +10,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Component;
 import com.alia.back_end_service.domain.user.Role;
 
+import java.util.Collections;
+
 
 @Component
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class UserAPIAdapter implements UserPortAPI {
 
     @Override
     public UserDTOGet registerUser(UserDTOPost userDTOPost) {
-        User user = new User(userDTOPost.getUsername(), userDTOPost.getMail(), userDTOPost.getPassword(), userDTOPost.getPhoto(), Role.USER);
+        User user = new User(userDTOPost.getUsername(), userDTOPost.getMail(), userDTOPost.getPassword(), userDTOPost.getPhoto(), Role.USER, Collections.emptyList());
         User savedUser = registerUserUseCase.execute(user);
         return new UserDTOGet(savedUser);
     }
