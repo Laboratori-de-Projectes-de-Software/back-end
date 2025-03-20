@@ -1,18 +1,19 @@
 package uib.lab.api.entity.jpa_user;
 
-import uib.lab.api.domain.User;
+import uib.lab.api.domain.UserDomain;
+import uib.lab.api.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapperImpl implements UserMapper {
     @Override
-    public User toDomain(uib.lab.api.entity.User entity){
-        return new User(entity.getId(), entity.getUsername(), entity.getName(), entity.getPassword());
+    public UserDomain toDomain(User entity){
+        return new UserDomain(entity.getId(), entity.getUsername(), entity.getName(), entity.getPassword());
     }
 
     @Override
-    public uib.lab.api.entity.User toEntity(User user){
-        return new uib.lab.api.entity.User(user.getId(), user.getUsername(), user.getName(), user.getPassword());
+    public User toEntity(UserDomain user){
+        return new User(user.getId(), user.getUsername(), user.getName(), user.getPassword());
     }
     
 }

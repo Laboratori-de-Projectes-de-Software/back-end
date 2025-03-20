@@ -1,5 +1,9 @@
 package uib.lab.api.domain;
 
+import java.util.List;
+
 public interface UserPort {
-    User save(User user);
+    UserDomain save(UserDomain user); 
+    
+    List<UserDomain> findAll();
 }

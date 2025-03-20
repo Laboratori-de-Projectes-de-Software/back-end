@@ -9,8 +9,8 @@ public class CreateUserUseCase {
         this.port = port;
     }
 
-    public User createUser(final String username, final String name, final String password){
-        User user = new User(username, name, password);
+    public UserDomain createUser(final String username, final String name, final String password){
+        UserDomain user = new UserDomain(username, name, password);
         return port.save(user);
     }
 }

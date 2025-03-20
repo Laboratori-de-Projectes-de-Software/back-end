@@ -1,9 +1,10 @@
 package uib.lab.api.entity.jpa_user;
 
-import uib.lab.api.domain.User;
+import uib.lab.api.domain.UserDomain;
+import uib.lab.api.entity.User;
 
 public interface UserMapper {
-    User toDomain(uib.lab.api.entity.User user);
+    UserDomain toDomain(User user);
 
-    uib.lab.api.entity.User toEntity(User user);
+    uib.lab.api.entity.User toEntity(UserDomain user);
 }

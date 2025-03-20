@@ -2,7 +2,7 @@ package uib.lab.api.service;
 
 import uib.lab.api.entity.User;
 import uib.lab.api.dto.user.UserResponse;
-import uib.lab.api.repository.UserRepository;
+import uib.lab.api.entity.jpa_user.UserJpaRepository;
 import uib.lab.api.util.message.MessageCode;
 import uib.lab.api.util.message.MessageConverter;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepository userRepository;
+    private final UserJpaRepository userJpaRepository;
     private final MessageConverter messageConverter;
     private final ModelMapper mapper;
 
@@ -32,7 +32,7 @@ public class UserService {
 
     public UserResponse findById(long id, Locale locale) {
         return this.map(
-                userRepository.findById(id).orElseThrow(() ->
+                userJpaRepository.findById(id).orElseThrow(() ->
                         new ResponseStatusException(
                                 HttpStatus.BAD_REQUEST,
                                 messageConverter.getMessage(Message.NOT_EXISTS, null, locale)

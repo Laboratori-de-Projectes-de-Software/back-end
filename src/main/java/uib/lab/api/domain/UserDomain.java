@@ -1,26 +1,26 @@
 package uib.lab.api.domain;
 
-public class User {
+public class UserDomain {
     private long id;
 
     private String username;
     private String name;
     private String password;
 
-    public User(long id, String u, String n, String p){
+    public UserDomain(long id, String u, String n, String p){
         this.id = id;
         this.username = u;
         this.name = n; 
         this.password = p;
     }
 
-    public User(String u, String n, String p){
+    public UserDomain(String u, String n, String p){
         this.username = u;
         this.name = n; 
         this.password = p;
     }
 
-    public User(){
+    public UserDomain(){
         
     }
 
