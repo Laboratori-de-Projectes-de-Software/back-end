@@ -3,13 +3,16 @@ package developers.iasuperleague.model.user;
 import developers.iasuperleague.model.bot.Bot;
 import developers.iasuperleague.model.liga.Liga;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "USER")
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class User {
 
     @Id
