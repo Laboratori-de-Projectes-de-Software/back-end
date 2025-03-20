@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mysql:
     image: mysql:8
@@ -7,7 +5,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: developerBD
+      MYSQL_DATABASE: developersBD
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
@@ -16,7 +14,7 @@ services:
       - mysql_data:/var/lib/mysql
 
   backend:
-    build: ./backend
+    build: .
     container_name: backend_container
     restart: always
     ports:
@@ -24,15 +22,13 @@ services:
     depends_on:
       - mysql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/developerBD?serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/developersBD?serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-    volumes:
-      - ./backend:/app
 
   frontend:
-    build: ./frontend
+    build: ../front-end-developers  # Nueva ruta
     container_name: frontend_container
     restart: always
     ports:
@@ -40,7 +36,7 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./frontend:/app
+      - ../front-end-developers:/app
       - /app/node_modules
 
 volumes:
