@@ -1,0 +1,597 @@
+openapi: 3.1.0
+info:
+  title: Service-Client
+  description: Communication between service and client.
+  version: 1.0.0
+
+paths:
+  /users/login:
+    post:
+      summary: User login
+      description: Authenticates a user and returns a JWT token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT token for authentication
+        '400':
+          description: Invalid username or password
+        '404':
+          description: User not found
+      security:
+        - api_key: []
+
+  /users/register:
+    post:
+      summary: User registration
+      description: Registers a new user with email validation and password security requirements.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Invalid input data
+        '409':
+          description: Username or email already exists
+  
+  /users/{id}/bots: 
+    get:
+      summary: Get bots associated with a user
+      description: Retrieves all bots that belong to a specific user.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: List of bots associated with the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bot'
+
+  /users/{id}/leagues: 
+    get:
+      summary: Get leagues associated with a user
+      description: Retrieves all leagues a user is part of.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: List of leagues associated with the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/League'
+
+  /users/{id}:
+    get:
+      summary: Get user details by ID
+      description: Retrieves a user by ID.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      summary: Delete user by ID
+      description: Deletes a user by ID (admin only).
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '204':
+          description: User deleted successfully
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: User not found
+
+  #Bots
+  /bots/register:
+    post:
+      summary: Bot registration
+      description: Registers a new bot associated with the authenticated user.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BotRegister'
+      responses:
+        '201':
+          description: Bot registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier of the bot
+                  message:
+                    type: string
+                    example: "Bot registered successfully"
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '409':
+          description: Bot with the same endpoint already exists
+
+  /bots/all: # admin
+    get:
+      summary: Get all bots
+      description: Retrieves a list of all bots (admin only).
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: List of all bots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bot'
+  
+  /bots/{id}:
+    get:
+      summary: Get bot by ID
+      description: Retrieves a specific bot by ID.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: Bot details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bot'
+    delete:
+      summary: Delete bot by ID
+      description: Deletes a bot by ID (admin only).
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '204':
+          description: Bot deleted successfully
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: Bot not found
+
+  /bots/{id}/leagues:
+    get:
+      summary: Get all leagues associated with a bot
+      description: Retrieves all leagues a bot is part of.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: List of leagues associated with the bot
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/League'
+
+  /bot/{id}/clasifications:
+    get:
+      summary: Get bot classifications
+      description: Retrieves classifications for a bot.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: List of classifications for the bot
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Classification'
+
+  /leagues/all:
+    get:
+      summary: Get all leagues
+      description: Retrieves all available leagues.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: List of all leagues
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/League'
+
+  /leagues/{id}:
+    get:
+      summary: Get league by ID
+      description: Retrieves a league by ID.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: League details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/League'
+    delete:
+      summary: Delete league by ID
+      description: Deletes a league by ID (admin only).
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '204':
+          description: League deleted successfully
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: League not found
+    patch:
+      summary: Update league by ID
+      description: Updates league details by ID.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueUpdate'
+      responses:
+        '200':
+          description: League updated successfully
+        '400':
+          description: Invalid input data
+        '404':
+          description: League not found
+
+  /leagues/{id}/bots:
+    get:
+      summary: Get bots associated with a league
+      description: Retrieves all bots in a specific league.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: List of bots associated with the league
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bot'
+
+  /leagues/{id}/users:
+    get:
+      summary: Get users associated with a league
+      description: Retrieves all users associated with a specific league.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: List of users associated with the league
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /leagues/{id}/rounds:
+    get:
+      summary: Get rounds in a league
+      description: Retrieves all rounds in a specific league.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: List of rounds in the league
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Round'
+  
+  /round/{id}/classifications:
+    get:
+      summary: Get classifications for a round
+      description: Retrieves the classifications for a specific round.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: List of classifications for the round
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Classification'
+
+  /round/{id}/games:
+    get:
+      summary: Get games for a round
+      description: Retrieves all games in a specific round.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: List of games in the round
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
+
+  /round/{id}:
+    get:
+      summary: Get round details by ID
+      description: Retrieves a round by ID.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: Round details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Round'
+
+  /game/{id}:
+    get:
+      summary: Get game by ID
+      description: Retrieves a game by ID.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: Game details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+
+  /game/{id}/messages:
+    get:
+      summary: Get messages for a game
+      description: Retrieves all messages related to a specific game.
+      security:
+        - api_key: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: List of messages for the game
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+
+
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Enter JWT token with Bearer prefix, e.g., "Bearer {token}"'
+  schemas:
+    UserLogin:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: 'user123'
+        password:
+          type: string
+          format: password
+          example: 'securePassword123'
+    
+    UserRegister:
+      type: object
+      required:
+        - username
+        - email
+        - password
+        - confirm_password
+      properties:
+        username:
+          type: string
+          example: 'newuser123'
+        email:
+          type: string
+          format: email
+          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+          example: 'user@example.com'
+        password:
+          type: string
+          format: password
+          pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$"
+          example: 'StrongPass123'
+        confirm_password:
+          type: string
+          format: password
+          example: 'StrongPass123'
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          example: 'newuser123'
+        email:
+          type: string
+          format: email
+          example: 'user@example.com'
+
+    BotRegister:
+      type: object
+      required:
+        - endpoint
+        - name
+        - description
+      properties:
+        endpoint:
+          type: string
+          format: uri
+          example: "https://api.example.com/bot-webhook"
+        name:
+          type: string
+          example: "MyBot"
+        description:
+          type: string
+          example: "An AI-powered chatbot that responds to user queries."
+    
+    Bot:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "MyBot"
+        description:
+          type: string
+          example: "An AI-powered chatbot that responds to user queries."
+    
+    League:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        init_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        time_match:
+          type: integer
+        number_match:
+          type: integer
+        state:
+          type: string
+
+    LeagueUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        init_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        time_match:
+          type: integer
+        number_match:
+          type: integer
+        state:
+          type: string
+
+    Classification:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        points:
+          type: integer
+        number_matchs:
+          types: integer
+        win_matchs:
+          type: integer
+        tie_matchs:
+          type: integer
+        lose_matchs:
+          type: integer
+      
+    Round:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        number_round:
+          type: integer
+        init_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        state:
+          type: string
+        
+    Game:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        result_local:
+          type: string
+        result_visit:
+          type: string
+        bot_local_id:
+          type: string
+        bot_visit_id:
+          type: string
+        state:
+          type: string
+    
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        content:
+          type: string
+        bot_id:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
