@@ -1,0 +1,30 @@
+---
+spring:
+  config:
+    activate:
+      on-profile: devel
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/jaumesitos_app
+    username: jaumesitos
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    sql:
+      init:
+        mode: always
+        schema-locations: classpath:db/taules.sql  # This points to your file location
+    jpa:
+      hibernate:
+        ddl-auto: none
+      show-sql: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: main
+
+  datasource:
+    url: url
+    username: none
+    password: none
