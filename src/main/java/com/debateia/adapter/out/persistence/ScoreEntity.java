@@ -1,5 +1,7 @@
 package com.debateia.adapter.out.persistence;
 
+import com.debateia.domain.Score;
+import io.jsonwebtoken.security.Message;
 import jakarta.persistence.*;
 
 @Entity
@@ -8,6 +10,19 @@ public class ScoreEntity {
     @EmbeddedId // id compuesta
     private ScoreEntityId id;
 
+    
+    public ScoreEntity() {}
+    
+    // Convierte una clase Score del dominio a una clase ScoreEntity (JPA)
+    public ScoreEntity(Score dom) {
+        
+    }
+    
+    // Convierte una clase ScoreEntity (JPA) a una clase Score, del dominio de la aplicacion
+    public Score toDomain() {
+        return null;
+    }
+    
     public ScoreEntityId getId() {
         return id;
     }

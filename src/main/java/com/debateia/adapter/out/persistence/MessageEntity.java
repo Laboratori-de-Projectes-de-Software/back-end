@@ -1,5 +1,6 @@
 package com.debateia.adapter.out.persistence;
 
+import io.jsonwebtoken.security.Message;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -25,6 +26,19 @@ public class MessageEntity {
     @JoinColumn(name = "combat_id", nullable = false) // clave foranea combat_id al id de CombatEntity
     private CombatEntity combat;
 
+    
+    public MessageEntity() {}
+    
+    // Convierte una clase Message del dominio a una clase MessageEntity (JPA)
+    public MessageEntity(Message dom) {
+        
+    }
+    
+    // Convierte una clase MessageEntity (JPA) a una clase Message, del dominio de la aplicacion
+    public Message toDomain() {
+        return null;
+    }
+    
     public Integer getId() {
         return id;
     }

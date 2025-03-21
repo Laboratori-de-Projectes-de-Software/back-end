@@ -1,5 +1,7 @@
 package com.debateia.adapter.out.persistence;
 
+import com.debateia.domain.User;
+import io.jsonwebtoken.security.Message;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -29,6 +31,19 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AIEntity> aiList = new ArrayList<>();
 
+    
+    public UserEntity() {}
+    
+    // Convierte una clase User del dominio a una clase UserEntity (JPA)
+    public UserEntity(User dom) {
+        
+    }
+    
+    // Convierte una clase UserEntity (JPA) a una clase User, del dominio de la aplicacion
+    public User toDomain() {
+        return null;
+    }
+    
     public String getPassword() {
         return password;
     }

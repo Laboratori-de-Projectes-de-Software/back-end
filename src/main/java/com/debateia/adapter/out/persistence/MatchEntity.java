@@ -1,5 +1,6 @@
 package com.debateia.adapter.out.persistence;
 
+import com.debateia.domain.Match;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,18 @@ public class MatchEntity {
     // mappedBy mapea a "match" como atributo de CombatEntity
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CombatEntity> combats = new ArrayList<>();
+    
+    public MatchEntity() {}
+    
+    // Convierte una clase Match del dominio a una clase MatchEntity (JPA)
+    public MatchEntity(Match dom) {
+        
+    }
+    
+    // Convierte una clase MatchEntity (JPA) a una clase Match, del dominio de la aplicacion
+    public Match toDomain() {
+        return null;
+    }
 
     public Integer getId() {
         return id;
