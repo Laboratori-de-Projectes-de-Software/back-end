@@ -1,6 +1,7 @@
 package uib.lab.api.controller;
 
 import uib.lab.api.dto.user.UserRegistrationRequest;
+import uib.lab.api.dto.user.UserUpdateRequest;
 import uib.lab.api.service.AuthenticationService;
 import uib.lab.api.util.ApiMessage;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,11 @@ public class AuthenticationController {
     public ResponseEntity<List<UserDomain>> getAllUsers() {
         List<UserDomain> users = authenticationService.getAllUsers();
         return ResponseEntity.ok(users);
+    }
+
+    @PutMapping("/updateUser/{id}")
+    public ResponseEntity<ApiMessage> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest user, Locale locale) throws MessagingException {
+        var message = authenticationService.updateUser(id, user, locale);
+        return ResponseEntity.status(message.getStatus()).body(message);
     }
 }

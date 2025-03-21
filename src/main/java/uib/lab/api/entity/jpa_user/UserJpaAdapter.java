@@ -1,7 +1,10 @@
 package uib.lab.api.entity.jpa_user;
 
+
 import uib.lab.api.domain.UserDomain;
 import uib.lab.api.domain.UserPort;
+import uib.lab.api.entity.User;
+import java.util.Optional;
 
 import java.util.stream.Collectors;
 import java.util.List;
@@ -37,5 +40,25 @@ public class UserJpaAdapter implements UserPort {
                    .stream()
                    .map(userMapper::toDomain)
                    .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<UserDomain> findById(Long id) {
+        return repo.findById(id).map(userMapper::toDomain);
+    }
+
+    /*
+     * Método que actualiza un usuario
+     */
+    @Override
+    public UserDomain update(UserDomain user){
+        User entity = repo.findById(user.getId())
+        .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    
+        entity.setUsername(user.getUsername());
+        entity.setName(user.getName());
+        entity.setPassword(user.getPassword());
+  
+        return userMapper.toDomain(repo.save(entity));
     }
 }
