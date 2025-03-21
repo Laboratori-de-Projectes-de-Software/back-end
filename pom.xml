@@ -158,6 +158,8 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
             <configuration>
+                <mainClass>com.debateia.DebateiaApplication</mainClass>
+                <start-class>com.debateia.DebateiaApplication</start-class>
                 <excludes>
                     <exclude>
                         <groupId>org.projectlombok</groupId>
