@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.Locale;
+import java.util.List;
+import uib.lab.api.domain.UserDomain;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,5 +23,11 @@ public class AuthenticationController {
     public ResponseEntity<ApiMessage> register(@Valid @RequestBody UserRegistrationRequest user, Locale locale) throws MessagingException {
         var message = authenticationService.register(user, locale);
         return ResponseEntity.status(message.getStatus()).body(message);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<UserDomain>> getAllUsers() {
+        List<UserDomain> users = authenticationService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 }
