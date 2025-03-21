@@ -20,6 +20,11 @@ public class Bot {
 
     private String url;
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] imagen;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
