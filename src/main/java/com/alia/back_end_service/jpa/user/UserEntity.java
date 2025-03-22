@@ -20,7 +20,7 @@ import java.util.List;
 public class UserEntity {
 
     @Id
-    @Column(name = "username")
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     @Column(name = "mail", unique = true, nullable = false)
@@ -35,6 +35,6 @@ public class UserEntity {
     @Column(name = "role")
     private Role role;
 
-    //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    //private List<BotEntity> bots = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BotEntity> bots = new ArrayList<>();
 }

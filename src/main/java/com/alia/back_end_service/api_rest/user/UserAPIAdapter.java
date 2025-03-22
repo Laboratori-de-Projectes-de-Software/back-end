@@ -4,9 +4,13 @@ import com.alia.back_end_service.domain.user.usecases.LoginUserUseCase;
 import com.alia.back_end_service.domain.user.usecases.RegisterUserUseCase;
 import com.alia.back_end_service.domain.user.User;
 import com.alia.back_end_service.domain.user.ports.UserPortAPI;
+import com.alia.back_end_service.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Component;
 import com.alia.back_end_service.domain.user.Role;
+
+import java.util.Collections;
 
 
 @Component
@@ -15,9 +19,11 @@ public class UserAPIAdapter implements UserPortAPI {
     private final RegisterUserUseCase registerUserUseCase;
     private final LoginUserUseCase loginUserUseCase;
 
+
+
     @Override
     public UserDTOGet registerUser(UserDTOPost userDTOPost) {
-        User user = new User(userDTOPost.getUsername(), userDTOPost.getMail(), userDTOPost.getPassword(), userDTOPost.getPhoto(), Role.USER);
+        User user = new User(userDTOPost.getUsername(), userDTOPost.getMail(), userDTOPost.getPassword(), userDTOPost.getPhoto(), Role.USER, Collections.emptyList());
         User savedUser = registerUserUseCase.execute(user);
         return new UserDTOGet(savedUser);
     }

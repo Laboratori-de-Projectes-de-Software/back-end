@@ -7,6 +7,8 @@ import com.alia.back_end_service.domain.user.exceptions.EmailAlreadyExistsExcept
 import com.alia.back_end_service.domain.user.exceptions.UsernameAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Collections;
+
 
 @RequiredArgsConstructor
 public class RegisterUserUseCase {
@@ -23,7 +25,7 @@ public class RegisterUserUseCase {
 
         // Encriptar contraseña antes de guardarla
         String encryptedPassword = passwordEncoderPort.encode(user.getPassword());
-        user = new User(user.getUsername(), user.getMail(), encryptedPassword, user.getPhoto(), user.getRole());
+        user = new User(user.getUsername(), user.getMail(), encryptedPassword, user.getPhoto(), user.getRole(), Collections.emptyList());
 
         return userPortDB.saveUser(user);
     }
