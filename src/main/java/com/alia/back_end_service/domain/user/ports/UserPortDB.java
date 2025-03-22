@@ -11,8 +11,8 @@ public interface UserPortDB {
     Optional<User> findByEmail(String email);
 
     //Create
-    User saveUser(User user);
+    User save(User user);
 
     //Delete
-    void deleteUser(String username);
+    void delete(String username);
 }

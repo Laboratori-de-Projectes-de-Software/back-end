@@ -27,6 +27,6 @@ public class RegisterUserUseCase {
         String encryptedPassword = passwordEncoderPort.encode(user.getPassword());
         user = new User(user.getUsername(), user.getMail(), encryptedPassword, user.getPhoto(), user.getRole(), Collections.emptyList());
 
-        return userPortDB.saveUser(user);
+        return userPortDB.save(user);
     }
 }
