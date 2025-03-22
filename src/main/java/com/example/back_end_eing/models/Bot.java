@@ -37,10 +37,30 @@ public class Bot {
     @Column
     private Integer numJornadas;
 
-    @Column
-    private String api_key;
+    @Column(unique = true, nullable = false)
+    private String API_KEY;
 
-    public Bot() {
 
-    }
+    //******* CONSTRUCTORES *******
+    public Bot() {}
+
+    //******* RELACIONES CON OTRAS CLASES *******
+    @ManyToOne
+    @JoinColumn(
+            name = "usuario_id",
+            nullable = false)
+
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "bot", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Participacion> participaciones;
+
+    @OneToMany(
+            mappedBy = "bot",
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+
+    private Set<Clasificacion> clasificaciones = new HashSet<>();
+
 }

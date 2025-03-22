@@ -14,8 +14,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @Entity
-@Table(name = "usuario")
-public class Usuario {
+public class Jornada {
 
     //******* COLUMNAS *******
     @Id
@@ -23,35 +22,29 @@ public class Usuario {
     @Column(nullable = false)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String nombreUsuario;
-
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
+    @Column
+    private Integer numJornada;
 
     @Column
-    private String foto;
+    private Integer numBots;
 
     //******* CONSTRUCTORES *******
-    public Usuario() {
-    }
+    public Jornada() {}
+
 
     //******* RELACIONES CON OTRAS CLASES *******
     @OneToMany(
-            mappedBy = "usuario",
+            mappedBy = "jornada",
             cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE},
             orphanRemoval = true
     )
-    private Set<Bot> bots = new HashSet<>();
+    private Set<Enfrentamiento> enfrentamientos = new HashSet<>();
 
-    @OneToMany(
-            mappedBy = "usuario",
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true
-    )
-    private Set<Liga> ligasUsuario = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(
+            name = "liga_id",
+            nullable = false)
+
+    private Liga liga;
 }
