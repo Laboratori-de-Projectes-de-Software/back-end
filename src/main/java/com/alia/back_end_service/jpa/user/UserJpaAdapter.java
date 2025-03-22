@@ -33,13 +33,13 @@ public class UserJpaAdapter implements UserPortDB {
     }
 
     @Override
-    public User saveUser(User user) {
+    public User save(User user) {
         UserEntity savedEntity = userJpaRepository.save(userMapper.toEntity(user));
         return userMapper.toDomain(savedEntity);
     }
 
     @Override
-    public void deleteUser(String username) {
+    public void delete(String username) {
         userJpaRepository.deleteByUsername(username);
     }
 }
