@@ -49,7 +49,6 @@ public class Bot {
     @JoinColumn(
             name = "usuario_id",
             nullable = false)
-
     private Usuario usuario;
 
     @OneToMany(mappedBy = "bot", cascade = CascadeType.ALL, orphanRemoval = true)
