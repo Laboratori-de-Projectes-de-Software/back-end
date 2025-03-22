@@ -43,6 +43,15 @@ public class Bot {
 
     //******* CONSTRUCTORES *******
     public Bot() {}
+    public Bot(String nombre, String descripcion, String foto, Integer victorias, Integer numJornadas, String API, Usuario user) {
+        nombreBot = nombre;
+        descripcionBot = descripcion;
+        fotoBot = foto;
+        numJornadas = victorias;
+        this.numJornadas = numJornadas;
+        API_KEY = API;
+        usuario = user;
+    }
 
     //******* RELACIONES CON OTRAS CLASES *******
     @ManyToOne
