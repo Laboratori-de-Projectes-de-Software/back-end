@@ -23,7 +23,6 @@ public class UserMapperImpl implements UserMapper{
                 entity.getUsername(),
                 entity.getMail(),
                 entity.getPassword(),
-                entity.getPhoto(),
                 entity.getRole(),
                 entity.getBots() != null ? entity.getBots().stream()
                         .map(botMapper::toDomain)
@@ -37,7 +36,6 @@ public class UserMapperImpl implements UserMapper{
                 user.getUsername(),
                 user.getMail(),
                 user.getPassword(),
-                user.getPhoto(),
                 user.getRole(),
                 user.getBots() != null ? user.getBots().stream().map(botMapper::toEntity).collect(Collectors.toList())
                 : Collections.emptyList()

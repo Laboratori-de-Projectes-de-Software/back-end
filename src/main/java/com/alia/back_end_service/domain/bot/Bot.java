@@ -25,5 +25,5 @@ public class Bot {
 
     private User user;
     private List<League> leagues;
-    private List<Message> messages;
+//    private List<Message> messages;
 }

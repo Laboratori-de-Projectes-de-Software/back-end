@@ -29,7 +29,4 @@ public class MessageEntity {
 
     @Column(name = "date")
     private String date;
-
-    @ManyToOne
-
 }

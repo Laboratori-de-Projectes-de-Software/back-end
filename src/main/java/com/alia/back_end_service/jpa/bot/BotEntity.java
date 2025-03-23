@@ -43,8 +43,8 @@ public class BotEntity {
     )
     private List<LeagueEntity> leagues;
 
-    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<MessageEntity> messages;
+//    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    private List<MessageEntity> messages;
 
 
 }

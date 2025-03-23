@@ -29,9 +29,6 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "photo")
-    private String photo;
-
     @Column(name = "role")
     private Role role;
 

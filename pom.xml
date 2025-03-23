@@ -95,6 +95,11 @@
 			<version>2.2.15</version>
 		</dependency>
 		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-models</artifactId>
+			<version>2.2.28</version>
+		</dependency>
+		<dependency>
 			<groupId>org.openapitools</groupId>
 			<artifactId>jackson-databind-nullable</artifactId>
 			<version>0.2.6</version>
@@ -156,7 +161,7 @@
 							<configOptions>
 								<interfaceOnly>false</interfaceOnly> <!-- Solo genera interfaces, tú las implementas -->
 								<useJakartaEe>true</useJakartaEe>  <!-- Usa jakarta en lugar de javax -->
-								<delegatePattern>true</delegatePattern> <!-- Genera controladores que delegan -->
+								<delegatePattern>false</delegatePattern> <!-- Genera controladores que delegan -->
 								<basePackage>com.alia.generated</basePackage>
 							</configOptions>
 						</configuration>

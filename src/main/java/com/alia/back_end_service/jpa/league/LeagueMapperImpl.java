@@ -5,9 +5,11 @@ import com.alia.back_end_service.jpa.bot.BotMapper;
 import com.alia.back_end_service.jpa.round.RoundEntity;
 import com.alia.back_end_service.jpa.round.RoundMapper;
 import com.alia.back_end_service.jpa.bot.BotEntity;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class LeagueMapperImpl implements LeagueMapper {
 
     private final BotMapper botMapper;

@@ -15,12 +15,12 @@ public class BotMapperImpl implements BotMapper{
 
     private final UserMapper userMapper;
     private final LeagueMapper leagueMapper;
-    private final MessageMapper messageMapper;
+//    private final MessageMapper messageMapper;
 
-    public BotMapperImpl(@Lazy UserMapper userMapper, @Lazy LeagueMapper leagueMapper, MessageMapper messageMapper) {
+    public BotMapperImpl(@Lazy UserMapper userMapper, @Lazy LeagueMapper leagueMapper) {
         this.userMapper = userMapper;
         this.leagueMapper = leagueMapper;
-        this.messageMapper = messageMapper;
+//        this.messageMapper = messageMapper;
     }
 
     @Override
@@ -34,10 +34,10 @@ public class BotMapperImpl implements BotMapper{
                 entity.getLeagues() != null ? entity.getLeagues().stream()
                         .map(leagueMapper::toDomain)
                         .collect(Collectors.toList()) : Collections.emptyList()
-                ,
-                entity.getMessages() != null ? entity.getMessages().stream()
-                        .map(messageMapper::toDomain)
-                        .collect(Collectors.toList()) : Collections.emptyList()
+//                ,
+//                entity.getMessages() != null ? entity.getMessages().stream()
+//                        .map(messageMapper::toDomain)
+//                        .collect(Collectors.toList()) : Collections.emptyList()
         );
     }
 
@@ -52,10 +52,10 @@ public class BotMapperImpl implements BotMapper{
                 domain.getLeagues() != null ? domain.getLeagues().stream()
                         .map(leagueMapper::toEntity)
                         .collect(Collectors.toList()) : Collections.emptyList()
-                ,
-                domain.getMessages() != null ? domain.getMessages().stream()
-                        .map(messageMapper::toEntity)
-                        .collect(Collectors.toList()) : Collections.emptyList()
+//                ,
+//                domain.getMessages() != null ? domain.getMessages().stream()
+//                        .map(messageMapper::toEntity)
+//                        .collect(Collectors.toList()) : Collections.emptyList()
         );
     }
 }

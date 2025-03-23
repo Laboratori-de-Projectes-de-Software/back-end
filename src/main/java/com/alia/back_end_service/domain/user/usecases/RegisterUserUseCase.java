@@ -25,7 +25,7 @@ public class RegisterUserUseCase {
 
         // Encriptar contraseña antes de guardarla
         String encryptedPassword = passwordEncoderPort.encode(user.getPassword());
-        user = new User(user.getUsername(), user.getMail(), encryptedPassword, user.getPhoto(), user.getRole(), Collections.emptyList());
+        user = new User(user.getUsername(), user.getMail(), encryptedPassword, user.getRole(), Collections.emptyList());
 
         return userPortDB.save(user);
     }
