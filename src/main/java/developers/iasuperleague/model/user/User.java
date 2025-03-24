@@ -24,10 +24,4 @@ public class User {
 
     @Column(nullable = false)
     private String password;
-
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<Liga> ligasCreadas;
-
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<Bot> bots;
 }
