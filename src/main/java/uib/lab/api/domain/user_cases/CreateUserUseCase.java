@@ -1,5 +1,8 @@
-package uib.lab.api.domain;
+package uib.lab.api.domain.user_cases;
 import org.springframework.stereotype.Component;
+
+import uib.lab.api.domain.UserDomain;
+import uib.lab.api.domain.UserPort;
 
 @Component
 public class CreateUserUseCase {

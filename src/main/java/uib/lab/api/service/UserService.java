@@ -1,8 +1,8 @@
 package uib.lab.api.service;
 
 import uib.lab.api.entity.User;
+import uib.lab.api.repository.UserJpaRepository;
 import uib.lab.api.dto.user.UserResponse;
-import uib.lab.api.entity.jpa_user.UserJpaRepository;
 import uib.lab.api.util.message.MessageCode;
 import uib.lab.api.util.message.MessageConverter;
 import lombok.Getter;

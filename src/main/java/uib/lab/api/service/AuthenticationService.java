@@ -3,19 +3,19 @@ package uib.lab.api.service;
 import uib.lab.api.dto.user.UserRegistrationRequest;
 import uib.lab.api.dto.user.UserUpdateRequest;
 import uib.lab.api.entity.User;
-import uib.lab.api.entity.jpa_user.UserJpaAdapter;
-import uib.lab.api.entity.jpa_user.UserMapper;
-import uib.lab.api.entity.jpa_user.UserJpaRepository;
+import uib.lab.api.mapper.UserMapper;
+import uib.lab.api.repository.UserJpaRepository;
 import uib.lab.api.util.ApiMessage;
 import uib.lab.api.util.jwt.JwtVerificationProvider;
 import uib.lab.api.util.message.MessageCode;
 import uib.lab.api.util.message.MessageConverter;
-import uib.lab.api.domain.CreateUserUseCase;
-import uib.lab.api.domain.GetAllUsersUseCase;
-import uib.lab.api.domain.UpdateUserUseCase;
+import uib.lab.api.adapter.UserJpaAdapter;
 import uib.lab.api.domain.UserDomain;
 
 import uib.lab.api.domain.UserPort;
+import uib.lab.api.domain.user_cases.CreateUserUseCase;
+import uib.lab.api.domain.user_cases.GetAllUsersUseCase;
+import uib.lab.api.domain.user_cases.UpdateUserUseCase;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -98,8 +98,11 @@ public class AuthenticationService {
         return usuarios;
     }
 
-
+    /*
+     * Método para actualizar un usuario
+     */
     public ApiMessage updateUser(Long id, UserUpdateRequest userUpdateRequest, Locale locale) throws MessagingException {
+        //Si el ID no existe en la base de datos lanzamos un mensaje de que no existe
         userJpaRepository.findById(id).orElseThrow(() -> {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
@@ -111,6 +114,7 @@ public class AuthenticationService {
             );
         });
 
+        //Si existe revisamos contraseña
         var user = strictMapper.map(userUpdateRequest, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(true); 

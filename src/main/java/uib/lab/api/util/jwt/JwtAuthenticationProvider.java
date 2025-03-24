@@ -1,6 +1,6 @@
 package uib.lab.api.util.jwt;
 
-import uib.lab.api.repository.UserRepository;
+import uib.lab.api.repository.UserJpaRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class JwtAuthenticationProvider extends JwtProvider {
     private String prefix;
 
     @Autowired
-    public JwtAuthenticationProvider(UserRepository userRepository) {
+    public JwtAuthenticationProvider(UserJpaRepository userRepository) {
         super(userRepository);
     }
 }

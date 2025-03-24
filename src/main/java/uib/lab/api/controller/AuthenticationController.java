@@ -26,13 +26,19 @@ public class AuthenticationController {
         return ResponseEntity.status(message.getStatus()).body(message);
     }
 
+    /*
+     * TODO: mover al userController, esta aqui para hacer pruebas
+     */
     @GetMapping("/users")
     public ResponseEntity<List<UserDomain>> getAllUsers() {
         List<UserDomain> users = authenticationService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
-    @PutMapping("/updateUser/{id}")
+    /*
+     * TODO: mover al userController, esta aqui para hacer pruebas
+     */
+    @PutMapping("/user/{id}")
     public ResponseEntity<ApiMessage> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest user, Locale locale) throws MessagingException {
         var message = authenticationService.updateUser(id, user, locale);
         return ResponseEntity.status(message.getStatus()).body(message);

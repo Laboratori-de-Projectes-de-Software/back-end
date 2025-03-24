@@ -13,5 +13,6 @@ public interface UserPort {
     //Método para actualizar un usuario
     UserDomain update(UserDomain user);
 
+    //Método para encontrar un usuario usando su id para buscar
     Optional<UserDomain> findById(Long id);
 }
