@@ -1,19 +1,21 @@
 package uib.lab.api.service;
 
 import uib.lab.api.dto.user.UserRegistrationRequest;
+import uib.lab.api.dto.user.UserUpdateRequest;
 import uib.lab.api.entity.User;
-import uib.lab.api.entity.jpa_user.UserJpaAdapter;
-import uib.lab.api.entity.jpa_user.UserMapper;
-import uib.lab.api.entity.jpa_user.UserJpaRepository;
+import uib.lab.api.mapper.UserMapper;
+import uib.lab.api.repository.UserJpaRepository;
 import uib.lab.api.util.ApiMessage;
 import uib.lab.api.util.jwt.JwtVerificationProvider;
 import uib.lab.api.util.message.MessageCode;
 import uib.lab.api.util.message.MessageConverter;
-import uib.lab.api.domain.CreateUserUseCase;
-import uib.lab.api.domain.GetAllUsersUseCase;
+import uib.lab.api.adapter.UserJpaAdapter;
 import uib.lab.api.domain.UserDomain;
 
 import uib.lab.api.domain.UserPort;
+import uib.lab.api.domain.user_cases.CreateUserUseCase;
+import uib.lab.api.domain.user_cases.GetAllUsersUseCase;
+import uib.lab.api.domain.user_cases.UpdateUserUseCase;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +41,7 @@ public class AuthenticationService {
     private final UserJpaAdapter userJpaAdapter;
     private final CreateUserUseCase createUserCase;
     private final GetAllUsersUseCase getAllUserCase;
+    private final UpdateUserUseCase updateUserUseCase;
 
     private final JwtVerificationProvider jwtVerificationProvider;
 
@@ -53,8 +56,8 @@ public class AuthenticationService {
     private enum Message implements MessageCode {
         ALREADY_EXISTS("user.already-exists.username"),
         NOT_EXISTS_BY_USERNAME("user.not-exists.username"),
-        ENABLED("registration.user-enabled");
-
+        ENABLED("registration.user-enabled"),
+        UPDATED("user.update");
         private final String code;
     }
 
@@ -72,7 +75,6 @@ public class AuthenticationService {
 
         var user = strictMapper.map(userRegistrationRequest, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         user.setEnabled(true); 
         user.setRoles(Set.of(User.Role.USER));
 
@@ -94,6 +96,37 @@ public class AuthenticationService {
     public List<UserDomain> getAllUsers(){
         List<UserDomain> usuarios = getAllUserCase.getUsers();
         return usuarios;
+    }
+
+    /*
+     * Método para actualizar un usuario
+     */
+    public ApiMessage updateUser(Long id, UserUpdateRequest userUpdateRequest, Locale locale) throws MessagingException {
+        //Si el ID no existe en la base de datos lanzamos un mensaje de que no existe
+        userJpaRepository.findById(id).orElseThrow(() -> {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    messageConverter.getMessage(
+                            Message.NOT_EXISTS_BY_USERNAME,
+                            Set.of(userUpdateRequest.getUsername()),
+                            locale
+                    )
+            );
+        });
+
+        //Si existe revisamos contraseña
+        var user = strictMapper.map(userUpdateRequest, User.class);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(true); 
+        user.setRoles(Set.of(User.Role.USER));
+
+        //Actualizamos el usuario usando el caso de uso de UpdateUserCase
+        updateUserUseCase.updateUser(id, user.getUsername(), user.getName(), user.getPassword());
+
+        return ApiMessage.builder()
+                .status(HttpStatus.CREATED)
+                .message(messageConverter.getMessage(Message.ENABLED, Set.of(userUpdateRequest.getName()), locale))
+                .build();
     }
 
     public User getLoggedUser() {

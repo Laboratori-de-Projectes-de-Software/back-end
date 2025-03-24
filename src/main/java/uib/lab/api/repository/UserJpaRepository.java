@@ -1,12 +1,18 @@
 package uib.lab.api.repository;
 
-import uib.lab.api.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import uib.lab.api.entity.User;
+
+
+@Repository
+public interface UserJpaRepository extends JpaRepository<User, Long>{
     Optional<User> findByUsername(String username);
 
     boolean existsByUsername(String username);
+
+    
 }
