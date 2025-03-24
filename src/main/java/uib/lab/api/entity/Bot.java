@@ -3,8 +3,6 @@ package uib.lab.api.entity;
 import lombok.*;
 import javax.persistence.*;
 import java.util.Set;
-import uib.lab.api.entity.User;
-import uib.lab.api.entity.Game;
 
 
 @Entity
