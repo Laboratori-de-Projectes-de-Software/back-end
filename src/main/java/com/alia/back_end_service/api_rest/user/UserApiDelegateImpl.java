@@ -1,11 +1,10 @@
 package com.alia.back_end_service.api_rest.user;
 
+import com.alia.back_end_service.api.UsersApiDelegate;
+import com.alia.back_end_service.api_model.UserLogin;
+import com.alia.back_end_service.api_model.UserRegister;
+import com.alia.back_end_service.api_model.UsersLoginPost200Response;
 import com.alia.back_end_service.domain.user.ports.UserPortAPI;
-import com.alia.generated.api.UsersApi;
-import com.alia.generated.api.UsersApiDelegate;
-import com.alia.generated.model.UserLogin;
-import com.alia.generated.model.UserRegister;
-import com.alia.generated.model.UsersLoginPost200Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
