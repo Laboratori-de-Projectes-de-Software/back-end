@@ -2,7 +2,7 @@ package com.example.gironetaServer.application.services;
 
 import com.example.gironetaServer.application.ports.UserRepository;
 import com.example.gironetaServer.domain.User;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.JwtTokenUtil;
+import com.example.gironetaServer.infraestructure.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -24,7 +24,7 @@ public class BotDatabaseRepository implements BotRepository {
 
     @Override
     public List<BotEntity> findByUsuarioCorreo(String correo) {
-        return botJpaRepository.findByUsuarioCorreo(correo);
+        return botJpaRepository.findByUsuarioEmail(correo);
     }
 
     @Override

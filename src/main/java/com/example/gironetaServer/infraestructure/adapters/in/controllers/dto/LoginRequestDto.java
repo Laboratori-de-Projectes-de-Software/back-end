@@ -1,10 +1,20 @@
 package com.example.gironetaServer.infraestructure.adapters.in.controllers.dto;
 
-public class LoginRequest {
-
+public class LoginRequestDto {
     private String username;
     private String password;
 
+    // Constructor por defecto
+    public LoginRequestDto() {
+    }
+
+    // Constructor
+    public LoginRequestDto(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    // Getters y setters
     public String getUsername() {
         return username;
     }
@@ -19,15 +29,5 @@ public class LoginRequest {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    private String email;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }
