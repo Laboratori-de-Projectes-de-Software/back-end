@@ -26,8 +26,6 @@ public class UserDTOPost {
     @NotBlank(message = "La contraseña no puede estar vacia")
     @Size(min = 6, max = 30, message = "La contraseña debe tener entre 6 y 30 caracteres")
     private String password;
-
-    private String photo;
 }
 
 
