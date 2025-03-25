@@ -16,58 +16,49 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserJpaAdapter implements UserPort {
-    private final UserJpaRepository repo;
+    private final UserJpaRepository userJpaRepository;
     private final UserMapper userMapper;
 
-    public UserJpaAdapter(final UserJpaRepository repo, final UserMapper userMapper){
-        this.repo = repo; //Repositorio
-        this.userMapper = userMapper; //Mapper para cambiar entre User (dominio) <-> User (entidad)
+    public UserJpaAdapter(final UserJpaRepository userJpaRepository, final UserMapper userMapper){
+        this.userJpaRepository = userJpaRepository;
+        this.userMapper = userMapper;
     }
 
-    /*
-     * Guarda un usuario dentro de la base de datos
-     */
     @Override
-    public UserDomain save(UserDomain user) {
-        return userMapper.toDomain(
-                repo.save(
-                        userMapper.toEntity(user)));
+    public Optional<UserDomain> findByUsername(String username) {
+        return userJpaRepository.findByUsername(username).map(userMapper::toDomain);
     }
 
-    /*
-     * Recoge todos los usuarios que se encuentran dentro de la base de datos
-     */
+    @Override
+    public UserDomain save(UserDomain userDomain) {
+        User userEntity = userMapper.toEntity(userDomain);
+        User savedUser = userJpaRepository.save(userEntity);
+        System.out.println("Usuario guardado con ID: " + savedUser.getId());
+        return userMapper.toDomain(savedUser);
+    }
+
      @Override
     public List<UserDomain> findAll() {
-        return repo.findAll()
+        return userJpaRepository.findAll()
                    .stream()
                    .map(userMapper::toDomain)
                    .collect(Collectors.toList());
     }
 
-    /*
-     * Buscamos un usuario usando su identificador
-     */
     @Override
     public Optional<UserDomain> findById(Long id) {
-        return repo.findById(id).map(userMapper::toDomain);
+        return userJpaRepository.findById(id).map(userMapper::toDomain);
     }
 
-    /*
-     * Método que actualiza un usuario
-     */
     @Override
     public UserDomain update(UserDomain user){
-        //Buscamos su id
-        User entity = repo.findById(user.getId())
+        User entity = userJpaRepository.findById(user.getId())
         .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     
-        //Actualizamos los datos
         entity.setUsername(user.getUsername());
         entity.setName(user.getName());
         entity.setPassword(user.getPassword());
   
-        //Lo guardamos en vase de datos
-        return userMapper.toDomain(repo.save(entity));
+        return userMapper.toDomain(userJpaRepository.save(entity));
     }
 }

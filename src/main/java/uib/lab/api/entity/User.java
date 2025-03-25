@@ -40,6 +40,12 @@ public class User implements UserDetails {
 
     private boolean enabled;
 
+    public User(long id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
+
     public User(long id, String u, String n, String p){
         this.id = id;
         this.username = u;

@@ -11,13 +11,24 @@ public class UserMapperImpl implements UserMapper {
      */
     @Override
     public UserDomain toDomain(User entity){
-        return new UserDomain(entity.getId(), entity.getUsername(), entity.getName(), entity.getPassword());
+        if (entity == null) {
+            return null;
+        }
+        return new UserDomain(entity.getId(), entity.getUsername(), entity.getName(), entity.getPassword(), true, entity.getRoles());
     }
 
     @Override
     public User toEntity(UserDomain user){
-        return new User(user.getId(), user.getUsername(), user.getName(), user.getPassword());
+        if (user == null) {
+            return null;
+        }
+        User entity = new User();
+        entity.setId(user.getId());
+        entity.setUsername(user.getUsername());
+        entity.setName(user.getName());
+        entity.setPassword(user.getPassword());
+        entity.setEnabled(true);
+        entity.setRoles(user.getRoles());
+        return entity;
     }
-    
 }
-

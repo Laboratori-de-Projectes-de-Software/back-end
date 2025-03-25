@@ -55,8 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         JwtUsernamePasswordAuthenticationFilter.class
                 )
                 .exceptionHandling(handler ->
-                        handler
-                                .authenticationEntryPoint(accessDeniedHandler)
+                        handler.authenticationEntryPoint(accessDeniedHandler)
                 );
     }
 

@@ -1,44 +1,92 @@
 package uib.lab.api.domain;
 
-public class UserDomain {
-    private long id;
+import java.util.Collection;
+import java.util.Set;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import uib.lab.api.entity.User.Role;
+
+public class UserDomain implements UserDetails {
+    private long id;
     private String username;
     private String name;
     private String password;
+    private boolean isEnabled;
+    private Set<Role> roles;
 
-    public UserDomain(long id, String u, String n, String p){
+    public UserDomain(long id, String username, String name, String password, boolean isEnabled, Set<Role> roles) {
         this.id = id;
-        this.username = u;
-        this.name = n; 
-        this.password = p;
+        this.username = username;
+        this.name = name;
+        this.password = password;
+        this.isEnabled = isEnabled;
+        this.roles = roles;
     }
 
-    public UserDomain(String u, String n, String p){
-        this.username = u;
-        this.name = n; 
-        this.password = p;
+    public UserDomain(long id, String username, String name, String password, boolean isEnabled) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.password = password;
+        this.isEnabled = isEnabled;
+        this.roles = roles;
     }
 
-    public UserDomain(){
-        
+    public UserDomain(String username, String name, String password, boolean isEnabled, Set<Role> roles) {
+        this.username = username;
+        this.name = name;
+        this.password = password;
+        this.isEnabled = isEnabled;
+        this.roles = roles;
     }
 
-    public long getId(){
+    public UserDomain() {}
+
+    public long getId() {
         return this.id;
     }
 
-    public String getUsername(){
+    public String getUsername() {
         return this.username;
     }
 
-    public String getName(){
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    public String getName() {
         return this.name;
     }
 
-    public String getPassword(){
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                .toList();
+    }
+
+    public String getPassword() {
         return this.password;
     }
 
+    public Set<Role> getRoles() {
+        return this.roles;
+    }
 
+    public boolean isEnabled() {
+        return this.isEnabled;
+    }
 }

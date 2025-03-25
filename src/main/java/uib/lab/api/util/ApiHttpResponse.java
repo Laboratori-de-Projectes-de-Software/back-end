@@ -1,5 +1,6 @@
 package uib.lab.api.util;
 
+import uib.lab.api.domain.UserDomain;
 import uib.lab.api.entity.User;
 import uib.lab.api.util.jwt.JwtAuthenticationProvider;
 import uib.lab.api.util.message.*;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
@@ -40,11 +40,19 @@ public class ApiHttpResponse {
     }
 
     public void jwtToken(HttpServletResponse response, Authentication authentication) throws IOException {
-        var token = jwtAuthenticationProvider.generate((User) authentication.getPrincipal());
+        Object principal = authentication.getPrincipal();
+        String token;
+
+        if (principal instanceof UserDomain) {
+            User user = new User(((UserDomain) principal).getId(), ((UserDomain) principal).getUsername(), ((UserDomain) principal).getPassword());
+
+            token = jwtAuthenticationProvider.generate(user);
+        } else {
+            throw new RuntimeException("Tipo inesperado de usuario autenticado: " + principal.getClass().getName());
+        }
+
         var stream = response.getOutputStream();
-
         response.setContentType(MediaType.TEXT_PLAIN_VALUE);
-
         objectMapper.writeValue(stream, token);
         stream.flush();
     }

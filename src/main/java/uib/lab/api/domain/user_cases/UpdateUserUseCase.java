@@ -13,7 +13,7 @@ public class UpdateUserUseCase {
     }
 
     public UserDomain updateUser(Long id, final String username, final String name, final String password){
-        UserDomain user = new UserDomain(id, username, name, password);
+        UserDomain user = new UserDomain(id, username, name, password, true);
         return port.update(user);
     }
 }
