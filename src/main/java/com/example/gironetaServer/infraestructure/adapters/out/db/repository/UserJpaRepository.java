@@ -4,8 +4,8 @@ import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserE
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
@@ -13,5 +13,5 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
 
     UserEntity findByUsername(String username);
 
-    UserEntity findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
 }

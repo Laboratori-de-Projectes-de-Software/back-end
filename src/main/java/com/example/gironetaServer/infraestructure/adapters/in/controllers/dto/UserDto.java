@@ -20,6 +20,10 @@ public class UserDto {
         this.updatedAt = updatedAt;
     }
 
+    public UserDto() {
+
+    }
+
     // Getters and setters
     public Long getId() {
         return id;
