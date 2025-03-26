@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.out.bot.*;
 import org.example.backend.databaseapi.domain.Bot;
+import org.example.backend.databaseapi.jpa.liga.LigaJpaMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Optional;
 public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort, DeleteBotPort, FindAllUserBots, FindAllBotsPort {
 
     private final BotJpaRepository botJpaRepository;
+    private final LigaJpaMapper ligaJpaMapper;
     private final BotJpaMapper botJpaMapper;
 
     @Override
@@ -42,6 +44,11 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
                         bot.setCualidad(changedBot.getCualidad());
                         bot.setImagen(changedBot.getImagen());
                         bot.setNombre(changedBot.getNombre());
+                        bot.setLigasBot(changedBot.getLigasBot()
+                                .stream()
+                                .map(ligaJpaMapper::toEntity)
+                                .toList()
+                        );
                         bot.setUrl(changedBot.getUrl());
                         return botJpaMapper.toDomain(botJpaRepository.save(bot));
                 })

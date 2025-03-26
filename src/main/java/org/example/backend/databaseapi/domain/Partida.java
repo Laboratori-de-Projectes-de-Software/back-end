@@ -15,6 +15,7 @@ public class Partida {
 
     private Integer partidaId;
     private Liga liga; //Notnull
+    private Estado estado;
     private Integer duracionTotal;
     private LocalDateTime fecha; //Notnull
 

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Builder
 @Getter
@@ -12,6 +14,7 @@ import lombok.Setter;
 public class Liga {
 
     private Integer ligaId;
+    private List<Bot> botsLiga;
     private Usuario usuario;
     private String nombre;
 

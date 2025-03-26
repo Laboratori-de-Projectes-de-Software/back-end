@@ -3,7 +3,10 @@ package org.example.backend.databaseapi.jpa.bot;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.example.backend.databaseapi.jpa.liga.LigaJpaEntity;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaEntity;
+
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -17,6 +20,9 @@ public class BotJpaEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private int idBot;
+
+    @ManyToMany(mappedBy = "botsLiga")
+    private List<LigaJpaEntity> ligasBot;
 
     @ManyToOne(optional = false)
     @JoinColumn(name="id_usuario")
