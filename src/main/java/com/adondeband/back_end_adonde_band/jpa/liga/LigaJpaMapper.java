@@ -24,7 +24,7 @@ public interface LigaJpaMapper {
     // Mapea de Liga a LigaEntity
     LigaEntity toEntity(Liga liga);
 
-    default  long map(LigaId value){
+    default long map(LigaId value){
         return value.value();
     }
 

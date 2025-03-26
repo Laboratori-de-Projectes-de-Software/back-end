@@ -21,7 +21,7 @@ public class Enfrentamiento {
 
     private Bot visitante;
 
-
+    
     private Conversacion conversacion;
 
     private Jornada jornada;
