@@ -1,11 +1,14 @@
 package org.example.backend.databaseapi.jpa.liga;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.out.liga.CreateLigaPort;
 import org.example.backend.databaseapi.application.port.out.liga.FindAllLigasPort;
 import org.example.backend.databaseapi.application.port.out.liga.FindLigaPort;
 import org.example.backend.databaseapi.application.port.out.liga.FindLigaUsuarioPort;
 import org.example.backend.databaseapi.domain.liga.Liga;
+import org.example.backend.databaseapi.jpa.bot.BotJpaAdapter;
+import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaAdapter;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaMapper;
 import org.springframework.stereotype.Component;
 
@@ -18,13 +21,30 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
 
     private final LigaJpaMapper ligaJpaMapper;
     private final LigaJpaRepository ligaJpaRepository;
-    private final UsuarioJpaMapper usuarioJpaMapper;
+    private final UsuarioJpaAdapter usuarioJpaAdapter;
+    private final BotJpaAdapter botJpaAdapter;
 
     @Override
+    @Transactional
     public Liga createLiga(Liga liga) {
+        LigaJpaEntity ligaJpa=LigaJpaEntity.builder()
+                .nombre(liga.getNombre())
+                .usuario(usuarioJpaAdapter.getUser(liga.getLigaId().value())
+                        .orElseThrow())
+                .botsLiga(
+                        liga.getBotsLiga()
+                                .stream()
+                                .map(
+                                    botId -> botJpaAdapter.getJpaBot(botId.value())
+                                            .orElseThrow()
+                                )
+                                .toList()
+
+                )
+                .build();
         return ligaJpaMapper.toDomain(
                 ligaJpaRepository.save(
-                        ligaJpaMapper.toEntity(liga)
+                        ligaJpa
                 )
         );
     }
@@ -50,5 +70,10 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
                 .stream()
                 .map(ligaJpaMapper::toDomain)
                 .toList();
+    }
+
+    public LigaJpaEntity getLiga(int ligaId){
+        return ligaJpaRepository.findById(ligaId)
+                .orElseThrow();
     }
 }

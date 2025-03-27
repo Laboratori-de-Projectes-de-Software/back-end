@@ -4,13 +4,9 @@ package org.example.backend.databaseapi.jpa.resultado;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.out.resultado.*;
-import org.example.backend.databaseapi.domain.bot.Bot;
-import org.example.backend.databaseapi.domain.partida.Partida;
 import org.example.backend.databaseapi.domain.resultado.Resultado;
 import org.example.backend.databaseapi.jpa.bot.BotJpaAdapter;
-import org.example.backend.databaseapi.jpa.bot.BotJpaMapper;
 import org.example.backend.databaseapi.jpa.partida.PartidaJpaAdapter;
-import org.example.backend.databaseapi.jpa.partida.PartidaJpaMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,15 +20,13 @@ public class ResultadoJpaAdapter implements CreateResultadoPort, FindBotResultad
     private final ResultadoJpaMapper resultadoJpaMapper;
     private final BotJpaAdapter botJpaAdapter;
     private final PartidaJpaAdapter partidaJpaAdapter;
-    private final BotJpaMapper botJpaMapper;
-    private final PartidaJpaMapper partidaJpaMapper;
 
     @Override
     @Transactional
     public Resultado createResultado(Resultado resultado) {
         ResultadoJpaEntity resultjpa=ResultadoJpaEntity.builder()
                 .bot(
-                        botJpaAdapter.findJpaBot(resultado.getResultadoId().botvalue())
+                        botJpaAdapter.getJpaBot(resultado.getResultadoId().botvalue())
                                 .orElseThrow()
                 )
                 .partida(
@@ -66,7 +60,7 @@ public class ResultadoJpaAdapter implements CreateResultadoPort, FindBotResultad
     public Optional<Resultado> findResultado(Integer botId, Integer partidaId) {
 
         ResultadoIdJpa resultadoId=new ResultadoIdJpa(
-                botJpaAdapter.findJpaBot(botId).orElseThrow(),
+                botJpaAdapter.getJpaBot(botId).orElseThrow(),
                 partidaJpaAdapter.findJpaPartida(partidaId).orElseThrow()
         );
         return resultadoJpaRepository.findById(resultadoId)
