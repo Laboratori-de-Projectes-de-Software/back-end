@@ -19,11 +19,11 @@ public class ResultadoModelAssembler implements RepresentationModelAssembler<Res
     @Override
     public EntityModel<Resultado> toModel(Resultado entity) {
         return EntityModel.of(entity,
-                linkTo(methodOn(ResultadoController.class).buscarResultadosPartida(entity.getPartida().getPartidaId().value(), entity.getPartida().getLiga().getLigaId().value())).withSelfRel());
+                linkTo(methodOn(ResultadoController.class).buscarResultadosPartida(entity.getResultadoId().partidavalue(), 0)).withSelfRel());
     }
 
     public CollectionModel<EntityModel<Resultado>> toCollectionModel(List<EntityModel<Resultado>> resultados) {
         return CollectionModel.of(resultados,
-                linkTo(methodOn(ResultadoController.class).buscarResultadosLiga(resultados.getFirst().getContent().getPartida().getPartidaId().value())).withSelfRel());
+                linkTo(methodOn(ResultadoController.class).buscarResultadosLiga(resultados.getFirst().getContent().getResultadoId().partidavalue())).withSelfRel());
     }
 }

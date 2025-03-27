@@ -4,16 +4,20 @@ import org.example.backend.databaseapi.domain.bot.Bot;
 import org.example.backend.databaseapi.domain.bot.BotId;
 import org.example.backend.databaseapi.domain.liga.LigaId;
 import org.example.backend.databaseapi.domain.usuario.UsuarioId;
+import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface BotJpaMapper {
 
     Bot toDomain(BotJpaEntity entity);
-    BotJpaEntity toEntity(Bot bot);
 
     default UsuarioId toUserId(Integer value) {
         return new UsuarioId(value);
+    }
+
+    default UsuarioId toUserId(UsuarioJpaEntity value) {
+        return new UsuarioId(value.getUserId());
     }
 
     default Integer toInteger(UsuarioId entity) {

@@ -31,8 +31,8 @@ public class ResultadoController {
         Resultado resultado=createResultadoPort.createResultado(resultadoRequest);
         return ResponseEntity.created(linkTo(methodOn(ResultadoController.class)
                         .buscarResultadosPartida(
-                                resultado.getPartida().getPartidaId().value(),
-                                resultado.getPartida().getLiga().getLigaId().value()))
+                                idpartida,
+                                idliga))
                         .toUri())
                 .body(resultadoModelAssembler.toModel(resultado));
     }

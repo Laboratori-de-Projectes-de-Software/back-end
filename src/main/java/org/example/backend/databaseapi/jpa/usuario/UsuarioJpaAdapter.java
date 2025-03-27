@@ -67,4 +67,8 @@ public class UsuarioJpaAdapter implements CreateUsuarioPort, FindUsuarioPort, De
                     return usuarioJpaMapper.toDomain(usuarioJpaRepository.save(entity));
                 });
     }
+
+    public Optional<UsuarioJpaEntity> getUser(int id){
+        return usuarioJpaRepository.findById(id);
+    }
 }

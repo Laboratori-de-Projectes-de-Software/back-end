@@ -49,4 +49,8 @@ public class PartidaJpaAdapter implements CreatePartidaPort, FindLigaPartidaPort
         return partidaJpaRepository.findById(idPartida)
                 .map(partidaJpaMapper::toDomain);
     }
+
+    public Optional<PartidaJpaEntity> findJpaPartida(Integer idPartida){
+        return partidaJpaRepository.findById(idPartida);
+    }
 }

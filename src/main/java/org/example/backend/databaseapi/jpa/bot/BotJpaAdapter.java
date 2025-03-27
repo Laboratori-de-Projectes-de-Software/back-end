@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.out.bot.*;
 import org.example.backend.databaseapi.domain.bot.Bot;
 import org.example.backend.databaseapi.jpa.liga.LigaJpaMapper;
+import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaAdapter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Optional;
 public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort, DeleteBotPort, FindAllUserBots, FindAllBotsPort {
 
     private final BotJpaRepository botJpaRepository;
+    private final UsuarioJpaAdapter usuarioJpaAdapter;
     private final LigaJpaMapper ligaJpaMapper;
     private final BotJpaMapper botJpaMapper;
 
@@ -22,7 +24,22 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
     @Transactional
     public Optional<Bot> createBot(Bot bot) {
         if(!botJpaRepository.existsByNombreOrUrl(bot.getNombre(),bot.getUrl())){
-            return Optional.of(botJpaMapper.toDomain(botJpaRepository.save(botJpaMapper.toEntity(bot))));
+            BotJpaEntity newbot=BotJpaEntity.builder()
+                    .url(bot.getUrl())
+                    .cualidad(bot.getCualidad())
+                    .ligasBot(bot.getLigasBot()
+                            .stream()
+                            .map(ligaJpaMapper::toEntity)
+                            .toList()
+                    )
+                    .imagen(bot.getImagen())
+                    .usuario(
+                            usuarioJpaAdapter.getUser(bot.getUsuario().value())
+                                    .orElseThrow()
+                    )
+                    .nombre(bot.getNombre())
+                    .build();
+            return Optional.of(botJpaMapper.toDomain(botJpaRepository.save(newbot)));
         }
         return Optional.empty();
     }
@@ -53,7 +70,24 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
                         return botJpaMapper.toDomain(botJpaRepository.save(bot));
                 })
                 .orElseGet(
-                        ()-> botJpaMapper.toDomain(botJpaRepository.save(botJpaMapper.toEntity(changedBot)))
+                        ()->{
+                        BotJpaEntity newbot=BotJpaEntity.builder()
+                                .url(changedBot.getUrl())
+                                .cualidad(changedBot.getCualidad())
+                                .ligasBot(changedBot.getLigasBot()
+                                        .stream()
+                                        .map(ligaJpaMapper::toEntity)
+                                        .toList()
+                                )
+                                .imagen(changedBot.getImagen())
+                                .usuario(
+                                        usuarioJpaAdapter.getUser(changedBot.getUsuario().value())
+                                                .orElseThrow()
+                                )
+                                .nombre(changedBot.getNombre())
+                                .build();
+                            return botJpaMapper.toDomain(botJpaRepository.save(newbot));
+                        }
                 );
     }
 
@@ -76,5 +110,9 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
                 .map(botJpaMapper::toDomain)
                 .toList();
 
+    }
+
+    public Optional<BotJpaEntity> findJpaBot(int id_bot){
+        return botJpaRepository.findById(id_bot);
     }
 }
