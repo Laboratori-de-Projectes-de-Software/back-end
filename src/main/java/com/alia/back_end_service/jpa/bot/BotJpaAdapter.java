@@ -2,6 +2,9 @@ package com.alia.back_end_service.jpa.bot;
 
 import com.alia.back_end_service.domain.bot.Bot;
 import com.alia.back_end_service.domain.bot.port.BotPortDB;
+import com.alia.back_end_service.domain.user.exceptions.UserNotFoundException;
+import com.alia.back_end_service.jpa.user.UserEntity;
+import com.alia.back_end_service.jpa.user.UserJpaRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -13,9 +16,12 @@ public class BotJpaAdapter implements BotPortDB {
 
     private final BotMapper botMapper;
 
-    public BotJpaAdapter(BotJpaRepository botJpaRepository, BotMapper botMapper) {
+    private final UserJpaRepository userJpaRepository;
+
+    public BotJpaAdapter(BotJpaRepository botJpaRepository, BotMapper botMapper, UserJpaRepository userJpaRepository) {
         this.botJpaRepository = botJpaRepository;
         this.botMapper = botMapper;
+        this.userJpaRepository = userJpaRepository;
     }
 
     @Override
@@ -26,7 +32,15 @@ public class BotJpaAdapter implements BotPortDB {
 
     @Override
     public Bot save(Bot bot) {
-        BotEntity savedEntity = botJpaRepository.save(botMapper.toEntity(bot));
+        BotEntity botEntity = botMapper.toEntity(bot);
+
+        // Resolver relación con usuario
+        UserEntity userEntity = userJpaRepository.findById(bot.getUserId())
+                .orElseThrow(UserNotFoundException::new);
+
+        botEntity.setUser(userEntity);
+
+        BotEntity savedEntity = botJpaRepository.save(botEntity);
         return botMapper.toDomain(savedEntity);
     }
 

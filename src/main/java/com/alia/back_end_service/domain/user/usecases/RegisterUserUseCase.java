@@ -5,17 +5,18 @@ import com.alia.back_end_service.domain.user.User;
 import com.alia.back_end_service.domain.user.ports.UserPortDB;
 import com.alia.back_end_service.domain.user.exceptions.EmailAlreadyExistsException;
 import com.alia.back_end_service.domain.user.exceptions.UsernameAlreadyExistsException;
+import com.alia.back_end_service.domain.user.ports.UserRegistrationPortAPI;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
 
 
 @RequiredArgsConstructor
-public class RegisterUserUseCase {
+public class RegisterUserUseCase implements UserRegistrationPortAPI {
     private final UserPortDB userPortDB;
     private final PasswordEncoderPort passwordEncoderPort;
 
-    public User execute(User user) {
+    public User registerUser(User user) {
         if (userPortDB.findByEmail(user.getMail()).isPresent()) {
             throw new EmailAlreadyExistsException();
         }

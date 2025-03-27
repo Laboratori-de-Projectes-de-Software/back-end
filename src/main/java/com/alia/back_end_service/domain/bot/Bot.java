@@ -23,7 +23,8 @@ public class Bot {
 
     private String token;
 
-    private User user;
-    private List<League> leagues;
-//    private List<Message> messages;
+    private String userId;
+
+    private List<Integer> leagueIds;
+
 }

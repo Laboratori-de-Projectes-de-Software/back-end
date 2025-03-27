@@ -3,10 +3,10 @@ package com.alia.back_end_service.jpa.league;
 
 import com.alia.back_end_service.domain.league.ports.LeaguePortDB;
 import com.alia.back_end_service.domain.league.League;
-import com.alia.back_end_service.jpa.round.RoundEntity;
+
 
 import java.util.List;
-import java.util.Optional;
+
 
 
 public class LeagueJpaAdapter implements LeaguePortDB {
