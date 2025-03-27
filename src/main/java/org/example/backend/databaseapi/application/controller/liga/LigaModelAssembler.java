@@ -1,8 +1,6 @@
 package org.example.backend.databaseapi.application.controller.liga;
 
-import org.example.backend.databaseapi.application.controller.bot.BotController;
-import org.example.backend.databaseapi.domain.Bot;
-import org.example.backend.databaseapi.domain.Liga;
+import org.example.backend.databaseapi.domain.liga.Liga;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
@@ -19,7 +17,7 @@ public class LigaModelAssembler implements RepresentationModelAssembler<Liga, En
     @Override
     public EntityModel<Liga> toModel(Liga entity) {
         return EntityModel.of(entity,
-                linkTo(methodOn(LigaController.class).buscarLiga(entity.getLigaId())).withSelfRel(),
+                linkTo(methodOn(LigaController.class).buscarLiga(entity.getLigaId().value())).withSelfRel(),
                 linkTo(methodOn(LigaController.class).buscarAllLigas()).withRel("ligas"));
     }
 

@@ -1,11 +1,10 @@
 package org.example.backend.databaseapi.application.controller.liga;
 
 import lombok.AllArgsConstructor;
-import org.example.backend.databaseapi.application.controller.bot.BotController;
 import org.example.backend.databaseapi.application.port.in.liga.AltaLigaPort;
 import org.example.backend.databaseapi.application.port.in.liga.BuscarAllLigasPort;
 import org.example.backend.databaseapi.application.port.in.liga.BuscarLigaPort;
-import org.example.backend.databaseapi.domain.Liga;
+import org.example.backend.databaseapi.domain.liga.Liga;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class LigaController {
     @PostMapping("/ligas")
     public ResponseEntity<EntityModel<Liga>> altaLiga(@RequestBody Liga requestLiga){
         Liga liga=altaLigaPort.altaLiga(requestLiga);
-        return ResponseEntity.created(linkTo(methodOn(LigaController.class).buscarLiga(liga.getLigaId())).toUri())
+        return ResponseEntity.created(linkTo(methodOn(LigaController.class).buscarLiga(liga.getLigaId().value())).toUri())
                 .body(ligaModelAssembler.toModel(liga));
     }
 

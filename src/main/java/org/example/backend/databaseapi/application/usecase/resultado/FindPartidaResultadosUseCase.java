@@ -3,7 +3,7 @@ package org.example.backend.databaseapi.application.usecase.resultado;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.in.resultado.BuscarResultadosPartidaPort;
 import org.example.backend.databaseapi.application.port.out.resultado.FindPartidaResultadoPort;
-import org.example.backend.databaseapi.domain.Resultado;
+import org.example.backend.databaseapi.domain.resultado.Resultado;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

@@ -1,10 +1,7 @@
 package org.example.backend.databaseapi.application.controller.resultado;
 
 import lombok.AllArgsConstructor;
-import org.example.backend.databaseapi.application.controller.liga.LigaController;
-import org.example.backend.databaseapi.application.controller.mensaje.MensajeController;
-import org.example.backend.databaseapi.domain.Mensaje;
-import org.example.backend.databaseapi.domain.Resultado;
+import org.example.backend.databaseapi.domain.resultado.Resultado;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
@@ -22,11 +19,11 @@ public class ResultadoModelAssembler implements RepresentationModelAssembler<Res
     @Override
     public EntityModel<Resultado> toModel(Resultado entity) {
         return EntityModel.of(entity,
-                linkTo(methodOn(ResultadoController.class).buscarResultadosPartida(entity.getPartida().getPartidaId(),entity.getPartida().getLiga().getLigaId())).withSelfRel());
+                linkTo(methodOn(ResultadoController.class).buscarResultadosPartida(entity.getPartida().getPartidaId().value(), entity.getPartida().getLiga().getLigaId().value())).withSelfRel());
     }
 
     public CollectionModel<EntityModel<Resultado>> toCollectionModel(List<EntityModel<Resultado>> resultados) {
         return CollectionModel.of(resultados,
-                linkTo(methodOn(ResultadoController.class).buscarResultadosLiga(resultados.getFirst().getContent().getPartida().getPartidaId())).withSelfRel());
+                linkTo(methodOn(ResultadoController.class).buscarResultadosLiga(resultados.getFirst().getContent().getPartida().getPartidaId().value())).withSelfRel());
     }
 }

@@ -2,7 +2,6 @@ package org.example.backend.databaseapi.jpa.resultado;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.backend.databaseapi.domain.Partida;
 import org.example.backend.databaseapi.jpa.bot.BotJpaEntity;
 import org.example.backend.databaseapi.jpa.partida.PartidaJpaEntity;
 
@@ -13,7 +12,7 @@ import org.example.backend.databaseapi.jpa.partida.PartidaJpaEntity;
 @Getter
 @Setter
 @Table(name="resultado")
-@IdClass(ResultadoId.class)
+@IdClass(ResultadoIdJpa.class)
 public class ResultadoJpaEntity {
 
     @Id

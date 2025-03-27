@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.databaseapi.application.exception.ResourceAlreadyExistsException;
 import org.example.backend.databaseapi.application.port.in.usuario.AltaUsuarioPort;
 import org.example.backend.databaseapi.application.port.out.usuario.CreateUsuarioPort;
-import org.example.backend.databaseapi.domain.Usuario;
+import org.example.backend.databaseapi.domain.usuario.Usuario;
 import org.springframework.stereotype.Component;
 
 @Component

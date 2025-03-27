@@ -5,7 +5,7 @@ import org.example.backend.databaseapi.application.port.in.resultado.BuscarResul
 import org.example.backend.databaseapi.application.port.in.resultado.BuscarResultadosLiga;
 import org.example.backend.databaseapi.application.port.in.resultado.BuscarResultadosPartidaPort;
 import org.example.backend.databaseapi.application.port.out.resultado.CreateResultadoPort;
-import org.example.backend.databaseapi.domain.Resultado;
+import org.example.backend.databaseapi.domain.resultado.Resultado;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +31,8 @@ public class ResultadoController {
         Resultado resultado=createResultadoPort.createResultado(resultadoRequest);
         return ResponseEntity.created(linkTo(methodOn(ResultadoController.class)
                         .buscarResultadosPartida(
-                                resultado.getPartida().getPartidaId(),
-                                resultado.getPartida().getLiga().getLigaId()))
+                                resultado.getPartida().getPartidaId().value(),
+                                resultado.getPartida().getLiga().getLigaId().value()))
                         .toUri())
                 .body(resultadoModelAssembler.toModel(resultado));
     }

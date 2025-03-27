@@ -1,9 +1,6 @@
 package org.example.backend.databaseapi.application.port.out.partida;
 
-import org.example.backend.databaseapi.domain.Liga;
-import org.example.backend.databaseapi.domain.Partida;
-
-import java.sql.Date;
+import org.example.backend.databaseapi.domain.partida.Partida;
 
 public interface CreatePartidaPort {
 

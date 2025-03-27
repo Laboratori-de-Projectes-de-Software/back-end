@@ -3,7 +3,6 @@ package org.example.backend.databaseapi.jpa.liga;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.example.backend.databaseapi.domain.Bot;
 import org.example.backend.databaseapi.jpa.bot.BotJpaEntity;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaEntity;
 

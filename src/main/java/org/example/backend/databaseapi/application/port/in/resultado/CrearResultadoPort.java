@@ -1,6 +1,6 @@
 package org.example.backend.databaseapi.application.port.in.resultado;
 
-import org.example.backend.databaseapi.domain.Resultado;
+import org.example.backend.databaseapi.domain.resultado.Resultado;
 
 public interface CrearResultadoPort {
 

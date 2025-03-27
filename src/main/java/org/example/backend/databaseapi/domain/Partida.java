@@ -1,9 +1,10 @@
-package org.example.backend.databaseapi.domain;
+package org.example.backend.databaseapi.domain.partida;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.backend.databaseapi.domain.liga.Liga;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 public class Partida {
 
-    private Integer partidaId;
+    private PartidaId partidaId;
     private Liga liga; //Notnull
     private Estado estado;
     private Integer duracionTotal;

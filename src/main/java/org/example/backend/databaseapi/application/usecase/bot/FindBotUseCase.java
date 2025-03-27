@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.exception.ResourceNotFoundException;
 import org.example.backend.databaseapi.application.port.in.bot.BuscarBotPort;
 import org.example.backend.databaseapi.application.port.out.bot.FindBotPort;
-import org.example.backend.databaseapi.domain.Bot;
+import org.example.backend.databaseapi.domain.bot.Bot;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 @AllArgsConstructor

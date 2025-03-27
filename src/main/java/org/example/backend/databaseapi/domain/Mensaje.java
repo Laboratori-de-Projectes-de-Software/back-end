@@ -1,9 +1,11 @@
-package org.example.backend.databaseapi.domain;
+package org.example.backend.databaseapi.domain.mensaje;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.backend.databaseapi.domain.partida.Partida;
+import org.example.backend.databaseapi.domain.bot.Bot;
 
 import java.sql.Timestamp;
 
@@ -13,7 +15,7 @@ import java.sql.Timestamp;
 @Setter
 public class Mensaje {
 
-    private Integer mensajeId;
+    private MensajeId mensajeId;
     private Bot bot;
     private Partida partida;
     private String texto; //Notnull

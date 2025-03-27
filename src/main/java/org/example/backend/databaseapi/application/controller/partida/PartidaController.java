@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.in.partida.AltaPartidaPort;
 import org.example.backend.databaseapi.application.port.in.partida.BuscarPartidaPort;
 import org.example.backend.databaseapi.application.port.in.partida.BuscarPartidasLigaPort;
-import org.example.backend.databaseapi.domain.Liga;
-import org.example.backend.databaseapi.domain.Partida;
+import org.example.backend.databaseapi.domain.partida.Partida;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class PartidaController {
     @PostMapping("/ligas/{id}/partidas")
     public ResponseEntity<EntityModel<Partida>> altaPartida(@RequestBody Partida requestPartida, @PathVariable String id){
         Partida partida=altaPartidaPort.altaPartida(requestPartida);
-        return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getLiga().getLigaId(),partida.getPartidaId())).toUri())
+        return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getLiga().getLigaId().value(), partida.getPartidaId().value())).toUri())
                 .body(partidaModelAssembler.toModel(partida));
     }
 
@@ -44,7 +43,7 @@ public class PartidaController {
     @GetMapping("/ligas/{id}/partidas/{idpartida}")
     public ResponseEntity<EntityModel<Partida>> buscarPartida(@PathVariable Integer id,@PathVariable Integer idpartida){
         Partida partida=buscarPartidaPort.buscarPartida(idpartida);
-        return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getLiga().getLigaId(),partida.getPartidaId())).toUri())
+        return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getLiga().getLigaId().value(), partida.getPartidaId().value())).toUri())
                 .body(partidaModelAssembler.toModel(partida));
     }
 }

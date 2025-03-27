@@ -1,13 +1,11 @@
 package org.example.backend.databaseapi.application.controller.mensaje;
 
 import lombok.AllArgsConstructor;
-import org.example.backend.databaseapi.application.controller.partida.PartidaController;
 import org.example.backend.databaseapi.application.port.in.mensaje.BuscarMensajePort;
 import org.example.backend.databaseapi.application.port.in.mensaje.BuscarMensajesBotPort;
 import org.example.backend.databaseapi.application.port.in.mensaje.BuscarMensajesPartidaPort;
 import org.example.backend.databaseapi.application.port.in.mensaje.NuevoMensajePort;
-import org.example.backend.databaseapi.domain.Mensaje;
-import org.example.backend.databaseapi.domain.Partida;
+import org.example.backend.databaseapi.domain.mensaje.Mensaje;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +40,7 @@ public class MensajeController {
                                                              @RequestBody Mensaje requestMensaje){
         Mensaje mensaje=nuevoMensajePort.altaMensaje(requestMensaje);
         return ResponseEntity.created(linkTo(methodOn(MensajeController.class)
-                        .buscarMensajesPartida(mensaje.getPartida().getPartidaId(),mensaje.getMensajeId())).toUri())
+                        .buscarMensajesPartida(mensaje.getPartida().getPartidaId().value(), mensaje.getMensajeId().value())).toUri())
                 .body(mensajeModelAssembler.toModel(mensaje));
     }
 

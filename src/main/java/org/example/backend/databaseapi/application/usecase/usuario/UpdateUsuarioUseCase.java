@@ -3,7 +3,7 @@ package org.example.backend.databaseapi.application.usecase.usuario;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.in.usuario.ActualizarUsuarioPort;
 import org.example.backend.databaseapi.application.port.out.usuario.UpdateUsuarioPort;
-import org.example.backend.databaseapi.domain.Usuario;
+import org.example.backend.databaseapi.domain.usuario.Usuario;
 import org.springframework.stereotype.Component;
 
 @Component

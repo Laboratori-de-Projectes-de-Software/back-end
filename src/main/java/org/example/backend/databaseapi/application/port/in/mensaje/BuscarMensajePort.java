@@ -1,6 +1,6 @@
 package org.example.backend.databaseapi.application.port.in.mensaje;
 
-import org.example.backend.databaseapi.domain.Mensaje;
+import org.example.backend.databaseapi.domain.mensaje.Mensaje;
 
 public interface BuscarMensajePort {
 

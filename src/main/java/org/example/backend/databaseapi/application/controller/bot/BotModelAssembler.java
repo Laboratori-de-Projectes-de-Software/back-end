@@ -1,8 +1,6 @@
 package org.example.backend.databaseapi.application.controller.bot;
 
-import org.example.backend.databaseapi.application.controller.usuario.UsuarioController;
-import org.example.backend.databaseapi.domain.Bot;
-import org.example.backend.databaseapi.domain.Usuario;
+import org.example.backend.databaseapi.domain.bot.Bot;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
@@ -19,7 +17,7 @@ public class BotModelAssembler implements RepresentationModelAssembler<Bot, Enti
     public EntityModel<Bot> toModel(Bot entity) {
 
         return EntityModel.of(entity,
-                linkTo(methodOn(BotController.class).buscarBot(entity.getIdBot())).withSelfRel(),
+                linkTo(methodOn(BotController.class).buscarBot(entity.getIdBot().value())).withSelfRel(),
         linkTo(methodOn(BotController.class).buscarAllBots()).withRel("bots"));
     }
 

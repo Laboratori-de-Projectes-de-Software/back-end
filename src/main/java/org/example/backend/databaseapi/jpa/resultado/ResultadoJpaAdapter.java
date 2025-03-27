@@ -4,9 +4,10 @@ package org.example.backend.databaseapi.jpa.resultado;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.out.resultado.*;
-import org.example.backend.databaseapi.domain.Bot;
-import org.example.backend.databaseapi.domain.Partida;
-import org.example.backend.databaseapi.domain.Resultado;
+import org.example.backend.databaseapi.domain.bot.Bot;
+import org.example.backend.databaseapi.domain.partida.Partida;
+import org.example.backend.databaseapi.domain.resultado.Resultado;
+import org.example.backend.databaseapi.jpa.bot.BotJpaAdapter;
 import org.example.backend.databaseapi.jpa.bot.BotJpaMapper;
 import org.example.backend.databaseapi.jpa.partida.PartidaJpaMapper;
 import org.springframework.stereotype.Component;
@@ -20,16 +21,24 @@ public class ResultadoJpaAdapter implements CreateResultadoPort, FindBotResultad
 
     private final ResultadoJpaRepository resultadoJpaRepository;
     private final ResultadoJpaMapper resultadoJpaMapper;
+    private final BotJpaAdapter botJpaAdapter;
     private final BotJpaMapper botJpaMapper;
     private final PartidaJpaMapper partidaJpaMapper;
 
     @Override
     @Transactional
     public Resultado createResultado(Resultado resultado) {
-        return resultadoJpaMapper.toDomain(
-                resultadoJpaRepository.save(
-                        resultadoJpaMapper.toEntity(resultado)
+        ResultadoJpaEntity resultjpa=ResultadoJpaEntity.builder()
+                .bot(
+                        botJpaMapper.toEntity(
+                                botJpaAdapter.findBot(
+                                    resultado.getResultadoId().botvalue()
+                                ).orElseThrow()
+                        )
                 )
+                .build();
+        return resultadoJpaMapper.toDomain(
+                resultadoJpaRepository.save(resultjpa)
         );
     }
 
@@ -51,7 +60,7 @@ public class ResultadoJpaAdapter implements CreateResultadoPort, FindBotResultad
 
     @Override
     public Optional<Resultado> findResultado(Bot bot, Partida partida) {
-        ResultadoId resultadoId=new ResultadoId(
+        ResultadoIdJpa resultadoId=new ResultadoIdJpa(
                 botJpaMapper.toEntity(bot),
                 partidaJpaMapper.toEntity(partida)
         );

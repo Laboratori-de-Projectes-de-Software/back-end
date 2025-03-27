@@ -3,9 +3,7 @@ package org.example.backend.databaseapi.application.usecase.mensaje;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.in.mensaje.NuevoMensajePort;
 import org.example.backend.databaseapi.application.port.out.mensaje.CreateMensajePort;
-import org.example.backend.databaseapi.domain.Bot;
-import org.example.backend.databaseapi.domain.Mensaje;
-import org.example.backend.databaseapi.domain.Partida;
+import org.example.backend.databaseapi.domain.mensaje.Mensaje;
 import org.springframework.stereotype.Component;
 
 @Component

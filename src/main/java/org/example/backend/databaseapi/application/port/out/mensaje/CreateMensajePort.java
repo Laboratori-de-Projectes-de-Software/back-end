@@ -1,8 +1,6 @@
 package org.example.backend.databaseapi.application.port.out.mensaje;
 
-import org.example.backend.databaseapi.domain.Bot;
-import org.example.backend.databaseapi.domain.Mensaje;
-import org.example.backend.databaseapi.domain.Partida;
+import org.example.backend.databaseapi.domain.mensaje.Mensaje;
 
 public interface CreateMensajePort {
 

@@ -1,6 +1,5 @@
 package org.example.backend.databaseapi.jpa.usuario;
 
-import org.example.backend.databaseapi.domain.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

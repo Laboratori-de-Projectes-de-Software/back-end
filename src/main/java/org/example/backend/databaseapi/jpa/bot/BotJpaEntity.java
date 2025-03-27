@@ -19,7 +19,7 @@ public class BotJpaEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private int idBot;
+    private Integer idBot;
 
     @ManyToMany(mappedBy = "botsLiga")
     private List<LigaJpaEntity> ligasBot;

@@ -2,8 +2,7 @@ package org.example.backend.databaseapi.application.controller.partida;
 
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.controller.liga.LigaController;
-import org.example.backend.databaseapi.domain.Liga;
-import org.example.backend.databaseapi.domain.Partida;
+import org.example.backend.databaseapi.domain.partida.Partida;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
@@ -20,7 +19,7 @@ public class PartidaModelAssembler implements RepresentationModelAssembler<Parti
     @Override
     public EntityModel<Partida> toModel(Partida entity) {
         return EntityModel.of(entity,
-                linkTo(methodOn(PartidaController.class).buscarPartida(entity.getLiga().getLigaId(), entity.getPartidaId())).withSelfRel());
+                linkTo(methodOn(PartidaController.class).buscarPartida(entity.getLiga().getLigaId().value(), entity.getPartidaId().value())).withSelfRel());
     }
 
     public CollectionModel<EntityModel<Partida>> toCollectionModel(List<EntityModel<Partida>> partida) {

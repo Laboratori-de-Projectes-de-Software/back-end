@@ -5,8 +5,8 @@ import org.example.backend.databaseapi.application.port.out.partida.CreatePartid
 import org.example.backend.databaseapi.application.port.out.partida.FindLigaPartidaPort;
 import org.example.backend.databaseapi.application.port.out.partida.FindPartidaPort;
 import org.example.backend.databaseapi.application.port.out.partida.UpdatePartidaPort;
-import org.example.backend.databaseapi.domain.Liga;
-import org.example.backend.databaseapi.domain.Partida;
+import org.example.backend.databaseapi.domain.liga.Liga;
+import org.example.backend.databaseapi.domain.partida.Partida;
 import org.example.backend.databaseapi.jpa.liga.LigaJpaMapper;
 import org.springframework.stereotype.Component;
 

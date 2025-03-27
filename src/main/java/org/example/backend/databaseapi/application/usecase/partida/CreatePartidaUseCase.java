@@ -3,8 +3,7 @@ package org.example.backend.databaseapi.application.usecase.partida;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.in.partida.AltaPartidaPort;
 import org.example.backend.databaseapi.application.port.out.partida.CreatePartidaPort;
-import org.example.backend.databaseapi.domain.Liga;
-import org.example.backend.databaseapi.domain.Partida;
+import org.example.backend.databaseapi.domain.partida.Partida;
 import org.springframework.stereotype.Component;
 
 @Component

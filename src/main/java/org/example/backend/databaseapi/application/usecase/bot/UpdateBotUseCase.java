@@ -3,7 +3,7 @@ package org.example.backend.databaseapi.application.usecase.bot;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.in.bot.ActualizarBotPort;
 import org.example.backend.databaseapi.application.port.out.bot.UpdateBotPort;
-import org.example.backend.databaseapi.domain.Bot;
+import org.example.backend.databaseapi.domain.bot.Bot;
 import org.springframework.stereotype.Component;
 
 @AllArgsConstructor

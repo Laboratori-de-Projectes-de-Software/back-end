@@ -1,10 +1,11 @@
-package org.example.backend.databaseapi.domain;
+package org.example.backend.databaseapi.domain.usuario;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.backend.databaseapi.domain.usuario.UsuarioId;
 
 @AllArgsConstructor
 @Builder
@@ -12,8 +13,9 @@ import lombok.Setter;
 @Setter
 public class Usuario {
 
-    private Integer userId;
+    private final UsuarioId userId;
     private String nombre;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;

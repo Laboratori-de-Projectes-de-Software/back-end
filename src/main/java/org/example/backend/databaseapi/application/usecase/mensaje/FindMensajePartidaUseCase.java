@@ -3,7 +3,7 @@ package org.example.backend.databaseapi.application.usecase.mensaje;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.in.mensaje.BuscarMensajesPartidaPort;
 import org.example.backend.databaseapi.application.port.out.mensaje.FindMensajePartidaPort;
-import org.example.backend.databaseapi.domain.Mensaje;
+import org.example.backend.databaseapi.domain.mensaje.Mensaje;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

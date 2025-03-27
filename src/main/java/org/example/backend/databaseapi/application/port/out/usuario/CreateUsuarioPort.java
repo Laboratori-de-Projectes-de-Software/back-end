@@ -1,6 +1,6 @@
 package org.example.backend.databaseapi.application.port.out.usuario;
 
-import org.example.backend.databaseapi.domain.Usuario;
+import org.example.backend.databaseapi.domain.usuario.Usuario;
 
 import java.util.Optional;
 

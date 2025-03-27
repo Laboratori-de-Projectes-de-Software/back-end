@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.exception.ResourceAlreadyExistsException;
 import org.example.backend.databaseapi.application.port.in.bot.AltaBotPort;
 import org.example.backend.databaseapi.application.port.out.bot.CreateBotPort;
-import org.example.backend.databaseapi.domain.Bot;
+import org.example.backend.databaseapi.domain.bot.Bot;
 import org.springframework.stereotype.Component;
 
 @Component

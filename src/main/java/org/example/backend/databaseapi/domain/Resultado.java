@@ -1,9 +1,11 @@
-package org.example.backend.databaseapi.domain;
+package org.example.backend.databaseapi.domain.resultado;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.backend.databaseapi.domain.bot.Bot;
+import org.example.backend.databaseapi.domain.partida.Partida;
 
 @AllArgsConstructor
 @Builder
@@ -11,15 +13,14 @@ import lombok.Setter;
 @Setter
 public class Resultado {
 
-    private Bot bot;
-    private Partida partida;
+    private ResultadoId resultadoId;
     private Integer puntuacion;//notnull
 
     @Override
     public String toString() {
         return "Resultado{" +
-                "bot=" + bot +
-                ", partida=" + partida +
+                "botid=" + resultadoId.botvalue() +
+                ", partidaid=" + resultadoId.partidavalue() +
                 ", puntuacion=" + puntuacion +
                 '}';
     }

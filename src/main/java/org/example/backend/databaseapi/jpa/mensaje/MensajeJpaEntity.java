@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.databaseapi.jpa.bot.BotJpaEntity;
 import org.example.backend.databaseapi.jpa.partida.PartidaJpaEntity;
-import org.example.backend.databaseapi.jpa.resultado.ResultadoId;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;

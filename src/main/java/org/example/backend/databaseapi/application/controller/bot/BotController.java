@@ -1,10 +1,8 @@
 package org.example.backend.databaseapi.application.controller.bot;
 
 import lombok.AllArgsConstructor;
-import org.example.backend.databaseapi.application.controller.usuario.UsuarioController;
 import org.example.backend.databaseapi.application.port.in.bot.*;
-import org.example.backend.databaseapi.domain.Bot;
-import org.example.backend.databaseapi.domain.Usuario;
+import org.example.backend.databaseapi.domain.bot.Bot;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +28,7 @@ public class BotController {
     @PostMapping("/bots")
     ResponseEntity<EntityModel<Bot>> altaBot(@RequestBody Bot newBot){
         Bot bot=altaBotPort.altaBot(newBot);
-        return ResponseEntity.created(linkTo(methodOn(BotController.class).buscarBot(bot.getIdBot())).toUri())
+        return ResponseEntity.created(linkTo(methodOn(BotController.class).buscarBot(bot.getIdBot().value())).toUri())
                 .body(botModelAssembler.toModel(bot));
     }
 
@@ -68,7 +66,7 @@ public class BotController {
     ResponseEntity<EntityModel<Bot>> actualizarBot(@RequestBody Bot changedBot,@PathVariable Integer id){
 
         Bot bot=actualizarBotPort.actualizarBot(changedBot, id);
-        return ResponseEntity.created(linkTo(methodOn(BotController.class).buscarBot(bot.getIdBot())).toUri())
+        return ResponseEntity.created(linkTo(methodOn(BotController.class).buscarBot(bot.getIdBot().value())).toUri())
                 .body(botModelAssembler.toModel(bot));
     }
 

@@ -1,7 +1,6 @@
 package org.example.backend.databaseapi.application.port.out.liga;
 
-import org.example.backend.databaseapi.domain.Liga;
-import org.example.backend.databaseapi.domain.Usuario;
+import org.example.backend.databaseapi.domain.liga.Liga;
 
 public interface CreateLigaPort {
 

@@ -2,8 +2,7 @@ package org.example.backend.databaseapi.application.controller.mensaje;
 
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.controller.liga.LigaController;
-import org.example.backend.databaseapi.domain.Mensaje;
-import org.example.backend.databaseapi.domain.Partida;
+import org.example.backend.databaseapi.domain.mensaje.Mensaje;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
@@ -20,7 +19,7 @@ public class MensajeModelAssembler implements RepresentationModelAssembler<Mensa
     @Override
     public EntityModel<Mensaje> toModel(Mensaje entity) {
         return EntityModel.of(entity,
-                linkTo(methodOn(MensajeController.class).buscarMensajesPartida(entity.getPartida().getPartidaId(),entity.getMensajeId())).withSelfRel());
+                linkTo(methodOn(MensajeController.class).buscarMensajesPartida(entity.getPartida().getPartidaId().value(), entity.getMensajeId().value())).withSelfRel());
     }
 
     public CollectionModel<EntityModel<Mensaje>> toCollectionModel(List<EntityModel<Mensaje>> mensajes) {

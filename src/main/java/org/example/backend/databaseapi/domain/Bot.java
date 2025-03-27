@@ -1,12 +1,13 @@
-package org.example.backend.databaseapi.domain;
+package org.example.backend.databaseapi.domain.bot;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.backend.databaseapi.domain.liga.Liga;
+import org.example.backend.databaseapi.domain.usuario.UsuarioId;
 
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @Builder
@@ -14,8 +15,8 @@ import java.util.Set;
 @Setter
 public class Bot {
 
-    private int idBot;
-    private Usuario usuario;
+    private final BotId idBot;
+    private UsuarioId usuario;
     private List<Liga> ligasBot;
     private String cualidad;
     private String url;

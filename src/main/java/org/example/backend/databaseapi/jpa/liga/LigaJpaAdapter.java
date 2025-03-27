@@ -5,8 +5,7 @@ import org.example.backend.databaseapi.application.port.out.liga.CreateLigaPort;
 import org.example.backend.databaseapi.application.port.out.liga.FindAllLigasPort;
 import org.example.backend.databaseapi.application.port.out.liga.FindLigaPort;
 import org.example.backend.databaseapi.application.port.out.liga.FindLigaUsuarioPort;
-import org.example.backend.databaseapi.domain.Liga;
-import org.example.backend.databaseapi.domain.Usuario;
+import org.example.backend.databaseapi.domain.liga.Liga;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaMapper;
 import org.springframework.stereotype.Component;
 

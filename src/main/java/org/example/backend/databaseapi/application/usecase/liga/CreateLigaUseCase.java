@@ -3,8 +3,7 @@ package org.example.backend.databaseapi.application.usecase.liga;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.databaseapi.application.port.in.liga.AltaLigaPort;
 import org.example.backend.databaseapi.application.port.out.liga.CreateLigaPort;
-import org.example.backend.databaseapi.domain.Liga;
-import org.example.backend.databaseapi.domain.Usuario;
+import org.example.backend.databaseapi.domain.liga.Liga;
 import org.springframework.stereotype.Component;
 
 @Component

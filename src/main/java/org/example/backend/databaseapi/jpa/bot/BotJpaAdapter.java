@@ -3,7 +3,7 @@ package org.example.backend.databaseapi.jpa.bot;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.out.bot.*;
-import org.example.backend.databaseapi.domain.Bot;
+import org.example.backend.databaseapi.domain.bot.Bot;
 import org.example.backend.databaseapi.jpa.liga.LigaJpaMapper;
 import org.springframework.stereotype.Component;
 

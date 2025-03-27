@@ -4,14 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.databaseapi.application.exception.ResourceNotFoundException;
 import org.example.backend.databaseapi.application.port.in.usuario.BuscarUsuarioPort;
 import org.example.backend.databaseapi.application.port.out.usuario.FindUsuarioPort;
-import org.example.backend.databaseapi.domain.Usuario;
+import org.example.backend.databaseapi.domain.usuario.Usuario;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class FindUsuarioUseCase implements BuscarUsuarioPort {
+
+
     private final FindUsuarioPort findUserPort;
 
     @Override
