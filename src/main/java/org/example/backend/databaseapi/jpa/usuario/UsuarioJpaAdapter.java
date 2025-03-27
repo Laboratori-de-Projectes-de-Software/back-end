@@ -25,7 +25,12 @@ public class UsuarioJpaAdapter implements CreateUsuarioPort, FindUsuarioPort, De
     public Optional<Usuario> createUsuario(Usuario usuario) {
         if(!usuarioJpaRepository.existsByEmail(usuario.getEmail())){
             // Encriptar la contraseña antes de guardar
-            UsuarioJpaEntity entity = usuarioJpaMapper.toEntity(usuario);
+            UsuarioJpaEntity entity=UsuarioJpaEntity.builder()
+                    .email(usuario.getEmail())
+                    .nombre(usuario.getNombre())
+                    .imagen(usuario.getImagen())
+                    .password(usuario.getPassword())
+                    .build();
             entity.setPassword(passwordService.encryptPassword(usuario.getPassword()));
             return Optional.of(usuarioJpaMapper.toDomain(usuarioJpaRepository.save(entity)));
         }
@@ -62,10 +67,15 @@ public class UsuarioJpaAdapter implements CreateUsuarioPort, FindUsuarioPort, De
                     return usuarioJpaMapper.toDomain(usuarioJpaRepository.save(user));
                 })
                 .orElseGet(() -> {
-                    UsuarioJpaEntity entity = usuarioJpaMapper.toEntity(usuario);
+                    UsuarioJpaEntity entity=UsuarioJpaEntity.builder()
+                            .email(usuario.getEmail())
+                            .nombre(usuario.getNombre())
+                            .imagen(usuario.getImagen())
+                            .password(usuario.getPassword())
+                            .build();
                     entity.setPassword(passwordService.encryptPassword(usuario.getPassword()));
                     return usuarioJpaMapper.toDomain(usuarioJpaRepository.save(entity));
-                });
+                });    
     }
 
     public Optional<UsuarioJpaEntity> getUser(int id){

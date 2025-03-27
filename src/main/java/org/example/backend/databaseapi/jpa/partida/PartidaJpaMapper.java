@@ -12,7 +12,6 @@ import org.mapstruct.Mapper;
 public interface PartidaJpaMapper {
 
     Partida toDomain(PartidaJpaEntity entity);
-    PartidaJpaEntity toEntity(Partida partida);
 
     default UsuarioId toUserId(Integer value) {
         return new UsuarioId(value);

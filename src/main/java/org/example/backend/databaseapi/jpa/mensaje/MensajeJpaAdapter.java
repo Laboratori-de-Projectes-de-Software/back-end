@@ -1,12 +1,16 @@
 package org.example.backend.databaseapi.jpa.mensaje;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.out.mensaje.CreateMensajePort;
 import org.example.backend.databaseapi.application.port.out.mensaje.FindMensajeBotPort;
 import org.example.backend.databaseapi.application.port.out.mensaje.FindMensajePartidaPort;
 import org.example.backend.databaseapi.application.port.out.mensaje.FindMensajePort;
 import org.example.backend.databaseapi.domain.mensaje.Mensaje;
+import org.example.backend.databaseapi.jpa.bot.BotJpaAdapter;
 import org.example.backend.databaseapi.jpa.bot.BotJpaMapper;
+import org.example.backend.databaseapi.jpa.partida.PartidaJpaAdapter;
+import org.example.backend.databaseapi.jpa.partida.PartidaJpaEntity;
 import org.example.backend.databaseapi.jpa.partida.PartidaJpaMapper;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +23,8 @@ public class MensajeJpaAdapter implements FindMensajePort, FindMensajePartidaPor
 
     private final MensajeJpaRepository mensajeJpaRepository;
     private final MensajeJpaMapper mensajeJpaMapper;
-    private final BotJpaMapper botJpaMapper;
-    private final PartidaJpaMapper partidaJpaMapper;
+    private final PartidaJpaAdapter partidaJpaAdapter;
+    private final BotJpaAdapter botJpaAdapter;
 
     @Override
     public List<Mensaje> findMensajeBot(Integer botId) {
@@ -44,12 +48,18 @@ public class MensajeJpaAdapter implements FindMensajePort, FindMensajePartidaPor
     }
 
     @Override
+    @Transactional
     public Mensaje createMensaje(Mensaje mensaje){
-
+        MensajeJpaEntity entity=MensajeJpaEntity.builder()
+                .partida(partidaJpaAdapter.getJpaPartida(mensaje.getPartida().value())
+                        .orElseThrow())
+                .bot(botJpaAdapter.getJpaBot(mensaje.getBot().value())
+                        .orElseThrow())
+                .hora(mensaje.getHora())
+                .texto(mensaje.getTexto())
+                .build();
         return mensajeJpaMapper.toDomain(
-                mensajeJpaRepository.save(
-                        mensajeJpaMapper.toEntity(mensaje)
-                )
+                mensajeJpaRepository.save(entity)
         );
     }
 }

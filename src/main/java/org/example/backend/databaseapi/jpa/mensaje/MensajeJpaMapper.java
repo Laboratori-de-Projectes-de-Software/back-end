@@ -13,8 +13,6 @@ public interface MensajeJpaMapper {
 
     Mensaje toDomain(MensajeJpaEntity entity);
 
-    MensajeJpaEntity toEntity(Mensaje mensaje);
-
     default UsuarioId toUserId(Integer value) {
         return new UsuarioId(value);
     }

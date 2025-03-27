@@ -19,7 +19,7 @@ public class MensajeModelAssembler implements RepresentationModelAssembler<Mensa
     @Override
     public EntityModel<Mensaje> toModel(Mensaje entity) {
         return EntityModel.of(entity,
-                linkTo(methodOn(MensajeController.class).buscarMensajesPartida(entity.getPartida().getPartidaId().value(), entity.getMensajeId().value())).withSelfRel());
+                linkTo(methodOn(MensajeController.class).buscarMensajesPartida(entity.getPartida().value(), entity.getMensajeId().value())).withSelfRel());
     }
 
     public CollectionModel<EntityModel<Mensaje>> toCollectionModel(List<EntityModel<Mensaje>> mensajes) {

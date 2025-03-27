@@ -7,6 +7,7 @@ import org.example.backend.databaseapi.application.port.out.partida.FindPartidaP
 import org.example.backend.databaseapi.application.port.out.partida.UpdatePartidaPort;
 import org.example.backend.databaseapi.domain.liga.Liga;
 import org.example.backend.databaseapi.domain.partida.Partida;
+import org.example.backend.databaseapi.jpa.liga.LigaJpaAdapter;
 import org.example.backend.databaseapi.jpa.liga.LigaJpaMapper;
 import org.springframework.stereotype.Component;
 
@@ -19,14 +20,21 @@ import java.util.Optional;
 public class PartidaJpaAdapter implements CreatePartidaPort, FindLigaPartidaPort, UpdatePartidaPort, FindPartidaPort {
 
     private final LigaJpaMapper ligaJpaMapper;
+    private final LigaJpaAdapter ligaJpaAdapter;
     private final PartidaJpaRepository partidaJpaRepository;
     private final PartidaJpaMapper partidaJpaMapper;
 
     @Override
     public Partida createPartida(Partida partida) {
+        PartidaJpaEntity entity=PartidaJpaEntity.builder()
+                .estado(partida.getEstado())
+                .duracionTotal(partida.getDuracionTotal())
+                .fecha(partida.getFecha())
+                .liga(ligaJpaAdapter.getLiga(partida.getLiga().value()))
+                .build();
         return partidaJpaMapper.toDomain(
                 partidaJpaRepository.save(
-                        partidaJpaMapper.toEntity(partida)
+                        entity
                 )
         );
     }
@@ -50,7 +58,7 @@ public class PartidaJpaAdapter implements CreatePartidaPort, FindLigaPartidaPort
                 .map(partidaJpaMapper::toDomain);
     }
 
-    public Optional<PartidaJpaEntity> findJpaPartida(Integer idPartida){
+    public Optional<PartidaJpaEntity> getJpaPartida(Integer idPartida){
         return partidaJpaRepository.findById(idPartida);
     }
 }

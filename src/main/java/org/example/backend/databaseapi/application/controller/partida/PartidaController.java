@@ -27,7 +27,7 @@ public class PartidaController {
     @PostMapping("/ligas/{id}/partidas")
     public ResponseEntity<EntityModel<Partida>> altaPartida(@RequestBody Partida requestPartida, @PathVariable String id){
         Partida partida=altaPartidaPort.altaPartida(requestPartida);
-        return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getLiga().getLigaId().value(), partida.getPartidaId().value())).toUri())
+        return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getLiga().value(), partida.getPartidaId().value())).toUri())
                 .body(partidaModelAssembler.toModel(partida));
     }
 
@@ -43,7 +43,7 @@ public class PartidaController {
     @GetMapping("/ligas/{id}/partidas/{idpartida}")
     public ResponseEntity<EntityModel<Partida>> buscarPartida(@PathVariable Integer id,@PathVariable Integer idpartida){
         Partida partida=buscarPartidaPort.buscarPartida(idpartida);
-        return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getLiga().getLigaId().value(), partida.getPartidaId().value())).toUri())
+        return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getLiga().value(), partida.getPartidaId().value())).toUri())
                 .body(partidaModelAssembler.toModel(partida));
     }
 }

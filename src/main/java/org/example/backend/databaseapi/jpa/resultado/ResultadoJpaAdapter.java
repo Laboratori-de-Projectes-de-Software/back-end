@@ -30,7 +30,7 @@ public class ResultadoJpaAdapter implements CreateResultadoPort, FindBotResultad
                                 .orElseThrow()
                 )
                 .partida(
-                        partidaJpaAdapter.findJpaPartida(resultado.getResultadoId().partidavalue())
+                        partidaJpaAdapter.getJpaPartida(resultado.getResultadoId().partidavalue())
                                 .orElseThrow()
                 )
                 .build();
@@ -61,7 +61,7 @@ public class ResultadoJpaAdapter implements CreateResultadoPort, FindBotResultad
 
         ResultadoIdJpa resultadoId=new ResultadoIdJpa(
                 botJpaAdapter.getJpaBot(botId).orElseThrow(),
-                partidaJpaAdapter.findJpaPartida(partidaId).orElseThrow()
+                partidaJpaAdapter.getJpaPartida(partidaId).orElseThrow()
         );
         return resultadoJpaRepository.findById(resultadoId)
                 .map(resultadoJpaMapper::toDomain);

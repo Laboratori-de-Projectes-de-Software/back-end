@@ -8,7 +8,6 @@ import org.mapstruct.Mapper;
 public interface UsuarioJpaMapper {
 
     Usuario toDomain(UsuarioJpaEntity entity);
-    UsuarioJpaEntity toEntity(Usuario usuario);
 
     default UsuarioId toUserId(Integer value) {
         return new UsuarioId(value);

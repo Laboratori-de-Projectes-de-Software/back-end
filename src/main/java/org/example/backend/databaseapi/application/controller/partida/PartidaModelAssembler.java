@@ -19,7 +19,7 @@ public class PartidaModelAssembler implements RepresentationModelAssembler<Parti
     @Override
     public EntityModel<Partida> toModel(Partida entity) {
         return EntityModel.of(entity,
-                linkTo(methodOn(PartidaController.class).buscarPartida(entity.getLiga().getLigaId().value(), entity.getPartidaId().value())).withSelfRel());
+                linkTo(methodOn(PartidaController.class).buscarPartida(entity.getLiga().value(), entity.getPartidaId().value())).withSelfRel());
     }
 
     public CollectionModel<EntityModel<Partida>> toCollectionModel(List<EntityModel<Partida>> partida) {
