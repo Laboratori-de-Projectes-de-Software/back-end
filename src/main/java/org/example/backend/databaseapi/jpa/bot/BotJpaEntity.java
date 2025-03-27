@@ -24,7 +24,7 @@ public class BotJpaEntity {
     @ManyToMany(mappedBy = "botsLiga")
     private List<LigaJpaEntity> ligasBot;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_usuario")
     private UsuarioJpaEntity usuario;
     private String cualidad;
