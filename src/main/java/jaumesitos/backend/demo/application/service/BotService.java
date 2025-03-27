@@ -2,11 +2,13 @@ package jaumesitos.backend.demo.application.service;
 
 import jaumesitos.backend.demo.application.repository.IBotRepository;
 import jaumesitos.backend.demo.domain.Bot;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+@Service
 public class BotService {
     private final IBotRepository botRepository;
 

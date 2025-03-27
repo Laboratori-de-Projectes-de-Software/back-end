@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SpringDataRespostaRepository extends JpaRepository<RespostaDBO, String> {
+public interface SpringDataRespostaRepository  {
 }

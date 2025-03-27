@@ -2,11 +2,13 @@ package jaumesitos.backend.demo.application.service;
 
 import jaumesitos.backend.demo.application.repository.IRespostaRepository;
 import jaumesitos.backend.demo.domain.Resposta;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class RespostaService {
     private final IRespostaRepository respostaRepository;
 

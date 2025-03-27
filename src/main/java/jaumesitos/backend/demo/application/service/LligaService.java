@@ -2,7 +2,9 @@ package jaumesitos.backend.demo.application.service;
 
 import jaumesitos.backend.demo.application.repository.ILligaRepository;
 import jaumesitos.backend.demo.domain.Lliga;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LligaService {
     private final ILligaRepository illigarepository;
 

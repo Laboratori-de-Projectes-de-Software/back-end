@@ -11,7 +11,6 @@ import jakarta.persistence.Table;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
 public class UserDBO {
     @Id
     private String id;

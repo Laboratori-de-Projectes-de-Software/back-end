@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "enfrentaments")
 public class EnfrentamentDBO {
     @Id
     private String id;

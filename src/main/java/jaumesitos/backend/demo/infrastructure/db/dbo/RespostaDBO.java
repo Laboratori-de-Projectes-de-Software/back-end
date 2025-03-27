@@ -11,7 +11,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "resposta")
 public class RespostaDBO {
     @Id
     private String id;

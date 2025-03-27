@@ -2,10 +2,11 @@ package jaumesitos.backend.demo.application.service;
 
 import jaumesitos.backend.demo.application.repository.IUserRepository;
 import jaumesitos.backend.demo.domain.User;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
-
+@Service
 public class UserService {
     private final IUserRepository userRepository;
 
