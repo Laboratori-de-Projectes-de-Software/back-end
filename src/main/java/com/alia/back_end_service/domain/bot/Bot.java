@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.net.URI;
 import java.util.List;
 
 @NoArgsConstructor
@@ -19,7 +20,7 @@ public class Bot {
 
     private String description;
 
-    private String endpoint;
+    private URI endpoint;
 
     private String token;
 

@@ -1,5 +1,6 @@
 package com.alia.back_end_service.api_rest.exception;
 
+import com.alia.back_end_service.domain.bot.exceptions.BotAlreadyExistsException;
 import com.alia.back_end_service.domain.user.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<Map<String, String>> handleInvalidPassword(InvalidPasswordException ex) {
         return buildErrorResponse("INVALID_PASSWORD", ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(BotAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleBotAlreadyExists(BotAlreadyExistsException ex) {
+        return buildErrorResponse("BOT_ALREADY_EXISTS", ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     // Construcción del mensaje de error

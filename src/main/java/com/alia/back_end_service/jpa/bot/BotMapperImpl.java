@@ -8,6 +8,7 @@ import com.alia.back_end_service.jpa.user.UserMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class BotMapperImpl implements BotMapper{
         return new Bot(
                 entity.getName(),
                 entity.getDescription(),
-                entity.getEndpoint(),
+                URI.create(entity.getEndpoint()),
                 entity.getToken(),
                 entity.getUser().getUsername(),
                 leagueIds
@@ -36,7 +37,7 @@ public class BotMapperImpl implements BotMapper{
         BotEntity entity = new BotEntity();
         entity.setName(bot.getName());
         entity.setDescription(bot.getDescription());
-        entity.setEndpoint(bot.getEndpoint());
+        entity.setEndpoint(bot.getEndpoint().toString());
         entity.setToken(bot.getToken());
         // El UserEntity debe setearse desde fuera
         return entity;
