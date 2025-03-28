@@ -1,0 +1,34 @@
+package com.adondeband.back_end_adonde_band.jpa.imagen;
+
+import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertEquals;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class TestImagenMapper {
+
+    private ImagenJpaMapper imagenJpaMapper;
+
+    @Before
+    public void setUp() {
+        imagenJpaMapper = ImagenJpaMapper.INSTANCE;
+    }
+
+    @Test
+    public void comprobarImagenEntityToImagen() {
+        ImagenEntity imagenEntity = new ImagenEntity();
+        imagenEntity.setId(1);
+        imagenEntity.setRuta("ruta");
+
+        Imagen imagen = imagenJpaMapper.toDomain(imagenEntity);
+
+        assertEquals(imagenEntity.getId(), imagen.getId());
+        assertEquals(imagenEntity.getRuta(), imagen.getRuta());
+    }
+}

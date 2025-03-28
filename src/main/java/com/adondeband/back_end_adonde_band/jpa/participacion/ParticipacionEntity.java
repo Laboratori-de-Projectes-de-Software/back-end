@@ -34,10 +34,4 @@ public class ParticipacionEntity {
     public ParticipacionEntity() {
 
     }
-
-    public long getId() {
-        return id;
-    }
-
-
 }

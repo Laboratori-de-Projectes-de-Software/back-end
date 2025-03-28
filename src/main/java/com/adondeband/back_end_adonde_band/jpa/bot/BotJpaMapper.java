@@ -26,8 +26,6 @@ public interface BotJpaMapper {
     // Mapea de Bot a BotEntity
     BotEntity toEntity(Bot bot);
 
-    //TODO Terrorismo, va porque dios lo quiere
-    ParticipacionEntity map(ParticipacionId value);
 
     // Mapeo de atributos
     default BotId toBotId(String value) {

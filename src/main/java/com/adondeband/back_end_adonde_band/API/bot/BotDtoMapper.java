@@ -20,4 +20,6 @@ public interface BotDtoMapper {
     default String toNombre(BotId id) {
         return id.value();
     }
+
+    default BotId toBotId(String id) { return new BotId(id); }
 }
