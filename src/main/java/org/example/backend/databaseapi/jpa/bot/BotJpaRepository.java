@@ -11,4 +11,5 @@ public interface BotJpaRepository extends JpaRepository<BotJpaEntity,Integer> {
 
     List<BotJpaEntity> findByUsuario_UserId(Integer id);
     boolean existsByNombreOrUrl(String nombre,String url);
+
 }

@@ -6,11 +6,16 @@ import org.example.backend.databaseapi.domain.liga.LigaId;
 import org.example.backend.databaseapi.domain.usuario.UsuarioId;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE )
 public interface BotJpaMapper {
 
     Bot toDomain(BotJpaEntity entity);
+
+    BotJpaEntity updateBot(BotJpaEntity newBot, @MappingTarget BotJpaEntity actualBot);
+
 
     default UsuarioId toUserId(Integer value) {
         return new UsuarioId(value);
@@ -21,6 +26,9 @@ public interface BotJpaMapper {
     }
 
     default Integer toInteger(UsuarioId entity) {
+        if(entity==null){
+            return null;
+        }
         return entity.value();
     }
 
@@ -30,6 +38,9 @@ public interface BotJpaMapper {
 
 
     default Integer toInteger(BotId entity) {
+        if(entity==null){
+            return null;
+        }
         return entity.value();
     }
 

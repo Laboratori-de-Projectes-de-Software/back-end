@@ -2,24 +2,37 @@ package org.example.backend.databaseapi.jpa.bot;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.example.backend.databaseapi.application.port.out.bot.*;
 import org.example.backend.databaseapi.domain.bot.Bot;
 import org.example.backend.databaseapi.jpa.liga.LigaJpaAdapter;
+import org.example.backend.databaseapi.jpa.liga.LigaJpaEntity;
 import org.example.backend.databaseapi.jpa.liga.LigaJpaMapper;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaAdapter;
+import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-@AllArgsConstructor
+
 @Component
+@RequiredArgsConstructor(onConstructor_ = {@Lazy})
 public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort, DeleteBotPort, FindAllUserBots, FindAllBotsPort {
 
     private final BotJpaRepository botJpaRepository;
+    @Lazy
     private final UsuarioJpaAdapter usuarioJpaAdapter;
-    private final BotJpaMapper botJpaMapper;
+    @Lazy
     private final LigaJpaAdapter ligaJpaAdapter;
+    private final BotJpaMapper botJpaMapper;
+    private final UsuarioJpaMapper usuarioJpaMapper;
+
+
 
     @Override
     @Transactional
@@ -28,13 +41,6 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
             BotJpaEntity newbot=BotJpaEntity.builder()
                     .url(bot.getUrl())
                     .cualidad(bot.getCualidad())
-                    .ligasBot(bot.getLigasBot()
-                            .stream()
-                            .map(
-                                    ligaId -> ligaJpaAdapter.getLiga(ligaId.value())
-                            )
-                            .toList()
-                    )
                     .imagen(bot.getImagen())
                     .usuario(
                             usuarioJpaAdapter.getUser(bot.getUsuario().value())
@@ -60,43 +66,38 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
     @Override
     @Transactional
     public Bot updateBot(Bot changedBot, Integer id) {
-        return botJpaRepository.findById(id)
-                .map(bot->{
-                        bot.setCualidad(changedBot.getCualidad());
-                        bot.setImagen(changedBot.getImagen());
-                        bot.setNombre(changedBot.getNombre());
-                        bot.setLigasBot(changedBot.getLigasBot()
-                                .stream()
-                                .map(
-                                        ligaId -> ligaJpaAdapter.getLiga(ligaId.value())
-                                )
-                                .toList()
-                        );
-                        bot.setUrl(changedBot.getUrl());
-                        return botJpaMapper.toDomain(botJpaRepository.save(bot));
-                })
-                .orElseGet(
-                        ()->{
-                        BotJpaEntity newbot=BotJpaEntity.builder()
-                                .url(changedBot.getUrl())
-                                .cualidad(changedBot.getCualidad())
-                                .ligasBot(changedBot.getLigasBot()
-                                        .stream()
-                                        .map(
-                                                ligaId -> ligaJpaAdapter.getLiga(ligaId.value())
-                                        )
-                                        .toList()
-                                )
-                                .imagen(changedBot.getImagen())
-                                .usuario(
-                                        usuarioJpaAdapter.getUser(changedBot.getUsuario().value())
-                                                .orElseThrow()
-                                )
-                                .nombre(changedBot.getNombre())
-                                .build();
-                            return botJpaMapper.toDomain(botJpaRepository.save(newbot));
-                        }
-                );
+        BotJpaEntity foundBot=botJpaRepository.findById(id)
+                .orElseThrow();
+
+        List<LigaJpaEntity> ligas=null;
+        if(changedBot.getLigasBot()!=null){
+            ligas=changedBot.getLigasBot()
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .map(ligaId -> ligaJpaAdapter.getLiga(ligaId.value()))
+                    .toList();
+        }
+
+
+        BotJpaEntity newbot=BotJpaEntity.builder()
+                .idBot(botJpaMapper.toInteger(changedBot.getIdBot()))
+                .url(changedBot.getUrl())
+                .cualidad(changedBot.getCualidad())
+                .imagen(changedBot.getImagen())
+                .usuario(
+                        usuarioJpaAdapter.getUser(botJpaMapper.toInteger(changedBot.getUsuario()))
+                                .orElse(foundBot.getUsuario())
+                )
+                .nombre(changedBot.getNombre())
+                .ligasBot(ligas)
+                .build();
+
+
+        return botJpaMapper.toDomain(
+                botJpaRepository.save(
+                        botJpaMapper.updateBot(newbot,foundBot)
+                )
+        );
     }
 
     @Override
@@ -111,7 +112,6 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
 
     @Override
     public List<Bot> findAllBots() {
-
         return botJpaRepository.findAll()
                 .stream()
                 .map(botJpaMapper::toDomain)

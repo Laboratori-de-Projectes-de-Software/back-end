@@ -2,6 +2,7 @@ package org.example.backend.databaseapi.jpa.liga;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.example.backend.databaseapi.application.port.out.liga.CreateLigaPort;
 import org.example.backend.databaseapi.application.port.out.liga.FindAllLigasPort;
 import org.example.backend.databaseapi.application.port.out.liga.FindLigaPort;
@@ -10,18 +11,21 @@ import org.example.backend.databaseapi.domain.liga.Liga;
 import org.example.backend.databaseapi.jpa.bot.BotJpaAdapter;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaAdapter;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaMapper;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = {@Lazy})
 public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLigaPort, FindLigaUsuarioPort {
 
     private final LigaJpaMapper ligaJpaMapper;
     private final LigaJpaRepository ligaJpaRepository;
+    @Lazy
     private final UsuarioJpaAdapter usuarioJpaAdapter;
+    @Lazy
     private final BotJpaAdapter botJpaAdapter;
 
     @Override

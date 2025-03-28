@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.example.backend.databaseapi.jpa.liga.LigaJpaEntity;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaEntity;
+import org.springframework.data.domain.Persistable;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name="bot")
-public class BotJpaEntity {
+public class BotJpaEntity{
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

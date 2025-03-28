@@ -78,7 +78,10 @@ public class UsuarioJpaAdapter implements CreateUsuarioPort, FindUsuarioPort, De
                 });    
     }
 
-    public Optional<UsuarioJpaEntity> getUser(int id){
+    public Optional<UsuarioJpaEntity> getUser(Integer id){
+        if(id==null){
+            return Optional.empty();
+        }
         return usuarioJpaRepository.findById(id);
     }
 }
