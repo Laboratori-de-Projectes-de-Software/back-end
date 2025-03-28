@@ -29,6 +29,8 @@ public class BotJpaEntity{
     @JoinColumn(name="id_usuario")
     private UsuarioJpaEntity usuario;
     private String cualidad;
+    @NotBlank
+    private String prompt;
 
     @NotBlank(message="El enlace al bot no puede estar vacio")
     private String url;

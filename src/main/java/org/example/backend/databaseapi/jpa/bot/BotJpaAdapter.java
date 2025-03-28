@@ -40,6 +40,7 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
         if(!botJpaRepository.existsByNombreOrUrl(bot.getNombre(),bot.getUrl())){
             BotJpaEntity newbot=BotJpaEntity.builder()
                     .url(bot.getUrl())
+                    .prompt(bot.getPrompt())
                     .cualidad(bot.getCualidad())
                     .imagen(bot.getImagen())
                     .usuario(
@@ -84,6 +85,7 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
                 .url(changedBot.getUrl())
                 .cualidad(changedBot.getCualidad())
                 .imagen(changedBot.getImagen())
+                .prompt(changedBot.getPrompt())
                 .usuario(
                         usuarioJpaAdapter.getUser(botJpaMapper.toInteger(changedBot.getUsuario()))
                                 .orElse(foundBot.getUsuario())
