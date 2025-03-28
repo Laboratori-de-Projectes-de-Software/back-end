@@ -1,8 +1,5 @@
 package com.alia.back_end_service.domain.bot;
 
-import com.alia.back_end_service.domain.league.League;
-import com.alia.back_end_service.domain.message.Message;
-import com.alia.back_end_service.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

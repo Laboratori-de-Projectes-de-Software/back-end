@@ -2,6 +2,8 @@ package com.alia.back_end_service.config;
 
 import com.alia.back_end_service.domain.bot.port.BotPortDB;
 import com.alia.back_end_service.domain.bot.port.BotRegistrationPortAPI;
+import com.alia.back_end_service.domain.bot.usecases.GetAllBotUseCase;
+import com.alia.back_end_service.domain.bot.usecases.GetBotUseCase;
 import com.alia.back_end_service.domain.bot.usecases.RegisterBotUseCase;
 import com.alia.back_end_service.domain.user.ports.PasswordEncoderPort;
 import com.alia.back_end_service.domain.user.ports.TokenProviderPort;
@@ -29,4 +31,10 @@ public class SpringConfig {
     public RegisterBotUseCase registerBotUseCase(BotPortDB botPortDB) {
         return new RegisterBotUseCase(botPortDB);
     }
+
+    @Bean
+    public GetAllBotUseCase getAllBotUseCase(BotPortDB botPortDB) {return new GetAllBotUseCase(botPortDB);}
+
+    @Bean
+    public GetBotUseCase getBotUseCase(BotPortDB botPortDB) {return new GetBotUseCase(botPortDB);}
 }

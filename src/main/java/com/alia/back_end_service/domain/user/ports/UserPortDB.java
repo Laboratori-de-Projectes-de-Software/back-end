@@ -8,6 +8,7 @@ public interface UserPortDB {
 
     //Gets and Find
     Optional<User> findByUsername(String username);
+
     Optional<User> findByEmail(String email);
 
     //Create

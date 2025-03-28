@@ -31,7 +31,7 @@ paths:
         '404':
           description: User not found
       security:
-        - api_key: []
+        - BearerAuth: []
 
   /users/register:
     post:
@@ -62,7 +62,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: List of bots associated with the user
@@ -71,7 +71,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Bot'
+                  $ref: '#/components/schemas/BotReturn'
 
   /users/{id}/leagues:
     get:
@@ -84,7 +84,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: List of leagues associated with the user
@@ -106,7 +106,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: User details
@@ -124,7 +124,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '204':
           description: User deleted successfully
@@ -139,7 +139,7 @@ paths:
       summary: Bot registration
       description: Registers a new bot associated with the authenticated user.
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       requestBody:
         required: true
         content:
@@ -152,15 +152,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    description: Unique identifier of the bot
-                  message:
-                    type: string
-                    example: "Bot registered successfully"
+                $ref: '#/components/schemas/BotReturn'
         '400':
           description: Invalid input data
         '401':
@@ -172,8 +164,6 @@ paths:
     get:
       summary: Get all bots
       description: Retrieves a list of all bots (admin only).
-      security:
-        - api_key: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: List of all bots
@@ -182,7 +172,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Bot'
+                  $ref: '#/components/schemas/BotReturn'
 
   /bots/{id}:
     get:
@@ -195,15 +185,13 @@ paths:
           schema:
             type: string
           description: Retrieves all leagues a bot is part of.
-      security:
-        - api_key: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: Bot details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Bot'
+                $ref: '#/components/schemas/BotReturn'
     delete:
       summary: Delete bot by ID
       description: Deletes a bot by ID (admin only).
@@ -214,7 +202,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '204':
           description: Bot deleted successfully
@@ -234,7 +222,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: List of leagues associated with the bot
@@ -256,7 +244,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: List of classifications for the bot
@@ -272,7 +260,7 @@ paths:
       summary: Get all leagues
       description: Retrieves all available leagues.
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: List of all leagues
@@ -294,7 +282,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: League details
@@ -312,7 +300,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '204':
           description: League deleted successfully
@@ -330,7 +318,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       requestBody:
         required: true
         content:
@@ -356,7 +344,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: List of bots associated with the league
@@ -365,7 +353,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Bot'
+                  $ref: '#/components/schemas/BotReturn'
 
   /leagues/{id}/users:
     get:
@@ -378,7 +366,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: List of users associated with the league
@@ -400,7 +388,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: List of rounds in the league
@@ -422,7 +410,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: List of classifications for the round
@@ -444,7 +432,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: List of games in the round
@@ -466,7 +454,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: Round details
@@ -486,7 +474,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: Game details
@@ -506,7 +494,7 @@ paths:
           schema:
             type: string
       security:
-        - api_key: []  # Se requiere autenticación con JWT
+        - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
         '200':
           description: List of messages for the game
@@ -520,11 +508,10 @@ paths:
 
 components:
   securitySchemes:
-    api_key:
-      type: apiKey
-      in: header
-      name: Authorization
-      description: 'Enter JWT token with Bearer prefix, e.g., "Bearer {token}"'
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     UserLogin:
       type: object
@@ -577,6 +564,7 @@ components:
         - endpoint
         - name
         - description
+        - user-id
       properties:
         endpoint:
           type: string
@@ -588,8 +576,11 @@ components:
         description:
           type: string
           example: "An AI-powered chatbot that responds to user queries."
+        user-id:
+          type: string
+          example: "Username"
 
-    Bot:
+    BotReturn:
       type: object
       properties:
         name:

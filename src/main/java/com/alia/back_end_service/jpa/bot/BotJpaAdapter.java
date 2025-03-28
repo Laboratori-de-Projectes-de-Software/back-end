@@ -7,7 +7,10 @@ import com.alia.back_end_service.jpa.user.UserEntity;
 import com.alia.back_end_service.jpa.user.UserJpaRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class BotJpaAdapter implements BotPortDB {
@@ -22,6 +25,14 @@ public class BotJpaAdapter implements BotPortDB {
         this.botJpaRepository = botJpaRepository;
         this.botMapper = botMapper;
         this.userJpaRepository = userJpaRepository;
+    }
+
+    @Override
+    public List<Bot> getBots() {
+        List<BotEntity> botEntities = botJpaRepository.findAll();
+        return botEntities.stream()
+                .map(botMapper::toDomain) // Aplicamos la función de mapeo
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -43,6 +54,8 @@ public class BotJpaAdapter implements BotPortDB {
         BotEntity savedEntity = botJpaRepository.save(botEntity);
         return botMapper.toDomain(savedEntity);
     }
+
+
 
     @Override
     public void delete(String name) {
