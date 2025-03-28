@@ -23,5 +23,5 @@ public class User {
 
     private Role role;
 
-    private List<Bot> bots;
+    private List<String> botIds;
 }

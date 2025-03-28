@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface BotJpaRepository extends JpaRepository<BotEntity, Integer> {
+public interface BotJpaRepository extends JpaRepository<BotEntity, String> {
     Optional<BotEntity> findByName(String name);
     void deleteByName(String name);
 }

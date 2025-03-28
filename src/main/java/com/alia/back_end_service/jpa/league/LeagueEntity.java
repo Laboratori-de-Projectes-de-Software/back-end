@@ -45,6 +45,4 @@ public class LeagueEntity {
     )
     private List<BotEntity> bots;
 
-    /*@OneToMany(mappedBy = "league", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RoundEntity> rounds;*/
 }
