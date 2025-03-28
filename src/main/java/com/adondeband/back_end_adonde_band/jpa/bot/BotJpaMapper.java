@@ -29,18 +29,31 @@ public interface BotJpaMapper {
 
     // Mapeo de atributos
     default BotId toBotId(String value) {
+        if (value == null) {
+            return null;
+        }
+
         return new BotId(value);
     }
 
     default String toBotIdString(BotId id) {
+        if (id == null) {
+            return null;
+        }
         return id.value();
     }
 
     default UsuarioId toUsuarioId(UsuarioEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         return new UsuarioId(entity.getNombre());
     }
 
     default ParticipacionId toParticipacionId(ParticipacionEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         return new ParticipacionId(entity.getId());
     }
 }

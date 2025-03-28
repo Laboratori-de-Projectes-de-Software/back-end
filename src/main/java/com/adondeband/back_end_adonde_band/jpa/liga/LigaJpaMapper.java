@@ -42,6 +42,11 @@ public interface LigaJpaMapper {
     }
 
     default ESTADO toESTADO(ESTADO_Entity estado_entity) {
+
+        if (estado_entity == null) {
+            return null;
+        }
+
         return ESTADO.valueOf(estado_entity.name());
     }
 }

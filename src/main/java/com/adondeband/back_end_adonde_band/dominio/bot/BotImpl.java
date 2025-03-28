@@ -8,7 +8,12 @@ import java.util.List;
 @Service
 public class BotImpl implements BotService {
 
-    private BotPort botPort;
+
+    private final BotPort botPort;
+
+    public BotImpl(BotPort botPort) {
+        this.botPort = botPort;
+    }
 
     @Override
     public Bot crearBot(Bot bot) {

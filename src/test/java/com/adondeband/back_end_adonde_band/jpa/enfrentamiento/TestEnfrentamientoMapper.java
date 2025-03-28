@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -14,13 +15,9 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest
 public class TestEnfrentamientoMapper {
 
+    @Autowired
     private EnfrentamientoJpaMapper enfrentamientoJpaMapper;
 
-    @Before
-    public void setUp() {
-        // Obtener la implementación generada por MapStruct
-        enfrentamientoJpaMapper = Mappers.getMapper(EnfrentamientoJpaMapper.class);
-    }
 
 
     // Test no terminado hay que hacer los mapper, este objeto es muy complejo para testearlo ahora

@@ -20,13 +20,16 @@ public interface ParticipacionJpaMapper {
 
     // Mapeo de atributos
     default BotId toBotId(BotEntity entity) {
-
-        int victorias = entity.getNumVictorias();
-
+        if (entity == null) {
+            return null;
+        }
         return new BotId(entity.getNombre());
     }
 
     default LigaId toLigaId(LigaEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         return new LigaId(entity.getId());
     }
 }

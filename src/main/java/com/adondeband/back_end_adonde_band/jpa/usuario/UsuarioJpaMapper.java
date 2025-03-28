@@ -13,6 +13,7 @@ import com.adondeband.back_end_adonde_band.jpa.rol.RolEntity;
 import com.adondeband.back_end_adonde_band.jpa.rol.RolJpaMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(uses =   {
             RolJpaMapper.class,
@@ -30,18 +31,28 @@ public interface UsuarioJpaMapper {
 
     // Mapeo de atributos
     default UsuarioId toUsuarioId(String value) {
+        if (value == null) {
+            return null;
+        }
         return new UsuarioId(value);
     }
 
     default String toUsuarioIdString(UsuarioId id) {
+        if (id == null) {
+            return null;
+        }
         return id.value();
     }
 
     default RolId toRolId(RolEntity entity) {
+        if(entity == null) return null;
         return new RolId(entity.getNombre());
     }
 
     default BotId toBotId(BotEntity entity) {
+        if (entity == null) {
+            return null;
+        }
         return new BotId(entity.getNombre());
     }
 }

@@ -27,24 +27,42 @@ public interface JornadaJpaMapper {
     JornadaEntity toEntity(Jornada jornada);
 
     //TODO Terrorismo, va porque dios lo quiere
-    default ParticipacionEntity map(ParticipacionId value) {
-        return null;
+    default ParticipacionEntity map(ParticipacionId id) {
+        if (id == null) return null;
+
+        return new ParticipacionEntity(id.value());
     }
 
     // Mapeo de atributos
     default JornadaId toJornadaId(Long value) {
+        if (value == null) {
+            //TODO LANZAR EXCEPCION
+            return null;
+        }
+
         return new JornadaId(value);
     }
 
     default long toJornadaIdint(JornadaId id) {
+
         return id.value();
     }
 
     default LigaId toLigaId(LigaEntity entity) {
+        if (entity == null) {
+            //TODO LANZAR EXCEPCION
+            return null;
+        }
+
         return new LigaId(entity.getId());
     }
 
     default EnfrentamientoId toEnfrentamientoId(EnfrentamientoEntity entity) {
+
+        if (entity == null) {
+            //TODO LANZAR EXCEPCION
+            return null;
+        }
         return new EnfrentamientoId(entity.getId());
     }
 }

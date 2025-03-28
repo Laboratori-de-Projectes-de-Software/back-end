@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -18,13 +19,8 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest
 public class TestLigaMapper {
 
+    @Autowired
     private LigaJpaMapper ligaJpaMapper;
-
-    @Before
-    public void setUp() {
-        // Obtener la implementación generada por MapStruct
-        ligaJpaMapper = Mappers.getMapper(LigaJpaMapper.class);
-    }
 
     @Test
     public void comprobarLigaEntityToLigaSencillo() {

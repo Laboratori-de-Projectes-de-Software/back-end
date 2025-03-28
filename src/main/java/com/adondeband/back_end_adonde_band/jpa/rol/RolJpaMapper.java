@@ -22,14 +22,17 @@ public interface RolJpaMapper {
 
     // Mapeo de atributos
     default RolId toRolId(String value) {
+        if(value == null) return null;
         return new RolId(value);
     }
 
     default String toRolIdString(RolId id) {
+        if(id == null) return null;
         return id.value();
     }
 
     default UsuarioId toUsuarioId(UsuarioEntity entity) {
+        if(entity == null) return null;
         return new UsuarioId(entity.getNombre());
     }
 }

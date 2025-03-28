@@ -25,5 +25,6 @@ public class BotDTO {
         this.numEmpates = 0;
         this.numDerrotas = 0;
         this.usuario = null;
+
     }
 }
