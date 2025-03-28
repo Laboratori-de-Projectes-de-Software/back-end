@@ -1,0 +1,33 @@
+package org.example.backend.databaseapi.jpa.bot;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
+import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaEntity;
+
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
+@Table(name="bot")
+public class BotJpaEntity {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private int idBot;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name="id_usuario")
+    private UsuarioJpaEntity usuario;
+    private String cualidad;
+
+    @NotBlank(message="El enlace al bot no puede estar vacio")
+    private String url;
+    private String imagen;
+
+    @NotBlank(message="El nombre del bot no puede estar vacio")
+    private String nombre;
+
+}

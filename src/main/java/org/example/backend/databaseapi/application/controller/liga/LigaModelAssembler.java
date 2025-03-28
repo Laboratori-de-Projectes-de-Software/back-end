@@ -1,0 +1,31 @@
+package org.example.backend.databaseapi.application.controller.liga;
+
+import org.example.backend.databaseapi.application.controller.bot.BotController;
+import org.example.backend.databaseapi.domain.Bot;
+import org.example.backend.databaseapi.domain.Liga;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+@Component
+public class LigaModelAssembler implements RepresentationModelAssembler<Liga, EntityModel<Liga>> {
+
+    @Override
+    public EntityModel<Liga> toModel(Liga entity) {
+        return EntityModel.of(entity,
+                linkTo(methodOn(LigaController.class).buscarLiga(entity.getLigaId())).withSelfRel(),
+                linkTo(methodOn(LigaController.class).buscarAllLigas()).withRel("ligas"));
+    }
+
+    public CollectionModel<EntityModel<Liga>> toCollectionModel(List<EntityModel<Liga>> ligas) {
+
+        return CollectionModel.of(ligas,
+                linkTo(methodOn(LigaController.class).buscarAllLigas()).withSelfRel());
+    }
+}
