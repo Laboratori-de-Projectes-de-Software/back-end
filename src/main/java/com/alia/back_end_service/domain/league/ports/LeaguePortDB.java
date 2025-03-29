@@ -9,6 +9,8 @@ public interface LeaguePortDB {
 
     League saveLeague(League league);
 
+    League getLeague(Integer id);
+
     void deleteLeague(Long id); // Para eliminar
 
     List<League> getAllLeagues();

@@ -36,6 +36,12 @@ public class BotJpaAdapter implements BotPortDB {
     }
 
     @Override
+    public List<Bot> getAllUserBots(String username) {
+        List<BotEntity> botEntities = botJpaRepository.getAllByUser_Username(username);
+        return  botEntities.stream().map(botMapper::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<Bot> findByName(String name) {
         Optional<BotEntity> botEntity = botJpaRepository.findByName(name);
         return botEntity.map(botMapper::toDomain);

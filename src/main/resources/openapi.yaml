@@ -93,7 +93,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/League'
+                  $ref: '#/components/schemas/LeagueResponse'
 
   /users/{id}:
     get:
@@ -113,7 +113,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserResponse'
     delete:
       summary: Delete user by ID
       description: Deletes a user by ID (admin only).
@@ -231,7 +231,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/League'
+                  $ref: '#/components/schemas/LeagueResponse'
 
   /bots/{id}/clasifications:
     get:
@@ -269,7 +269,32 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/League'
+                  $ref: '#/components/schemas/LeagueResponse'
+
+  /leagues/create:
+    post:
+      summary: Create a League
+      description: Create a League and returns that league
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueCreate'
+      responses:
+        '201':
+          description: League Created Succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueResponse'
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+
 
   /leagues/{id}:
     get:
@@ -280,7 +305,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       security:
         - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
@@ -289,7 +314,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/League'
+                $ref: '#/components/schemas/LeagueResponse'
     delete:
       summary: Delete league by ID
       description: Deletes a league by ID (admin only).
@@ -298,7 +323,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       security:
         - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
@@ -316,7 +341,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       security:
         - BearerAuth: []  # Se requiere autenticación con JWT
       requestBody:
@@ -342,7 +367,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       security:
         - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
@@ -364,7 +389,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       security:
         - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
@@ -375,7 +400,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/UserResponse'
 
   /leagues/{id}/rounds:
     get:
@@ -386,7 +411,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       security:
         - BearerAuth: []  # Se requiere autenticación con JWT
       responses:
@@ -547,7 +572,7 @@ components:
           format: password
           pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$"
           example: 'StrongPass123'
-    User:
+    UserResponse:
       type: object
       properties:
         username:
@@ -590,12 +615,21 @@ components:
           type: string
           example: "An AI-powered chatbot that responds to user queries."
 
-    League:
+    LeagueCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        time_match:
+          type: integer
+        number_match:
+          type: integer
+
+    LeagueResponse:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
         name:
           type: string
         init_time:

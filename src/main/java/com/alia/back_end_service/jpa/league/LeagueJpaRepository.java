@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface LeagueJpaRepository extends JpaRepository<LeagueEntity, Long> {
 
     @EntityGraph(attributePaths = {"bots"}) // Sin rounds de momento
-    Optional<LeagueEntity> findById(Long id); // Detalles completos
+    Optional<LeagueEntity> findById(Integer id); // Detalles completos
 
     @Query("SELECT l FROM LeagueEntity l JOIN l.bots b WHERE b.user.username = :username")
     List<LeagueEntity> findLeaguesByUser(String username); // Ligas con bots del usuario
