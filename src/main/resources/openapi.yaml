@@ -253,7 +253,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Classification'
+                  $ref: '#/components/schemas/ClassificationResponse'
 
   /leagues/all:
     get:
@@ -423,7 +423,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Round'
+                  $ref: '#/components/schemas/RoundResponse'
 
   /round/{id}/classifications:
     get:
@@ -445,7 +445,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Classification'
+                  $ref: '#/components/schemas/ClassificationResponse'
 
   /round/{id}/games:
     get:
@@ -467,7 +467,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Game'
+                  $ref: '#/components/schemas/GameResponse'
 
   /round/{id}:
     get:
@@ -487,7 +487,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Round'
+                $ref: '#/components/schemas/RoundResponse'
 
   /game/{id}:
     get:
@@ -507,7 +507,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Game'
+                $ref: '#/components/schemas/GameResponse'
 
   /game/{id}/messages:
     get:
@@ -529,7 +529,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Message'
+                  $ref: '#/components/schemas/MessageResponse'
 
 
 components:
@@ -664,12 +664,11 @@ components:
         state:
           type: string
 
-    Classification:
+    ClassificationResponse:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
         points:
           type: integer
         number_matchs:
@@ -681,12 +680,11 @@ components:
         lose_matchs:
           type: integer
 
-    Round:
+    RoundResponse:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
         number_round:
           type: integer
         init_time:
@@ -698,12 +696,11 @@ components:
         state:
           type: string
 
-    Game:
+    GameResponse:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
         timestamp:
           type: string
           format: date-time
@@ -718,12 +715,11 @@ components:
         state:
           type: string
 
-    Message:
+    MessageResponse:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
         content:
           type: string
         bot_id:
