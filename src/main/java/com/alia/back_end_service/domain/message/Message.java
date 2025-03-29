@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,16 +18,13 @@ import java.time.Instant;
 @Setter
 public class Message {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @Column(nullable = false, length = 500) // Revisar tema de la longitud
     private String text;
 
-    @Column(nullable = false)
-    private Instant timestamp; // Formato UTC
+    private OffsetDateTime timestamp; // Formato UTC
 
+    private Bot bot;
 
 
 }
