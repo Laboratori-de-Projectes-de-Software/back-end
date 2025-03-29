@@ -16,4 +16,36 @@ public class LigaDTO {
         this.fechaFin = fechaFin;
         this.estado = ESTADO.PENDIENTE;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {  // Agregar setter
+        this.nombre = nombre;
+    }
+
+    public ESTADO getEstado() {
+        return estado;
+    }
+
+    public void setEstado(ESTADO estado) {  // Agregar setter
+        this.estado = estado;
+    }
+
+    public LocalDateTime getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(LocalDateTime fechaInicio) {  // Agregar setter
+        this.fechaInicio = fechaInicio;
+    }
+
+    public LocalDateTime getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(LocalDateTime fechaFin) {  // Agregar setter
+        this.fechaFin = fechaFin;
+    }
 }
