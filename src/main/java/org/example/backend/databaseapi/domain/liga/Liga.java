@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.backend.databaseapi.domain.bot.Bot;
+import org.example.backend.databaseapi.domain.bot.BotId;
 import org.example.backend.databaseapi.domain.usuario.Usuario;
+import org.example.backend.databaseapi.domain.usuario.UsuarioId;
 
 import java.util.List;
 
@@ -16,8 +18,8 @@ import java.util.List;
 public class Liga {
 
     private LigaId ligaId;
-    private List<Bot> botsLiga;
-    private Usuario usuario;
+    private List<BotId> botsLiga;
+    private UsuarioId usuario;
     private String nombre;
 
     @Override

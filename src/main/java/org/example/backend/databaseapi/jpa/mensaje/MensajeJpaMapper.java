@@ -6,6 +6,8 @@ import org.example.backend.databaseapi.domain.liga.LigaId;
 import org.example.backend.databaseapi.domain.mensaje.MensajeId;
 import org.example.backend.databaseapi.domain.partida.PartidaId;
 import org.example.backend.databaseapi.domain.usuario.UsuarioId;
+import org.example.backend.databaseapi.jpa.bot.BotJpaEntity;
+import org.example.backend.databaseapi.jpa.partida.PartidaJpaEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
@@ -23,6 +25,10 @@ public interface MensajeJpaMapper {
 
     default BotId toBotId(Integer value) {
         return new BotId(value);
+    }
+
+    default BotId toBotId(BotJpaEntity entity) {
+        return new BotId(entity.getIdBot());
     }
 
     default Integer toInteger(BotId entity) {
@@ -47,6 +53,10 @@ public interface MensajeJpaMapper {
 
     default PartidaId toPartidaId(Integer value) {
         return new PartidaId(value);
+    }
+
+    default PartidaId toPartidaId(PartidaJpaEntity entity) {
+        return new PartidaId(entity.getPartidaId());
     }
 
     default Integer toInteger(PartidaId entity) {

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.backend.databaseapi.domain.liga.Liga;
+import org.example.backend.databaseapi.domain.liga.LigaId;
 import org.example.backend.databaseapi.domain.usuario.UsuarioId;
 
 import java.util.List;
@@ -17,9 +18,10 @@ public class Bot {
 
     private final BotId idBot;
     private UsuarioId usuario;
-    private List<Liga> ligasBot;
+    private List<LigaId> ligasBot;
     private String cualidad;
     private String url;
+    private String prompt;
     private String imagen;
     private String nombre;
 

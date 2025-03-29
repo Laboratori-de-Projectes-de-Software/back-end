@@ -9,7 +9,7 @@ import org.example.backend.databaseapi.application.port.in.usuario.BuscarUsuario
 import org.example.backend.databaseapi.application.port.in.usuario.EliminarUsuarioPort;
 import org.example.backend.databaseapi.application.service.JwtService;
 import org.example.backend.databaseapi.application.service.PasswordService;
-import org.example.backend.databaseapi.domain.Usuario;
+import org.example.backend.databaseapi.domain.usuario.Usuario;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,7 +73,7 @@ public class UsuarioController {
     @PatchMapping("/usuario/{id}")
     ResponseEntity<EntityModel<Usuario>> actualizarUsuario(@RequestBody Usuario usuario, @PathVariable Integer id){
         Usuario user = actualizarUsuarioPort.actualizarUsuario(usuario, id);
-        return ResponseEntity.created(linkTo(methodOn(UsuarioController.class).buscarUsuario(user.getUserId())).toUri())
+        return ResponseEntity.created(linkTo(methodOn(UsuarioController.class).buscarUsuario(user.getUserId().value())).toUri())
                 .body(userModelAssembler.toModel(user));
     }
 }

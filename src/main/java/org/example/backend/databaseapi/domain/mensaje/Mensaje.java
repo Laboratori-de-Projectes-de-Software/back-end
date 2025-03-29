@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.backend.databaseapi.domain.partida.Partida;
-import org.example.backend.databaseapi.domain.bot.Bot;
+import org.example.backend.databaseapi.domain.bot.BotId;
+import org.example.backend.databaseapi.domain.partida.PartidaId;
 
 import java.sql.Timestamp;
 
@@ -16,8 +16,8 @@ import java.sql.Timestamp;
 public class Mensaje {
 
     private MensajeId mensajeId;
-    private Bot bot;
-    private Partida partida;
+    private BotId bot;
+    private PartidaId partida;
     private String texto; //Notnull
     private Timestamp hora; //Notnull
 

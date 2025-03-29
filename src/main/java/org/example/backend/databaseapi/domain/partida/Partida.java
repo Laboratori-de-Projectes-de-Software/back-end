@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.backend.databaseapi.domain.liga.Liga;
+import org.example.backend.databaseapi.domain.liga.LigaId;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class Partida {
 
     private PartidaId partidaId;
-    private Liga liga; //Notnull
+    private LigaId liga; //Notnull
     private Estado estado;
     private Integer duracionTotal;
     private LocalDateTime fecha; //Notnull

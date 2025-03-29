@@ -6,6 +6,7 @@ import org.example.backend.databaseapi.domain.bot.BotId;
 import org.example.backend.databaseapi.domain.liga.LigaId;
 import org.example.backend.databaseapi.domain.partida.PartidaId;
 import org.example.backend.databaseapi.domain.usuario.UsuarioId;
+import org.example.backend.databaseapi.jpa.liga.LigaJpaEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
@@ -31,6 +32,10 @@ public interface PartidaJpaMapper {
 
     default LigaId toLigaId(Integer value) {
         return new LigaId(value);
+    }
+
+    default LigaId toLigaId(LigaJpaEntity entity) {
+        return new LigaId(entity.getLigaId());
     }
 
     default Integer toInteger(LigaId entity) {

@@ -4,6 +4,7 @@ import org.example.backend.databaseapi.domain.bot.Bot;
 import org.example.backend.databaseapi.domain.bot.BotId;
 import org.example.backend.databaseapi.domain.liga.LigaId;
 import org.example.backend.databaseapi.domain.usuario.UsuarioId;
+import org.example.backend.databaseapi.jpa.liga.LigaJpaEntity;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -46,6 +47,10 @@ public interface BotJpaMapper {
 
     default LigaId toLigaId(Integer value) {
         return new LigaId(value);
+    }
+
+    default LigaId toLigaId(LigaJpaEntity entity) {
+        return new LigaId(entity.getLigaId());
     }
 
     default Integer toInteger(LigaId entity) {
