@@ -1,20 +1,15 @@
 package org.example.backend.databaseapi.jpa.bot;
 
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.databaseapi.application.port.out.bot.*;
 import org.example.backend.databaseapi.domain.bot.Bot;
 import org.example.backend.databaseapi.jpa.liga.LigaJpaAdapter;
 import org.example.backend.databaseapi.jpa.liga.LigaJpaEntity;
-import org.example.backend.databaseapi.jpa.liga.LigaJpaMapper;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaAdapter;
-import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,9 +25,6 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
     @Lazy
     private final LigaJpaAdapter ligaJpaAdapter;
     private final BotJpaMapper botJpaMapper;
-    private final UsuarioJpaMapper usuarioJpaMapper;
-
-
 
     @Override
     @Transactional
@@ -79,7 +71,8 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
                     .toList();
         }
 
-
+        //Tal vez se tenga que comprobar si la url ya existe, eso depende de los requisitos,
+        //actualmente podria estar en 2 bots diferentes al no estar especificado
         BotJpaEntity newbot=BotJpaEntity.builder()
                 .idBot(botJpaMapper.toInteger(changedBot.getIdBot()))
                 .url(changedBot.getUrl())

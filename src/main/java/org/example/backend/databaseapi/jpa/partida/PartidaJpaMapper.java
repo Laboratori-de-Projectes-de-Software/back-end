@@ -1,6 +1,5 @@
 package org.example.backend.databaseapi.jpa.partida;
 
-import org.example.backend.databaseapi.domain.mensaje.MensajeId;
 import org.example.backend.databaseapi.domain.partida.Partida;
 import org.example.backend.databaseapi.domain.bot.BotId;
 import org.example.backend.databaseapi.domain.liga.LigaId;

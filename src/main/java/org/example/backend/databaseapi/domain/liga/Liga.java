@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.backend.databaseapi.domain.bot.Bot;
 import org.example.backend.databaseapi.domain.bot.BotId;
-import org.example.backend.databaseapi.domain.usuario.Usuario;
 import org.example.backend.databaseapi.domain.usuario.UsuarioId;
 
 import java.util.List;

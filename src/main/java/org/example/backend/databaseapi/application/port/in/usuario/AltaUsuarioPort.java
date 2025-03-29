@@ -4,6 +4,6 @@ import org.example.backend.databaseapi.domain.usuario.Usuario;
 
 public interface AltaUsuarioPort {
 
-    public Usuario altaUsuario(Usuario user);
+    Usuario altaUsuario(Usuario user);
 
 }

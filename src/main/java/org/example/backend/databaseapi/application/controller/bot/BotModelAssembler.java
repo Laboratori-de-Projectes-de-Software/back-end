@@ -4,6 +4,8 @@ import org.example.backend.databaseapi.domain.bot.Bot;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,8 +15,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class BotModelAssembler implements RepresentationModelAssembler<Bot, EntityModel<Bot>> {
+
     @Override
-    public EntityModel<Bot> toModel(Bot entity) {
+    @NonNull
+    public EntityModel<Bot> toModel(@NonNull Bot entity) {
 
         return EntityModel.of(entity,
                 linkTo(methodOn(BotController.class).buscarBot(entity.getIdBot().value())).withSelfRel(),

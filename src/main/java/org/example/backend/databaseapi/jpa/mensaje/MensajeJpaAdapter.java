@@ -8,10 +8,7 @@ import org.example.backend.databaseapi.application.port.out.mensaje.FindMensajeP
 import org.example.backend.databaseapi.application.port.out.mensaje.FindMensajePort;
 import org.example.backend.databaseapi.domain.mensaje.Mensaje;
 import org.example.backend.databaseapi.jpa.bot.BotJpaAdapter;
-import org.example.backend.databaseapi.jpa.bot.BotJpaMapper;
 import org.example.backend.databaseapi.jpa.partida.PartidaJpaAdapter;
-import org.example.backend.databaseapi.jpa.partida.PartidaJpaEntity;
-import org.example.backend.databaseapi.jpa.partida.PartidaJpaMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

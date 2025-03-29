@@ -6,6 +6,7 @@ import org.example.backend.databaseapi.domain.partida.Partida;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,7 +18,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @AllArgsConstructor
 public class PartidaModelAssembler implements RepresentationModelAssembler<Partida, EntityModel<Partida>> {
     @Override
-    public EntityModel<Partida> toModel(Partida entity) {
+    @NonNull
+    public EntityModel<Partida> toModel(@NonNull Partida entity) {
         return EntityModel.of(entity,
                 linkTo(methodOn(PartidaController.class).buscarPartida(entity.getLiga().value(), entity.getPartidaId().value())).withSelfRel());
     }

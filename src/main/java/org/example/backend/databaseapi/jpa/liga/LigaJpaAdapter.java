@@ -1,7 +1,6 @@
 package org.example.backend.databaseapi.jpa.liga;
 
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.databaseapi.application.port.out.liga.CreateLigaPort;
 import org.example.backend.databaseapi.application.port.out.liga.FindAllLigasPort;
@@ -10,7 +9,6 @@ import org.example.backend.databaseapi.application.port.out.liga.FindLigaUsuario
 import org.example.backend.databaseapi.domain.liga.Liga;
 import org.example.backend.databaseapi.jpa.bot.BotJpaAdapter;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaAdapter;
-import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 

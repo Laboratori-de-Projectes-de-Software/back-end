@@ -6,6 +6,7 @@ import org.example.backend.databaseapi.domain.mensaje.Mensaje;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,7 +18,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @AllArgsConstructor
 public class MensajeModelAssembler implements RepresentationModelAssembler<Mensaje, EntityModel<Mensaje>> {
     @Override
-    public EntityModel<Mensaje> toModel(Mensaje entity) {
+    @NonNull
+    public EntityModel<Mensaje> toModel(@NonNull Mensaje entity) {
         return EntityModel.of(entity,
                 linkTo(methodOn(MensajeController.class).buscarMensajesPartida(entity.getPartida().value(), entity.getMensajeId().value())).withSelfRel());
     }

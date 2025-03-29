@@ -4,6 +4,7 @@ import org.example.backend.databaseapi.domain.liga.Liga;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,7 +16,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class LigaModelAssembler implements RepresentationModelAssembler<Liga, EntityModel<Liga>> {
 
     @Override
-    public EntityModel<Liga> toModel(Liga entity) {
+    @NonNull
+    public EntityModel<Liga> toModel(@NonNull Liga entity) {
         return EntityModel.of(entity,
                 linkTo(methodOn(LigaController.class).buscarLiga(entity.getLigaId().value())).withSelfRel(),
                 linkTo(methodOn(LigaController.class).buscarAllLigas()).withRel("ligas"));

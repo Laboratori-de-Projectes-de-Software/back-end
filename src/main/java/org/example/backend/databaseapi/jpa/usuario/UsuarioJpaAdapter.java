@@ -2,6 +2,7 @@ package org.example.backend.databaseapi.jpa.usuario;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.example.backend.databaseapi.application.exception.ResourceAlreadyExistsException;
 import org.example.backend.databaseapi.application.port.out.usuario.CreateUsuarioPort;
 import org.example.backend.databaseapi.application.port.out.usuario.DeleteUsuarioPort;
 import org.example.backend.databaseapi.application.port.out.usuario.FindUsuarioPort;
@@ -23,10 +24,10 @@ public class UsuarioJpaAdapter implements CreateUsuarioPort, FindUsuarioPort, De
     @Override
     @Transactional
     public Optional<Usuario> createUsuario(Usuario usuario) {
-        if(!usuarioJpaRepository.existsByEmail(usuario.getEmail())){
+        if(!usuarioJpaRepository.existsByEmail(usuario.getEmail().value())){
             // Encriptar la contraseña antes de guardar
             UsuarioJpaEntity entity=UsuarioJpaEntity.builder()
-                    .email(usuario.getEmail())
+                    .email(usuario.getEmail().value())
                     .nombre(usuario.getNombre())
                     .imagen(usuario.getImagen())
                     .password(usuario.getPassword())
@@ -38,9 +39,8 @@ public class UsuarioJpaAdapter implements CreateUsuarioPort, FindUsuarioPort, De
     }
 
     @Override
-    public Usuario deleteUsuario(int id_usuario) {
+    public void deleteUsuario(int id_usuario) {
         usuarioJpaRepository.deleteById(id_usuario);
-        return null;
     }
 
     @Override
@@ -54,28 +54,37 @@ public class UsuarioJpaAdapter implements CreateUsuarioPort, FindUsuarioPort, De
     }
 
     @Override
-    public Usuario updateUsuario(Usuario usuario, Integer id) {
-        return usuarioJpaRepository.findById(id)
-                .map(user -> {
-                    user.setNombre(usuario.getNombre());
-                    user.setEmail(usuario.getEmail());
-                    user.setImagen(usuario.getImagen());
-                    // Solo actualizar contraseña si se proporciona una nueva
-                    if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
-                        user.setPassword(passwordService.encryptPassword(usuario.getPassword()));
-                    }
-                    return usuarioJpaMapper.toDomain(usuarioJpaRepository.save(user));
-                })
-                .orElseGet(() -> {
-                    UsuarioJpaEntity entity=UsuarioJpaEntity.builder()
-                            .email(usuario.getEmail())
-                            .nombre(usuario.getNombre())
-                            .imagen(usuario.getImagen())
-                            .password(usuario.getPassword())
-                            .build();
-                    entity.setPassword(passwordService.encryptPassword(usuario.getPassword()));
-                    return usuarioJpaMapper.toDomain(usuarioJpaRepository.save(entity));
-                });    
+    public Usuario updateUsuario(Usuario changedUser, Integer id) {
+        String email=null;
+        if(changedUser.getEmail()!=null){
+            email=changedUser.getEmail().value();
+        }
+
+        //TODO: Comprobar si changedUser email existe
+        if(usuarioJpaRepository.existsByEmail(email)){
+            throw new ResourceAlreadyExistsException("Este email no esta disponible");
+        }
+
+        UsuarioJpaEntity foundUser=getUser(id)
+                .orElseThrow();
+
+
+        UsuarioJpaEntity newUser=UsuarioJpaEntity.builder()
+                .userId(foundUser.getUserId())
+                .email(email)
+                .nombre(changedUser.getNombre())
+                .imagen(changedUser.getImagen())
+                .build();
+
+        if (changedUser.getPassword() != null && !changedUser.getPassword().isEmpty()) {
+            newUser.setPassword(passwordService.encryptPassword(changedUser.getPassword()));
+        }
+
+        return usuarioJpaMapper.toDomain(
+                usuarioJpaRepository.save(
+                        usuarioJpaMapper.updateUser(newUser,foundUser)
+                )
+        );
     }
 
     public Optional<UsuarioJpaEntity> getUser(Integer id){

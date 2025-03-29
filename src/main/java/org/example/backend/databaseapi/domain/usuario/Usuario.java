@@ -16,7 +16,7 @@ public class Usuario {
     private final UsuarioId userId;
     private String nombre;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String email;
+    private Email email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String imagen;

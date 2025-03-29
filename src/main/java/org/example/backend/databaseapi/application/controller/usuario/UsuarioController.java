@@ -11,10 +11,8 @@ import org.example.backend.databaseapi.application.service.JwtService;
 import org.example.backend.databaseapi.application.service.PasswordService;
 import org.example.backend.databaseapi.domain.usuario.Usuario;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -50,7 +48,11 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody Usuario request) {
-        Usuario user = buscarUsuarioPort.buscarUsuario(request.getEmail());
+        String email=null;
+        if(request.getEmail()!=null){
+            email=request.getEmail().value();
+        }
+        Usuario user = buscarUsuarioPort.buscarUsuario(email);
         // damos el mismo mensaje de error en ambos casos para no proporcionar más información de la necesaria
         if (user == null || !passwordService.matchesPassword(request.getPassword(), user.getPassword())) {
             throw new IncorrectCredentialsException("El email o la contraseña son incorrectos");
