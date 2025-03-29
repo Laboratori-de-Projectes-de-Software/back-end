@@ -7,6 +7,7 @@ import com.alia.back_end_service.jpa.round.RoundMapper;
 import com.alia.back_end_service.jpa.bot.BotEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -33,9 +34,9 @@ public class LeagueMapperImpl implements LeagueMapper {
 
         // Map bots (many-to-many)
         if (entity.getBots() != null) {
-            league.setBots(entity.getBots().stream()
+            league.setBots(new ArrayList<>(entity.getBots().stream()
                     .map(botMapper::toDomain)
-                    .toList());
+                    .toList()));
         }
 
         // No mapeamos rounds aún

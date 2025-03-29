@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -43,6 +44,6 @@ public class LeagueEntity {
             joinColumns = @JoinColumn(name = "league_id"),
             inverseJoinColumns = @JoinColumn(name = "bot_name")
     )
-    private List<BotEntity> bots;
+    private List<BotEntity> bots = new ArrayList<>();
 
 }

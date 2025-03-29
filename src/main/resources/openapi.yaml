@@ -359,6 +359,28 @@ paths:
         '404':
           description: League not found
 
+  /leagues/inscribe/bot:
+    post:
+      summary: Bot registration to a league
+      description: Registers a bot into a league
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueInscribe'
+      security:
+        - BearerAuth: [ ]  # Se requiere autenticación con JWT
+      responses:
+        '201':
+          description: Bot registered successfully
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '409':
+          description: Bot with the same endpoint already exists
+
   /leagues/{id}/bots:
     get:
       summary: Get bots associated with a league
@@ -625,6 +647,14 @@ components:
           type: integer
         number_match:
           type: integer
+
+    LeagueInscribe:
+      type: object
+      properties:
+        league_id:
+          type: integer
+        bot_id:
+          type: string
 
     LeagueResponse:
       type: object

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -30,7 +31,7 @@ public class League {
 
     private String state;
 
-    private List<Bot> bots;
+    private List<Bot> bots = new ArrayList<>();
 
     // private List<Round> rounds;
 }
