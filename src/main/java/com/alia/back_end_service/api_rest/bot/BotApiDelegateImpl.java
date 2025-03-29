@@ -7,6 +7,8 @@ import com.alia.back_end_service.domain.bot.Bot;
 import com.alia.back_end_service.domain.bot.port.BotGetAllPortAPI;
 import com.alia.back_end_service.domain.bot.port.BotGetPortApi;
 import com.alia.back_end_service.domain.bot.port.BotRegistrationPortAPI;
+import com.alia.back_end_service.domain.league.League;
+import com.alia.back_end_service.domain.league.ports.LeagueGetPortAPI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,8 @@ public class BotApiDelegateImpl implements BotsApiDelegate {
     private final BotGetAllPortAPI botGetAllPortAPI;
     private final BotGetPortApi botGetPortApi;
     private final BotMapperAPI botMapperPortAPI;
+
+    private final LeagueGetPortAPI leagueGetPortAPI;
 
     @Override
     public ResponseEntity<BotReturn> botsRegisterPost(BotRegister botRegister) {
@@ -42,4 +46,5 @@ public class BotApiDelegateImpl implements BotsApiDelegate {
     public ResponseEntity<BotReturn> botsIdGet(String id) {
         return ResponseEntity.status(HttpStatus.OK).body(botMapperPortAPI.toApiResponse(botGetPortApi.findByName(id)));
     }
+
 }

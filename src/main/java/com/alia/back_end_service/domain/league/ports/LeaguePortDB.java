@@ -1,5 +1,6 @@
 package com.alia.back_end_service.domain.league.ports;
 
+import com.alia.back_end_service.domain.bot.Bot;
 import com.alia.back_end_service.domain.league.League;
 
 import java.util.List;
@@ -10,6 +11,10 @@ public interface LeaguePortDB {
     League saveLeague(League league);
 
     League getLeague(Integer id);
+
+    League inscribeBot(Integer league_id, String bot_name);
+
+    List<Bot> getAllLeagueBots(Integer leagueId);
 
     void deleteLeague(Long id); // Para eliminar
 

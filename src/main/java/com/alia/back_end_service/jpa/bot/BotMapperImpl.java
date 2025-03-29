@@ -5,6 +5,7 @@ import com.alia.back_end_service.jpa.league.LeagueEntity;
 import com.alia.back_end_service.jpa.league.LeagueMapper;
 import com.alia.back_end_service.jpa.message.MessageMapper;
 import com.alia.back_end_service.jpa.user.UserMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -18,17 +19,12 @@ public class BotMapperImpl implements BotMapper{
 
     @Override
     public Bot toDomain(BotEntity entity) {
-        List<Integer> leagueIds = entity.getLeagues() != null
-                ? entity.getLeagues().stream().map(LeagueEntity::getId).toList()
-                : List.of();
-
         return new Bot(
                 entity.getName(),
                 entity.getDescription(),
                 URI.create(entity.getEndpoint()),
                 entity.getToken(),
-                entity.getUser().getUsername(),
-                leagueIds
+                entity.getUser().getUsername()
         );
     }
 
@@ -39,7 +35,6 @@ public class BotMapperImpl implements BotMapper{
         entity.setDescription(bot.getDescription());
         entity.setEndpoint(bot.getEndpoint().toString());
         entity.setToken(bot.getToken());
-        // El UserEntity debe setearse desde fuera
         return entity;
     }
 }

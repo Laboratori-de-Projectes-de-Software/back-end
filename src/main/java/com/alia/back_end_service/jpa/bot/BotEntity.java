@@ -36,11 +36,4 @@ public class BotEntity {
     @JoinColumn(name = "user_id", nullable = false)  // Relación con UserEntity
     private UserEntity user;
 
-    @ManyToMany
-    @JoinTable(name = "bot_leagues",
-            joinColumns = @JoinColumn(name = "name_bot"),
-            inverseJoinColumns = @JoinColumn(name = "league_id")
-    )
-    private List<LeagueEntity> leagues;
-
 }
