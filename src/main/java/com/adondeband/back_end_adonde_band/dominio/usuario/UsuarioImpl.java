@@ -1,10 +1,15 @@
 package com.adondeband.back_end_adonde_band.dominio.usuario;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UsuarioImpl implements UsuarioService {
-    private UsuarioPort usuarioPort;
+    private final UsuarioPort usuarioPort;
+
+    public UsuarioImpl(UsuarioPort usuarioPort) {
+        this.usuarioPort = usuarioPort;
+    }
 
     @Override
     public Usuario crearUsuario(Usuario usuario) {
