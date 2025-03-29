@@ -271,10 +271,11 @@ paths:
                 items:
                   $ref: '#/components/schemas/LeagueResponse'
 
-  /leagues/create:
+  /leagues/create/league:
     post:
       summary: Create a League
       description: Create a League and returns that league
+      operationId: createLeague
       security:
         - BearerAuth: []
       requestBody:

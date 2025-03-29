@@ -11,5 +11,5 @@ public interface BotPortDB {
     Optional<Bot> findByName(String name);
     Bot save(Bot bot);
     void delete(String name);
-
+    Optional<Bot> findByEndpoint(String endpoint);
 }

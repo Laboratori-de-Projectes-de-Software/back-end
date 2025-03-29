@@ -31,6 +31,7 @@ public class BotApiDelegateImpl implements BotsApiDelegate {
 
     @Override
     public ResponseEntity<BotReturn> botsRegisterPost(BotRegister botRegister) {
+
         // Mapeo al objeto de dominio
         Bot bot = new Bot(
                 botRegister.getName(),

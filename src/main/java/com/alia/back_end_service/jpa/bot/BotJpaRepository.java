@@ -12,4 +12,5 @@ public interface BotJpaRepository extends JpaRepository<BotEntity, String> {
     List<BotEntity> getAllByUser_Username(String username);
     Optional<BotEntity> findByName(String name);
     void deleteByName(String name);
+    Optional<BotEntity> findByEndpoint(String endpoint);
 }

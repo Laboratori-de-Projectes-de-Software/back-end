@@ -18,6 +18,11 @@ public class RegisterBotUseCase implements BotRegistrationPortAPI {
         if (botPortDB.findByName(bot.getName()).isPresent()) {
             throw new BotAlreadyExistsException("Ya existe un bot con el nombre: " + bot.getName());
         }
+
+        if (botPortDB.findByEndpoint(bot.getEndpoint().toString()).isPresent()) {
+            throw new BotAlreadyExistsException("Ya existe un bot con el endpoint: " + bot.getEndpoint());
+        }
+
         return botPortDB.save(bot);
     }
 }

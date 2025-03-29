@@ -9,6 +9,7 @@ import com.alia.back_end_service.domain.league.League;
 import com.alia.back_end_service.domain.league.ports.LeagueCreatePortAPI;
 import com.alia.back_end_service.domain.league.ports.LeagueGetAllPortAPI;
 import com.alia.back_end_service.domain.league.ports.LeagueGetPortAPI;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -50,7 +51,8 @@ public class LeagueApiDelegateImpl implements LeaguesApiDelegate {
     }
 
     @Override
-    public ResponseEntity<LeagueResponse> leaguesCreatePost(LeagueCreate leagueCreate) {
+    public ResponseEntity<LeagueResponse> createLeague(@Valid LeagueCreate leagueCreate) {
+
         League league = new League();
         league.setName(leagueCreate.getName());
         league.setNumber_match(leagueCreate.getNumberMatch());

@@ -37,7 +37,9 @@ public class BotJpaAdapter implements BotPortDB {
 
     @Override
     public List<Bot> getAllUserBots(String username) {
+
         List<BotEntity> botEntities = botJpaRepository.getAllByUser_Username(username);
+        System.out.println(botEntities.size());
         return  botEntities.stream().map(botMapper::toDomain).collect(Collectors.toList());
     }
 
@@ -62,9 +64,14 @@ public class BotJpaAdapter implements BotPortDB {
     }
 
 
-
     @Override
     public void delete(String name) {
         botJpaRepository.deleteByName(name);
+    }
+
+    @Override
+    public Optional<Bot> findByEndpoint(String endpoint) {
+        Optional<BotEntity> botEntity = botJpaRepository.findByEndpoint(endpoint);
+        return botEntity.map(botMapper::toDomain);
     }
 }
