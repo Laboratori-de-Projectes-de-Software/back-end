@@ -31,12 +31,24 @@ public class LeagueJpaAdapter implements LeaguePortDB {
 
     @Override
     public League saveLeague(League league) {
-        LeagueEntity entity = leagueMapper.toEntity(league);
-
-        // Falta lo de las rondas
-
-        LeagueEntity saved = leagueJpaRepository.save(entity);
+        LeagueEntity saved = leagueJpaRepository.save(leagueMapper.toEntity(league));
         return leagueMapper.toDomain(saved);
+    }
+
+    @Override
+    public League updateLeague(League league){
+        LeagueEntity entity = leagueJpaRepository.findById(league.getId()).orElse(null);
+        if(entity != null){
+            entity.setName(league.getName()==null? entity.getName():league.getName());
+            entity.setInit_time(league.getInit_time() == null? entity.getInit_time():league.getInit_time());
+            entity.setEnd_time(league.getEnd_time() == null? entity.getEnd_time():league.getEnd_time());
+            entity.setNumber_match(league.getNumber_match()==null? entity.getNumber_match():league.getNumber_match());
+            entity.setTime_match(league.getTime_match() == null? entity.getTime_match():league.getTime_match());
+            entity.setState(league.getState() == null? entity.getState():league.getState());
+            return leagueMapper.toDomain(leagueJpaRepository.save(entity));
+        }
+        return null;
+
     }
 
     @Override

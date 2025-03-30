@@ -22,15 +22,15 @@ public class LeagueMapperAPIImpl implements LeagueMapperAPI {
     }
 
     @Override
-    public League toDomainUpdate(LeagueUpdate leagueUpdate, League aux) {
+    public League toDomainUpdate(LeagueUpdate leagueUpdate, Integer id) {
         League league = new League();
-        league.setId(aux.getId());
-        league.setName(leagueUpdate.getName() == null ? aux.getName() : leagueUpdate.getName());
-        league.setNumber_match(leagueUpdate.getNumberMatch() == null ? aux.getNumber_match() : leagueUpdate.getNumberMatch());
-        league.setTime_match(leagueUpdate.getTimeMatch() == null ? aux.getTime_match() : leagueUpdate.getTimeMatch());
-        league.setInit_time(leagueUpdate.getInitTime() == null ? aux.getInit_time() : leagueUpdate.getInitTime());
-        leagueUpdate.setEndTime(leagueUpdate.getEndTime() == null ? aux.getEnd_time() : leagueUpdate.getEndTime());
-        league.setState(leagueUpdate.getState() == null ? aux.getState() : leagueUpdate.getState());
+        league.setId(id);
+        league.setName(leagueUpdate.getName());
+        league.setNumber_match(leagueUpdate.getNumberMatch());
+        league.setTime_match(leagueUpdate.getTimeMatch());
+        league.setInit_time(leagueUpdate.getInitTime());
+        league.setEnd_time(leagueUpdate.getEndTime());
+        league.setState(leagueUpdate.getState()); // Crear enum
         return league;
     }
 
