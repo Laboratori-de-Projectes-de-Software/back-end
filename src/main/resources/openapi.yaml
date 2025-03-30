@@ -221,7 +221,7 @@ paths:
           description: Invalid input data
         '404':
           description: Bot not found
-    
+
     delete:
       summary: Delete bot by ID
       description: Deletes a bot by ID (admin only).
