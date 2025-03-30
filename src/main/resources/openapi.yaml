@@ -192,6 +192,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BotReturn'
+
+    patch:
+      summary: Update Bot by ID
+      description: Updates Bot details by ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - BearerAuth: [ ]  # Se requiere autenticación con JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BotUpdate'
+      responses:
+        '200':
+          description: League details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BotReturn'
+        '400':
+          description: Invalid input data
+        '404':
+          description: Bot not found
+    
     delete:
       summary: Delete bot by ID
       description: Deletes a bot by ID (admin only).
@@ -632,6 +662,24 @@ components:
           type: string
           example: "Username"
 
+    BotUpdate:
+      type: object
+      required:
+        - endpoint
+        - name
+        - description
+      properties:
+        endpoint:
+          type: string
+          format: uri
+          example: "https://api.example.com/bot-webhook"
+        name:
+          type: string
+          example: "MyBot"
+        description:
+          type: string
+          example: "An AI-powered chatbot that responds to user queries."
+
     BotReturn:
       type: object
       properties:
@@ -641,6 +689,9 @@ components:
         description:
           type: string
           example: "An AI-powered chatbot that responds to user queries."
+        username:
+          type: string
+          example: "User"
 
     LeagueCreate:
       type: object
