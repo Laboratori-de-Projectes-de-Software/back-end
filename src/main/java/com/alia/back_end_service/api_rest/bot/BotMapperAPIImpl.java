@@ -14,6 +14,7 @@ public class BotMapperAPIImpl implements BotMapperAPI {
         BotReturn botReturn = new BotReturn();
         botReturn.setName(bot.getName());
         botReturn.setDescription(bot.getDescription());
+        botReturn.setUsername(bot.getUserId());
         return botReturn;
     }
 

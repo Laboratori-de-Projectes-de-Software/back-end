@@ -3,6 +3,7 @@ package com.alia.back_end_service.api_rest.bot;
 import com.alia.back_end_service.api.BotsApiDelegate;
 import com.alia.back_end_service.api_model.BotRegister;
 import com.alia.back_end_service.api_model.BotReturn;
+import com.alia.back_end_service.api_model.BotUpdate;
 import com.alia.back_end_service.domain.bot.Bot;
 import com.alia.back_end_service.domain.bot.port.BotGetAllPortAPI;
 import com.alia.back_end_service.domain.bot.port.BotGetPortApi;
@@ -47,4 +48,8 @@ public class BotApiDelegateImpl implements BotsApiDelegate {
         return ResponseEntity.status(HttpStatus.OK).body(botMapperPortAPI.toApiResponse(botGetPortApi.findByName(id)));
     }
 
+    @Override
+    public ResponseEntity<BotReturn> botsIdPatch(String id, BotUpdate botUpdate) {
+        return BotsApiDelegate.super.botsIdPatch(id, botUpdate);
+    }
 }
