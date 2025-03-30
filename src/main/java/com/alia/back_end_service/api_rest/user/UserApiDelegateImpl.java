@@ -3,10 +3,8 @@ package com.alia.back_end_service.api_rest.user;
 import com.alia.back_end_service.api.UsersApiDelegate;
 import com.alia.back_end_service.api_model.*;
 import com.alia.back_end_service.api_rest.bot.BotMapperAPI;
-import com.alia.back_end_service.domain.user.ports.GetAllUserBotsPortAPI;
-import com.alia.back_end_service.domain.user.ports.UserGetPortAPI;
-import com.alia.back_end_service.domain.user.ports.UserLoginPortAPI;
-import com.alia.back_end_service.domain.user.ports.UserRegistrationPortAPI;
+import com.alia.back_end_service.api_rest.league.LeagueMapperAPI;
+import com.alia.back_end_service.domain.user.ports.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -23,8 +21,10 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     private final UserLoginPortAPI userLoginPortAPI;
     private final UserGetPortAPI userGetPortAPI;
     private final GetAllUserBotsPortAPI getAllUserBotsPortAPI;
+    private final GetAllUserLeaugesPortAPI getAllUserLeaugesPortAPI;
     private final UserMapperAPI userMapperPortAPI;
     private final BotMapperAPI botMapperPortAPI;
+    private final LeagueMapperAPI leagueMapperPortAPI;
 
     @Override
     public ResponseEntity<UsersLoginPost200Response> usersLoginPost(UserLogin userLogin) {
@@ -52,7 +52,10 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<List<LeagueResponse>> usersIdLeaguesGet(String id) {
-        return UsersApiDelegate.super.usersIdLeaguesGet(id);
+        return ResponseEntity.status(HttpStatus.OK).body(getAllUserLeaugesPortAPI.GetAllUserLeauges(id)
+                .stream()
+                .map(leagueMapperPortAPI::toApiResponse)
+                .toList());
     }
 
 

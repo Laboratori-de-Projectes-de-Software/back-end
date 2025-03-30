@@ -10,10 +10,7 @@ import com.alia.back_end_service.domain.league.ports.LeaguePortDB;
 import com.alia.back_end_service.domain.league.usecases.*;
 import com.alia.back_end_service.domain.user.ports.PasswordEncoderPort;
 import com.alia.back_end_service.domain.user.ports.TokenProviderPort;
-import com.alia.back_end_service.domain.user.usecases.GetAllUserBotsUseCase;
-import com.alia.back_end_service.domain.user.usecases.GetUserUseCase;
-import com.alia.back_end_service.domain.user.usecases.LoginUserUseCase;
-import com.alia.back_end_service.domain.user.usecases.RegisterUserUseCase;
+import com.alia.back_end_service.domain.user.usecases.*;
 import com.alia.back_end_service.domain.user.ports.UserPortDB;
 import com.alia.back_end_service.jwt.JwtProvider;
 import jakarta.validation.Valid;
@@ -41,6 +38,11 @@ public class SpringConfig {
     @Bean
     public GetAllUserBotsUseCase getAllUserBotsUseCase(BotPortDB botPortDB) {
         return new GetAllUserBotsUseCase(botPortDB);
+    }
+
+    @Bean
+    GetAllUserLeaguesUseCase getAllUserLeaguesUseCase(LeaguePortDB leaguePortDB) {
+        return new GetAllUserLeaguesUseCase(leaguePortDB);
     }
 
 
