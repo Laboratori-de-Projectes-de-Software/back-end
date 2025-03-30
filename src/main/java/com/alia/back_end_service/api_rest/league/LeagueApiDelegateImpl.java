@@ -31,7 +31,7 @@ public class LeagueApiDelegateImpl implements LeaguesApiDelegate {
     private final LeagueInscribeBotPortAPI leagueInscribeBotPortAPI;
     private final BotMapperAPI botMapperAPI;
     private final LeagueGetAllBotsPortAPI leagueGetAllBotsPortAPI;
-
+    private final LeagueUpdatePortAPI leagueUpdatePortAPI;
 
     @Override
     public ResponseEntity<List<LeagueResponse>> leaguesAllGet() {
@@ -67,9 +67,7 @@ public class LeagueApiDelegateImpl implements LeaguesApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Void> leaguesIdPatch(Integer id, LeagueUpdate leagueUpdate) {
-        League aux = leagueGetPortAPI.getLeague(id);
-        leagueCreatePortAPI.createLeague(leagueMapperAPI.toDomainUpdate(leagueUpdate,aux));
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<LeagueResponse> leaguesIdPatch(Integer id, LeagueUpdate leagueUpdate) {
+        return new ResponseEntity<>(leagueMapperAPI.toApiResponse(leagueUpdatePortAPI.updateLeague(leagueMapperAPI.toDomainUpdate(leagueUpdate,id))),HttpStatus.OK);
     }
 }

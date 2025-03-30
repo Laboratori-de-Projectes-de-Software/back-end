@@ -353,7 +353,11 @@ paths:
               $ref: '#/components/schemas/LeagueUpdate'
       responses:
         '200':
-          description: League updated successfully
+          description: League details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueResponse'
         '400':
           description: Invalid input data
         '404':
