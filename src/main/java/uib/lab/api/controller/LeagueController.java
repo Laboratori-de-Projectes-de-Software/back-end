@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import uib.lab.api.dto.League.LeagueRequest;;
+import uib.lab.api.dto.League.LeagueRequest;
 import uib.lab.api.entity.League;
 import uib.lab.api.service.LeagueService;
 

@@ -15,6 +15,7 @@ public class League {
     private long id;
 
     private String name;
+    
     private LocalDateTime date;
     private int playTime;
     private int numRounds;
