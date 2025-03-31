@@ -55,7 +55,8 @@ public class SecurityConfiguration {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**",configuration);
+        //CAMBIAR PARA ACTIVAR CORS
+        source.registerCorsConfiguration("/TODO/**",configuration);
 
         return source;
     }

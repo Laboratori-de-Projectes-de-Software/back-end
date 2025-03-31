@@ -1,6 +1,5 @@
 package com.adondeband.back_end_adonde_band.dominio.usuario;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
