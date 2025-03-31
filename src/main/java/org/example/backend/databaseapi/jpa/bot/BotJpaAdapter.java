@@ -4,14 +4,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.databaseapi.application.port.out.bot.*;
 import org.example.backend.databaseapi.domain.bot.Bot;
-import org.example.backend.databaseapi.domain.bot.BotsFilterRequest;
 import org.example.backend.databaseapi.jpa.liga.LigaJpaAdapter;
 import org.example.backend.databaseapi.jpa.liga.LigaJpaEntity;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaAdapter;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -114,31 +112,6 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
                 .map(botJpaMapper::toDomain)
                 .toList();
 
-    }
-
-    @Override
-    public List<Bot> findAllBotsFilter(BotsFilterRequest request){
-        List<Bot> bots = botJpaRepository.findAll()
-                .stream()
-                .filter(bot -> request.getCualidad() == null || request.getCualidad().contains(bot.getCualidad()) || bot.getCualidad().contains(request.getCualidad()))
-                .filter(bot -> request.getNombre() == null || request.getNombre().contains(bot.getNombre()) || bot.getNombre().contains(request.getNombre()))
-                .filter(bot -> request.getUsuario() == null || request.getUsuario().contains(bot.getUsuario().getNombre()) || bot.getUsuario().getNombre().contains(request.getUsuario()))
-                .map(botJpaMapper::toDomain)
-                .sorted(getComparator(request.getOrden()))
-                .toList();
-        return bots;
-    }
-
-    private Comparator<Bot> getComparator(Integer orden) {
-        if (orden == null || orden == 0)
-            return (o1, o2) -> 0; // Orden por defecto
-
-        return switch (orden) {
-            case 1 -> Comparator.comparing(Bot::getNombre);
-            case 2 -> Comparator.comparing(Bot::getNombre).reversed();
-            case 3 -> Comparator.comparing(Bot::getCualidad);
-            default -> Comparator.comparing(Bot::getCualidad).reversed();
-        };
     }
 
     public Optional<BotJpaEntity> getJpaBot(int id_bot){

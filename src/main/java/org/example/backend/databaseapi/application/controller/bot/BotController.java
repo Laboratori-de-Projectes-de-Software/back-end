@@ -3,7 +3,6 @@ package org.example.backend.databaseapi.application.controller.bot;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.in.bot.*;
 import org.example.backend.databaseapi.domain.bot.Bot;
-import org.example.backend.databaseapi.domain.bot.BotsFilterRequest;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -48,15 +47,6 @@ public class BotController {
     @GetMapping("/bots")
     ResponseEntity<CollectionModel<EntityModel<Bot>>> buscarAllBots(){
         List<EntityModel<Bot>> bots=buscarAllBotsPort.buscarAllBots()
-                .stream()
-                .map(botModelAssembler::toModel)
-                .toList();
-        return ResponseEntity.ok(botModelAssembler.toCollectionModel(bots));
-    }
-
-    @PatchMapping("/bots")
-    ResponseEntity<CollectionModel<EntityModel<Bot>>> buscarAllBotsFilter(@RequestBody BotsFilterRequest request){
-        List<EntityModel<Bot>> bots = buscarAllBotsPort.buscarAllBotsFiltro(request)
                 .stream()
                 .map(botModelAssembler::toModel)
                 .toList();
