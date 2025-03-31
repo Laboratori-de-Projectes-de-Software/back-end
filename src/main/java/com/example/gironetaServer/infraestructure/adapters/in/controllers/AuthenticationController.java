@@ -26,18 +26,23 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
+    //Not used Mappers for conversion between Domain and Entity (no idea where it should be)
     @PostMapping("/signup")
-    public ResponseEntity<UserDto> register(@RequestBody RegisterUserDto registerUserDto) {
-        User registeredUser = authenticationService.signup(registerUserDto);
-        UserDto userDto = UserMapper.toUserDto(registeredUser);
-        return ResponseEntity.ok(userDto);
+    public ResponseEntity<UserEntity> register(@RequestBody RegisterUserDto registerUserDto) {
+        UserEntity registeredUser = authenticationService.signup(registerUserDto);
+
+        return ResponseEntity.ok(registeredUser);
     }
 
+    //Not used Mappers for conversion between Domain and Entity (no idea where it should be)
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        User authenticatedUser = authenticationService.authenticate(loginUserDto);
+        UserEntity authenticatedUser = authenticationService.authenticate(loginUserDto);
+
         String jwtToken = jwtService.generateToken(authenticatedUser);
+
         LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
+
         return ResponseEntity.ok(loginResponse);
     }
 }

@@ -33,6 +33,12 @@ public class UserEntity implements UserDetails {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    //Email es único, así que se considera "UserName"
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
     // Getters and setters
     public Long getId() {
         return id;
@@ -40,10 +46,6 @@ public class UserEntity implements UserDetails {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public void setUsername(String username) {

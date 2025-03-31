@@ -28,17 +28,19 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User signup(RegisterUserDto input) {
+    public UserEntity signup(RegisterUserDto input) {
         UserEntity user = new UserEntity();
         user.setUsername(input.getUsername());
         user.setEmail(input.getEmail());
         user.setPassword(passwordEncoder.encode(input.getPassword()));
 
         UserEntity savedUser = userJpaRepository.save(user);
-        return UserMapper.toDomain(savedUser);
+
+        //return UserMapper.toDomain(savedUser); Lo pasa a dominio (?
+        return savedUser;
     }
 
-    public User authenticate(LoginUserDto input) {
+    public UserEntity authenticate(LoginUserDto input) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         input.getEmail(),
@@ -48,7 +50,8 @@ public class AuthenticationService {
 
         UserEntity userEntity = userJpaRepository.findByEmail(input.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return UserMapper.toDomain(userEntity);
+
+        //return UserMapper.toDomain(userEntity); Lo pasa a dominio (?
+        return userEntity;
     }
 }
-
