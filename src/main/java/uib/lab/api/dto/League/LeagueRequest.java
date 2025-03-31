@@ -15,10 +15,6 @@ public class LeagueRequest {
     @NotBlank(message = "El nombre de la liga es obligatorio")
     private String name;
 
-    @NotNull(message = "La fecha de la liga es obligatoria")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") 
-    private LocalDateTime date;
-
     @NotNull(message = "El tiempo de juego es obligatorio")
     private int playTime;
 

@@ -16,7 +16,6 @@ public class League {
 
     private String name;
     
-    private LocalDateTime date;
     private int playTime;
     private int numRounds;
 
@@ -26,7 +25,6 @@ public class League {
     @OneToMany(mappedBy = "league")
     private Set<Round> round;
 }
-
-enum LeagueState {
+public enum LeagueState {
     PENDING, IN_PROGRESS, COMPLETED;
 }
