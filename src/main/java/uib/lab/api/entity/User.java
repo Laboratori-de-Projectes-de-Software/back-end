@@ -13,7 +13,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@SecondaryTable(name = "bot", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 public class User implements UserDetails {
     private static final long serialVersionUID = -1246018760540645731L;
 
@@ -40,6 +39,12 @@ public class User implements UserDetails {
     private Set<Bot> bots;
 
     private boolean enabled;
+
+    public User(long id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
 
     public User(long id, String u, String n, String p){
         this.id = id;

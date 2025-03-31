@@ -30,12 +30,15 @@ public class JwtTokenVerifierFilter extends OncePerRequestFilter {
         }
 
         try {
-            SecurityContextHolder.getContext().setAuthentication(
-                    jwtAuthenticationProvider.verify(
-                            authorization.replace(jwtAuthenticationProvider.getPrefix(), "")
-                    )
-            );
-        } catch (JwtException | UsernameNotFoundException e) {
+            var token = authorization.replace(jwtAuthenticationProvider.getPrefix(), "").trim();
+            var authentication = jwtAuthenticationProvider.verify(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (JwtException e) {
+            System.out.println("JWT Verification Failed: " + e.getMessage());
+            apiHttpResponse.unauthorized(response, request.getLocale());
+            return;
+        } catch (UsernameNotFoundException e) {
+            System.out.println("User Not Found: " + e.getMessage());
             apiHttpResponse.unauthorized(response, request.getLocale());
             return;
         }

@@ -1,6 +1,6 @@
 package uib.lab.api.util.jwt;
 
-import uib.lab.api.repository.UserRepository;
+import uib.lab.api.repository.UserJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "jwt.verification")
 public class JwtVerificationProvider extends JwtProvider {
     @Autowired
-    public JwtVerificationProvider(UserRepository userRepository) {
+    public JwtVerificationProvider(UserJpaRepository userRepository) {
         super(userRepository);
     }
 }

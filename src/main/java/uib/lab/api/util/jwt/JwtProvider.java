@@ -1,7 +1,7 @@
 package uib.lab.api.util.jwt;
 
 import uib.lab.api.entity.User;
-import uib.lab.api.repository.UserRepository;
+import uib.lab.api.repository.UserJpaRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Date;
 @Setter
 @RequiredArgsConstructor
 public abstract class JwtProvider {
-    private final UserRepository userRepository;
+    private final UserJpaRepository userRepository;
 
     private String secret;
     private int duration;
@@ -29,7 +29,6 @@ public abstract class JwtProvider {
                 .setSubject(String.valueOf(user.getId()))
                 .claim("username", user.getUsername())
                 .claim("name", user.getName())
-                .claim("password", user.getPassword())
                 .setIssuedAt(new Date())
                 .setExpiration(Timestamp.valueOf(LocalDateTime.now().plus(duration, temporalUnit)))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)))
