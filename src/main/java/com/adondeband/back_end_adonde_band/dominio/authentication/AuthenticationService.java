@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public interface AuthenticationService {
 
 
-    public Usuario signup(Usuario input);
+    Usuario signup(Usuario input);
 
-    public Usuario authenticate(Usuario input);
+    Usuario authenticate(Usuario input);
 }

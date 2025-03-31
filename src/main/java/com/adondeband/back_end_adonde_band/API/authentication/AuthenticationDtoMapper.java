@@ -5,34 +5,35 @@ import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public class AuthenticationDtoMapper{
+public interface AuthenticationDtoMapper{
 
-    public Usuario toDomain(RegisterUserDto registerUserDto){
+    default Usuario registerUserDtotoDomain(RegisterUserDto registerUserDto){
         Usuario usuario = new Usuario();
         usuario.setCorreo(registerUserDto.getEmail());
         usuario.setContrasena(registerUserDto.getPassword());
-        usuario.setNombre(new UsuarioId(registerUserDto.getFullName()));
+        usuario.setNombre(new UsuarioId(registerUserDto.getUser()));
         return usuario;
     }
 
-    public Usuario toDomain(LoginUserDto loginUserDto){
+    default Usuario loginUserDtotoDomain(LoginUserDto loginUserDto){
+
         Usuario usuario = new Usuario();
-        usuario.setCorreo(loginUserDto.getEmail());
+        usuario.setNombre(new UsuarioId(loginUserDto.getUser()));
         usuario.setContrasena(loginUserDto.getPassword());
         return usuario;
     }
 
-    public RegisterUserDto UserToRegisterDto(Usuario usuario){
+    default RegisterUserDto userToRegisterDto(Usuario usuario){
         RegisterUserDto registerUserDto = new RegisterUserDto();
         registerUserDto.setEmail(usuario.getCorreo());
         registerUserDto.setPassword(usuario.getContrasena());
-        registerUserDto.setFullName(usuario.getNombre().value());
+        registerUserDto.setUser(usuario.getNombre().value());
         return registerUserDto;
     }
 
-    public LoginUserDto UserToLoginDTO(Usuario usuario){
+    default LoginUserDto userToLoginDTO(Usuario usuario){
         LoginUserDto loginUserDto = new LoginUserDto();
-        loginUserDto.setEmail(usuario.getCorreo());
+        loginUserDto.setUser(usuario.getNombre().value());
         loginUserDto.setPassword(usuario.getContrasena());
         return loginUserDto;
     }

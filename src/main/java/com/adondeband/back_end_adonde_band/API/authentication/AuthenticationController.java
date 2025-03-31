@@ -27,19 +27,19 @@ public class AuthenticationController {
     public AuthenticationController(JwtService jwtService, AuthenticationImpl authenticationService, AuthenticationDtoMapper authenticationDtoMapper) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
-        this.authenticationDtoMapper = new AuthenticationDtoMapper();
+        this.authenticationDtoMapper = authenticationDtoMapper;
     }
 
     @PostMapping("/signup")
     public ResponseEntity<Usuario> register(@RequestBody RegisterUserDto registerUserDto) {
-        Usuario registeredUser = authenticationService.signup( authenticationDtoMapper.toDomain(registerUserDto) );
+        Usuario registeredUser = authenticationService.signup( authenticationDtoMapper.registerUserDtotoDomain(registerUserDto) );
 
         return ResponseEntity.ok(registeredUser);
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        Usuario authenticatedUser = authenticationService.authenticate(authenticationDtoMapper.toDomain(loginUserDto));
+        Usuario authenticatedUser = authenticationService.authenticate(authenticationDtoMapper.loginUserDtotoDomain(loginUserDto));
 
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(
                 authenticatedUser.getNombre().value(),
