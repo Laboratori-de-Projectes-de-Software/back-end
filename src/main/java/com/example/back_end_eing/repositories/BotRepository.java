@@ -8,6 +8,6 @@ import java.util.Optional;
 @Repository
 public interface BotRepository extends CrudRepository<Bot, Long> {
 
-    Optional<Bot> findByAPI_KEY(String API);
+    Optional<Bot> findByApiKey(String apiKey);
 
 }

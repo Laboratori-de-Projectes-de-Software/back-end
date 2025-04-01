@@ -38,7 +38,7 @@ public class Bot {
     private Integer numJornadas;
 
     @Column(unique = true, nullable = false)
-    private String API_KEY;
+    private String apiKey;
 
 
     //******* CONSTRUCTORES *******
@@ -49,7 +49,7 @@ public class Bot {
         fotoBot = foto;
         numJornadas = victorias;
         this.numJornadas = numJornadas;
-        API_KEY = API;
+        apiKey = API;
         usuario = user;
     }
 
