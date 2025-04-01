@@ -1,6 +1,6 @@
 package com.alia.back_end_service.api_rest.message;
 
-import com.alia.back_end_service.api_model.MessageResponse;
+import com.alia.back_end_service.api_model.MessageDTO;
 import com.alia.back_end_service.domain.message.Message;
 import com.alia.back_end_service.jpa.message.MessageMapper;
 import org.springframework.stereotype.Component;
@@ -8,12 +8,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageMapperAPIImpl implements MessageMapperAPI {
     @Override
-    public MessageResponse toApiResponse(Message message) {
-        MessageResponse messageResponse = new MessageResponse();
-        messageResponse.setId(message.getId());
-        messageResponse.setContent(message.getText());
+    public MessageDTO toApiResponse(Message message) {
+        MessageDTO messageResponse = new MessageDTO();
+        messageResponse.setText(message.getText());
         messageResponse.setBotId(message.getBot().getName());
-        messageResponse.setTimestamp(message.getTimestamp());
+        messageResponse.setTime(message.getTimestamp());
         return messageResponse;
     }
 }
