@@ -3,6 +3,7 @@ package com.example.back_end_eing.services.impl;
 import com.example.back_end_eing.dto.LogInUserDto;
 import com.example.back_end_eing.dto.RegisterUserDto;
 import com.example.back_end_eing.exceptions.UserAlreadyExistsException;
+import com.example.back_end_eing.exceptions.UserNameNotFoundException;
 import com.example.back_end_eing.exceptions.UserNotFoundException;
 import com.example.back_end_eing.models.Usuario;
 import com.example.back_end_eing.repositories.UsuarioRepository;
@@ -38,7 +39,7 @@ public class LogInServiceImpl implements LogInService {
     public String logIn(LogInUserDto logInUserDto) {
         // Buscar usuario en la base de datos por nombre de usuario
         Usuario usuario = usuarioRepository.findByNombreUsuario(logInUserDto.getNombreUsuario())
-                .orElseThrow(() -> new UserNotFoundException(logInUserDto.getNombreUsuario()));
+                .orElseThrow(() -> new UserNameNotFoundException(logInUserDto.getNombreUsuario()));
 
         // Comparar la contraseña ingresada con la almacenada
         if (!passwordEncoder.matches(logInUserDto.getPassword(), usuario.getPassword())) {
