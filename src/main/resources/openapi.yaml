@@ -108,7 +108,7 @@ paths:
         '500':
           description: Internal Server error
 
-  /bot?owner={userId}:
+  /bot/owner={userId}:
     get:
       summary: Get all bots from an specific user
       description: Get all bots from an specific user.
@@ -245,7 +245,7 @@ paths:
         '500':
           description: Internal Server error
 
-  /league?owner={userId}:
+  /league/owner={userId}:
     get:
       summary: Get all leagues
       description: Get all leagues
@@ -309,7 +309,7 @@ paths:
       summary: Update one league
       description: Update one league
       parameters:
-        - name: id
+        - name: leagueId
           in: path
           required: true
           schema:
@@ -340,7 +340,7 @@ paths:
         summary: Delete one league
         description: Delete one league
         parameters:
-          - name: id
+          - name: leagueId
             in: path
             required: true
             schema:
@@ -365,7 +365,7 @@ paths:
           '500':
             description: Internal Server error
 
-  /league/{leagueID}/leaderboard:
+  /league/{leagueId}/leaderboard:
     get:
       summary: Get classification from a league
       description: Get classification from a league
@@ -403,6 +403,13 @@ paths:
       description: Start a league (creates all matches)
       security:
         - BearerAuth: [ ]
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+            
       responses:
         '201':
           description: League started
@@ -425,6 +432,12 @@ paths:
         description: Get all matches from a league
         security:
           - BearerAuth: []
+        parameters:
+          - name: leagueId
+            in: path
+            required: true
+            schema:
+              type: integer
         responses:
           '201':
             description: Matches found
@@ -451,6 +464,12 @@ paths:
         description: Get all messages from a match
         security:
           - BearerAuth: []
+        parameters:
+          - name: matchId
+            in: path
+            required: true
+            schema:
+              type: integer
         responses:
           '201':
             description: Match found
@@ -559,7 +578,7 @@ components:
         bots:
           type: array
           items:
-            format: integer
+            type: string
 
     ParticipationDTO:
       type: object

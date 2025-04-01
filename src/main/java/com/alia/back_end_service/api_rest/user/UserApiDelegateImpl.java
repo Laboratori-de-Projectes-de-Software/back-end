@@ -1,6 +1,6 @@
 package com.alia.back_end_service.api_rest.user;
 
-import com.alia.back_end_service.api.UsersApiDelegate;
+import com.alia.back_end_service.api.AuthApiDelegate;
 import com.alia.back_end_service.api_model.*;
 import com.alia.back_end_service.api_rest.bot.BotMapperAPI;
 import com.alia.back_end_service.api_rest.league.LeagueMapperAPI;
@@ -16,47 +16,19 @@ import java.util.List;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class UserApiDelegateImpl implements UsersApiDelegate {
+public class UserApiDelegateImpl implements AuthApiDelegate {
     private final UserRegistrationPortAPI userRegistrationPortAPI;
     private final UserLoginPortAPI userLoginPortAPI;
-    private final UserGetPortAPI userGetPortAPI;
-    private final GetAllUserBotsPortAPI getAllUserBotsPortAPI;
-    private final GetAllUserLeaugesPortAPI getAllUserLeaugesPortAPI;
     private final UserMapperAPI userMapperPortAPI;
-    private final BotMapperAPI botMapperPortAPI;
-    private final LeagueMapperAPI leagueMapperPortAPI;
+
 
     @Override
-    public ResponseEntity<UsersLoginPost200Response> usersLoginPost(UserLogin userLogin) {
-        return ResponseEntity.status(HttpStatus.OK).body(new UsersLoginPost200Response().token(userLoginPortAPI.login(userLogin.getUsername(), userLogin.getPassword())));
+    public ResponseEntity<AuthLoginPost200Response> authLoginPost(UserDTOLogin userDTOLogin) {
+        return AuthApiDelegate.super.authLoginPost(userDTOLogin);
     }
 
     @Override
-    public ResponseEntity<Void> usersRegisterPost(UserRegister userRegister) {
-        userRegistrationPortAPI.registerUser(userMapperPortAPI.toDomainRegister(userRegister));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Void> authRegisterPost(UserDTORegister userDTORegister) {
+        return AuthApiDelegate.super.authRegisterPost(userDTORegister);
     }
-
-    @Override
-    public ResponseEntity<List<BotReturn>> usersIdBotsGet(String id) {
-        return ResponseEntity.status(HttpStatus.OK).body(getAllUserBotsPortAPI.getAllUserBots(id)
-                .stream()
-                .map(botMapperPortAPI::toApiResponse)
-                .toList());
-    }
-
-    @Override
-    public ResponseEntity<UserResponse> usersIdGet(String id) {
-        return ResponseEntity.status(HttpStatus.OK).body(userMapperPortAPI.toApiResponse(userGetPortAPI.getUser(id)));
-    }
-
-    @Override
-    public ResponseEntity<List<LeagueResponse>> usersIdLeaguesGet(String id) {
-        return ResponseEntity.status(HttpStatus.OK).body(getAllUserLeaugesPortAPI.GetAllUserLeauges(id)
-                .stream()
-                .map(leagueMapperPortAPI::toApiResponse)
-                .toList());
-    }
-
-
 }
