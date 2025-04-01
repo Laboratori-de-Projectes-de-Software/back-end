@@ -53,7 +53,7 @@ public class TestParticipacionMapper {
         botEntity.setUsuario(usuarioEntity);
 
         LigaEntity ligaEntity = new LigaEntity();
-        ligaEntity.setId(1);
+        ligaEntity.setId(1L);
         ligaEntity.setNombre("Liga 1");
         ligaEntity.setFechaInicio(LocalDateTime.now());
         ligaEntity.setFechaFin(LocalDateTime.now());
@@ -73,7 +73,7 @@ public class TestParticipacionMapper {
         // Assert Bot
         assertEquals(p_e.getBot().getNombre(), p.getBot().value());
         // Assert Liga
-        assertEquals(p_e.getLiga().getId(), p.getLiga().value());
+        assertEquals(p_e.getLiga().getId().longValue(), p.getLiga().value());
 
 
     }

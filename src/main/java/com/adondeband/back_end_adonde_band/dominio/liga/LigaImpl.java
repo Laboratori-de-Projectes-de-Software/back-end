@@ -7,7 +7,12 @@ public class LigaImpl implements LigaService {
 
     private LigaPort ligaPort;
 
-    public Liga insertarLiga(Liga liga) {
+    public LigaImpl(LigaPort ligaPort) {
+        this.ligaPort = ligaPort;
+    }
+
+    @Override
+    public Liga crearLiga(Liga liga) {
         return ligaPort.save(liga);
     }
 }

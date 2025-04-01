@@ -24,12 +24,15 @@ public interface LigaJpaMapper {
     // Mapea de Liga a LigaEntity
     LigaEntity toEntity(Liga liga);
 
-    default long map(LigaId value){
+    default Long map(LigaId value){
+        if (value == null) {
+            return null;
+        }
         return value.value();
     }
 
     // Mapeo de atributos
-    default LigaId toLigaId(long value) {
+    default LigaId toLigaId(Long value) {
         return new LigaId(value);
     }
 

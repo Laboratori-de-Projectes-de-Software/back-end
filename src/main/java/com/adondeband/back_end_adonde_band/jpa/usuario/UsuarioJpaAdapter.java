@@ -2,9 +2,11 @@ package com.adondeband.back_end_adonde_band.jpa.usuario;
 
 import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioPort;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -20,6 +22,7 @@ public class UsuarioJpaAdapter implements UsuarioPort {
     }
 
     @Override
+    @Transactional
     public Usuario save(Usuario usuario) {
         return usuarioJpaMapper.toDomain(
                 usuarioJpaRepository.save(
@@ -27,10 +30,11 @@ public class UsuarioJpaAdapter implements UsuarioPort {
     }
 
     @Override
-    public List<Usuario> findByNombre(String s) {
+    @Transactional
+    public Optional<Usuario> findByNombre(String s) {
         return usuarioJpaRepository.findByNombre(s)
                 .stream()
                 .map(usuarioJpaMapper::toDomain)
-                .collect(Collectors.toList());
+                .findFirst();
     }
 }
