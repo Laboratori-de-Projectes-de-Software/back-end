@@ -39,6 +39,14 @@ public class Liga {
 
     //******* CONSTRUCTOR *******
     public Liga() {}
+    public Liga(String nombreLiga, Integer numJornadas, Integer numBots, String estado, Integer jornadaActual, Usuario usuario) {
+        this.nombreLiga = nombreLiga;
+        this.numJornadas = numJornadas;
+        this.numBots = numBots;
+        this.estado = estado;
+        this.jornadaActual = jornadaActual;
+        this.usuario = usuario;
+    }
 
     //******* RELACIONES CON OTRAS CLASES *******
     @OneToMany(
