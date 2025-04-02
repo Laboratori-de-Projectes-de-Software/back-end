@@ -38,11 +38,20 @@ public class Bot {
     private Integer numJornadas;
 
     @Column(unique = true, nullable = false)
-    private String API_KEY;
+    private String apiKey;
 
 
     //******* CONSTRUCTORES *******
     public Bot() {}
+    public Bot(String nombre, String descripcion, String foto, Integer victorias, Integer numJornadas, String API, Usuario user) {
+        nombreBot = nombre;
+        descripcionBot = descripcion;
+        fotoBot = foto;
+        numJornadas = victorias;
+        this.numJornadas = numJornadas;
+        apiKey = API;
+        usuario = user;
+    }
 
     //******* RELACIONES CON OTRAS CLASES *******
     @ManyToOne

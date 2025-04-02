@@ -23,5 +23,6 @@ public class Participacion {
     @JoinColumn(name = "enfrentamiento_id", nullable = false)
     private Enfrentamiento enfrentamiento;
 
-    private boolean ganador; // true si el bot ganó, false si perdió
+    @Column
+    private String resultado;
 }
