@@ -33,6 +33,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(cors -> {})
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/h2-console/**").permitAll()
@@ -49,14 +50,15 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:8005","http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of("http://localhost:8005","http://localhost:5173", "localhost:5173"));
         configuration.setAllowedMethods(List.of("GET","POST"));
         configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         //CAMBIAR PARA ACTIVAR CORS
-        source.registerCorsConfiguration("/TODO/**",configuration);
+        source.registerCorsConfiguration("/**",configuration);
 
         return source;
     }
