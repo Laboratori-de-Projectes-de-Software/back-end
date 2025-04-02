@@ -1,6 +1,8 @@
 package com.example.gironetaServer.infraestructure.adapters.out.db.entities;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Bot")
@@ -27,6 +29,9 @@ public class BotEntity {
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = true)
     private UserEntity usuario; // Relación con Usuario
+
+    @ManyToMany(mappedBy = "bots")
+    private Set<LigaEntity> ligas = new HashSet<>();
 
     public BotEntity() {
     }
@@ -73,6 +78,10 @@ public class BotEntity {
         return usuario;
     }
 
+    public Set<LigaEntity> getLigas() {
+        return ligas;
+    }
+
     // Métodos setter
     public void setId(Long id) {
         this.id = id;
@@ -96,5 +105,9 @@ public class BotEntity {
 
     public void setUsuario(UserEntity usuario) {
         this.usuario = usuario;
+    }
+
+    public void setLigas(Set<LigaEntity> ligas) {
+        this.ligas = ligas;
     }
 }
