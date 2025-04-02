@@ -20,7 +20,7 @@ public class BotServiceImpl implements BotService{
 
     public void BotRegistro(String nombre, String descripcion, String foto, Integer victorias, Integer numJornadas, String API, Long id){
         //mirar si existe un bot con esa api        
-        if(botRepository.findByAPI_KEY(API) == null){
+        if(botRepository.findByApiKey(API).isEmpty()){
             //crear objeto usuario segun el id
             user = getUser(id);
             bot = new Bot(nombre, descripcion, foto, victorias, numJornadas, API, user);

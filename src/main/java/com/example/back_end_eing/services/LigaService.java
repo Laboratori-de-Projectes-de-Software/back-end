@@ -11,4 +11,7 @@ public interface LigaService {
 
     //Devolver la liga ordenada por clasificación
     public List<Clasificacion> LigaClasificacion(Long liga);
+
+    public void LigaRegistro(String nombreLiga, Integer numJornadas, Integer numBots, String estado, Integer jornadaActual, Long id);
+
 }
