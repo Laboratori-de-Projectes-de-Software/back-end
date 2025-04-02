@@ -22,6 +22,9 @@ import java.util.List;
 public class BotEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     @Column(nullable = false, unique = true)
     private String name;
 
@@ -33,6 +36,9 @@ public class BotEntity {
 
     @Column(nullable = false, unique = true)
     private String token;
+
+    @Column(nullable = true)
+    private String imgUrl;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)  // Relación con UserEntity

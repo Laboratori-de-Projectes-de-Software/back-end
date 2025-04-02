@@ -17,14 +17,17 @@ public class BotMapperAPIImpl implements BotMapperAPI {
         bot.setDescription(botRegister.getDescripcion());
         bot.setEndpoint(botRegister.getEndpoint());
         bot.setToken(UUID.randomUUID().toString());
+        bot.setImg(botRegister.getUrlImagen());
         return bot;
     }
 
     @Override
     public BotSummaryDTO toApiResponseSummary(Bot bot) {
         BotSummaryDTO botReturn = new BotSummaryDTO();
+        botReturn.setId(bot.getId());
         botReturn.setName(bot.getName());
         botReturn.setDescription(bot.getDescription());
+        botReturn.setUsername(bot.getUserId());
         return botReturn;
     }
 

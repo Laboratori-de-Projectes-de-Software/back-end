@@ -5,6 +5,7 @@ import com.alia.back_end_service.domain.bot.port.BotRegistrationPortAPI;
 import com.alia.back_end_service.domain.bot.usecases.GetAllBotUseCase;
 import com.alia.back_end_service.domain.bot.usecases.GetBotUseCase;
 import com.alia.back_end_service.domain.bot.usecases.RegisterBotUseCase;
+import com.alia.back_end_service.domain.bot.usecases.UpdateBotUseCase;
 import com.alia.back_end_service.domain.league.League;
 import com.alia.back_end_service.domain.league.ports.LeaguePortDB;
 import com.alia.back_end_service.domain.league.usecases.*;
@@ -58,6 +59,8 @@ public class SpringConfig {
 
     @Bean
     public GetBotUseCase getBotUseCase(BotPortDB botPortDB) {return new GetBotUseCase(botPortDB);}
+    @Bean
+    UpdateBotUseCase updateBotUseCase(BotPortDB botPortDB) {return new UpdateBotUseCase(botPortDB);}
 
     //LEAGUE
     @Bean

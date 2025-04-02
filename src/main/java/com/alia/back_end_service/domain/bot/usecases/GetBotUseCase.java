@@ -14,4 +14,10 @@ public class GetBotUseCase implements BotGetPortApi {
     public Bot findByName(String name) {
         return botPortDB.findByName(name).orElse(null);
     }
+
+    @Override
+    public Bot findById(Integer id) {
+        return botPortDB.findById(id);
+    }
+
 }

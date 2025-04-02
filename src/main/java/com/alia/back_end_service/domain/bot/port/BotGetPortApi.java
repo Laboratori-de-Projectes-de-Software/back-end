@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface BotGetPortApi {
     Bot findByName(String name);
+    Bot findById(Integer id);
 }

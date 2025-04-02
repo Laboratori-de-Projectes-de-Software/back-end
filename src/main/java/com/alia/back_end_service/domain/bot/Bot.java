@@ -15,6 +15,9 @@ import java.util.List;
 @Getter
 @Setter
 public class Bot {
+
+    private Integer id;
+
     private String name;
 
     private String description;
@@ -22,6 +25,8 @@ public class Bot {
     private URI endpoint;
 
     private String token;
+
+    private URI img;
 
     private String userId;
 

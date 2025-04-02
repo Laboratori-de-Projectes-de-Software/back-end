@@ -147,7 +147,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Bot details
@@ -174,7 +174,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       security:
         - BearerAuth: [ ]  # Se requiere autenticación con JWT
       requestBody:
@@ -556,6 +556,8 @@ components:
     BotSummaryDTO:
       type: object
       properties:
+          id:
+            type: integer
           name:
             type: string
             example: "MyBot"
