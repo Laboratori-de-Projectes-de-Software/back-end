@@ -54,7 +54,7 @@ public class LeagueJpaAdapter implements LeaguePortDB {
     @Override
     public League inscribeBot(Integer league_id, String bot_name) {
         LeagueEntity entity = leagueJpaRepository.findById(league_id).orElse(null);
-        BotEntity botEntity = botJpaRepository.findById(bot_name).orElse(null);
+        BotEntity botEntity = botJpaRepository.findByName(bot_name).orElse(null);
         if (entity == null) {
             return null;
         }

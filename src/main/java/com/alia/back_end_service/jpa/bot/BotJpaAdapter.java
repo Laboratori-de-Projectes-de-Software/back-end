@@ -42,6 +42,11 @@ public class BotJpaAdapter implements BotPortDB {
         return  botEntities.stream().map(botMapper::toDomain).collect(Collectors.toList());
     }
 
+    @Override
+    public Bot findById(Integer id){
+        return botMapper.toDomain(botJpaRepository.findById(id).orElse(null));
+    }
+
 
     @Override
     public Optional<Bot> findByName(String name) {
@@ -63,6 +68,14 @@ public class BotJpaAdapter implements BotPortDB {
         return botMapper.toDomain(savedEntity);
     }
 
+    @Override
+    public void update(Bot bot, Integer id) {
+        BotEntity getBotEntity = botJpaRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        getBotEntity.setName(bot.getName()==null ? getBotEntity.getName():bot.getName());
+        getBotEntity.setDescription(bot.getDescription()==null? getBotEntity.getDescription():bot.getDescription());
+        getBotEntity.setEndpoint(bot.getEndpoint()==null? getBotEntity.getEndpoint():bot.getEndpoint().toString());
+        botJpaRepository.save(getBotEntity);
+    }
 
     @Override
     public void delete(String name) {

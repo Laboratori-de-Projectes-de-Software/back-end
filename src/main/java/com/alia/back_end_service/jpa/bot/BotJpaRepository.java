@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BotJpaRepository extends JpaRepository<BotEntity, String> {
+public interface BotJpaRepository extends JpaRepository<BotEntity, Integer> {
     List<BotEntity> getAllByUser_Username(String username);
     Optional<BotEntity> findByName(String name);
     void deleteByName(String name);

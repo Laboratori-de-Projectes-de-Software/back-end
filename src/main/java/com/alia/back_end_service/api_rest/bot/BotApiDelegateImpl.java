@@ -7,7 +7,9 @@ import com.alia.back_end_service.domain.bot.Bot;
 import com.alia.back_end_service.domain.bot.port.BotGetAllPortAPI;
 import com.alia.back_end_service.domain.bot.port.BotGetPortApi;
 import com.alia.back_end_service.domain.bot.port.BotRegistrationPortAPI;
+import com.alia.back_end_service.domain.bot.port.BotUpdatePortAPI;
 import com.alia.back_end_service.domain.league.ports.LeagueGetPortAPI;
+import com.alia.back_end_service.domain.user.ports.GetAllUserBotsPortAPI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -24,21 +26,29 @@ public class BotApiDelegateImpl implements BotApiDelegate {
     private final BotRegistrationPortAPI botRegistrationPortAPI;
     private final BotGetAllPortAPI botGetAllPortAPI;
     private final BotGetPortApi botGetPortApi;
+    private final GetAllUserBotsPortAPI getAllUserBotsPortAPI;
+    private final BotUpdatePortAPI botUpdatePortAPI;
     private final BotMapperAPI botMapperPortAPI;
 
     @Override
-    public ResponseEntity<BotSummaryDTO> botBotIdGet(String botId) {
-        return BotApiDelegate.super.botBotIdGet(botId);
+    public ResponseEntity<BotSummaryDTO> botBotIdGet(Integer botId) {
+        return ResponseEntity.status(HttpStatus.OK).body(botMapperPortAPI.toApiResponseSummary(botGetPortApi.findById(botId)));
     }
 
     @Override
-    public ResponseEntity<Void> botBotIdPut(String botId, BotDTO botDTO) {
-        return BotApiDelegate.super.botBotIdPut(botId, botDTO);
+    public ResponseEntity<Void> botBotIdPut(Integer botId, BotDTO botDTO) {
+        botUpdatePortAPI.update(botMapperPortAPI.toDomainRegister(botDTO),botId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Override
     public ResponseEntity<List<BotSummaryDTO>> botGet() {
-        return BotApiDelegate.super.botGet();
+        return ResponseEntity.status(HttpStatus.OK).body(botGetAllPortAPI.getAllBots().stream().map(botMapperPortAPI::toApiResponseSummary).toList());
+    }
+
+    @Override
+    public ResponseEntity<List<BotSummaryDTO>> botOwneruserIdGet(String userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(getAllUserBotsPortAPI.getAllUserBots(userId).stream().map(botMapperPortAPI::toApiResponseSummary).toList());
     }
 
     @Override

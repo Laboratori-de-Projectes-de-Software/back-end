@@ -49,10 +49,12 @@ public class BotMapperImpl implements BotMapper{
                 : List.of();
 
         return new Bot(
+                entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
                 URI.create(entity.getEndpoint()),
                 entity.getToken(),
+                URI.create(entity.getImgUrl()),
                 entity.getUser().getUsername(),
                 leagueIds,
                 messageIds,
@@ -68,6 +70,7 @@ public class BotMapperImpl implements BotMapper{
         entity.setName(bot.getName());
         entity.setDescription(bot.getDescription());
         entity.setEndpoint(bot.getEndpoint().toString());
+        entity.setImgUrl(bot.getImg().toString());
         entity.setToken(bot.getToken());
         // La asignación de UserEntity y relaciones (leagues, messages, games, classifications) se realiza en el adaptador.
         return entity;
