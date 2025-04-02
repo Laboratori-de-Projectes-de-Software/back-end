@@ -1,31 +1,27 @@
 package jaumesitos.backend.demo.infrastructure.res.api;
 
 
-import jaumesitos.backend.demo.infrastructure.res.dto.RespostaDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 import lombok.RequiredArgsConstructor;
 
-import jaumesitos.backend.demo.infrastructure.res.mapper.RespostaDTOMapper;
-import jaumesitos.backend.demo.application.service.RespostaService;
+import jaumesitos.backend.demo.infrastructure.res.mapper.UserDTOMapper;
+import jaumesitos.backend.demo.application.service.UserService;
 
 @RequiredArgsConstructor
 @RestController
 
 @RequestMapping("")
-@Tag(name = "Answers Controller", description = "Endpoints for managing answers between bots")
+@Tag(name = "User Controller", description = "Endpoints for managing users")
+public class AuthController {
 
-public class ResponsesController {
+    private final UserDTOMapper mapper; //convertidor de DTO a classe de lògica de negoci
+    private final UserService service; //adaptador
+
     //CODIS ERROR:
     //HttpStatus.OK -> 200
     //HttpStatus.CREATED -> 201
@@ -40,5 +36,10 @@ public class ResponsesController {
     //HttpStatus.GATEWAY_TIMEOUT -> 504
 
     //SWAGGER:
-    //http://localhost:9090/swagger-ui/index.html#/
+    //http://localhost:8080/swagger-ui/index.html#/
+
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllUsers() {
+        return new ResponseEntity<>("Endpoint /api/users/getallUsers", HttpStatus.ACCEPTED);
+    }
 }

@@ -39,5 +39,5 @@ public class BotController {
     //HttpStatus.GATEWAY_TIMEOUT -> 504
 
     //SWAGGER:
-    //http://localhost:9090/swagger-ui/index.html#/
+    //http://localhost:8080/swagger-ui/index.html#/
 }
