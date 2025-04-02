@@ -2,6 +2,7 @@ package com.example.gironetaServer.infraestructure.adapters.in.controllers.mappe
 
 import com.example.gironetaServer.domain.User;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserDto;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserResponse;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 
 public class UserMapper {
@@ -38,5 +39,16 @@ public class UserMapper {
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
         return user;
+    }
+
+    public static UserResponse toUserResponse(User user) {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(user.getId());
+        userResponse.setUsername(user.getUsername());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setPassword(user.getPassword());
+        userResponse.setCreatedAt(user.getCreatedAt());
+        userResponse.setUpdatedAt(user.getUpdatedAt());
+        return userResponse;
     }
 }
