@@ -39,7 +39,7 @@ public class LigaEntity {
     @JoinColumn(name = "usuario_id", nullable = false)
     private UserEntity usuario; // Relación con Usuario
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
     @JoinTable(name = "liga_bot", joinColumns = @JoinColumn(name = "liga_id"), inverseJoinColumns = @JoinColumn(name = "bot_id"))
     private Set<BotEntity> bots; // Relación con Bots
 

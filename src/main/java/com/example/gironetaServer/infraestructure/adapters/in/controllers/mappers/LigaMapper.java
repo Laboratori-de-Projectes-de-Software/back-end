@@ -8,6 +8,8 @@ import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LigaE
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.BotJpaRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,9 +34,12 @@ public class LigaMapper {
         league.setMatchTime(ligaEntity.getMatchTime());
         league.setUserId(ligaEntity.getUsuario().getEmail());
 
-        List<Long> botIds = ligaEntity.getBots().stream()
-                .map(BotEntity::getId)
-                .collect(Collectors.toList());
+        List<Long> botIds = new ArrayList<>();
+        if (ligaEntity.getBots() != null) {
+            botIds = ligaEntity.getBots().stream()
+                    .map(BotEntity::getId)
+                    .collect(Collectors.toList());
+        }
         league.setBots(botIds);
 
         return league;
@@ -49,10 +54,13 @@ public class LigaMapper {
         ligaEntity.setMatchTime(league.getMatchTime());
         ligaEntity.setUsuario(UserMapper.toEntity(userRepository.getUserByEmail(league.getUserId())));
 
-        Set<BotEntity> botEntities = league.getBots().stream()
-                .map(botId -> botJpaRepository.findById(botId).orElseThrow())
-                .collect(Collectors.toSet());
-        ligaEntity.setBots(botEntities);
+        // Inicializamos un conjunto vacío o null - los bots se asociarán después de
+        // guardar la liga
+        if (league.getBots() == null || league.getBots().isEmpty()) {
+            ligaEntity.setBots(new HashSet<>());
+        } else {
+            ligaEntity.setBots(null); // Se establecerá después de guardar la liga
+        }
 
         return ligaEntity;
     }
