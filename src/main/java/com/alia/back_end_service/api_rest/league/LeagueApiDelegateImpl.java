@@ -1,6 +1,6 @@
 package com.alia.back_end_service.api_rest.league;
 
-import com.alia.back_end_service.api.LeaguesApiDelegate;
+import com.alia.back_end_service.api.LeagueApiDelegate;
 import com.alia.back_end_service.api_model.*;
 import com.alia.back_end_service.api_rest.bot.BotMapperAPI;
 import com.alia.back_end_service.domain.league.League;
@@ -12,12 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class LeagueApiDelegateImpl implements LeaguesApiDelegate {
+public class LeagueApiDelegateImpl implements LeagueApiDelegate {
 
     private final LeagueCreatePortAPI leagueCreatePortAPI;
     private final LeagueGetPortAPI leagueGetPortAPI;
@@ -30,18 +31,56 @@ public class LeagueApiDelegateImpl implements LeaguesApiDelegate {
 
 
     @Override
-    public ResponseEntity<LeagueDTO> leaguesLeagueIdDelete(Integer leagueId) {
-        return LeaguesApiDelegate.super.leaguesLeagueIdDelete(leagueId);
+    public ResponseEntity<LeagueDTO> leagueLeagueIdDelete(Integer leagueId) {
+        return LeagueApiDelegate.super.leagueLeagueIdDelete(leagueId);
     }
 
     @Override
-    public ResponseEntity<LeagueDTO> leaguesLeagueIdGet(Integer leagueId) {
-        return LeaguesApiDelegate.super.leaguesLeagueIdGet(leagueId);
+    public ResponseEntity<LeagueDTO> leagueLeagueIdGet(Integer leagueId) {
+        return ResponseEntity.ok(leagueMapperAPI.toApiResponse(leagueGetPortAPI.getLeague(leagueId)));
     }
 
     @Override
-    public ResponseEntity<Void> leaguesLeagueIdPut(Integer leagueId, LeagueDTO leagueDTO) {
-        return LeaguesApiDelegate.super.leaguesLeagueIdPut(leagueId, leagueDTO);
+    public ResponseEntity<Void> leagueLeagueIdPut(Integer leagueId, LeagueDTO leagueDTO) {
+        return LeagueApiDelegate.super.leagueLeagueIdPut(leagueId, leagueDTO);
     }
 
+
+    @Override
+    public ResponseEntity<List<LeagueDTO>> leagueGet() {
+        List<League> leagues = leagueGetAllPortAPI.getAllLeagues();
+        List<LeagueDTO> leaguesDTOs = new ArrayList<>();
+
+        for (League league : leagues) {
+            leaguesDTOs.add(leagueMapperAPI.toApiResponse(league));
+        }
+
+        return ResponseEntity.ok(leaguesDTOs);
+    }
+
+    @Override
+    public ResponseEntity<List<ParticipationDTO>> leagueLeagueIdLeaderboardGet(Integer leagueId) {
+        return LeagueApiDelegate.super.leagueLeagueIdLeaderboardGet(leagueId);
+    }
+
+    @Override
+    public ResponseEntity<List<MatchDTO>> leagueLeagueIdMatchGet(Integer leagueId) {
+        return LeagueApiDelegate.super.leagueLeagueIdMatchGet(leagueId);
+    }
+
+    @Override
+    public ResponseEntity<Void> leagueLeagueIdStartPost(Integer leagueId) {
+        return LeagueApiDelegate.super.leagueLeagueIdStartPost(leagueId);
+    }
+
+    @Override
+    public ResponseEntity<List<LeagueDTO>> leagueOwneruserIdGet(String userId) {
+        return LeagueApiDelegate.super.leagueOwneruserIdGet(userId);
+    }
+
+    @Override
+    public ResponseEntity<Void> leaguePost(LeagueDTO leagueDTO) {
+        leagueCreatePortAPI.createLeague(leagueMapperAPI.toDomainCreate(leagueDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

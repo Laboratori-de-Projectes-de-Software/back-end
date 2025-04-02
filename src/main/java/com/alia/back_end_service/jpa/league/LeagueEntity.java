@@ -23,7 +23,7 @@ public class LeagueEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "init_time", nullable = false)
+    @Column(name = "init_time")
     private OffsetDateTime init_time;
 
     @Column(name = "end_time")
