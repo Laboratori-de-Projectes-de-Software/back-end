@@ -24,4 +24,14 @@ public class Bot {
     private String token;
 
     private String userId;
+
+    private List<Integer> leagueIds;
+
+    private List<Integer> messagesIds;
+
+    private List<Integer> localGameIds;
+
+    private List<Integer> visitorGameIds;
+
+    private List<Integer> classificationIds;
 }

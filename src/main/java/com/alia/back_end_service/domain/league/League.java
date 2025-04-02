@@ -31,7 +31,7 @@ public class League {
 
     private String state;
 
-    private List<Bot> bots = new ArrayList<>();
+    private List<String> botIds;
 
-    // private List<Round> rounds;
+    private List<Integer> roundIds;
 }

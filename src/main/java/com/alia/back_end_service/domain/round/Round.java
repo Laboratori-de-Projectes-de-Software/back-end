@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -24,5 +25,11 @@ public class Round {
     private OffsetDateTime end_time;
 
     private String state;
+
+    private Integer leagueId;
+
+    private List<Integer> gameIds;
+
+    private List<Integer> classificationIds;
 
 }

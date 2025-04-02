@@ -38,19 +38,14 @@ public class RoundEntity {
     @Column(nullable = false, name = "state")
     private String state;;
 
-//    @ManyToOne
-//    @JoinColumn(name = "league", nullable = false)
-//    private LeagueEntity league;
-//
-//    @OneToMany
-//    @JoinColumn(name = "round_games", nullable = false)
-//    private List<GameEntity> games;
-//
-//    @OneToMany
-//    @JoinColumn(name = "round_classifications", nullable = false)
-//    private List<ClassificationEntity> classifications;
+    @ManyToOne
+    @JoinColumn(name = "league_id", nullable = false)
+    private LeagueEntity league;
 
-    //Posible relación con estado_jornada
+    @OneToMany(mappedBy = "round", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<GameEntity> games;
 
+    @OneToMany(mappedBy = "round", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ClassificationEntity> classifications;
 
 }

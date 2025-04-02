@@ -14,9 +14,9 @@ public class LeagueMapperAPIImpl implements LeagueMapperAPI {
     public League toDomainCreate(LeagueDTO leagueCreate) {
         League league = new League();
         league.setName(leagueCreate.getName());
-        league.setNumber_match(leagueCreate.getNumberMatch());
-        //league.setBots(leagueCreate.getBots());
-        league.setTime_match(leagueCreate.getTimeMatch());
+        league.setNumber_match(leagueCreate.getRounds());
+        league.setBotIds(leagueCreate.getBots());
+        league.setTime_match(leagueCreate.getMatchTime());
         league.setInit_time(OffsetDateTime.now());
         league.setState("Espera"); // Crear enum
         return league;
@@ -27,9 +27,9 @@ public class LeagueMapperAPIImpl implements LeagueMapperAPI {
     public LeagueDTO toApiResponse(League league) {
         LeagueDTO leagueResponse = new LeagueDTO();
         leagueResponse.setName(league.getName());
-        leagueResponse.setNumberMatch(league.getNumber_match());
-        leagueResponse.setTimeMatch(league.getTime_match());
-        league.setBots(league.getBots());
+        leagueResponse.setRounds(league.getNumber_match());
+        leagueResponse.setMatchTime(league.getTime_match());
+        league.setBotIds(league.getBotIds());
         return leagueResponse;
     }
 }

@@ -1,5 +1,7 @@
 package com.alia.back_end_service.jpa.classification;
 
+import com.alia.back_end_service.jpa.bot.BotEntity;
+import com.alia.back_end_service.jpa.round.RoundEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,7 +34,11 @@ public class ClassificationEntity {
     @Column(name = "lose_matchs")
     private Integer loseMatchs;
 
-    // Falta el Bot ManyToOne
+    @ManyToOne
+    @JoinColumn(name = "bot_name", nullable = false)
+    private BotEntity bot;
 
-    // Falta el Round ManyToOne
+    @ManyToOne
+    @JoinColumn(name = "round_id", nullable = false)
+    private RoundEntity round;
 }

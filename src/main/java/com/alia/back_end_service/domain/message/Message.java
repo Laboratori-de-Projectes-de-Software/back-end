@@ -20,11 +20,12 @@ public class Message {
 
     private Integer id;
 
-    private String text;
+    private String message;
 
-    private OffsetDateTime timestamp; // Formato UTC
+    private OffsetDateTime date; // Formato UTC
 
-    private Bot bot;
+    private String botId;
 
+    private Integer gameId;
 
 }

@@ -1,6 +1,8 @@
 package com.alia.back_end_service.jpa.game;
 
 import com.alia.back_end_service.jpa.bot.BotEntity;
+import com.alia.back_end_service.jpa.message.MessageEntity;
+import com.alia.back_end_service.jpa.round.RoundEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +11,7 @@ import lombok.Setter;
 
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,16 +35,19 @@ public class GameEntity {
     private String result_visit;
 
     @ManyToOne
-    @JoinColumn(name = "local_bot_id", nullable = false)
-    private BotEntity bot_local_id;
+    @JoinColumn(name = "localBot", nullable = false)
+    private BotEntity localBot;
 
     @ManyToOne
-    @JoinColumn(name = "visit_bot_id", nullable = false)
-    private BotEntity bot_visit_id;
+    @JoinColumn(name = "visitorBot", nullable = false)
+    private BotEntity visitorBot;
 
-    //Posible relación con mensaje
+    @ManyToOne
+    @JoinColumn(name = "round_id", nullable = false)
+    private RoundEntity round;
 
-    //Posible relación con jornada
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<MessageEntity> messages;
 
     @Column(name = "state")
     private String state;

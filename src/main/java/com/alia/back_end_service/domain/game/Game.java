@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,9 +23,13 @@ public class Game {
 
     private String result_visit;
 
-    private Bot bot_local_id;
+    private String bot_local_id;
 
-    private Bot bot_visit_id;
+    private String bot_visit_id;
+
+    private Integer roundId;
+
+    private List<Integer> messageIds;
 
     private String state;
 

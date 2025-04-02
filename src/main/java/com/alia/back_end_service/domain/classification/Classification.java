@@ -23,7 +23,7 @@ public class Classification {
 
     private Integer lose_matchs;
 
-    // Falta el Bot
+    private String botId;
 
-    // Falta el Round
+    private Integer roundId;
 }

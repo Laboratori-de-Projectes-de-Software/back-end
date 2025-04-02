@@ -8,7 +8,9 @@ import com.alia.back_end_service.jpa.bot.BotEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class LeagueMapperImpl implements LeagueMapper {
@@ -32,14 +34,24 @@ public class LeagueMapperImpl implements LeagueMapper {
         league.setNumber_match(entity.getNumber_match());
         league.setState(entity.getState());
 
-        // Map bots (many-to-many)
+
         if (entity.getBots() != null) {
-            league.setBots(new ArrayList<>(entity.getBots().stream()
-                    .map(botMapper::toDomain)
-                    .toList()));
+            List<String> botIds = entity.getBots().stream()
+                    .map(BotEntity::getName)
+                    .collect(Collectors.toList());
+            league.setBotIds(botIds);
+        } else {
+            league.setBotIds(Collections.emptyList());
         }
 
-        // No mapeamos rounds aún
+        if (entity.getRounds() != null) {
+            List<Integer> roundIds = entity.getRounds().stream()
+                    .map(RoundEntity::getId)
+                    .collect(Collectors.toList());
+            league.setRoundIds(roundIds);
+        } else {
+            league.setRoundIds(Collections.emptyList());
+        }
 
         return league;
     }
@@ -56,16 +68,6 @@ public class LeagueMapperImpl implements LeagueMapper {
         entity.setTime_match(domain.getTime_match());
         entity.setNumber_match(domain.getNumber_match());
         entity.setState(domain.getState());
-
-        // Map bots (many-to-many)
-        if (domain.getBots() != null) {
-            List<BotEntity> bots = domain.getBots().stream()
-                    .map(botMapper::toEntity)
-                    .toList();
-            entity.setBots(bots);
-        }
-
-        // No mapeamos rounds aún
 
         return entity;
     }

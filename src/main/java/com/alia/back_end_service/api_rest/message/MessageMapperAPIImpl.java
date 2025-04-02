@@ -10,9 +10,9 @@ public class MessageMapperAPIImpl implements MessageMapperAPI {
     @Override
     public MessageDTO toApiResponse(Message message) {
         MessageDTO messageResponse = new MessageDTO();
-        messageResponse.setText(message.getText());
-        messageResponse.setBotId(message.getBot().getName());
-        messageResponse.setTime(message.getTimestamp());
+        messageResponse.setText(message.getMessage());
+        messageResponse.setBotId(message.getBotId());
+        messageResponse.setTime(message.getDate());
         return messageResponse;
     }
 }

@@ -15,11 +15,11 @@ public class LoginUserUseCase implements UserLoginPortAPI {
     private final PasswordEncoderPort passwordEncoderPort;
     private final TokenProviderPort tokenProviderPort;
 
-    public String login(String username, String rawPassword) {
-        User user = userPortDB.findByUsername(username)
+    public String login(User userLogin) {
+        User user = userPortDB.findByUsername(userLogin.getUsername())
                 .orElseThrow(UserNotFoundException::new);
 
-        if (!passwordEncoderPort.matches(rawPassword, user.getPassword())) {
+        if (!passwordEncoderPort.matches(userLogin.getPassword(), user.getPassword())) {
             throw new InvalidPasswordException();
         }
 

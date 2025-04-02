@@ -46,4 +46,6 @@ public class LeagueEntity {
     )
     private List<BotEntity> bots = new ArrayList<>();
 
+    @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<RoundEntity> rounds;
 }
