@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/auth")
+@RequestMapping("/api/v0/auth")
 @RestController
 public class AuthenticationController {
     private final JwtService jwtService;
@@ -27,7 +27,7 @@ public class AuthenticationController {
     }
 
     //Not used Mappers for conversion between Domain and Entity (no idea where it should be)
-    @PostMapping("/signup")
+    @PostMapping("/register")
     public ResponseEntity<UserEntity> register(@RequestBody RegisterUserDto registerUserDto) {
         UserEntity registeredUser = authenticationService.signup(registerUserDto);
 

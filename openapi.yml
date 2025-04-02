@@ -6,7 +6,7 @@ info:
 servers:
   - url: http://localhost:8080
 paths:
-  /users:
+  /api/v0/users:
     get:
       summary: Get all users
       responses:
@@ -18,7 +18,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UserDto'
-  /user/{id}:
+  /api/v0/user/{id}:
     get:
       summary: Get user by ID
       parameters:
@@ -36,7 +36,7 @@ paths:
                 $ref: '#/components/schemas/UserDto'
         '404':
           description: User not found
-  /user:
+  /api/v0/user:
     post:
       summary: Create a new user
       requestBody:
@@ -52,7 +52,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserDto'
-  /user/username/{username}:
+  /api/v0/user/username/{username}:
     get:
       summary: Get user by username
       parameters:
@@ -70,7 +70,7 @@ paths:
                 $ref: '#/components/schemas/UserDto'
         '404':
           description: User not found
-  /user/email/{email}:
+  /api/v0/user/email/{email}:
     get:
       summary: Get user by email
       parameters:
@@ -88,7 +88,7 @@ paths:
                 $ref: '#/components/schemas/UserDto'
         '404':
           description: User not found
-  /auth/signup:
+  /api/v0/auth/register:
     post:
       summary: Register a new user
       requestBody:
@@ -104,7 +104,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserDto'
-  /auth/login:
+  /api/v0/auth/login:
     post:
       summary: Authenticate a user
       requestBody:
