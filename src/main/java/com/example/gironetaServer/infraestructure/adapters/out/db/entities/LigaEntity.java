@@ -1,19 +1,14 @@
 package com.example.gironetaServer.infraestructure.adapters.out.db.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "Liga", uniqueConstraints = {
         @UniqueConstraint(columnNames = "nombre") // El nombre de la liga debe ser único
 })
-
 public class LigaEntity {
 
     @Id
@@ -50,8 +45,7 @@ public class LigaEntity {
     }
 
     public LigaEntity(String name, String urlImagen, Integer rounds, Long matchTime, Set<BotEntity> bots,
-            UserEntity usuario,
-            Set<JornadaEntity> jornadas) {
+            UserEntity usuario, Set<JornadaEntity> jornadas) {
         this.name = name;
         this.urlImagen = urlImagen;
         this.rounds = rounds;
@@ -62,4 +56,77 @@ public class LigaEntity {
         this.jornadas = jornadas;
     }
 
+    // Métodos getter
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public Long getMatchTime() {
+        return matchTime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getRounds() {
+        return rounds;
+    }
+
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public UserEntity getUsuario() {
+        return usuario;
+    }
+
+    public Set<BotEntity> getBots() {
+        return bots;
+    }
+
+    public Set<JornadaEntity> getJornadas() {
+        return jornadas;
+    }
+
+    // Métodos setter
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public void setMatchTime(Long matchTime) {
+        this.matchTime = matchTime;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRounds(Integer rounds) {
+        this.rounds = rounds;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
+    }
+
+    public void setUsuario(UserEntity usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setBots(Set<BotEntity> bots) {
+        this.bots = bots;
+    }
+
+    public void setJornadas(Set<JornadaEntity> jornadas) {
+        this.jornadas = jornadas;
+    }
 }
