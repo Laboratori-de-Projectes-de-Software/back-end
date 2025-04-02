@@ -2,6 +2,7 @@ package com.example.gironetaServer.infraestructure.adapters.in.controllers;
 
 import com.example.gironetaServer.application.services.LeagueService;
 import com.example.gironetaServer.domain.League;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class LeagueController {
     public ResponseEntity<LigaDto> createLeague(@RequestBody LigaDto leagueDto) {
         League league = LigaMapper.toAppObject(leagueDto);
         League savedLeague = leagueService.createLeague(league);
-        System.out.println(savedLeague.getUserId());
-        return ResponseEntity.ok(LigaMapper.toLeagueDto(savedLeague));
+        return ResponseEntity.status(HttpStatus.CREATED).body(LigaMapper.toLeagueDto(savedLeague));
     }
+
 }
