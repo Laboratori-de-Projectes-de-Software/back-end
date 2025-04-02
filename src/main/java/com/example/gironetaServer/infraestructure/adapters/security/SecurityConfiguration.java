@@ -35,7 +35,7 @@ public class SecurityConfiguration {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/", "/v3/api-docs/", "/swagger-ui.html", "/swagger-ui/").permitAll() // Allow access to Swagger
+                        .requestMatchers("/auth/**", "/v3/api-docs/", "/swagger-ui.html", "/swagger-ui/").permitAll() // Allow access to Swagger
                         .anyRequest().authenticated()
                 )
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)) // Allow frames from the same origin
