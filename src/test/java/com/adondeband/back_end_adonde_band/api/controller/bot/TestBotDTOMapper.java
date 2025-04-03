@@ -30,8 +30,7 @@ public class TestBotDTOMapper {
                 null,
                 0,
                 0,
-                0,
-                null);
+                0);
 
         // Act
         Bot bot = botDtoMapper.toDomain(botDTO);
@@ -62,6 +61,5 @@ public class TestBotDTOMapper {
         assertEquals(bot.getNombre().value(), botDTO.getNombre());
         assertEquals(bot.getCualidad(), botDTO.getCualidad());
         assertEquals(bot.getImagen().getRuta(), botDTO.getImagen());
-        assertEquals(bot.getUsuario().value(), botDTO.getUsuario().value());
     }
 }

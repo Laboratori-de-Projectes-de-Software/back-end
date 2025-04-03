@@ -7,6 +7,8 @@ import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,23 +28,34 @@ public class BotController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BotDTO>> listarBots(@RequestParam(value = "owner", required = false) String userId) {
-        List<Bot> bots = (userId != null) ? botService.obtenerBotsPorUsuario(new UsuarioId(userId)) : botService.obtenerTodosLosBots();
+    public ResponseEntity<List<BotDTOMin>> listarBots(@RequestParam(value = "owner", required = false) String userId) {
+        // Obtener listado de bots
+        List<Bot> bots = (userId == null)
+                ? botService.obtenerTodosLosBots()
+                : botService.obtenerBotsPorUsuario(new UsuarioId(
+                    SecurityContextHolder.getContext().getAuthentication().getName()));
 
         // comprobar que la lista no está vacía
         if (bots.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        // pasar de Bot a BotDTO
-        List<BotDTO> botsDTO = bots.stream().map(botMapper::toDTO).toList();
+        // pasar de Bot a BotDTOMin
+        List<BotDTOMin> botsDTOMin = bots.stream().map(botMapper::toDTO).map(BotDTOMin::new).toList();
 
-        return ResponseEntity.status(HttpStatus.OK).body(botsDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(botsDTOMin);
     }
 
     @PostMapping
-    public ResponseEntity<BotDTO> crearBot(@RequestBody BotDTO botDTO) {
+    public ResponseEntity<BotDTO> crearBot(@RequestBody BotDTOMin botDTOMin) {
+        BotDTO botDTO = new BotDTO(botDTOMin);
         Bot bot = botMapper.toDomain(botDTO);
+
+        // Obtiene el usuario autenticado desde SecurityContextHolder
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Set UserId into bot
+        bot.setUsuario(new UsuarioId(authentication.getName()));
+
         Bot nuevoBot = botService.crearBot(bot);
         return ResponseEntity.status(HttpStatus.CREATED).body(botMapper.toDTO(nuevoBot));
     }
