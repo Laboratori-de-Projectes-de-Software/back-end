@@ -14,6 +14,7 @@ import org.junit.platform.suite.api.SuiteDisplayName;
                 BotAdapterIntegrationTest.class,
                 LigaAdapterIntegrationTest.class,
                 PartidaAdapterIntegrationTest.class,
-                MensajeAdapterIntegrationTest.class})
+                MensajeAdapterIntegrationTest.class,
+                ResultadoAdapterIntegrationTest.class})
 public class SuiteTest {
 }
