@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class BotDatabaseRepository implements BotRepository {
@@ -44,5 +45,12 @@ public class BotDatabaseRepository implements BotRepository {
     @Override
     public void deleteById(Long id) {
         botJpaRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Bot> getAllBots() {
+        return botJpaRepository.findAll().stream()
+                .map(botMapper::toDomain)
+                .collect(Collectors.toList());
     }
 }

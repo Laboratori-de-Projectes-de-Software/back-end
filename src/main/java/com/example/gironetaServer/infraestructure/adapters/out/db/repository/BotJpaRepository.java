@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface BotJpaRepository extends JpaRepository<BotEntity, Long> {
     List<BotEntity> findByUsuarioEmail(String email);
+    List<BotEntity> findAll();
 }

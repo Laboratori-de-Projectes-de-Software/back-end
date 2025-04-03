@@ -11,4 +11,5 @@ public interface BotRepository {
     List<Bot> findByUsuarioCorreo(String correo);  // Cambiado de BotEntity a Bot
     Bot save(Bot bot);
     void deleteById(Long id);
+    List<Bot> getAllBots();
 }
