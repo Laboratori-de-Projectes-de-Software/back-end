@@ -3,6 +3,7 @@ package com.adondeband.back_end_adonde_band.API.bot;
 import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotService;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotImpl;
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,20 +27,21 @@ public class BotController {
 
     @GetMapping
     public ResponseEntity<List<BotDTO>> listarBots(@RequestParam(value = "owner", required = false) String userId) {
-        //TODO
+        List<Bot> bots = (userId != null) ? botService.obtenerBotsPorUsuario(new UsuarioId(userId)) : botService.obtenerTodosLosBots();
 
-        /*
-        List<Bot> bots = (userId != null) ? botService.obtenerBotsPorUsuario(userId) : botService.obtenerTodosLosBots();
+        // comprobar que la lista no está vacía
+        if (bots.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // pasar de Bot a BotDTO
         List<BotDTO> botsDTO = bots.stream().map(botMapper::toDTO).toList();
-        return ResponseEntity.ok(botsDTO);
-         */
 
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body(botsDTO);
     }
 
     @PostMapping
     public ResponseEntity<BotDTO> crearBot(@RequestBody BotDTO botDTO) {
-
         Bot bot = botMapper.toDomain(botDTO);
         Bot nuevoBot = botService.crearBot(bot);
         return ResponseEntity.status(HttpStatus.CREATED).body(botMapper.toDTO(nuevoBot));
@@ -50,13 +52,11 @@ public class BotController {
         // Obtener la lista de Bots desde el servicio
         List<Bot> bots = botService.obtenerBotPorNombre(botId);
 
-        // Convertir manualmente cada Bot a BotDTO
-        List<BotDTO> botsDTO = new ArrayList<>();
-        for (Bot bot : bots) {
-            botsDTO.add(botMapper.toDTO(bot));
-        }
+        // Convertir manualmente de Bot a BotDTO
+        List<BotDTO> botDTO = new ArrayList<>();
+        botDTO.add(botMapper.toDTO(bots.getFirst()));
 
         // Devolver la lista de BotDTO en la respuesta HTTP
-        return ResponseEntity.status(HttpStatus.OK).body(botsDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(botDTO);
     }
 }

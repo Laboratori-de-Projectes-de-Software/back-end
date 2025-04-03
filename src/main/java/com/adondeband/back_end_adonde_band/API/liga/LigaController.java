@@ -2,8 +2,11 @@ package com.adondeband.back_end_adonde_band.API.liga;
 
 import com.adondeband.back_end_adonde_band.API.enfrentamiento.EnfrentamientoDTO;
 import com.adondeband.back_end_adonde_band.API.participacion.ParticipacionDTO;
+import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
+import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaImpl;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaService;
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,15 +32,17 @@ public class LigaController {
 
     @GetMapping
     public ResponseEntity<List<LigaDTO>> listarLigas(@RequestParam(value = "owner", required = false) String userId) {
-        //TODO
+        // TODO
+        List<Liga> ligas = (userId != null) ? ligaService.obtenerLigasPorUsuario(new UsuarioId(userId)) : ligaService.obtenerTodasLasLigas();
 
-        /*
-        List<Bot> bots = (userId != null) ? botService.obtenerBotsPorUsuario(userId) : botService.obtenerTodosLosBots();
-        List<BotDTO> botsDTO = bots.stream().map(botMapper::toDTO).toList();
-        return ResponseEntity.ok(botsDTO);
-         */
+        if (ligas.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
 
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null);
+        // Pasar de Liga a LigaDTO
+        List<LigaDTO> ligasDTO = ligas.stream().map(ligaDtoMapper::toDTO).toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(ligasDTO);
     }
 
     @PostMapping
@@ -57,13 +63,10 @@ public class LigaController {
     }
 
     @GetMapping("/{leagueId}")
-    public ResponseEntity<List<LigaDTO>> obtenerLiga(@PathVariable String leagueId) {
-        //TODO
+    public ResponseEntity<List<LigaDTO>> obtenerLiga(@PathVariable Long leagueId) {
+        List<Liga> ligas = ligaService.obtenerLigaPorId(new LigaId(leagueId));
 
-        /*
-        List<Liga> ligas = ligaService.obtenerLiga(leagueId);
-
-        if (ligas.isEmpty) {
+        if (ligas.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
@@ -73,10 +76,6 @@ public class LigaController {
 
         // Devolver la lista de LigaDTO en la respuesta HTTP
         return ResponseEntity.status(HttpStatus.OK).body(ligaDTO);
-
-         */
-
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null);
     }
 
     @PutMapping("/{leagueId}")

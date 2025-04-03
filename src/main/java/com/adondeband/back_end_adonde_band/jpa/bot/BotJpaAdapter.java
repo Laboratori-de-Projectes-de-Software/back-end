@@ -2,6 +2,7 @@ package com.adondeband.back_end_adonde_band.jpa.bot;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotPort;
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,5 +33,19 @@ public class BotJpaAdapter implements BotPort {
                 .stream()
                 .map(botJpaMapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Bot> findAll() {
+        return botJpaRepository.findAll()
+                .stream()
+                .map(botJpaMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Bot> findBotsUsuario(UsuarioId userId) {
+        // TODO
+        return List.of();
     }
 }
