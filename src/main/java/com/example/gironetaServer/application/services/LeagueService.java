@@ -76,11 +76,6 @@ public class LeagueService implements CreateLeague {
                     BotEntity botEntity = botJpaRepository.findById(botId)
                             .orElseThrow(() -> new ResourceNotFoundException("Bot no encontrado con ID: " + botId));
 
-                    // Verificar si el bot pertenece al usuario actual
-                    if (!botEntity.getUsuario().getEmail().equals(usuario)) {
-                        throw new ForbiddenException("No tienes permiso para usar el bot con ID: " + botId);
-                    }
-
                     botEntities.add(botEntity);
                 }
 
