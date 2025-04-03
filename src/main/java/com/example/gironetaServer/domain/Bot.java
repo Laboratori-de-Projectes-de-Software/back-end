@@ -1,12 +1,5 @@
 package com.example.gironetaServer.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
-@Builder
-@Getter
-@Setter
 public class Bot {
     private Long id;
     private String name;
@@ -27,4 +20,53 @@ public class Bot {
         this.usuario_correo = usuario_correo;
     }
 
+    // Métodos getter
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public String getUsuario_correo() {
+        return usuario_correo;
+    }
+
+    // Métodos setter
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
+    }
+
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    public void setUsuario_correo(String usuario_correo) {
+        this.usuario_correo = usuario_correo;
+    }
 }

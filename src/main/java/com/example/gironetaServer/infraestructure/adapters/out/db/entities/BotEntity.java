@@ -1,13 +1,9 @@
 package com.example.gironetaServer.infraestructure.adapters.out.db.entities;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.HashSet;
+import java.util.Set;
 
-@Getter
-@Builder
-@Setter
 @Entity
 @Table(name = "Bot")
 public class BotEntity {
@@ -19,14 +15,14 @@ public class BotEntity {
     @Column(nullable = false, length = 100)
     private String name;
 
-    //prompt
+    // prompt
     @Column(nullable = false, length = 255)
     private String descripcion;
 
     @Column(nullable = false, length = 255)
     private String urlImagen;
 
-    //url de datos
+    // url de datos
     @Column(nullable = false, length = 255)
     private String endpoint;
 
@@ -34,8 +30,10 @@ public class BotEntity {
     @JoinColumn(name = "usuario_id", nullable = true)
     private UserEntity usuario; // Relación con Usuario
 
-    public BotEntity (){
+    @ManyToMany(mappedBy = "bots")
+    private Set<LigaEntity> ligas = new HashSet<>();
 
+    public BotEntity() {
     }
 
     public BotEntity(Long id, String name, String descripcion, String urlImagen, String endpoint) {
@@ -55,4 +53,61 @@ public class BotEntity {
         this.usuario = usuario;
     }
 
+    // Métodos getter
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public UserEntity getUsuario() {
+        return usuario;
+    }
+
+    public Set<LigaEntity> getLigas() {
+        return ligas;
+    }
+
+    // Métodos setter
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
+    }
+
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    public void setUsuario(UserEntity usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setLigas(Set<LigaEntity> ligas) {
+        this.ligas = ligas;
+    }
 }
