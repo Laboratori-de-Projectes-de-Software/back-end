@@ -7,16 +7,15 @@ import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.adondeband.back_end_adonde_band.api.ApiApiDelegate;
 
 import java.util.ArrayList;
 
-@RequestMapping("/auth")
-@RestController
-public class AuthenticationController {
+@Component
+public class AuthApiDelegate implements ApiApiDelegate {
     private final JwtService jwtService;
 
     private final AuthenticationService authenticationService;
@@ -24,7 +23,7 @@ public class AuthenticationController {
     private final AuthenticationDtoMapper authenticationDtoMapper;
 
     @Autowired
-    public AuthenticationController(JwtService jwtService, AuthenticationImpl authenticationService, AuthenticationDtoMapper authenticationDtoMapper) {
+    public AuthApiDelegate(JwtService jwtService, AuthenticationImpl authenticationService, AuthenticationDtoMapper authenticationDtoMapper) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
         this.authenticationDtoMapper = authenticationDtoMapper;
