@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -25,7 +27,6 @@ public class TestBotService {
         Bot botSaved = botService.crearBot(bot);
 
         // Assert
-
         assertEquals(bot.getNombre().value(), botSaved.getNombre().value());
         assertEquals(bot.getCualidad(), botSaved.getCualidad());
     }
@@ -43,7 +44,30 @@ public class TestBotService {
         // Assert
         assertEquals(bot.getNombre().value(), botFound.getNombre().value());
         assertEquals(bot.getCualidad(), botFound.getCualidad());
+    }
 
+    @Test
+    @Transactional
+    public void testGetAllBots() {
+        // Arrange
+        for (int i = 1; i <= 5; i++) {
+            Bot bot = new Bot(new BotId("Bot " + i), "Cualidad " + i);
+            botService.crearBot(bot);
+        }
+
+        // Act
+        List<Bot> botsFound = botService.obtenerTodosLosBots();
+
+        // Assert
+        assert(botsFound.size() == 5);
+        assertEquals("Bot 1", botsFound.getFirst().getNombre().value());
+        assertEquals("Cualidad 1", botsFound.getFirst().getCualidad());
+    }
+
+    @Test
+    @Transactional
+    public void testGetBotsByUser() {
+        //TODO
     }
 
 

@@ -17,7 +17,6 @@ public class TestBotMapper {
     @Autowired
     private BotJpaMapper botJpaMapper;
 
-
     @Test
     public void comprobarBotEntityToBotSencillo() {
         // Arrange

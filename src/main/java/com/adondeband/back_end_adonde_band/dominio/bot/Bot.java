@@ -26,6 +26,8 @@ public class Bot {
 
     private String cualidad;
 
+    private String endpoint;
+
     private UsuarioId usuario;
 
     private Imagen imagen;

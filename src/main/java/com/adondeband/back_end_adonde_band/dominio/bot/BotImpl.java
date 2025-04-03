@@ -1,5 +1,6 @@
 package com.adondeband.back_end_adonde_band.dominio.bot;
 
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -7,7 +8,6 @@ import java.util.List;
 
 @Service
 public class BotImpl implements BotService {
-
 
     private final BotPort botPort;
 
@@ -27,5 +27,15 @@ public class BotImpl implements BotService {
     @Override
     public List<Bot> obtenerBotPorNombre(String nombre) {
         return botPort.findByNombre(nombre);
+    }
+
+    @Override
+    public List<Bot> obtenerTodosLosBots() {
+        return botPort.findAll();
+    }
+
+    @Override
+    public List<Bot> obtenerBotsPorUsuario(UsuarioId userId) {
+        return botPort.findBotsUsuario(userId);
     }
 }

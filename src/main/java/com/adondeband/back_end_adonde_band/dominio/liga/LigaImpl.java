@@ -1,11 +1,14 @@
 package com.adondeband.back_end_adonde_band.dominio.liga;
 
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class LigaImpl implements LigaService {
 
-    private LigaPort ligaPort;
+    private final LigaPort ligaPort;
 
     public LigaImpl(LigaPort ligaPort) {
         this.ligaPort = ligaPort;
@@ -14,5 +17,20 @@ public class LigaImpl implements LigaService {
     @Override
     public Liga crearLiga(Liga liga) {
         return ligaPort.save(liga);
+    }
+
+    @Override
+    public List<Liga> obtenerLigaPorId(LigaId id) {
+        return ligaPort.findById(id);
+    }
+
+    @Override
+    public List<Liga> obtenerTodasLasLigas() {
+        return ligaPort.findAll();
+    }
+
+    @Override
+    public List<Liga> obtenerLigasPorUsuario(UsuarioId userId) {
+        return ligaPort.findLigasUsuario(userId);
     }
 }

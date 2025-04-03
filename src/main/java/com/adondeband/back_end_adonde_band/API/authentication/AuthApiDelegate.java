@@ -29,9 +29,9 @@ public class AuthApiDelegate implements ApiApiDelegate {
         this.authenticationDtoMapper = authenticationDtoMapper;
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/register")
     public ResponseEntity<Usuario> register(@RequestBody RegisterUserDto registerUserDto) {
-        Usuario registeredUser = authenticationService.signup( authenticationDtoMapper.registerUserDtotoDomain(registerUserDto) );
+        Usuario registeredUser = authenticationService.signup(authenticationDtoMapper.registerUserDtotoDomain(registerUserDto) );
 
         return ResponseEntity.ok(registeredUser);
     }
