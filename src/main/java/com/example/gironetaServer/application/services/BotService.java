@@ -40,7 +40,7 @@ public class BotService implements CreateBot, GetBot {
 
     @Override
     public List<Bot> getBotsByOwner(Long id) {
-        return null;
+        return botRepository.getBotsByOwner(id);
     }
 
 }

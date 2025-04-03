@@ -53,4 +53,12 @@ public class BotDatabaseRepository implements BotRepository {
                 .map(botMapper::toDomain)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Bot> getBotsByOwner(Long userId) {
+        return botJpaRepository.findAll().stream()
+                .filter(botEntity -> botEntity.getUsuario() != null && botEntity.getUsuario().getId().equals(userId))
+                .map(botMapper::toDomain)
+                .collect(Collectors.toList());
+    }
 }

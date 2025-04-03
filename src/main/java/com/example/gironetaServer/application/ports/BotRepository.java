@@ -12,4 +12,5 @@ public interface BotRepository {
     Bot save(Bot bot);
     void deleteById(Long id);
     List<Bot> getAllBots();
+    List<Bot> getBotsByOwner(Long id);
 }
