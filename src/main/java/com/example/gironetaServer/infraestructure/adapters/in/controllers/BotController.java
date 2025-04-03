@@ -64,4 +64,11 @@ public class BotController {
         return ResponseEntity.ok(botSummaryDTOs);
     }
 
+    @PutMapping("/bot/{botId}")
+    public ResponseEntity<Void> updateBot(@PathVariable Long botId, @RequestBody BotDto botDto) {
+        Bot bot = BotMapper.toAppObject(botDto);
+        botService.updateBot(botId,bot);
+        return ResponseEntity.noContent().build(); // 204 No Content
+    }
+
 }
