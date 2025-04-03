@@ -39,6 +39,7 @@ public class PartidaJpaAdapter implements CreatePartidaPort, FindLigaPartidaPort
         );
     }
 
+    //Encontrar las partidas de una liga
     @Override
     public List<Partida> findLigaPartida(Integer idliga) {
         return partidaJpaRepository.findByLiga_LigaId(idliga)

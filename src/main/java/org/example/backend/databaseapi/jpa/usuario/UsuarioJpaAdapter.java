@@ -45,7 +45,6 @@ public class UsuarioJpaAdapter implements CreateUsuarioPort, FindUsuarioPort, De
                     .email(usuario.getEmail().value())
                     .nombre(usuario.getNombre())
                     .imagen(usuario.getImagen())
-                    .password(usuario.getPassword())
                     .build();
             entity.setPassword(passwordService.encryptPassword(usuario.getPassword()));
             return Optional.of(usuarioJpaMapper.toDomain(usuarioJpaRepository.save(entity)));
@@ -59,8 +58,8 @@ public class UsuarioJpaAdapter implements CreateUsuarioPort, FindUsuarioPort, De
     }
 
     @Override
-    public Optional<Usuario> findUsuario(Integer id_usuario) {
-        return usuarioJpaRepository.findById(id_usuario).map(usuarioJpaMapper::toDomain);
+    public Optional<Usuario> findUsuario(Integer usuarioId) {
+        return usuarioJpaRepository.findById(usuarioId).map(usuarioJpaMapper::toDomain);
     }
 
     @Override

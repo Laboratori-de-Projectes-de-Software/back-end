@@ -21,7 +21,7 @@ public class BotJpaEntity{
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer idBot;
 
-    @ManyToMany(mappedBy = "botsLiga")
+    @ManyToMany(mappedBy = "botsLiga",fetch = FetchType.EAGER)
     private List<LigaJpaEntity> ligasBot;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -23,7 +23,7 @@ public class LigaJpaEntity {
     @Column(name="id_liga")
     private Integer ligaId;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "bot_liga",
             joinColumns = @JoinColumn(name = "id_liga"),
