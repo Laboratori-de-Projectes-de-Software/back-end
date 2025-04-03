@@ -44,6 +44,7 @@ public class BotMapper {
         botDto.setDescripcion(bot.getDescripcion());
         botDto.setUrlImagen(bot.getUrlImagen());
         botDto.setEndpoint(bot.getEndpoint());
+        botDto.setUsuario_correo(bot.getUsuario_correo());
         return botDto;
     }
 
@@ -54,6 +55,7 @@ public class BotMapper {
         bot.setDescripcion(botDto.getDescripcion());
         bot.setUrlImagen(botDto.getUrlImagen());
         bot.setEndpoint(botDto.getEndpoint());
+        bot.setUsuario_correo(botDto.getUsuario_correo());
         return bot;
     }
 }
