@@ -31,8 +31,10 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
     public Liga createLiga(Liga liga) {
         LigaJpaEntity ligaJpa=LigaJpaEntity.builder()
                 .nombre(liga.getNombre())
-                .usuario(usuarioJpaAdapter.getUser(liga.getLigaId().value())
+                .usuario(usuarioJpaAdapter.getUser(liga.getUsuario().value())
                         .orElseThrow())
+                /*
+                TODO:ES POSIBLE QUE SE TENGA QUE CREAR UNA FUNCION PARA ESTO AL SER UN ENDPOINT DIFERENTE
                 .botsLiga(
                         liga.getBotsLiga()
                                 .stream()
@@ -43,6 +45,7 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
                                 .toList()
 
                 )
+                 */
                 .build();
         return ligaJpaMapper.toDomain(
                 ligaJpaRepository.save(
