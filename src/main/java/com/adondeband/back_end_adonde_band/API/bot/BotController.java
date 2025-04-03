@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bot")
+@RequestMapping("api/v0/bot")
 public class BotController {
 
     private final BotService botService;
@@ -24,12 +24,20 @@ public class BotController {
         this.botMapper = botDtoMapper;
     }
 
-    @GetMapping("/hola")
-    public String hola() {
-        return "Hello, World!";
+    @GetMapping
+    public ResponseEntity<List<BotDTO>> listarBots(@RequestParam(value = "owner", required = false) String userId) {
+        //TODO
+
+        /*
+        List<Bot> bots = (userId != null) ? botService.obtenerBotsPorUsuario(userId) : botService.obtenerTodosLosBots();
+        List<BotDTO> botsDTO = bots.stream().map(botMapper::toDTO).toList();
+        return ResponseEntity.ok(botsDTO);
+         */
+
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null);
     }
 
-    @PostMapping("/crearbot")
+    @PostMapping
     public ResponseEntity<BotDTO> crearBot(@RequestBody BotDTO botDTO) {
 
         Bot bot = botMapper.toDomain(botDTO);
@@ -37,10 +45,10 @@ public class BotController {
         return ResponseEntity.status(HttpStatus.CREATED).body(botMapper.toDTO(nuevoBot));
     }
 
-    @GetMapping("/{nombre}")
-    public ResponseEntity<List<BotDTO>> obtenerBot(@PathVariable String nombre) {
+    @GetMapping("/{botId}")
+    public ResponseEntity<List<BotDTO>> obtenerBot(@PathVariable String botId) {
         // Obtener la lista de Bots desde el servicio
-        List<Bot> bots = botService.obtenerBotPorNombre(nombre);
+        List<Bot> bots = botService.obtenerBotPorNombre(botId);
 
         // Convertir manualmente cada Bot a BotDTO
         List<BotDTO> botsDTO = new ArrayList<>();
@@ -49,6 +57,6 @@ public class BotController {
         }
 
         // Devolver la lista de BotDTO en la respuesta HTTP
-        return ResponseEntity.ok(botsDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(botsDTO);
     }
 }

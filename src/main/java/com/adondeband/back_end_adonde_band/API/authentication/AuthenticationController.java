@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 
-@RequestMapping("/auth")
+@RequestMapping("/api/v0/auth")
 @RestController
 public class AuthenticationController {
     private final JwtService jwtService;
@@ -30,9 +30,9 @@ public class AuthenticationController {
         this.authenticationDtoMapper = authenticationDtoMapper;
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/register")
     public ResponseEntity<Usuario> register(@RequestBody RegisterUserDto registerUserDto) {
-        Usuario registeredUser = authenticationService.signup( authenticationDtoMapper.registerUserDtotoDomain(registerUserDto) );
+        Usuario registeredUser = authenticationService.signup(authenticationDtoMapper.registerUserDtotoDomain(registerUserDto) );
 
         return ResponseEntity.ok(registeredUser);
     }
