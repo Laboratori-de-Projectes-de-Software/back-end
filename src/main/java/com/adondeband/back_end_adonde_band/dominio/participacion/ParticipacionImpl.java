@@ -5,9 +5,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ParticipacionImpl implements ParticipacionService {
 
-    private ParticipacionPort participacionPort;
+    private final ParticipacionPort participacionPort;
 
     public Participacion insertarParticipacion(Participacion participacion) {
         return participacionPort.save(participacion);
+    }
+
+    public ParticipacionImpl(ParticipacionPort participacionPort) {
+        this.participacionPort = participacionPort;
     }
 }

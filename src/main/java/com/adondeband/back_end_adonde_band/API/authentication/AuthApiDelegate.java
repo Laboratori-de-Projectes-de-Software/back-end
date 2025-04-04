@@ -8,21 +8,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.adondeband.back_end_adonde_band.api.ApiApiDelegate;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 
-@Component
-public class AuthApiDelegate implements ApiApiDelegate {
+//TODO ESTO NO VA; NO SE COMO COÑO FUNCIONA EL APIAPIDELEGATE
+// SI ALGUIEN QUIERO TESTEAR HAY QUE CAMBIAR DE VUELTA
+
+//@Controller
+@RestController
+@RequestMapping("api/v0/auth")
+public class AuthApiDelegate
+        //implements ApiApiDelegate
+{
     private final JwtService jwtService;
 
     private final AuthenticationService authenticationService;
 
     private final AuthenticationDtoMapper authenticationDtoMapper;
 
-    @Autowired
+
     public AuthApiDelegate(JwtService jwtService, AuthenticationImpl authenticationService, AuthenticationDtoMapper authenticationDtoMapper) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;

@@ -3,6 +3,9 @@ package com.adondeband.back_end_adonde_band.dominio.liga;
 import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
+import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
+import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionService;
+import com.adondeband.back_end_adonde_band.dominio.bot.BotService;
 import jakarta.transaction.Transactional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +25,10 @@ public class TestLigaService {
 
     @Autowired
     private LigaService ligaService;
+    @Autowired
+    private BotService botService;
+    @Autowired
+    private ParticipacionService participacionService;
 
     @Test
     @Transactional
@@ -100,5 +107,37 @@ public class TestLigaService {
     @Transactional
     public void testGetLigasByUser() {
         //TODO
+    }
+
+    @Test
+    @Transactional
+    public void testAddBotLiga() {
+        // Arrange
+        Liga liga = new Liga();
+        liga.setId(new LigaId(1L));
+        liga.setNombre("La liga EA Sports");
+        liga.setEstado(ESTADO.PENDIENTE);
+        liga.setFechaInicio(LocalDateTime.now());
+        liga.setFechaFin(LocalDateTime.now());
+        liga.setImagen(null);
+        liga.setParticipaciones(new ArrayList<>());
+
+        // save league
+        Liga laliga = ligaService.crearLiga(liga);
+
+        assertNotNull("El id de la liga no debe ser null", laliga.getId());
+
+        Bot bot = new Bot();
+        bot.setNombre(new BotId("Bot 1"));
+
+        Bot bot1 = botService.crearBot(bot);
+
+        assertNotNull("El id del bot no debe ser null", bot1.getNombre());   // Act
+        Participacion pGuardada = participacionService.insertarParticipacion(new Participacion(bot1.getNombre().value(), laliga.getId().value()));
+
+        assertEquals(pGuardada.getBot(), bot1.getNombre());
+
+
+
     }
 }

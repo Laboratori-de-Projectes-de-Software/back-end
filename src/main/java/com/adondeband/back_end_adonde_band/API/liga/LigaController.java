@@ -6,6 +6,8 @@ import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaImpl;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaService;
+import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
+import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionService;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,11 +25,13 @@ public class LigaController {
 
     private final LigaService ligaService;
     private final LigaDtoMapper ligaDtoMapper;
+    private final ParticipacionService participacionService;
 
     @Autowired
-    public LigaController(LigaImpl ligaService, LigaDtoMapper ligaDtoMapper) {
+    public LigaController(LigaImpl ligaService, LigaDtoMapper ligaDtoMapper, ParticipacionService participacionService) {
         this.ligaService = ligaService;
         this.ligaDtoMapper = ligaDtoMapper;
+        this.participacionService = participacionService;
     }
 
     @GetMapping
@@ -92,8 +96,11 @@ public class LigaController {
 
     @PostMapping("/{leagueId}/bot")
     public ResponseEntity<?> addBotToLiga(@PathVariable String leagueId, @RequestBody String botId) {
-        //TODO
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null);
+        Participacion p = participacionService.insertarParticipacion(new Participacion(botId, Long.parseLong(leagueId)));
+        if (p != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al añadir el bot a la liga");
     }
 
     @GetMapping("/{leagueId}/leaderboard")
