@@ -52,9 +52,9 @@ public class LeagueJpaAdapter implements LeaguePortDB {
     }
 
     @Override
-    public League inscribeBot(Integer league_id, String bot_name) {
+    public League inscribeBot(Integer league_id, Integer bot_id) {
         LeagueEntity entity = leagueJpaRepository.findById(league_id).orElse(null);
-        BotEntity botEntity = botJpaRepository.findByName(bot_name).orElse(null);
+        BotEntity botEntity = botJpaRepository.findById(bot_id).orElse(null);
         if (entity == null) {
             return null;
         }
@@ -67,7 +67,7 @@ public class LeagueJpaAdapter implements LeaguePortDB {
     }
 
     @Override
-    public void deleteLeague(Long id) {
+    public void deleteLeague(Integer id) {
         leagueJpaRepository.deleteById(id);
     }
 
@@ -87,6 +87,13 @@ public class LeagueJpaAdapter implements LeaguePortDB {
     @Override
     public List<League> getLeaguesByUser(String username) {
         return leagueJpaRepository.findLeaguesByUser(username).stream()
+                .map(leagueMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public List<League> getLeaguesByBotId(Integer botId) {
+        return leagueJpaRepository.findLeaguesByBotId(botId).stream()
                 .map(leagueMapper::toDomain)
                 .toList();
     }

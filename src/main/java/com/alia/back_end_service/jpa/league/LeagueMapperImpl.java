@@ -15,12 +15,6 @@ import java.util.stream.Collectors;
 @Component
 public class LeagueMapperImpl implements LeagueMapper {
 
-    private final BotMapper botMapper;
-
-    public LeagueMapperImpl(BotMapper botMapper) {
-        this.botMapper = botMapper;
-    }
-
     @Override
     public League toDomain(LeagueEntity entity) {
         if (entity == null) return null;
@@ -34,13 +28,13 @@ public class LeagueMapperImpl implements LeagueMapper {
         league.setNumber_match(entity.getNumber_match());
         league.setState(entity.getState());
 
-
         if (entity.getBots() != null) {
-            List<String> botIds = entity.getBots().stream()
-                    .map(BotEntity::getName)
+            List<Integer> botIds = entity.getBots().stream()
+                    .map(BotEntity::getId)
                     .collect(Collectors.toList());
             league.setBotIds(botIds);
         } else {
+
             league.setBotIds(Collections.emptyList());
         }
 

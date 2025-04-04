@@ -42,7 +42,10 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
 
     @Override
     public ResponseEntity<Void> leagueLeagueIdPut(Integer leagueId, LeagueDTO leagueDTO) {
-        return LeagueApiDelegate.super.leagueLeagueIdPut(leagueId, leagueDTO);
+        League league = leagueMapperAPI.toDomainCreate(leagueDTO);
+        league.setId(leagueId);
+        leagueUpdatePortAPI.updateLeague(league);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 
@@ -81,6 +84,12 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
     @Override
     public ResponseEntity<Void> leaguePost(LeagueDTO leagueDTO) {
         leagueCreatePortAPI.createLeague(leagueMapperAPI.toDomainCreate(leagueDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @Override
+    public ResponseEntity<Void> leagueLeagueIdBotPost(Integer leagueId, LeagueLeagueIdBotPostRequest leagueLeagueIdBotPostRequest) {
+        leagueInscribeBotPortAPI.inscribe(leagueId, leagueLeagueIdBotPostRequest.getBotId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

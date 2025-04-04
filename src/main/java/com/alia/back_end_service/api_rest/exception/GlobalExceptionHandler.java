@@ -1,6 +1,7 @@
 package com.alia.back_end_service.api_rest.exception;
 
 import com.alia.back_end_service.domain.bot.exceptions.BotAlreadyExistsException;
+import com.alia.back_end_service.domain.league.exceptions.BotAlreadyRegisteredInALeague;
 import com.alia.back_end_service.domain.user.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,5 +46,10 @@ public class GlobalExceptionHandler {
         response.put("error", error);
         response.put("message", message);
         return ResponseEntity.status(status).body(response);
+    }
+
+    @ExceptionHandler(BotAlreadyRegisteredInALeague.class)
+    public ResponseEntity<Map<String, String>> handleBotAlreadyRegisteredInLeague(BotAlreadyRegisteredInALeague ex) {
+        return buildErrorResponse("BOT_ALREADY_REGISTERED_IN_A_LEAGUE", ex.getMessage(), HttpStatus.CONFLICT);
     }
 }

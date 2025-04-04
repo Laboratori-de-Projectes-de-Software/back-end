@@ -12,13 +12,15 @@ public interface LeaguePortDB {
 
     League getLeague(Integer id);
 
-    League inscribeBot(Integer league_id, String bot_name);
+    League inscribeBot(Integer league_id, Integer bot_id);
     League updateLeague(League league);
     List<Bot> getAllLeagueBots(Integer leagueId);
 
-    void deleteLeague(Long id); // Para eliminar
+    void deleteLeague(Integer id); // Para eliminar
 
     List<League> getAllLeagues();
 
     List<League> getLeaguesByUser(String username);
+
+    List<League> getLeaguesByBotId(Integer botId);
 }

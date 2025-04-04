@@ -42,7 +42,7 @@ public class LeagueEntity {
     @JoinTable(
             name = "league_bots",
             joinColumns = @JoinColumn(name = "league_id"),
-            inverseJoinColumns = @JoinColumn(name = "bot_name")
+            inverseJoinColumns = @JoinColumn(name = "bot_id")
     )
     private List<BotEntity> bots = new ArrayList<>();
 
