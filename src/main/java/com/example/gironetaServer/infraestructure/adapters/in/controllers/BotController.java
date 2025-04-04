@@ -12,6 +12,7 @@ import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.Bo
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserResponse;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers.BotSummaryMapper;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers.UserMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class BotController {
     public ResponseEntity<BotDto> createBot(@RequestBody BotDto botDto) {
         Bot bot = BotMapper.toAppObject(botDto);
         Bot savedBot = botService.createBot(bot);
-        return ResponseEntity.ok(BotMapper.toBotDto(savedBot));
+        return new ResponseEntity<>(BotMapper.toBotDto(savedBot), HttpStatus.CREATED);
     }
 
     @GetMapping("/bot/{botId}")
@@ -53,8 +54,14 @@ public class BotController {
 
         if (userId != null) {
             bots = botService.getBotsByOwner(userId);
+            if (bots.isEmpty()) {
+                return ResponseEntity.notFound().build(); // Devuelve 404 si no se encuentran bots para el usuario
+            }
         } else {
             bots = botService.getAllBots();
+            if (bots.isEmpty()) {
+                return ResponseEntity.notFound().build(); // Devuelve 404 si no hay ningún bot en la base de datos
+            }
         }
 
         List<BotSummaryDto> botSummaryDTOs = bots.stream()
@@ -63,6 +70,8 @@ public class BotController {
 
         return ResponseEntity.ok(botSummaryDTOs);
     }
+
+
 
     @PutMapping("/bot/{botId}")
     public ResponseEntity<Void> updateBot(@PathVariable Long botId, @RequestBody BotDto botDto) {

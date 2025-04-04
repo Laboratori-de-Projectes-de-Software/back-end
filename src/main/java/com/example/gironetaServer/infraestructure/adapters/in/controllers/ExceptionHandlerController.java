@@ -1,6 +1,7 @@
 package com.example.gironetaServer.infraestructure.adapters.in.controllers;
 
 import com.example.gironetaServer.domain.exceptions.*;
+import com.example.gironetaServer.domain.exceptions.IllegalArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -90,5 +91,13 @@ public class ExceptionHandlerController {
         logger.error("Error inesperado: ", ex);
 
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", "Bad Request");
+        response.put("message", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
