@@ -1,5 +1,9 @@
 package jaumesitos.backend.demo.domain;
 
+import lombok.*;
+
+@Getter
+@Setter
 public class User {
     private String id;
     private String name;

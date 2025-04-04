@@ -1,6 +1,10 @@
 package jaumesitos.backend.demo.infrastructure.res.api;
 
 
+import jaumesitos.backend.demo.domain.User;
+import org.springframework.web.bind.annotation.RequestBody;
+import jaumesitos.backend.demo.application.service.AuthService;
+import jaumesitos.backend.demo.infrastructure.res.dto.UserDTORegister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 import jaumesitos.backend.demo.infrastructure.res.mapper.UserDTOMapper;
-import jaumesitos.backend.demo.application.service.UserService;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,7 +23,7 @@ import jaumesitos.backend.demo.application.service.UserService;
 public class AuthController {
 
     private final UserDTOMapper mapper; //convertidor de DTO a classe de lògica de negoci
-    private final UserService service; //adaptador
+    private final AuthService service; //adaptador
 
     //CODIS ERROR:
     //HttpStatus.OK -> 200
@@ -41,5 +44,18 @@ public class AuthController {
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
         return new ResponseEntity<>("Endpoint /api/users/getallUsers", HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/auth/register")
+    public ResponseEntity<?> register(@RequestBody UserDTORegister dto) {
+        try {
+            User user = mapper.toDomain(dto);
+            service.register(user);
+            return ResponseEntity.ok("User created");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error");
+        }
     }
 }

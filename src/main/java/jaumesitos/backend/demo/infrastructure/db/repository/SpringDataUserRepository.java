@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface SpringDataUserRepository {
+public interface SpringDataUserRepository extends JpaRepository<UserDBO, String> {
     Optional<UserDBO> findByEmail(String email);
 }
