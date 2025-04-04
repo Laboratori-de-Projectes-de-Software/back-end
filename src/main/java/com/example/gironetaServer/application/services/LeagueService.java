@@ -13,6 +13,7 @@ import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LigaE
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.BotJpaRepository;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.LigaJpaRepository;
+import com.example.gironetaServer.infraestructure.adapters.out.db.repository.UserJpaRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,12 +31,14 @@ public class LeagueService implements CreateLeague {
     private final LeagueRepository leagueRepository;
     private final BotJpaRepository botJpaRepository;
     private final LigaJpaRepository ligaJpaRepository;
+    private final UserJpaRepository userJpaRepository;
 
     public LeagueService(LeagueRepository leagueRepository, BotJpaRepository botJpaRepository,
-            LigaJpaRepository ligaJpaRepository) {
+            LigaJpaRepository ligaJpaRepository, UserJpaRepository userJpaRepository) {
         this.leagueRepository = leagueRepository;
         this.botJpaRepository = botJpaRepository;
         this.ligaJpaRepository = ligaJpaRepository;
+        this.userJpaRepository = userJpaRepository;
     }
 
     @Override
@@ -176,6 +179,10 @@ public class LeagueService implements CreateLeague {
         }
 
         if (ownerId != null) {
+            // Verificar si el usuario existe
+            if (!userJpaRepository.existsById(ownerId)) {
+                throw new ResourceNotFoundException("Usuario no encontrado con id: " + ownerId);
+            }
             return leagueRepository.findByUserId(ownerId);
         } else {
             return leagueRepository.findAll();
