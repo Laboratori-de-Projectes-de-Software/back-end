@@ -6,7 +6,7 @@ import uib.lab.api.application.usecase.GetAllUsersUseCase;
 import uib.lab.api.application.usecase.UpdateUserUseCase;
 import uib.lab.api.application.dto.user.UserUpdateRequest;
 import uib.lab.api.domain.entity.User;
-import uib.lab.api.infraestructura.JpaRepositories.UserJpaRepository;
+import uib.lab.api.infraestructura.jpaRepositories.UserJpaRepository;
 import uib.lab.api.application.dto.user.UserResponse;
 import uib.lab.api.infraestructura.util.ApiMessage;
 import uib.lab.api.infraestructura.util.message.MessageCode;

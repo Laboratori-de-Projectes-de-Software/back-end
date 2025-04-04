@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         JwtUsernamePasswordAuthenticationFilter jwtAuthFilter =
                 new JwtUsernamePasswordAuthenticationFilter(objectMapper, apiHttpResponse, authenticationManager());
 
-        jwtAuthFilter.setFilterProcessesUrl("/api/login");
+        jwtAuthFilter.setFilterProcessesUrl("/api/v0/auth/login");
         http
                 .cors().and()
                 .csrf().disable()

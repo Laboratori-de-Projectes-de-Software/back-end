@@ -3,7 +3,7 @@ package uib.lab.api.application.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uib.lab.api.domain.entity.League;
-import uib.lab.api.infraestructura.JpaRepositories.LeagueJpaRepository;
+import uib.lab.api.infraestructura.jpaRepositories.LeagueJpaRepository;
 
 @Service
 @RequiredArgsConstructor

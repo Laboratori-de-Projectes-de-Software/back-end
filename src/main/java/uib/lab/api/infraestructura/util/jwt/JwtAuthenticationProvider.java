@@ -1,6 +1,6 @@
 package uib.lab.api.infraestructura.util.jwt;
 
-import uib.lab.api.infraestructura.JpaRepositories.UserJpaRepository;
+import uib.lab.api.infraestructura.jpaRepositories.UserJpaRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;

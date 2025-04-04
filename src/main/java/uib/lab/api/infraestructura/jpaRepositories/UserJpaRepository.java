@@ -1,4 +1,4 @@
-package uib.lab.api.infraestructura.JpaRepositories;
+package uib.lab.api.infraestructura.jpaRepositories;
 
 import java.util.Optional;
 

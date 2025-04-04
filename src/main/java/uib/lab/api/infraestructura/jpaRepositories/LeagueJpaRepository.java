@@ -1,4 +1,4 @@
-package uib.lab.api.infraestructura.JpaRepositories;
+package uib.lab.api.infraestructura.jpaRepositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/ligas")
+@RequestMapping("/api/v0/league")
 @PreAuthorize("isAuthenticated()")
 public class LeagueController {
 

@@ -19,7 +19,7 @@ import java.util.Locale;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user")
+@RequestMapping("/api/v0/user")
 @PreAuthorize("isAuthenticated()")
 public class UserController {
     private final UserService userService;

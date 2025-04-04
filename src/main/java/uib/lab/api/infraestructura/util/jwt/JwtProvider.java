@@ -1,7 +1,7 @@
 package uib.lab.api.infraestructura.util.jwt;
 
 import uib.lab.api.domain.entity.User;
-import uib.lab.api.infraestructura.JpaRepositories.UserJpaRepository;
+import uib.lab.api.infraestructura.jpaRepositories.UserJpaRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;

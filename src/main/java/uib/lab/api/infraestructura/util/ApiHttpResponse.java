@@ -5,7 +5,6 @@ import uib.lab.api.domain.entity.User;
 import uib.lab.api.infraestructura.util.jwt.JwtAuthenticationProvider;
 import uib.lab.api.infraestructura.util.message.MessageCode;
 import uib.lab.api.infraestructura.util.message.MessageConverter;
-import uib.lab.api.util.message.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

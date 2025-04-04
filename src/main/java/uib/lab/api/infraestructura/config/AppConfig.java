@@ -24,7 +24,6 @@ import javax.persistence.EntityManager;
 @ConfigurationProperties(prefix = "cors")
 public class AppConfig implements WebMvcConfigurer {
     private final MessageSource messageSource;
-    private final EntityManager entityManager;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

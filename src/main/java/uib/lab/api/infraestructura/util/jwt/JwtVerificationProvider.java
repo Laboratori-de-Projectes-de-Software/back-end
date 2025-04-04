@@ -1,6 +1,6 @@
 package uib.lab.api.infraestructura.util.jwt;
 
-import uib.lab.api.infraestructura.JpaRepositories.UserJpaRepository;
+import uib.lab.api.infraestructura.jpaRepositories.UserJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

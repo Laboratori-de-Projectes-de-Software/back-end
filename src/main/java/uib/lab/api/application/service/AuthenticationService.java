@@ -2,7 +2,7 @@ package uib.lab.api.application.service;
 
 import uib.lab.api.application.dto.user.UserRegistrationRequest;
 import uib.lab.api.domain.entity.User;
-import uib.lab.api.infraestructura.JpaRepositories.UserJpaRepository;
+import uib.lab.api.infraestructura.jpaRepositories.UserJpaRepository;
 import uib.lab.api.infraestructura.util.ApiMessage;
 import uib.lab.api.infraestructura.util.message.MessageCode;
 import uib.lab.api.infraestructura.util.message.MessageConverter;

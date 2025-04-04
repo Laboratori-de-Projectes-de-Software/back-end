@@ -12,12 +12,12 @@ import java.util.Locale;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v0")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/register")
-    public ResponseEntity<ApiMessage> register(@Valid @RequestBody UserRegistrationRequest user, Locale locale) throws MessagingException {
+    @PostMapping("/auth/register")
+    public ResponseEntity<ApiMessage> register(@Valid @RequestBody UserRegistrationRequest user, Locale locale) {
         var message = authenticationService.register(user, locale);
         return ResponseEntity.status(message.getStatus()).body(message);
     }

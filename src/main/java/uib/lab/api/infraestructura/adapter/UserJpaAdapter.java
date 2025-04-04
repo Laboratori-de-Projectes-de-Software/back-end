@@ -5,7 +5,7 @@ import uib.lab.api.domain.UserDomain;
 import uib.lab.api.application.port.UserPort;
 import uib.lab.api.domain.entity.User;
 import uib.lab.api.application.mapper.UserMapper;
-import uib.lab.api.infraestructura.JpaRepositories.UserJpaRepository;
+import uib.lab.api.infraestructura.jpaRepositories.UserJpaRepository;
 
 import java.util.Optional;
 

@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uib.lab.api.domain.entity.Bot;
 import uib.lab.api.domain.entity.User;
-import uib.lab.api.infraestructura.JpaRepositories.BotJpaRepository;
-import uib.lab.api.infraestructura.JpaRepositories.UserJpaRepository;
+import uib.lab.api.infraestructura.jpaRepositories.BotJpaRepository;
+import uib.lab.api.infraestructura.jpaRepositories.UserJpaRepository;
 
 import java.util.List;
 
