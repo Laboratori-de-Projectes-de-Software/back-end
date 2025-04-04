@@ -28,10 +28,10 @@ public class LigaDatabaseRepository implements LeagueRepository {
     }
 
     @Override
-    public List<League> findByUserId(String userId) {
-        return leagueJpaRepository.findByUsuarioEmail(userId)
+    public List<League> findByUserId(Long userId) {
+        return leagueJpaRepository.findByUsuarioId(userId)
                 .stream()
-                .map(leagueMapper::toDomain)
+                .map(ligaEntity -> leagueMapper.toDomain(ligaEntity))
                 .collect(Collectors.toList());
     }
 
