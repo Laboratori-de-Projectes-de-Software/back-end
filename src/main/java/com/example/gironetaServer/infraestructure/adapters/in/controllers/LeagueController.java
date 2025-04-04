@@ -22,9 +22,11 @@ import java.util.stream.Collectors;
 public class LeagueController {
 
     private final LeagueService leagueService;
+    private final LigaMapper ligaMapper;
 
-    public LeagueController(LeagueService leagueService) {
+    public LeagueController(LeagueService leagueService, LigaMapper ligaMapper) {
         this.leagueService = leagueService;
+        this.ligaMapper = ligaMapper;
     }
 
     @PostMapping("/league")
@@ -32,9 +34,17 @@ public class LeagueController {
         try {
             League league = LigaMapper.toAppObject(leagueDto);
             League savedLeague = leagueService.createLeague(league);
-            return ResponseEntity.status(HttpStatus.CREATED).body(LigaMapper.toLeagueDto(savedLeague));
+            return ResponseEntity.status(HttpStatus.CREATED).body(ligaMapper.toLeagueDto(savedLeague));
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (TimeoutException e) {
+            return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).build();
         } catch (ConflictException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -42,19 +52,28 @@ public class LeagueController {
 
     @GetMapping("/league")
     public ResponseEntity<List<LigaDto>> getAllLeagues(@RequestParam(required = false) Long owner) {
-        List<League> leagues = leagueService.getAllLeagues(owner);
-        System.out.println("Leagues: " + leagues);
-        List<LigaDto> leagueDtos = leagues.stream()
-                .map(LigaMapper::toLeagueDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(leagueDtos);
+        try {
+            List<League> leagues = leagueService.getAllLeagues(owner);
+            List<LigaDto> leagueDtos = leagues.stream()
+                    .map(ligaMapper::toLeagueDto)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(leagueDtos);
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (TimeoutException e) {
+            return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/league/{id}")
     public ResponseEntity<LigaDto> getLeagueById(@PathVariable Long id) {
         try {
             League league = leagueService.getLeagueById(id);
-            LigaDto leagueDto = LigaMapper.toLeagueDto(league);
+            LigaDto leagueDto = ligaMapper.toLeagueDto(league);
             return ResponseEntity.ok(leagueDto);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -74,7 +93,7 @@ public class LeagueController {
         try {
             League league = LigaMapper.toAppObject(leagueDto);
             League updatedLeague = leagueService.updateLeague(id, league);
-            LigaDto updatedLeagueDto = LigaMapper.toLeagueDto(updatedLeague);
+            LigaDto updatedLeagueDto = ligaMapper.toLeagueDto(updatedLeague);
             return ResponseEntity.ok(updatedLeagueDto);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
