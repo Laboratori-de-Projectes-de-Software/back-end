@@ -31,7 +31,7 @@ public class League {
 
     private String state;
 
-    private List<String> botIds;
+    private List<Integer> botIds;
 
     private List<Integer> roundIds;
 }

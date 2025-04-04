@@ -365,6 +365,42 @@ paths:
           '500':
             description: Internal Server error
 
+  /league/{leagueId}/bot:
+    post:
+      summary: Register bot to league
+      description: Registre de bot en lliga
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                botId:
+                  type: integer
+                  description: ID del bot a registrar en la liga
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '201':
+          description: Bot registered
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: League or Bot not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+
   /league/{leagueId}/leaderboard:
     get:
       summary: Get classification from a league
@@ -580,7 +616,7 @@ components:
         bots:
           type: array
           items:
-            type: string
+            type: integer
 
     ParticipationDTO:
       type: object
