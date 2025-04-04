@@ -11,16 +11,16 @@ public class BotSummaryDto {
     private Long id;
     private String name;
     private String urlImagen;
-    private String usuario_correo;
+    private Long usuario_id;
 
     public BotSummaryDto(){
 
     }
 
-    public BotSummaryDto(Long id, String name, String urlImagen, String usuario_correo) {
+    public BotSummaryDto(Long id, String name, String urlImagen, Long usuario_id) {
         this.id = id;
         this.name = name;
         this.urlImagen = urlImagen;
-        this.usuario_correo = usuario_correo;
+        this.usuario_id = usuario_id;
     }
 }

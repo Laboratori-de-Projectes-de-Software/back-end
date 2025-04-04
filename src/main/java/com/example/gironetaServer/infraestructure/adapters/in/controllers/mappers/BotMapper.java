@@ -4,6 +4,7 @@ import com.example.gironetaServer.application.ports.UserRepository;
 import com.example.gironetaServer.domain.Bot;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.BotDto;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.BotEntity;
+import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,7 +23,7 @@ public class BotMapper {
         bot.setDescripcion(botEntity.getDescripcion());
         bot.setUrlImagen(botEntity.getUrlImagen());
         bot.setEndpoint(botEntity.getEndpoint());
-        bot.setUsuario_correo(botEntity.getUsuario().getEmail());
+        bot.setUsuario_id(botEntity.getUsuario().getId());
         return bot;
     }
 
@@ -33,7 +34,8 @@ public class BotMapper {
         botEntity.setDescripcion(bot.getDescripcion());
         botEntity.setUrlImagen(bot.getUrlImagen());
         botEntity.setEndpoint(bot.getEndpoint());
-        botEntity.setUsuario(UserMapper.toEntity(userRepository.getUserByEmail(bot.getUsuario_correo())));
+        UserEntity userEntity = UserMapper.toEntity(userRepository.getUserById(bot.getUsuario_id()));
+        botEntity.setUsuario(userEntity);
         return botEntity;
     }
 
@@ -44,7 +46,7 @@ public class BotMapper {
         botDto.setDescripcion(bot.getDescripcion());
         botDto.setUrlImagen(bot.getUrlImagen());
         botDto.setEndpoint(bot.getEndpoint());
-        botDto.setUsuario_correo(bot.getUsuario_correo());
+        botDto.setUsuario_id(bot.getUsuario_id());
         return botDto;
     }
 
@@ -55,7 +57,7 @@ public class BotMapper {
         bot.setDescripcion(botDto.getDescripcion());
         bot.setUrlImagen(botDto.getUrlImagen());
         bot.setEndpoint(botDto.getEndpoint());
-        bot.setUsuario_correo(botDto.getUsuario_correo());
+        bot.setUsuario_id(botDto.getUsuario_id());
         return bot;
     }
 }

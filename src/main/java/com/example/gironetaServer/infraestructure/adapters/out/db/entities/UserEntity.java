@@ -1,3 +1,4 @@
+// UserEntity.java
 package com.example.gironetaServer.infraestructure.adapters.out.db.entities;
 
 import jakarta.persistence.Entity;
@@ -33,10 +34,15 @@ public class UserEntity implements UserDetails {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    //Email es único, así que se considera "UserName"
-    @Override
-    public String getUsername() {
-        return email;
+    // Default constructor
+    public UserEntity() {
+    }
+
+    public UserEntity(Long id, String username, String email, String password) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
     }
 
     // Getters and setters
@@ -46,6 +52,10 @@ public class UserEntity implements UserDetails {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void setUsername(String username) {
@@ -58,11 +68,6 @@ public class UserEntity implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
     }
 
     public String getPassword() {
@@ -98,6 +103,11 @@ public class UserEntity implements UserDetails {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
     }
 
     @Override

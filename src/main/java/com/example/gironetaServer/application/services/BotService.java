@@ -9,6 +9,7 @@ import com.example.gironetaServer.domain.exceptions.ConflictException;
 import com.example.gironetaServer.domain.exceptions.ForbiddenException;
 import com.example.gironetaServer.domain.exceptions.ResourceNotFoundException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
+import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,8 +33,9 @@ public class BotService implements CreateBot, GetBot, UpdateBot {
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new UnauthorizedException("Usuario no autenticado");
         }
-        String usuario = authentication.getName();
-        bot.setUsuario_correo(usuario);
+        UserEntity authenticatedUser = (UserEntity) authentication.getPrincipal();
+        Long userId = authenticatedUser.getId();
+        bot.setUsuario_id(userId);
 
         // Validar los campos obligatorios del bot
         if (bot == null ||
@@ -48,7 +50,7 @@ public class BotService implements CreateBot, GetBot, UpdateBot {
             return botRepository.save(bot);
         } catch (DataIntegrityViolationException e) {
             // Ejemplo: Si el nombre del bot debe ser único por usuario
-            if (e.getMessage().contains("UNIQUE constraint") && e.getMessage().contains("name") && e.getMessage().contains(usuario)) {
+            if (e.getMessage().contains("UNIQUE constraint") && e.getMessage().contains("name") && e.getMessage().contains(userId.toString())) {
                 throw new ConflictException("Ya existe un bot con este nombre para tu usuario.");
             }
             throw new ConflictException("Error al crear el bot: " + e.getMessage());
@@ -136,9 +138,10 @@ public class BotService implements CreateBot, GetBot, UpdateBot {
             if (authentication == null || !authentication.isAuthenticated()) {
                 throw new UnauthorizedException("Usuario no autenticado.");
             }
-            String currentUserEmail = authentication.getName();
+            UserEntity authenticatedUser = (UserEntity) authentication.getPrincipal();
+            Long currentUserId = authenticatedUser.getId();
 
-            if (!existingBot.getUsuario_correo().equals(currentUserEmail)) {
+            if (!existingBot.getUsuario_id().equals(currentUserId)) {
                 throw new ForbiddenException("No tienes permiso para actualizar este bot.");
             }
 
@@ -151,7 +154,7 @@ public class BotService implements CreateBot, GetBot, UpdateBot {
                 botRepository.save(existingBot);
             } catch (DataIntegrityViolationException e) {
                 // Ejemplo: Si el nuevo nombre del bot ya existe para el usuario
-                if (e.getMessage().contains("UNIQUE constraint") && e.getMessage().contains("name") && e.getMessage().contains(currentUserEmail)) {
+                if (e.getMessage().contains("UNIQUE constraint") && e.getMessage().contains("name") && e.getMessage().contains(currentUserId.toString())) {
                     throw new ConflictException("Ya existe un bot con este nombre para tu usuario.");
                 }
                 throw new ConflictException("Error al actualizar el bot: " + e.getMessage());
