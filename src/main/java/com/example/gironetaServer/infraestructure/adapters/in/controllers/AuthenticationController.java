@@ -39,12 +39,11 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
         UserEntity authenticatedUser = authenticationService.authenticate(loginUserDto);
-        String jwtToken = jwtService.generateToken(authenticatedUser);
+        String jwtToken = jwtService.generateToken(authenticatedUser, authenticatedUser.getId(), authenticatedUser.getEmail());
         LoginResponse loginResponse = new LoginResponse().setToken(jwtToken)
                 .setExpiresIn(jwtService.getExpirationTime());
         return ResponseEntity.ok(loginResponse);
     }
-
     // Clase interna para la respuesta del login
     public static class LoginResponse {
         private String token;

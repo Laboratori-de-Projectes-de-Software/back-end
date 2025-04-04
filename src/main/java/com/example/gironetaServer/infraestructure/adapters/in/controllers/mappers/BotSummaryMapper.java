@@ -14,7 +14,7 @@ public class BotSummaryMapper {
                 bot.getId(),
                 bot.getName(),
                 bot.getUrlImagen(),
-                bot.getUsuario_correo()
+                bot.getUsuario_id()
         );
     }
 }

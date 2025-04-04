@@ -1,15 +1,13 @@
 package com.example.gironetaServer.application.services;
 
-import java.util.ArrayList;
-
+import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
+import com.example.gironetaServer.application.ports.UserRepository;
+import com.example.gironetaServer.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import com.example.gironetaServer.application.ports.UserRepository;
-import com.example.gironetaServer.domain.User;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -24,7 +22,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("Usuario no encontrado: " + username);
         }
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(), user.getPassword(), new ArrayList<>());
+        return new UserEntity(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword()
+        );
     }
 }

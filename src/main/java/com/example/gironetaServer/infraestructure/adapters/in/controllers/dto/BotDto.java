@@ -6,18 +6,18 @@ public class BotDto {
     private String descripcion;
     private String urlImagen;
     private String endpoint;
-    private String usuario_correo;
+    private Long usuario_id;
 
     public BotDto() {
     }
 
-    public BotDto(Long id, String name, String descripcion, String urlImagen, String endpoint, String usuario_correo) {
+    public BotDto(Long id, String name, String descripcion, String urlImagen, String endpoint, Long usuario_id) {
         this.id = id;
         this.name = name;
         this.descripcion = descripcion;
         this.urlImagen = urlImagen;
         this.endpoint = endpoint;
-        this.usuario_correo = usuario_correo;
+        this.usuario_id = usuario_id;
     }
 
     // Métodos getter
@@ -62,11 +62,11 @@ public class BotDto {
         this.endpoint = endpoint;
     }
 
-    public String getUsuario_correo() {
-        return usuario_correo;
+    public Long getUsuario_id() {
+        return usuario_id;
     }
 
-    public void setUsuario_correo(String usuario_correo) {
-        this.usuario_correo = usuario_correo;
+    public void setUsuario_id(Long usuario_id) {
+        this.usuario_id = usuario_id;
     }
 }
