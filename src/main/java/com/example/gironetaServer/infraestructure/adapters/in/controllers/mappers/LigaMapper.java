@@ -5,6 +5,7 @@ import com.example.gironetaServer.domain.League;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LigaDto;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.BotEntity;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LigaEntity;
+import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.BotJpaRepository;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +33,7 @@ public class LigaMapper {
         league.setUrlImagen(ligaEntity.getUrlImagen());
         league.setRounds(ligaEntity.getRounds());
         league.setMatchTime(ligaEntity.getMatchTime());
-        league.setUserId(ligaEntity.getUsuario().getEmail());
+        league.setUserId(ligaEntity.getUsuario().getId());
 
         List<Long> botIds = new ArrayList<>();
         if (ligaEntity.getBots() != null) {
@@ -52,7 +53,8 @@ public class LigaMapper {
         ligaEntity.setUrlImagen(league.getUrlImagen());
         ligaEntity.setRounds(league.getRounds());
         ligaEntity.setMatchTime(league.getMatchTime());
-        ligaEntity.setUsuario(UserMapper.toEntity(userRepository.getUserByEmail(league.getUserId())));
+        UserEntity userEntity = UserMapper.toEntity(userRepository.getUserById(league.getUserId()));
+        ligaEntity.setUsuario(userEntity);
 
         // Inicializamos un conjunto vacío o null - los bots se asociarán después de
         // guardar la liga
@@ -67,6 +69,7 @@ public class LigaMapper {
 
     public static LigaDto toLeagueDto(League league) {
         LigaDto ligaDto = new LigaDto();
+        ligaDto.setId(league.getId());
         ligaDto.setName(league.getName());
         ligaDto.setUrlImagen(league.getUrlImagen());
         ligaDto.setRounds(league.getRounds());

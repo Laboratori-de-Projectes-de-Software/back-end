@@ -10,6 +10,7 @@ import com.example.gironetaServer.domain.exceptions.TimeoutException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.BotEntity;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LigaEntity;
+import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.BotJpaRepository;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.LigaJpaRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -45,8 +46,9 @@ public class LeagueService implements CreateLeague {
             throw new UnauthorizedException("Usuario no autenticado");
         }
 
-        String usuario = authentication.getName();
-        league.setUserId(usuario);
+        UserEntity authenticatedUser = (UserEntity) authentication.getPrincipal();
+        Long userId = authenticatedUser.getId();
+        league.setUserId(userId);
 
         // Guardar la liga primero sin bots
         League savedLeague;
@@ -117,7 +119,8 @@ public class LeagueService implements CreateLeague {
             throw new UnauthorizedException("Usuario no autenticado");
         }
 
-        String userId = authentication.getName();
+        UserEntity authenticatedUser = (UserEntity) authentication.getPrincipal();
+        Long userId = authenticatedUser.getId();
         return leagueRepository.findByUserId(userId);
     }
 
@@ -127,7 +130,8 @@ public class LeagueService implements CreateLeague {
             throw new UnauthorizedException("Usuario no autenticado");
         }
 
-        String userId = authentication.getName();
+        UserEntity authenticatedUser = (UserEntity) authentication.getPrincipal();
+        Long userId = authenticatedUser.getId();
         League league = leagueRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Liga no encontrada con id: " + id));
 
@@ -146,7 +150,8 @@ public class LeagueService implements CreateLeague {
             throw new UnauthorizedException("Usuario no autenticado");
         }
 
-        String userId = authentication.getName();
+        UserEntity authenticatedUser = (UserEntity) authentication.getPrincipal();
+        Long userId = authenticatedUser.getId();
 
         League league = leagueRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Liga no encontrada con id: " + id));

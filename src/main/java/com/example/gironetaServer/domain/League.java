@@ -9,13 +9,13 @@ public class League {
     private Integer rounds;
     private Long matchTime;
     private List<Long> bots;
-    private String userId;
+    private Long userId;
 
     public League() {
     }
 
     public League(Long id, String name, String urlImagen, Integer rounds, Long matchTime, List<Long> bots,
-            String userId) {
+            Long userId) {
         this.id = id;
         this.name = name;
         this.urlImagen = urlImagen;
@@ -50,7 +50,7 @@ public class League {
         return bots;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
@@ -79,7 +79,7 @@ public class League {
         this.bots = bots;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 }

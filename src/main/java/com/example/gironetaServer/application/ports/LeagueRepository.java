@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface LeagueRepository {
     Optional<League> findById(Long id);
 
-    List<League> findByUserId(String userId);
+    List<League> findByUserId(Long userId);
 
     League save(League league);
 
