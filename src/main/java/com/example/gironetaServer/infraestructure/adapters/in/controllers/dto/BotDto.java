@@ -61,4 +61,12 @@ public class BotDto {
     public void setEndpoint(String endpoint) {
         this.endpoint = endpoint;
     }
+
+    public String getUsuario_correo() {
+        return usuario_correo;
+    }
+
+    public void setUsuario_correo(String usuario_correo) {
+        this.usuario_correo = usuario_correo;
+    }
 }
