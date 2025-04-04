@@ -6,7 +6,7 @@ import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import uib.lab.api.entity.User.Role;
+import uib.lab.api.domain.entity.User.Role;
 
 public class UserDomain implements UserDetails {
     private long id;
