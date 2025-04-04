@@ -2,8 +2,10 @@ package jaumesitos.backend.demo.infrastructure.res.api;
 
 
 import jaumesitos.backend.demo.domain.User;
+import jaumesitos.backend.demo.infrastructure.res.dto.BotDTO;
 import jaumesitos.backend.demo.infrastructure.res.dto.UserDTOLogin;
 import jaumesitos.backend.demo.infrastructure.res.dto.UserResponseDTO;
+import jaumesitos.backend.demo.infrastructure.res.mapper.BotDTOMapper;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +31,7 @@ import java.util.Map;
 @Tag(name = "User Controller", description = "Endpoints for managing users")
 public class AuthController {
 
-    private final UserDTOMapper mapper; //convertidor de DTO a classe de lògica de negoci
+    private final UserDTOMapper userMapper; //convertidor de DTO a classe de lògica de negoci
     private final AuthService service; //adaptador
 
     //CODIS ERROR:
@@ -56,7 +58,7 @@ public class AuthController {
     @PostMapping("/auth/register")
     public ResponseEntity<?> register(@RequestBody UserDTORegister dto) {
         try {
-            User user = mapper.toDomain(dto);
+            User user = userMapper.toDomain(dto);
             service.register(user);
             return ResponseEntity.ok("User created");
         } catch (IllegalArgumentException e) {
@@ -70,7 +72,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody UserDTOLogin dto) {
         try {
             User user = service.login(dto.getEmail(), dto.getPassword());
-            UserResponseDTO response = mapper.toResponseDTO(user);
+            UserResponseDTO response = userMapper.toResponseDTO(user);
 
             Map<String, Object> result = new HashMap<>();
             result.put("message", "User logged");

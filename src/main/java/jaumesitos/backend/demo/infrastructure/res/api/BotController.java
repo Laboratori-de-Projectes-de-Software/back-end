@@ -1,7 +1,9 @@
 package jaumesitos.backend.demo.infrastructure.res.api;
 
 
+import jaumesitos.backend.demo.domain.Bot;
 import jaumesitos.backend.demo.infrastructure.res.dto.BotDTO;
+import jaumesitos.backend.demo.infrastructure.res.dto.BotResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +14,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +26,10 @@ import jaumesitos.backend.demo.application.service.BotService;
 @RequestMapping("")
 @Tag(name = "Bot Controller", description = "Endpoints for managing bots")
 public class BotController {
+
+    private final BotService botService;
+    private final BotDTOMapper botMapper;
+
     //CODIS ERROR:
     //HttpStatus.OK -> 200
     //HttpStatus.CREATED -> 201
@@ -40,4 +45,16 @@ public class BotController {
 
     //SWAGGER:
     //http://localhost:8080/swagger-ui/index.html#/
+
+    @PostMapping("/bot")
+    public ResponseEntity<?> createBot(@RequestBody BotDTO dto) {
+        try {
+            Bot bot = botMapper.toDomain(dto);
+            Bot saved = botService.registerBot(bot);
+            BotResponseDTO response = botMapper.toResponseDTO(saved);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating bot");
+        }
+    }
 }
