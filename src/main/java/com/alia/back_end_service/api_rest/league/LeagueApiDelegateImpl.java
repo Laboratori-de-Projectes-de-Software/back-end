@@ -5,7 +5,6 @@ import com.alia.back_end_service.api_model.*;
 import com.alia.back_end_service.api_rest.bot.BotMapperAPI;
 import com.alia.back_end_service.domain.league.League;
 import com.alia.back_end_service.domain.league.ports.*;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -25,14 +24,15 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
     private final LeagueGetAllPortAPI leagueGetAllPortAPI;
     private final LeagueMapperAPI leagueMapperAPI;
     private final LeagueInscribeBotPortAPI leagueInscribeBotPortAPI;
-    private final BotMapperAPI botMapperAPI;
     private final LeagueGetAllBotsPortAPI leagueGetAllBotsPortAPI;
+    private final LeagueDeletePortAPI leagueDeletePortAPI;
     private final LeagueUpdatePortAPI leagueUpdatePortAPI;
 
 
     @Override
     public ResponseEntity<LeagueDTO> leagueLeagueIdDelete(Integer leagueId) {
-        return LeagueApiDelegate.super.leagueLeagueIdDelete(leagueId);
+        leagueDeletePortAPI.deleteLeague(leagueId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Override
@@ -92,4 +92,5 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
         leagueInscribeBotPortAPI.inscribe(leagueId, leagueLeagueIdBotPostRequest.getBotId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
 }

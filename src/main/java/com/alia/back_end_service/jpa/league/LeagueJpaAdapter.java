@@ -108,4 +108,9 @@ public class LeagueJpaAdapter implements LeaguePortDB {
 
         return null;
     }
+
+    @Override
+    public boolean existLeagueIdWithBotId(Integer leagueId, Integer botId){
+        return leagueJpaRepository.existsLeagueEntitiesByIdAndBots_Id(leagueId, botId);
+    }
 }

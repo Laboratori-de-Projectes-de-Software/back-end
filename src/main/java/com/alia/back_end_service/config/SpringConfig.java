@@ -75,4 +75,6 @@ public class SpringConfig {
     public UpdateLeagueUseCase updateLeagueUseCase(LeaguePortDB leaguePortDB) {return new UpdateLeagueUseCase(leaguePortDB);}
     @Bean
     public GetAllLeagueBotsUseCase getAllLeagueBotsUseCase(LeaguePortDB leaguePortDB) {return new GetAllLeagueBotsUseCase(leaguePortDB);}
+    @Bean
+    public DeleteLeagueUseCase deleteLeagueUseCase(LeaguePortDB leaguePortDB) {return new DeleteLeagueUseCase(leaguePortDB);}
 }
