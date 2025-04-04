@@ -23,4 +23,6 @@ public interface LeaguePortDB {
     List<League> getLeaguesByUser(String username);
 
     List<League> getLeaguesByBotId(Integer botId);
+
+    boolean existLeagueIdWithBotId(Integer leagueId, Integer botId);
 }

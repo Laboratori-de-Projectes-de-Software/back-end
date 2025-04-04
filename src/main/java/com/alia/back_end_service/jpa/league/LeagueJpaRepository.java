@@ -21,4 +21,6 @@ public interface LeagueJpaRepository extends JpaRepository<LeagueEntity, Integer
 
     @Query("SELECT l FROM LeagueEntity l JOIN l.bots b WHERE b.id = :botId")
     List<LeagueEntity> findLeaguesByBotId(Integer botId);
+
+    boolean existsLeagueEntitiesByIdAndBots_Id(Integer id, Integer botId);
 }
