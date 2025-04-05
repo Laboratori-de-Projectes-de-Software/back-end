@@ -7,40 +7,6 @@ info:
 servers:
   - url: test
 paths:
-  /api/auth/register:
-    post:
-      tags:
-        - auth
-      summary: Registrar un usuario
-      operationId: registerUser
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                user:
-                  type: string
-                  description: "Nombre de usuario"
-                mail:
-                  type: string
-                  description: "Dirección de correo electrónico"
-                password:
-                  type: string
-                  description: "Contraseña"
-              required:
-                - user
-                - mail
-                - password
-      responses:
-        '200':
-          description: Usuario registrado
-          content:
-            application/json:
-              schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/UserMin'
   /api/hola:
     post:
       tags:
@@ -54,6 +20,36 @@ paths:
             application/json:
               schema:
                 type: string
+  /api/auth/register:
+    post:
+      tags:
+        - auth
+      summary: Registrar un usuario
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              items:
+                $ref: '#/components/schemas/UserDTORegister'
+      responses:
+        '200':
+          description: Usuario registrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Usuario registrado con éxito"
+        '401':
+            description: Usuario ya registrado
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
   /api/auth/login:
     post:
       tags:
@@ -65,16 +61,8 @@ paths:
           application/json:
             schema:
               type: object
-              properties:
-                user:
-                  type: string
-                  description: "Nombre de usuario"
-                password:
-                  type: string
-                  description: "Contraseña"
-              required:
-                - user
-                - password
+              items:
+                $ref: '#/components/schemas/UserDTOLogin'
       responses:
         '200':
           description: Login exitoso
@@ -83,7 +71,7 @@ paths:
               schema:
                 type: object
                 items:
-                  $ref: '#/components/schemas/UserMin'
+                  $ref: '#/components/schemas/UserResponseDTO'
   /api/bot:
     get:
       tags:
@@ -133,31 +121,15 @@ paths:
           application/json:
             schema:
               type: object
-              properties:
-                name:
-                  type: string
-                  description: "Nombre del bot a añadir"
-                img:
-                  type: string
-                  description: "URL de la imagen"
-                attribute:
-                  type: string
-                  description: "Cualidad del bot"
-                  enum:
-                    - EMPATIA
-                    - GENEROSIDAD
-                    - COBARDIA
-              required:
-                - name
-                - img
-                - attribute
+              items:
+                $ref: '#/components/schemas/BotDTO'
       responses:
         '201':
           description: Bot creado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Liga'
+                $ref: '#/components/schemas/BotResponseDTO'
         '401':
           description: No hay permisos
           content:
@@ -184,12 +156,11 @@ paths:
       summary: Encuentra bot por su ID.
       description: Devuelve un único bot.
       parameters:
-        - name: botId
-          in: path
-          required: true # No deja poner algo que no sea true y no deja no poner required ¿?¿?¿?
-          schema: 
-            type: integer
-            format: int64
+        - name: owner
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: Successful operation
@@ -197,10 +168,10 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/BotMin'
+                  - $ref: '#/components/schemas/BotResponseDTO'
                   - type: array
                     items:
-                      $ref: '#/components/schemas/BotMin'
+                      $ref: '#/components/schemas/BotSummaryResponseDTO'
         '400':
           description: Invalid ID supplied
         '404':
@@ -561,7 +532,7 @@ components:
           type: integer
           format: int32
         equipo:
-          $ref: '#/components/schemas/BotMin'
+          $ref: '#/components/schemas/BotResponseDTO'
         partidosJugados:
           type: integer
           format: int32
@@ -625,32 +596,103 @@ components:
         - pendiente
         - en curso
         - finalizado
-    BotMin:
+    BotDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Nombre del bot a añadir"
+        description:
+          type: string
+          description: "Cualidad del bot"
+        urlImagen:
+          type: string
+          description: "URL de la imagen"
+        endpoint:
+          type: string
+          description: "URL del endpoint del bot"
+      required:
+        - name
+        - description
+        - urlImagen
+        - endpoint
+    BotResponseDTO:
       type: object
       properties:
         botId:
           type: integer
           format: int64
-        numVictorias:
+        name:
+            type: string
+            description: "Nombre del bot"
+        description:
+            type: string
+            description: "Descripción del bot"
+        urlImagen:
+            type: string
+            description: "URL de la imagen del bot"
+        nWins:
           type: integer
           format: int32
-        numEmpates:
+        nDraws:
           type: integer
           format: int32
-        numDerrotas:
+        nLosses:
           type: integer
           format: int32
-        cualidad:
-          type: string
-          description: Cualidad (emoción) que defiende el bot.
-          example: valentía
-    UserMin:
+    BotSummaryResponseDTO:
       type: object
       properties:
+        botId:
+          type: integer
+          format: int64
+        name:
+          type: string
+          description: "Nombre del bot"
+        description:
+          type: string
+          description: "Descripción del bot"
+    UserDTORegister:
+      type: object
+      properties:
+        user:
+          type: string
+          description: "Nombre de usuario"
+        mail:
+            type: string
+            description: "Dirección de correo electrónico"
+        password:
+          type: string
+          description: "Contraseña"
+      required:
+        - user
+        - password
+    UserDTOLogin:
+      type: object
+      properties:
+        user:
+          type: string
+          description: "Nombre de usuario"
+        password:
+          type: string
+          description: "Contraseña"
+      required:
+        - user
+        - password
+    UserResponseDTO:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG9uZWJveSIsImlhdCI6MTY4NTQ2NzYwMCwiZXhwIjoxNjg1NTU0MDAwfQ
+        expiresIn:
+          type: integer
+          format: int32
+          example: 3600
         userId:
           type: integer
           format: int64
-        username:
+        user:
           type: string
           example: adondeboy
     Error:
