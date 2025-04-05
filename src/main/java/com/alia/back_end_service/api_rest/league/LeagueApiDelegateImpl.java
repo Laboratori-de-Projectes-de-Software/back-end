@@ -25,6 +25,7 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
     private final LeagueMapperAPI leagueMapperAPI;
     private final LeagueInscribeBotPortAPI leagueInscribeBotPortAPI;
     private final LeagueGetAllBotsPortAPI leagueGetAllBotsPortAPI;
+    private final LeagueStartPortAPI leagueStartPortAPI;
     private final LeagueDeletePortAPI leagueDeletePortAPI;
     private final LeagueUpdatePortAPI leagueUpdatePortAPI;
 
@@ -73,7 +74,8 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
 
     @Override
     public ResponseEntity<Void> leagueLeagueIdStartPost(Integer leagueId) {
-        return LeagueApiDelegate.super.leagueLeagueIdStartPost(leagueId);
+        leagueStartPortAPI.startLeague(leagueId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Override

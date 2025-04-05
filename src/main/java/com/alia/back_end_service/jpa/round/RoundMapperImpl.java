@@ -7,12 +7,13 @@ import com.alia.back_end_service.jpa.game.GameEntity;
 import com.alia.back_end_service.jpa.game.GameMapper;
 import com.alia.back_end_service.jpa.league.LeagueMapper;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Component
 public class RoundMapperImpl implements RoundMapper{
 
     public Round toDomain(RoundEntity entity) {
@@ -28,32 +29,31 @@ public class RoundMapperImpl implements RoundMapper{
         // Extraer el ID de la liga
         round.setLeagueId(entity.getLeague() != null ? entity.getLeague().getId() : null);
 
-        // Extraer IDs de los juegos
-        if (entity.getGames() != null) {
-            List<Integer> gameIds = entity.getGames().stream()
-                    .map(GameEntity::getId)
-                    .collect(Collectors.toList());
-            round.setGameIds(gameIds);
-        } else {
-            round.setGameIds(Collections.emptyList());
-        }
-
-        // Extraer IDs de las clasificaciones
-        if (entity.getClassifications() != null) {
-            List<Integer> classificationIds = entity.getClassifications().stream()
-                    .map(ClassificationEntity::getId)
-                    .collect(Collectors.toList());
-            round.setClassificationIds(classificationIds);
-        } else {
-            round.setClassificationIds(Collections.emptyList());
-        }
+//        // Extraer IDs de los juegos
+//        if (entity.getGames() != null) {
+//            List<Integer> gameIds = entity.getGames().stream()
+//                    .map(GameEntity::getId)
+//                    .collect(Collectors.toList());
+//            round.setGameIds(gameIds);
+//        } else {
+//            round.setGameIds(Collections.emptyList());
+//        }
+//
+//        // Extraer IDs de las clasificaciones
+//        if (entity.getClassifications() != null) {
+//            List<Integer> classificationIds = entity.getClassifications().stream()
+//                    .map(ClassificationEntity::getId)
+//                    .collect(Collectors.toList());
+//            round.setClassificationIds(classificationIds);
+//        } else {
+//            round.setClassificationIds(Collections.emptyList());
+//        }
 
         return round;
     }
 
     @Override
     public RoundEntity toEntity(Round domain) {
-        if (domain == null) return null;
 
         RoundEntity entity = new RoundEntity();
         entity.setId(domain.getId());

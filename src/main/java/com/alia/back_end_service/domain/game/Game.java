@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -23,13 +24,13 @@ public class Game {
 
     private String result_visit;
 
-    private String bot_local_id;
+    private Integer bot_local_id;
 
-    private String bot_visit_id;
+    private Integer bot_visit_id;
 
     private Integer roundId;
 
-    private List<Integer> messageIds;
+    private List<Integer> messageIds = new ArrayList<>();
 
     private String state;
 

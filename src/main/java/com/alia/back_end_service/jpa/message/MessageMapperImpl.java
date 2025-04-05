@@ -1,6 +1,7 @@
 package com.alia.back_end_service.jpa.message;
 
 import com.alia.back_end_service.domain.message.Message;
+import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
