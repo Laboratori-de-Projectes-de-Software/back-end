@@ -5,6 +5,7 @@ import com.example.gironetaServer.domain.League;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LigaEntity;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers.LigaMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,16 +23,27 @@ public class LigaDatabaseRepository implements LeagueRepository {
     }
 
     @Override
+    @Transactional
     public Optional<League> findById(Long id) {
         return leagueJpaRepository.findById(id)
                 .map(leagueMapper::toDomain);
     }
 
     @Override
+    @Transactional
     public List<League> findByUserId(Long userId) {
         return leagueJpaRepository.findByUsuarioId(userId)
                 .stream()
                 .map(ligaEntity -> leagueMapper.toDomain(ligaEntity))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<League> findAll() {
+        return leagueJpaRepository.findAll()
+                .stream()
+                .map(leagueMapper::toDomain)
                 .collect(Collectors.toList());
     }
 

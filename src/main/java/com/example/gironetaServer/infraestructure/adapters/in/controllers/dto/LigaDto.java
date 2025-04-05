@@ -9,17 +9,20 @@ public class LigaDto {
     private Integer rounds;
     private Long matchTime;
     private List<Long> bots;
+    private String user; // Owner
 
     public LigaDto() {
     }
 
-    public LigaDto(Long id, String name, String urlImagen, Integer rounds, Long matchTime, List<Long> bots) {
+    public LigaDto(Long id, String name, String urlImagen, Integer rounds, Long matchTime, List<Long> bots,
+            String user) {
         this.id = id;
         this.name = name;
         this.urlImagen = urlImagen;
         this.rounds = rounds;
         this.matchTime = matchTime;
         this.bots = bots;
+        this.user = user;
     }
 
     // Métodos getter
@@ -47,6 +50,10 @@ public class LigaDto {
         return bots;
     }
 
+    public String getUser() {
+        return user;
+    }
+
     // Métodos setter
     public void setId(Long id) {
         this.id = id;
@@ -70,5 +77,9 @@ public class LigaDto {
 
     public void setBots(List<Long> bots) {
         this.bots = bots;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }

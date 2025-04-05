@@ -67,7 +67,7 @@ public class LigaMapper {
         return ligaEntity;
     }
 
-    public static LigaDto toLeagueDto(League league) {
+    public LigaDto toLeagueDto(League league) {
         LigaDto ligaDto = new LigaDto();
         ligaDto.setId(league.getId());
         ligaDto.setName(league.getName());
@@ -75,6 +75,15 @@ public class LigaMapper {
         ligaDto.setRounds(league.getRounds());
         ligaDto.setMatchTime(league.getMatchTime());
         ligaDto.setBots(league.getBots());
+
+        // Obtener el nombre del usuario (owner)
+        if (league.getUserId() != null) {
+            com.example.gironetaServer.domain.User user = userRepository.getUserById(league.getUserId());
+            if (user != null) {
+                ligaDto.setUser(user.getUsername());
+            }
+        }
+
         return ligaDto;
     }
 

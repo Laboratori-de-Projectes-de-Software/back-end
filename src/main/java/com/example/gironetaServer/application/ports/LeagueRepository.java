@@ -10,6 +10,8 @@ public interface LeagueRepository {
 
     List<League> findByUserId(Long userId);
 
+    List<League> findAll();
+
     League save(League league);
 
     void deleteById(Long id);
