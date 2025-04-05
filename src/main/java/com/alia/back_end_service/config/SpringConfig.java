@@ -6,6 +6,7 @@ import com.alia.back_end_service.domain.bot.usecases.GetBotUseCase;
 import com.alia.back_end_service.domain.bot.usecases.RegisterBotUseCase;
 import com.alia.back_end_service.domain.bot.usecases.UpdateBotUseCase;
 import com.alia.back_end_service.domain.game.ports.GamePortDB;
+import com.alia.back_end_service.domain.league.League;
 import com.alia.back_end_service.domain.league.ports.LeaguePortDB;
 import com.alia.back_end_service.domain.league.usecases.*;
 import com.alia.back_end_service.domain.round.ports.RoundPortDB;
@@ -77,5 +78,6 @@ public class SpringConfig {
     public DeleteLeagueUseCase deleteLeagueUseCase(LeaguePortDB leaguePortDB) {return new DeleteLeagueUseCase(leaguePortDB);}
     @Bean
     public StartLeagueUseCase startLeagueUseCase(LeaguePortDB leaguePortDB, RoundPortDB roundPortDB, GamePortDB gamePortDB) { return new StartLeagueUseCase(leaguePortDB, roundPortDB, gamePortDB); }
-
+    @Bean
+    public GetAllLeagueGamesUseCase getAllLeagueGamesUseCase(LeaguePortDB leaguePortDB){return new GetAllLeagueGamesUseCase(leaguePortDB);}
 }

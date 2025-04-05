@@ -627,13 +627,16 @@ components:
     MatchDTO:
       type: object
       properties:
-        timestamp:
-          type: string
-          format: date-time
-        result:
-          type: string
         state:
           type: string
+        result:
+          type: integer
+        fighters:
+          type: array
+          items:
+            type: integer
+        roundNumber:
+          type: integer
 
     MessageDTO:
       type: object

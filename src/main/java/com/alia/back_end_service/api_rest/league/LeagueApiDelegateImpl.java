@@ -3,10 +3,13 @@ package com.alia.back_end_service.api_rest.league;
 import com.alia.back_end_service.api.LeagueApiDelegate;
 import com.alia.back_end_service.api_model.*;
 import com.alia.back_end_service.api_rest.bot.BotMapperAPI;
+import com.alia.back_end_service.api_rest.game.GameMapperAPI;
+import com.alia.back_end_service.domain.game.Game;
 import com.alia.back_end_service.domain.league.League;
 import com.alia.back_end_service.domain.league.ports.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,8 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
     private final LeagueStartPortAPI leagueStartPortAPI;
     private final LeagueDeletePortAPI leagueDeletePortAPI;
     private final LeagueUpdatePortAPI leagueUpdatePortAPI;
+    private final LeagueGetAllGamesPortAPI leagueGetAllGamesPortAPI;
+    private final GameMapperAPI gameMapperAPI;
 
 
     @Override
@@ -69,7 +74,13 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
 
     @Override
     public ResponseEntity<List<MatchDTO>> leagueLeagueIdMatchGet(Integer leagueId) {
-        return LeagueApiDelegate.super.leagueLeagueIdMatchGet(leagueId);
+        List<Game> games = leagueGetAllGamesPortAPI.getAllLeagueGames(leagueId);
+        List<MatchDTO> matchesDTOs = new ArrayList<>();
+
+        for (Game game : games) {
+            matchesDTOs.add(gameMapperAPI.toApiResponse(game));
+        }
+        return ResponseEntity.ok(matchesDTOs);
     }
 
     @Override
