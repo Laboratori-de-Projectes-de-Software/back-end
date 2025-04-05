@@ -9,11 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import com.adondeband.back_end_adonde_band.api.ApiApiDelegate;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 
@@ -37,6 +34,11 @@ public class AuthApiDelegate
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
         this.authenticationDtoMapper = authenticationDtoMapper;
+    }
+
+    @GetMapping("/test")
+    public  String getPath() {
+        return "api/v0/auth";
     }
 
     @PostMapping("/register")
