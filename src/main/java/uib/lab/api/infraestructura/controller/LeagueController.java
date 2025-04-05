@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 import uib.lab.api.application.dto.League.LeagueRequest;
 import uib.lab.api.domain.entity.League;
+import uib.lab.api.infraestructura.util.ApiMessage;
 import uib.lab.api.application.service.LeagueService;
 import javax.validation.Valid;
+import java.util.Locale;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,15 +23,8 @@ public class LeagueController {
     private final LeagueService leagueService;
 
     @PostMapping
-    public ResponseEntity<League> createLeague(@Valid @RequestBody LeagueRequest leagueRequest) {
-        League league = new League();
-        league.setName(leagueRequest.getName());
-        league.setPlayTime(leagueRequest.getPlayTime());
-        league.setNumRounds(leagueRequest.getNumRounds());
-        league.setState(League.LeagueState.PENDING);
-
-        League savedLeague = leagueService.createLeague(league);
-
-        return new ResponseEntity<>(savedLeague, HttpStatus.CREATED);
+    public ResponseEntity<ApiMessage> createLeague(@Valid @RequestBody LeagueRequest leagueRequest, Locale locale) {
+        var message = leagueService.createLeague(leagueRequest, locale);
+        return ResponseEntity.status(message.getStatus()).body(message);
     }
 }
