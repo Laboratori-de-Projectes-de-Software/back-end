@@ -45,11 +45,11 @@ paths:
                     type: string
                     example: "Usuario registrado con éxito"
         '401':
-            description: Usuario ya registrado
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/Error"
+          description: Usuario ya registrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/auth/login:
     post:
       tags:
@@ -81,10 +81,10 @@ paths:
       operationId: getBots
       parameters:
         - name: userId
-          description: Id del usuario propietario de los bots. 
+          description: Id del usuario propietario de los bots.
           in: query
           required: false
-          schema: 
+          schema:
             type: integer
             format: int64
       responses:
@@ -156,6 +156,13 @@ paths:
       summary: Encuentra bot por su ID.
       description: Devuelve un único bot.
       parameters:
+        - name: botId
+          description: Id del bot correspondiente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
         - name: owner
           in: query
           required: false
@@ -246,7 +253,7 @@ paths:
   /api/league/{leagueId}:
     summary: Llamadas a APIs relacionadas con la gestión de ligas
     get:
-      tags: 
+      tags:
         - liga
       summary: Devolver información de una liga concreta o información reducida de todas las ligas
       operationId: getLiga
@@ -305,7 +312,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Liga'  
+                $ref: '#/components/schemas/Liga'
         '401':
           description: No hay permisos
           content:
@@ -348,7 +355,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Liga'  
+                $ref: '#/components/schemas/Liga'
         '401':
           description: No hay permisos
           content:
@@ -366,7 +373,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error" 
+                $ref: "#/components/schemas/Error"
   /api/league/{leagueId}/bot:
     post:
       tags:
@@ -396,7 +403,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Liga'  
+                $ref: '#/components/schemas/Liga'
         '401':
           description: No hay permisos
           content:
@@ -488,7 +495,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"             
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Liga:
@@ -623,14 +630,14 @@ components:
           type: integer
           format: int64
         name:
-            type: string
-            description: "Nombre del bot"
+          type: string
+          description: "Nombre del bot"
         description:
-            type: string
-            description: "Descripción del bot"
+          type: string
+          description: "Descripción del bot"
         urlImagen:
-            type: string
-            description: "URL de la imagen del bot"
+          type: string
+          description: "URL de la imagen del bot"
         nWins:
           type: integer
           format: int32
@@ -659,8 +666,8 @@ components:
           type: string
           description: "Nombre de usuario"
         mail:
-            type: string
-            description: "Dirección de correo electrónico"
+          type: string
+          description: "Dirección de correo electrónico"
         password:
           type: string
           description: "Contraseña"
