@@ -10,6 +10,7 @@ import com.adondeband.back_end_adonde_band.jpa.enfrentamiento.EnfrentamientoJpaM
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(uses =   {

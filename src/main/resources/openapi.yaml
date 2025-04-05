@@ -1,0 +1,670 @@
+openapi: 3.0.4
+info:
+  title: BotSports
+  description: |-
+    Una especificación de OpenAPI para la página de BotSports
+  version: 1.0.0
+servers:
+  - url: test
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - auth
+      summary: Registrar un usuario
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                  description: "Nombre de usuario"
+                mail:
+                  type: string
+                  description: "Dirección de correo electrónico"
+                password:
+                  type: string
+                  description: "Contraseña"
+              required:
+                - user
+                - mail
+                - password
+      responses:
+        '200':
+          description: Usuario registrado
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/UserMin'
+  /api/hola:
+    post:
+      tags:
+        - test
+      summary: Test
+      operationId: test
+      responses:
+        '200':
+          description: Hola
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/auth/login:
+    post:
+      tags:
+        - auth
+      summary: Acceder a la cuenta de un usuario
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                  description: "Nombre de usuario"
+                password:
+                  type: string
+                  description: "Contraseña"
+              required:
+                - user
+                - password
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/UserMin'
+  /api/bot:
+    get:
+      tags:
+        - bot
+      summary: Listar todos bots
+      description: Lista los bots del usuario recibido. Si no se recibe usuario, lista todos los bots.
+      operationId: getBots
+      parameters:
+        - name: userId
+          description: Id del usuario propietario de los bots. 
+          in: query
+          required: false
+          schema: 
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Bots encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Liga'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado ningún bot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - bot
+      summary: Crea bot.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: "Nombre del bot a añadir"
+                img:
+                  type: string
+                  description: "URL de la imagen"
+                attribute:
+                  type: string
+                  description: "Cualidad del bot"
+                  enum:
+                    - EMPATIA
+                    - GENEROSIDAD
+                    - COBARDIA
+              required:
+                - name
+                - img
+                - attribute
+      responses:
+        '201':
+          description: Bot creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Liga'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/bot/{botId}:
+    summary: Llamadas a API para obtener la información del bot botId.
+    get:
+      tags:
+        - bot
+      summary: Encuentra bot por su ID.
+      description: Devuelve un único bot.
+      parameters:
+        - name: botId
+          in: path
+          required: true # No deja poner algo que no sea true y no deja no poner required ¿?¿?¿?
+          schema: 
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/BotMin'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/BotMin'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Bot not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/league:
+    get:
+      tags:
+        - liga
+      summary: Listar todas las ligas
+      operationId: getLigas
+      responses:
+        '200':
+          description: Ligas encontradas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Liga'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado ninguna liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - liga
+      summary: Crear una liga
+      operationId: createLiga
+      responses:
+        '201':
+          description: Liga creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Liga'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/league/{leagueId}:
+    summary: Llamadas a APIs relacionadas con la gestión de ligas
+    get:
+      tags: 
+        - liga
+      summary: Devolver información de una liga concreta o información reducida de todas las ligas
+      operationId: getLiga
+      parameters:
+        - name: leagueId
+          description: Id de la liga correspondiente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Liga encontrada
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Liga'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/LigaMin'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado la liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      tags:
+        - liga
+      operationId: modifyLiga
+      parameters:
+        - name: leagueId
+          description: Id de la liga correspondiente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Liga modificada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Liga'  
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado ninguna liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - liga
+      operationId: deleteLiga
+      parameters:
+        - name: leagueId
+          description: Id de la liga correspondiente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Liga eliminada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Liga'  
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado la liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error" 
+  /api/league/{leagueId}/bot:
+    post:
+      tags:
+        - liga
+      summary: Añadir un bot a una liga
+      operationId: addBot
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: botId
+              description: Id del bot a añadir
+              type: integer
+              format: int64
+      responses:
+        '201':
+          description: Bot registrado en la liga
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Liga'  
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado bot o liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '409':
+          description: Conflict (Bot ya estaba registado)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/league/{leagueId}/start:
+    summary: Iniciar Liga
+    post:
+      tags:
+        - liga
+      operationId: startLiga
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Liga iniciada
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado la liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/league/{leagueId}/getJornada:
+    summary: Devolver una jornada
+    get:
+      tags:
+        - liga
+      operationId: getJornada
+      parameters:
+        - name: leagueId
+          description: Id de la liga correspondiente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: numJornada
+          description: Nº de la jornada a recibir
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Jornada'
+        '404':
+          description: No se ha encontrado la jornada correspondiente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"             
+components:
+  schemas:
+    Liga:
+      properties:
+        nombre:
+          type: string
+        logoUrl:
+          type: string
+        estado:
+          $ref: '#/components/schemas/Estado'
+        fechaInicio:
+          type: string
+          format: date-time
+        fechaFinal:
+          type: string
+          format: date-time
+        clasificacion:
+          type: array
+          items:
+            $ref: '#/components/schemas/Participacion'
+      required:
+        - nombre
+        - logoUrl
+        - estado
+    LigaMin:
+      properties:
+        nombre:
+          type: string
+          example: LaLiga EA Sports
+        logoUrl:
+          type: string
+        estado:
+          $ref: '#/components/schemas/Estado'
+      required:
+        - nombre
+        - logoUrl
+        - estado
+    Participacion:
+      properties:
+        pos:
+          type: integer
+          format: int32
+        equipo:
+          $ref: '#/components/schemas/BotMin'
+        partidosJugados:
+          type: integer
+          format: int32
+        ganados:
+          type: integer
+          format: int32
+        empatados:
+          type: integer
+          format: int32
+        perdidos:
+          type: integer
+          format: int32
+        puntos:
+          type: integer
+          format: int32
+      required:
+        - pos
+        - equipo
+        - partidosJugados
+        - ganados
+        - empatados
+        - perdidos
+        - puntos
+    Jornada:
+      properties:
+        num:
+          type: integer
+          format: int32
+        partidos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Partido'
+      required:
+        - num
+        - partidos
+    Partido:
+      properties:
+        idPartido:
+          type: integer
+          format: int64
+        equipo1:
+          type: string
+        equipo2:
+          type: string
+        estado:
+          $ref: '#/components/schemas/Estado'
+        ganador:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2
+      required:
+        - idPartido
+        - equipo1
+        - equipo2
+        - estado
+    Estado:
+      type: string
+      description: Estado de la liga
+      enum:
+        - pendiente
+        - en curso
+        - finalizado
+    BotMin:
+      type: object
+      properties:
+        botId:
+          type: integer
+          format: int64
+        numVictorias:
+          type: integer
+          format: int32
+        numEmpates:
+          type: integer
+          format: int32
+        numDerrotas:
+          type: integer
+          format: int32
+        cualidad:
+          type: string
+          description: Cualidad (emoción) que defiende el bot.
+          example: valentía
+    UserMin:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        username:
+          type: string
+          example: adondeboy
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

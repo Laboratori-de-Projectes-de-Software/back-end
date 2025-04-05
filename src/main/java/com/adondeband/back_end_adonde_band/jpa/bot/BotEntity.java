@@ -25,6 +25,8 @@ public class BotEntity {
 
     private String cualidad;
 
+    private String endpoint;
+
     @ManyToOne
     private UsuarioEntity usuario;
 

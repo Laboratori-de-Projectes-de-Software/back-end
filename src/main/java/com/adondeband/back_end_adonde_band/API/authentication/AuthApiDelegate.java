@@ -7,32 +7,43 @@ import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import com.adondeband.back_end_adonde_band.api.ApiApiDelegate;
 
 import java.util.ArrayList;
 
-@RequestMapping("/auth")
+//TODO ESTO NO VA; NO SE COMO COÑO FUNCIONA EL APIAPIDELEGATE
+// SI ALGUIEN QUIERO TESTEAR HAY QUE CAMBIAR DE VUELTA
+
+//@Controller
 @RestController
-public class AuthenticationController {
+@RequestMapping("api/v0/auth")
+public class AuthApiDelegate
+        //implements ApiApiDelegate
+{
     private final JwtService jwtService;
 
     private final AuthenticationService authenticationService;
 
     private final AuthenticationDtoMapper authenticationDtoMapper;
 
-    @Autowired
-    public AuthenticationController(JwtService jwtService, AuthenticationImpl authenticationService, AuthenticationDtoMapper authenticationDtoMapper) {
+
+    public AuthApiDelegate(JwtService jwtService, AuthenticationImpl authenticationService, AuthenticationDtoMapper authenticationDtoMapper) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
         this.authenticationDtoMapper = authenticationDtoMapper;
     }
 
-    @PostMapping("/signup")
+    @GetMapping("/test")
+    public  String getPath() {
+        return "api/v0/auth";
+    }
+
+    @PostMapping("/register")
     public ResponseEntity<Usuario> register(@RequestBody RegisterUserDto registerUserDto) {
-        Usuario registeredUser = authenticationService.signup( authenticationDtoMapper.registerUserDtotoDomain(registerUserDto) );
+        Usuario registeredUser = authenticationService.signup(authenticationDtoMapper.registerUserDtotoDomain(registerUserDto) );
 
         return ResponseEntity.ok(registeredUser);
     }

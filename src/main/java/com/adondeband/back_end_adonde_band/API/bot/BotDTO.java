@@ -1,12 +1,21 @@
 package com.adondeband.back_end_adonde_band.API.bot;
 
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class BotDTO {
 
     private String nombre;
+
+    private String cualidad;
+
+    private String imagen; // luego quizá sea ImagenDTO
+
+    private String endpoint;
 
     private Integer numVictorias;
 
@@ -14,17 +23,13 @@ public class BotDTO {
 
     private Integer numDerrotas;
 
-    private String cualidad;
+    public BotDTO(BotDTOMin botDTOMin) {
+        this.nombre = botDTOMin.getNombre();
+        this.cualidad = botDTOMin.getCualidad();
+        this.imagen = botDTOMin.getImagen();
+        this.endpoint = botDTOMin.getEndpoint();
 
-    private UsuarioId usuario;
-
-    public BotDTO(String nombre, String cualidad) {
-        this.nombre = nombre;
-        this.cualidad = cualidad;
-        this.numVictorias = 0;
-        this.numEmpates = 0;
-        this.numDerrotas = 0;
-        this.usuario = null;
-
+        // default de otros atributos
+        numDerrotas = numEmpates = numVictorias = 0;
     }
 }
