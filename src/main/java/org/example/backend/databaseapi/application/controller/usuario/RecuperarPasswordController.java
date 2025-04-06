@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @RestController
 @RequestMapping("/usuario/password")
 public class RecuperarPasswordController {
@@ -20,15 +22,16 @@ public class RecuperarPasswordController {
     }
     
     @PostMapping("/recuperar")
-    public ResponseEntity<String> solicitarRecuperacion(@RequestBody Email email) {
+    public ResponseEntity<Void> solicitarRecuperacion(@RequestBody Email email) {
         boolean existeUsuario = recuperarPasswordPort.procesarSolicitudRecuperacion(email.value());
-        
+
         if (!existeUsuario) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Email no registrado");
+            return ResponseEntity.status(HttpStatus.SEE_OTHER)
+                    .location(URI.create("/register"))
+                    .build();
         }
 
-        return ResponseEntity.ok("Se ha enviado un enlace de recuperación a tu correo");
+        return ResponseEntity.ok().build();
     }
     
     @GetMapping("/validar-token/{token}")
