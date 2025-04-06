@@ -23,8 +23,8 @@ public class UserApiDelegateImpl implements AuthApiDelegate {
 
 
     @Override
-    public ResponseEntity<AuthLoginPost200Response> authLoginPost(UserDTOLogin userDTOLogin) {
-        return ResponseEntity.status(HttpStatus.OK).body(new AuthLoginPost200Response().token(userLoginPortAPI.login(userMapperPortAPI.toDomainLogin(userDTOLogin))));
+    public ResponseEntity<UserResponseDTO> authLoginPost(UserDTOLogin userDTOLogin) {
+        return ResponseEntity.status(HttpStatus.OK).body(new UserResponseDTO().token(userLoginPortAPI.login(userMapperPortAPI.toDomainLogin(userDTOLogin))));
     }
 
     @Override

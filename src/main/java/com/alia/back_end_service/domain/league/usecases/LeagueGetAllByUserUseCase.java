@@ -1,18 +1,18 @@
-package com.alia.back_end_service.domain.user.usecases;
+package com.alia.back_end_service.domain.league.usecases;
 
 import com.alia.back_end_service.domain.league.League;
 import com.alia.back_end_service.domain.league.ports.LeaguePortDB;
-import com.alia.back_end_service.domain.user.ports.GetAllUserLeaugesPortAPI;
+import com.alia.back_end_service.domain.league.ports.LeagueGetAllByUserPortAPI;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
 
 @AllArgsConstructor
-public class GetAllUserLeaguesUseCase implements GetAllUserLeaugesPortAPI {
+public class LeagueGetAllByUserUseCase implements LeagueGetAllByUserPortAPI {
     private final LeaguePortDB leaguePortDB;
 
     @Override
-    public List<League> GetAllUserLeauges(String username) {
+    public List<League> getAllLeaguesByUser(String username) {
         return leaguePortDB.getLeaguesByUser(username);
     }
 }

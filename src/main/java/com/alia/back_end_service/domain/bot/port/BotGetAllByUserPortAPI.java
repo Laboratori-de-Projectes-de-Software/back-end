@@ -1,9 +1,9 @@
-package com.alia.back_end_service.domain.user.ports;
+package com.alia.back_end_service.domain.bot.port;
 
 import com.alia.back_end_service.domain.bot.Bot;
 
 import java.util.List;
 
-public interface GetAllUserBotsPortAPI {
+public interface BotGetAllByUserPortAPI {
     List<Bot> getAllUserBots(String username);
 }

@@ -19,8 +19,8 @@ public interface LeagueJpaRepository extends JpaRepository<LeagueEntity, Integer
     @EntityGraph(attributePaths = {"bots"})
     Optional<LeagueEntity> findById(Integer id);
 
-    @Query("SELECT l FROM LeagueEntity l JOIN l.bots b WHERE b.user.username = :username")
-    List<LeagueEntity> findLeaguesByUser(String username); // Ligas con bots del usuario
+    //@Query("SELECT l FROM LeagueEntity l JOIN l.bots b WHERE b.user.username = :username")
+    List<LeagueEntity> findLeaguesByBots_User_Username(String username);
 
     @Query("SELECT l FROM LeagueEntity l JOIN l.bots b WHERE b.id = :botId")
     List<LeagueEntity> findLeaguesByBotId(Integer botId);

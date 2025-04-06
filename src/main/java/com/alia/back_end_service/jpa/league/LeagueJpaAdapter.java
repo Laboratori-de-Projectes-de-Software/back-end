@@ -91,7 +91,8 @@ public class LeagueJpaAdapter implements LeaguePortDB {
 
     @Override
     public List<League> getLeaguesByUser(String username) {
-        return leagueJpaRepository.findLeaguesByUser(username).stream()
+        List<LeagueEntity> leagues = leagueJpaRepository.findLeaguesByBots_User_Username(username);
+        return leagues.stream()
                 .map(leagueMapper::toDomain)
                 .toList();
     }

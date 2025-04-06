@@ -1,7 +1,7 @@
 package com.alia.back_end_service.api_rest.bot;
 
 import com.alia.back_end_service.api_model.BotDTO;
-import com.alia.back_end_service.api_model.BotSummaryDTO;
+import com.alia.back_end_service.api_model.BotSummaryResponseDTO;
 import com.alia.back_end_service.domain.bot.Bot;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ public class BotMapperAPIImpl implements BotMapperAPI {
     public Bot toDomainRegister(BotDTO botRegister) {
         Bot bot = new Bot();
         bot.setName(botRegister.getName());
-        bot.setDescription(botRegister.getDescripcion());
+        bot.setDescription(botRegister.getDescription());
         bot.setEndpoint(botRegister.getEndpoint());
         bot.setToken(UUID.randomUUID().toString());
         bot.setImg(botRegister.getUrlImagen());
@@ -22,12 +22,13 @@ public class BotMapperAPIImpl implements BotMapperAPI {
     }
 
     @Override
-    public BotSummaryDTO toApiResponseSummary(Bot bot) {
-        BotSummaryDTO botReturn = new BotSummaryDTO();
+    public BotSummaryResponseDTO toApiResponseSummary(Bot bot) {
+        BotSummaryResponseDTO botReturn = new BotSummaryResponseDTO();
         botReturn.setId(bot.getId());
         botReturn.setName(bot.getName());
         botReturn.setDescription(bot.getDescription());
         botReturn.setUsername(bot.getUserId());
+        botReturn.setEndpoint(bot.getEndpoint());
         return botReturn;
     }
 
@@ -35,7 +36,7 @@ public class BotMapperAPIImpl implements BotMapperAPI {
     public BotDTO toApiResponseDTO(Bot bot) {
         BotDTO botReturn = new BotDTO();
         botReturn.setName(bot.getName());
-        botReturn.setDescripcion(bot.getDescription());
+        botReturn.setDescription(bot.getDescription());
         botReturn.endpoint(bot.getEndpoint());
         botReturn.urlImagen(null);
         return botReturn;

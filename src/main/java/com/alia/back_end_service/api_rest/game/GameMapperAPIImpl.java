@@ -1,6 +1,6 @@
 package com.alia.back_end_service.api_rest.game;
 
-import com.alia.back_end_service.api_model.MatchDTO;
+import com.alia.back_end_service.api_model.MatchResponseDTO;
 import com.alia.back_end_service.domain.game.Game;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +11,11 @@ import java.util.List;
 public class GameMapperAPIImpl implements GameMapperAPI {
 
     @Override
-    public MatchDTO toApiResponse(Game game) {
+    public MatchResponseDTO toApiResponse(Game game) {
 
         int result = resolveResultEnum(game.getResult_local(), game.getResult_visit());
 
-        MatchDTO matchDTO = new MatchDTO();
+        MatchResponseDTO matchDTO = new MatchResponseDTO();
         matchDTO.setState(game.getState());
         matchDTO.setResult(result);
         List<Integer> fighters = new ArrayList<>();

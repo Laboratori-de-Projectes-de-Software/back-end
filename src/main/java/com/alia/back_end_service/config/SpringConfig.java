@@ -1,12 +1,8 @@
 package com.alia.back_end_service.config;
 
 import com.alia.back_end_service.domain.bot.port.BotPortDB;
-import com.alia.back_end_service.domain.bot.usecases.GetAllBotUseCase;
-import com.alia.back_end_service.domain.bot.usecases.GetBotUseCase;
-import com.alia.back_end_service.domain.bot.usecases.RegisterBotUseCase;
-import com.alia.back_end_service.domain.bot.usecases.UpdateBotUseCase;
+import com.alia.back_end_service.domain.bot.usecases.*;
 import com.alia.back_end_service.domain.game.ports.GamePortDB;
-import com.alia.back_end_service.domain.league.League;
 import com.alia.back_end_service.domain.league.ports.LeaguePortDB;
 import com.alia.back_end_service.domain.league.usecases.*;
 import com.alia.back_end_service.domain.round.ports.RoundPortDB;
@@ -36,13 +32,13 @@ public class SpringConfig {
     }
 
     @Bean
-    public GetAllUserBotsUseCase getAllUserBotsUseCase(BotPortDB botPortDB) {
-        return new GetAllUserBotsUseCase(botPortDB);
+    public BotGetAllByUserUseCase getAllUserBotsUseCase(BotPortDB botPortDB) {
+        return new BotGetAllByUserUseCase(botPortDB);
     }
 
     @Bean
-    GetAllUserLeaguesUseCase getAllUserLeaguesUseCase(LeaguePortDB leaguePortDB) {
-        return new GetAllUserLeaguesUseCase(leaguePortDB);
+    LeagueGetAllByUserUseCase getAllUserLeaguesUseCase(LeaguePortDB leaguePortDB) {
+        return new LeagueGetAllByUserUseCase(leaguePortDB);
     }
 
 
