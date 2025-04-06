@@ -9,4 +9,6 @@ public interface FindUsuarioPort {
     Optional<Usuario> findUsuario(Integer id_usuario);
 
     Optional<Usuario> findUsuario(String email);
+
+    Optional<Usuario> findUsuarioByResetPasswordToken(String token);
 }

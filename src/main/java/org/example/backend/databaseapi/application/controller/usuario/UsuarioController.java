@@ -1,7 +1,7 @@
 package org.example.backend.databaseapi.application.controller.usuario;
 
 import lombok.AllArgsConstructor;
-import org.example.backend.databaseapi.domain.usuario.AuthResponse;
+import org.example.backend.databaseapi.domain.usuario.TokenAndUsuario;
 import org.example.backend.databaseapi.application.exception.IncorrectCredentialsException;
 import org.example.backend.databaseapi.application.port.in.usuario.ActualizarUsuarioPort;
 import org.example.backend.databaseapi.application.port.in.usuario.AltaUsuarioPort;
@@ -30,11 +30,11 @@ public class UsuarioController {
     private final JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody Usuario request) {
+    public ResponseEntity<TokenAndUsuario> register(@RequestBody Usuario request) {
         Usuario user = altaUsuarioPort.altaUsuario(request);
         String token = jwtService.generateToken(user);
 
-        return ResponseEntity.ok(AuthResponse.builder()
+        return ResponseEntity.ok(TokenAndUsuario.builder()
                 .token(token)
                 .usuario(user)
                 .build());
@@ -47,7 +47,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody Usuario request) {
+    public ResponseEntity<TokenAndUsuario> login(@RequestBody Usuario request) {
         String email=null;
         if(request.getEmail()!=null){
             email=request.getEmail().value();
@@ -60,7 +60,7 @@ public class UsuarioController {
 
         String token = jwtService.generateToken(user);
 
-        return ResponseEntity.ok(AuthResponse.builder()
+        return ResponseEntity.ok(TokenAndUsuario.builder()
                 .token(token)
                 .usuario(user)
                 .build());

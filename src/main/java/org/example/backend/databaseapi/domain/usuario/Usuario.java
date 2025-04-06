@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.backend.databaseapi.domain.usuario.UsuarioId;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @Builder
 @Getter
@@ -20,6 +22,8 @@ public class Usuario {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String imagen;
+    private String resetPasswordToken;
+    private LocalDateTime resetPasswordExpires;
 
     @Override
     public String toString() {
