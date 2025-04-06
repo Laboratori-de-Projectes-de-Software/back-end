@@ -3,6 +3,7 @@ package org.example.backend.databaseapi.jpa.usuario;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.exception.ResourceAlreadyExistsException;
+import org.example.backend.databaseapi.application.exception.ValidationException;
 import org.example.backend.databaseapi.application.port.out.usuario.CreateUsuarioPort;
 import org.example.backend.databaseapi.application.port.out.usuario.DeleteUsuarioPort;
 import org.example.backend.databaseapi.application.port.out.usuario.FindUsuarioPort;
@@ -24,6 +25,19 @@ public class UsuarioJpaAdapter implements CreateUsuarioPort, FindUsuarioPort, De
     @Override
     @Transactional
     public Optional<Usuario> createUsuario(Usuario usuario) {
+        if (usuario.getNombre() == null || usuario.getNombre().isEmpty() ||
+                usuario.getPassword() == null || usuario.getPassword().isEmpty() ||
+                usuario.getEmail() == null || usuario.getEmail().value() == null || usuario.getEmail().value().isEmpty() ||
+                usuario.getUserId() == null) {
+
+            throw new ValidationException("Validation failed: " +
+                    (usuario.getNombre() == null || usuario.getNombre().isEmpty() ? "Name is required. " : "") +
+                    (usuario.getPassword() == null || usuario.getPassword().isEmpty() ? "Password is required. " : "") +
+                    (usuario.getEmail() == null || usuario.getEmail().value() == null || usuario.getEmail().value().isEmpty() ? "Email is required. " : "") +
+                    (usuario.getUserId() == null ? "User ID is required. " : "")
+            );
+        }
+
         if(!usuarioJpaRepository.existsByEmail(usuario.getEmail().value())){
             // Encriptar la contraseña antes de guardar
             UsuarioJpaEntity entity=UsuarioJpaEntity.builder()
