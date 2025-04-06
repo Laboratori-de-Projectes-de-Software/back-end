@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Imagen {
-    private int id;
+    private Long id;
 
     private String ruta;
 

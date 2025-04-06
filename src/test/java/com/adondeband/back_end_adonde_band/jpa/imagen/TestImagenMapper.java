@@ -21,7 +21,7 @@ public class TestImagenMapper {
     @Test
     public void comprobarImagenEntityToImagen() {
         ImagenEntity imagenEntity = new ImagenEntity();
-        imagenEntity.setId(1);
+        imagenEntity.setId(1L);
         imagenEntity.setRuta("ruta");
 
         Imagen imagen = imagenJpaMapper.toDomain(imagenEntity);
@@ -33,7 +33,7 @@ public class TestImagenMapper {
     @Test
     public void comprobarImagenEntityToImagenWithNullValues() {
         ImagenEntity imagenEntity = new ImagenEntity();
-        imagenEntity.setId(0);
+        imagenEntity.setId(0L);
         imagenEntity.setRuta(null);
 
         Imagen imagen = imagenJpaMapper.toDomain(imagenEntity);
@@ -45,7 +45,7 @@ public class TestImagenMapper {
     @Test
     public void comprobarImagenEntityToImagenWithEmptyString() {
         ImagenEntity imagenEntity = new ImagenEntity();
-        imagenEntity.setId(1);
+        imagenEntity.setId(1L);
         imagenEntity.setRuta("");
 
         Imagen imagen = imagenJpaMapper.toDomain(imagenEntity);

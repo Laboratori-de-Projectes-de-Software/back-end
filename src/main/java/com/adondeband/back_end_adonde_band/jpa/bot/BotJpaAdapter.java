@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 public class BotJpaAdapter implements BotPort {
 
     private final BotJpaRepository botJpaRepository;
-
     private final BotJpaMapper botJpaMapper;
     private final UsuarioJpaMapper usuarioJpaMapper;
 
@@ -26,6 +25,14 @@ public class BotJpaAdapter implements BotPort {
 
     @Override
     public Bot save(Bot bot) {
+        /*
+        // DEBUG
+        BotEntity botEntity = botJpaMapper.toEntity(bot);
+        BotEntity saved = botJpaRepository.save(botEntity);
+        Bot botR = botJpaMapper.toDomain(saved);
+        return botR;
+         */
+
         return botJpaMapper.toDomain(
                 botJpaRepository.save(
                         botJpaMapper.toEntity(bot)));
