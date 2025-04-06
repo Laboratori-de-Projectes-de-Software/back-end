@@ -80,7 +80,7 @@ paths:
       description: Lista los bots del usuario recibido. Si no se recibe usuario, lista todos los bots.
       operationId: getBots
       parameters:
-        - name: userId
+        - name: owner
           description: Id del usuario propietario de los bots.
           in: query
           required: false
@@ -93,7 +93,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Liga'
+                type: array
+                items:
+                  $ref: '#/components/schemas/BotResponseDTO'
         '401':
           description: No hay permisos
           content:
@@ -129,7 +131,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BotResponseDTO'
+                # array of objects
+                type: array
+                items:
+                  $ref: '#/components/schemas/BotSummaryResponseDTO'
         '401':
           description: No hay permisos
           content:
@@ -149,7 +154,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /api/bot/{botId}:
-    summary: Llamadas a API para obtener la información del bot botId.
+    summary: Llamadas a API para obtener la información de un bot dado su id.
     get:
       tags:
         - bot
@@ -163,22 +168,14 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: owner
-          in: query
-          required: false
-          schema:
-            type: string
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/BotResponseDTO'
-                  - type: array
-                    items:
-                      $ref: '#/components/schemas/BotSummaryResponseDTO'
+                $ref: '#/components/schemas/BotResponseDTO'
+
         '400':
           description: Invalid ID supplied
         '404':
@@ -195,13 +192,23 @@ paths:
         - liga
       summary: Listar todas las ligas
       operationId: getLigas
+      parameters:
+        - name: owner
+          description: Id del usuario propietario de las ligas.
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
           description: Ligas encontradas
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Liga'
+                type: array
+                items:
+                  $ref: '#/components/schemas/LeagueResponseDTO'
         '401':
           description: No hay permisos
           content:
@@ -231,7 +238,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Liga'
+                $ref: '#/components/schemas/LeagueResponseDTO'
         '401':
           description: No hay permisos
           content:
@@ -271,11 +278,7 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Liga'
-                  - type: array
-                    items:
-                      $ref: '#/components/schemas/LigaMin'
+                $ref: '#/components/schemas/LeagueResponseDTO'
         '401':
           description: No hay permisos
           content:
@@ -294,7 +297,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-    patch:
+    put:
       tags:
         - liga
       operationId: modifyLiga
@@ -312,7 +315,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Liga'
+                $ref: '#/components/schemas/LeagueResponseDTO'
         '401':
           description: No hay permisos
           content:
@@ -355,7 +358,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Liga'
+                $ref: '#/components/schemas/LeagueResponseDTO'
         '401':
           description: No hay permisos
           content:
@@ -381,7 +384,7 @@ paths:
       summary: Añadir un bot a una liga
       operationId: addBot
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: leagueId
           in: path
@@ -399,11 +402,15 @@ paths:
               format: int64
       responses:
         '201':
-          description: Bot registrado en la liga
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Liga'
+            description: Bot añadido a la liga
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: "Bot añadido a la liga correctamente"
         '401':
           description: No hay permisos
           content:
@@ -428,14 +435,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /api/league/{leagueId}/start:
-    summary: Iniciar Liga
-    post:
+  /api/league/{leagueId}/leaderboard:
+    summary: Devolver la clasificación de una liga
+    get:
       tags:
         - liga
-      operationId: startLiga
+      operationId: getClassification
       parameters:
         - name: leagueId
+          description: Id de la liga correspondiente
           in: path
           required: true
           schema:
@@ -443,7 +451,13 @@ paths:
             format: int64
       responses:
         '200':
-          description: Liga iniciada
+          description: Clasificación encontrada
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ParticipationResponseDTO'
         '401':
           description: No hay permisos
           content:
@@ -462,12 +476,54 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /api/league/{leagueId}/getJornada:
-    summary: Devolver una jornada
+  /api/league/{leagueId}/start:
+    summary: Iniciar Liga
+    post:
+      tags:
+        - liga
+      operationId: startLiga
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '201':
+          description: Liga iniciada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                      type: string
+                      example: "Liga iniciada correctamente"
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado la liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/league/{leagueId}/match:
+    summary: Devolver los partidos de una liga
     get:
       tags:
         - liga
-      operationId: getJornada
+      operationId: getPartidosLiga
       parameters:
         - name: leagueId
           description: Id de la liga correspondiente
@@ -476,189 +532,76 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: numJornada
-          description: Nº de la jornada a recibir
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
       responses:
         '200':
-          description: Operación exitosa
+          description: Partidos encontrados
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Jornada'
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchResponseDTO'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         '404':
-          description: No se ha encontrado la jornada correspondiente
+          description: No se ha encontrado la liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/match/{matchId}/message:
+    summary: Devolver los mensajes de un partido
+    get:
+      tags:
+        - partido
+      operationId: getMessages
+      parameters:
+        - name: matchId
+          description: Id del partido correspondiente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Mensajes encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageResponseDTO'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado el partido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
 components:
   schemas:
-    Liga:
-      properties:
-        nombre:
-          type: string
-        logoUrl:
-          type: string
-        estado:
-          $ref: '#/components/schemas/Estado'
-        fechaInicio:
-          type: string
-          format: date-time
-        fechaFinal:
-          type: string
-          format: date-time
-        clasificacion:
-          type: array
-          items:
-            $ref: '#/components/schemas/Participacion'
-      required:
-        - nombre
-        - logoUrl
-        - estado
-    LigaMin:
-      properties:
-        nombre:
-          type: string
-          example: LaLiga EA Sports
-        logoUrl:
-          type: string
-        estado:
-          $ref: '#/components/schemas/Estado'
-      required:
-        - nombre
-        - logoUrl
-        - estado
-    Participacion:
-      properties:
-        pos:
-          type: integer
-          format: int32
-        equipo:
-          $ref: '#/components/schemas/BotResponseDTO'
-        partidosJugados:
-          type: integer
-          format: int32
-        ganados:
-          type: integer
-          format: int32
-        empatados:
-          type: integer
-          format: int32
-        perdidos:
-          type: integer
-          format: int32
-        puntos:
-          type: integer
-          format: int32
-      required:
-        - pos
-        - equipo
-        - partidosJugados
-        - ganados
-        - empatados
-        - perdidos
-        - puntos
-    Jornada:
-      properties:
-        num:
-          type: integer
-          format: int32
-        partidos:
-          type: array
-          items:
-            $ref: '#/components/schemas/Partido'
-      required:
-        - num
-        - partidos
-    Partido:
-      properties:
-        idPartido:
-          type: integer
-          format: int64
-        equipo1:
-          type: string
-        equipo2:
-          type: string
-        estado:
-          $ref: '#/components/schemas/Estado'
-        ganador:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 2
-      required:
-        - idPartido
-        - equipo1
-        - equipo2
-        - estado
-    Estado:
-      type: string
-      description: Estado de la liga
-      enum:
-        - pendiente
-        - en curso
-        - finalizado
-    BotDTO:
-      type: object
-      properties:
-        name:
-          type: string
-          description: "Nombre del bot a añadir"
-        description:
-          type: string
-          description: "Cualidad del bot"
-        urlImagen:
-          type: string
-          description: "URL de la imagen"
-        endpoint:
-          type: string
-          description: "URL del endpoint del bot"
-      required:
-        - name
-        - description
-        - urlImagen
-        - endpoint
-    BotResponseDTO:
-      type: object
-      properties:
-        botId:
-          type: integer
-          format: int64
-        name:
-          type: string
-          description: "Nombre del bot"
-        description:
-          type: string
-          description: "Descripción del bot"
-        urlImagen:
-          type: string
-          description: "URL de la imagen del bot"
-        nWins:
-          type: integer
-          format: int32
-        nDraws:
-          type: integer
-          format: int32
-        nLosses:
-          type: integer
-          format: int32
-    BotSummaryResponseDTO:
-      type: object
-      properties:
-        botId:
-          type: integer
-          format: int64
-        name:
-          type: string
-          description: "Nombre del bot"
-        description:
-          type: string
-          description: "Descripción del bot"
     UserDTORegister:
       type: object
       properties:
@@ -702,6 +645,180 @@ components:
         user:
           type: string
           example: adondeboy
+    BotDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Nombre del bot a añadir"
+        description:
+          type: string
+          description: "Cualidad del bot"
+        urlImagen:
+          type: string
+          description: "URL de la imagen"
+        endpoint:
+          type: string
+          description: "URL del endpoint del bot"
+        userId:
+          type: integer
+          format: int64
+          description: "Id del usuario propietario del bot"
+      required:
+        - name
+        - description
+        - urlImagen
+        - endpoint
+    BotResponseDTO:
+      type: object
+      properties:
+        botId:
+          type: integer
+          format: int64
+        name:
+          type: string
+          description: "Nombre del bot"
+        description:
+          type: string
+          description: "Descripción del bot"
+        urlImagen:
+          type: string
+          description: "URL de la imagen del bot"
+        nWins:
+          type: integer
+          format: int32
+        nDraws:
+          type: integer
+          format: int32
+        nLosses:
+          type: integer
+          format: int32
+    BotSummaryResponseDTO:
+      type: object
+      properties:
+        botId:
+          type: integer
+          format: int64
+        name:
+          type: string
+          description: "Nombre del bot"
+        description:
+          type: string
+          description: "Descripción del bot"
+    LeagueDTO:
+      properties:
+        name:
+          type: string
+          example: LaLiga EA Sports
+        urlImagen:
+          type: string
+        userId:
+          type: integer
+          format: int64
+        rounds:
+          type: integer
+          format: int32
+        matchTime:
+          type: integer
+          format: int64
+        bots:
+          type: array
+          description: "Lista de los ids de los bots de la liga"
+          items:
+            type: integer
+            format: int64
+    LeagueResponseDTO:
+      properties:
+        leagueId:
+          type: integer
+          format: int64
+        state:
+          $ref: '#/components/schemas/Estado'
+        name:
+          type: string
+          example: LaLiga EA Sports
+        urlImagen:
+          type: string
+        userId:
+          type: integer
+          format: int64
+        rounds:
+          type: integer
+          format: int32
+        matchTime:
+          type: integer
+          format: int64
+        bots:
+          type: array
+          description: "Lista de los ids de los bots de la liga"
+          items:
+            type: integer
+            format: int64
+        clasificacion:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParticipationResponseDTO'
+      required:
+        - leagueId
+        - state
+        - name
+        - urlImagen
+        - userId
+        - rounds
+        - matchTime
+        - bots
+    MatchResponseDTO:
+      properties:
+        state:
+          $ref: '#/components/schemas/Estado'
+        result:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2
+        fighters:
+          type: array
+          items:
+            # BotIds
+            type: integer
+            format: int64
+        roundNumber:
+          type: integer
+          format: int32
+      required:
+        - state
+        - result
+        - fighters
+        - roundNumber
+    MessageResponseDTO:
+      properties:
+        text:
+          type: string
+          description: "Texto del mensaje"
+        botId:
+          type: integer
+          format: int64
+        time:
+          type: string
+          format: date-time
+    ParticipationResponseDTO:
+      properties:
+        botId:
+          type: integer
+          format: int64
+        position:
+          type: integer
+          format: int32
+        points:
+          type: integer
+          format: int32
+    Estado:
+      type: string
+      description: Estado de la liga
+      enum:
+        - pendiente
+        - en curso
+        - finalizado
     Error:
       type: object
       properties:
