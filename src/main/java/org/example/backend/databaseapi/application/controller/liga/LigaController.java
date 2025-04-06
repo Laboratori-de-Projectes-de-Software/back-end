@@ -1,9 +1,11 @@
 package org.example.backend.databaseapi.application.controller.liga;
 
 import lombok.AllArgsConstructor;
+import org.example.backend.databaseapi.application.port.in.bot.EliminarBotPort;
 import org.example.backend.databaseapi.application.port.in.liga.AltaLigaPort;
 import org.example.backend.databaseapi.application.port.in.liga.BuscarAllLigasPort;
 import org.example.backend.databaseapi.application.port.in.liga.BuscarLigaPort;
+import org.example.backend.databaseapi.application.port.in.liga.EliminarLigaPort;
 import org.example.backend.databaseapi.domain.liga.Liga;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -23,10 +25,11 @@ public class LigaController {
     private final BuscarLigaPort buscarLigaPort;
     private final BuscarAllLigasPort buscarAllLigasPort;
     private final LigaModelAssembler ligaModelAssembler;
+    private final EliminarLigaPort eliminarLigaPort;
 
     @PostMapping("/ligas")
     public ResponseEntity<EntityModel<Liga>> altaLiga(@RequestBody Liga requestLiga){
-        Liga liga=altaLigaPort.altaLiga(requestLiga);
+        Liga liga = altaLigaPort.altaLiga(requestLiga);
         return ResponseEntity.created(linkTo(methodOn(LigaController.class).buscarLiga(liga.getLigaId().value())).toUri())
                 .body(ligaModelAssembler.toModel(liga));
     }
@@ -46,5 +49,13 @@ public class LigaController {
                 .toList();
         return ResponseEntity.ok(ligaModelAssembler.toCollectionModel(ligas));
     }
-
+    /*
+     comentado para no desperdiciar mi esfuerzo y para no añadir algo que no se ha pedido
+     pero quizá sí se pedirá luego (además viene bien para testear)
+     */
+    /*@DeleteMapping("/ligas/{id}")
+    ResponseEntity<?> eliminarLiga(@PathVariable Integer id){
+        eliminarLigaPort.eliminarLiga(id);
+        return ResponseEntity.noContent().build();
+    }*/
 }

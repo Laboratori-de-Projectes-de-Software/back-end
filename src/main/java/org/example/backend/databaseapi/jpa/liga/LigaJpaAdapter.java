@@ -17,7 +17,7 @@ import org.example.backend.databaseapi.application.exception.ValidationException
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Lazy})
-public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLigaPort, FindLigaUsuarioPort {
+public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLigaPort, FindLigaUsuarioPort, DeleteLigaPort {
 
     private final LigaJpaMapper ligaJpaMapper;
     private final LigaJpaRepository ligaJpaRepository;
@@ -100,4 +100,7 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
         return ligaJpaRepository.findById(ligaId)
                 .orElseThrow();
     }
+
+    @Override
+    public void deleteLiga(int id_liga) { ligaJpaRepository.deleteById(id_liga); }
 }
