@@ -30,4 +30,11 @@ public class CustomException {
     public final ErrorInfo IncorrectCredentialsException(HttpServletRequest req, Exception ex) {
         return new ErrorInfo(req.getRequestURL(), ex);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({ValidationException.class, IllegalArgumentException.class})
+    @ResponseBody
+    public final ErrorInfo handleValidationException(HttpServletRequest req, Exception ex) {
+        return new ErrorInfo(req.getRequestURL(), ex);
+    }
 }

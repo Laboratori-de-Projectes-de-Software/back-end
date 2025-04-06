@@ -2,18 +2,18 @@ package org.example.backend.databaseapi.jpa.liga;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.backend.databaseapi.application.port.out.liga.CreateLigaPort;
-import org.example.backend.databaseapi.application.port.out.liga.FindAllLigasPort;
-import org.example.backend.databaseapi.application.port.out.liga.FindLigaPort;
-import org.example.backend.databaseapi.application.port.out.liga.FindLigaUsuarioPort;
+import org.example.backend.databaseapi.application.port.out.liga.*;
+import org.example.backend.databaseapi.domain.bot.Bot;
 import org.example.backend.databaseapi.domain.liga.Liga;
 import org.example.backend.databaseapi.jpa.bot.BotJpaAdapter;
+import org.example.backend.databaseapi.jpa.bot.BotJpaEntity;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaAdapter;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import org.example.backend.databaseapi.application.exception.ValidationException;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Lazy})
@@ -28,30 +28,49 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
 
     @Override
     @Transactional
-    public Liga createLiga(Liga liga) {
-        LigaJpaEntity ligaJpa=LigaJpaEntity.builder()
-                .nombre(liga.getNombre())
-                .usuario(usuarioJpaAdapter.getUser(liga.getUsuario().value())
-                        .orElseThrow())
-                /*
-                TODO:ES POSIBLE QUE SE TENGA QUE CREAR UNA FUNCION PARA ESTO AL SER UN ENDPOINT DIFERENTE
-                .botsLiga(
-                        liga.getBotsLiga()
-                                .stream()
-                                .map(
-                                    botId -> botJpaAdapter.getJpaBot(botId.value())
-                                            .orElseThrow()
-                                )
-                                .toList()
+    public Optional<Liga> createLiga(Liga liga) {
+        if (liga.getNombre() == null || liga.getNombre().isEmpty() ||
+                liga.getUsuario() == null ||
+                liga.getBotsLiga() == null || liga.getBotsLiga().isEmpty()) {
 
+            throw new ValidationException("Validation failed: " +
+                    (liga.getNombre() == null || liga.getNombre().isEmpty() ? "Name is required. " : "") +
+                    (liga.getUsuario() == null ? "User is required. " : "") +
+                    (liga.getBotsLiga() == null || liga.getBotsLiga().isEmpty() ? "Bots are required. " : "")
+            );
+        }
+
+        if(ligaJpaRepository.existsByNombre(liga.getNombre())) {
+            return Optional.empty();
+        }
+
+        int numBots = liga.getBotsLiga().size();
+        int maxRondas = (numBots * (numBots - 1)) / 2;
+
+        if (liga.getRondas() > maxRondas) {
+            throw new ValidationException("Número de partidas excede el máximo para " + numBots + " bots: " + maxRondas);
+        } else if (liga.getRondas() <= 0) {
+            liga.setRondas(maxRondas);
+        }
+
+        LigaJpaEntity ligaJpa = LigaJpaEntity.builder()
+                .nombre(liga.getNombre())
+                .usuario(
+                        usuarioJpaAdapter.getUser(liga.getUsuario().value())
+                                .orElseThrow()
                 )
-                 */
+                .rondas(liga.getRondas())
+                .botsLiga(
+                    liga.getBotsLiga()
+                            .stream()
+                            .map(
+                                botId -> botJpaAdapter.getJpaBot(botId.value())
+                                        .orElseThrow()
+                            )
+                            .toList()
+                )
                 .build();
-        return ligaJpaMapper.toDomain(
-                ligaJpaRepository.save(
-                        ligaJpa
-                )
-        );
+        return Optional.of(ligaJpaMapper.toDomain(ligaJpaRepository.save(ligaJpa)));
     }
 
     @Override

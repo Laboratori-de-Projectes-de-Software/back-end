@@ -37,4 +37,5 @@ public class LigaJpaEntity {
     @NotBlank(message = "El nombre de la liga no puede estar vacia")
     private String nombre;
 
+    private int rondas;
 }

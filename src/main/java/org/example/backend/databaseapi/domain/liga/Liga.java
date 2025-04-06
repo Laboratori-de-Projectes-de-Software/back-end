@@ -15,17 +15,19 @@ import java.util.List;
 @Setter
 public class Liga {
 
-    private LigaId ligaId;
+    private final LigaId ligaId;
     private List<BotId> botsLiga;
     private UsuarioId usuario;
     private String nombre;
+    private int rondas;
 
     @Override
     public String toString() {
         return "Liga{" +
                 "ligaId=" + ligaId +
                 ", usuario=" + usuario +
-                ", nombre='" + nombre + '\'' +
+                ", nombre='" + nombre +
+                ", rondas='" + rondas + '\'' +
                 '}';
     }
 }
