@@ -1,10 +1,9 @@
-package org.example.backend.databaseapi.application.dto;
+package org.example.backend.databaseapi.domain.usuario;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.backend.databaseapi.domain.usuario.Usuario;
 
 @Data
 @Builder

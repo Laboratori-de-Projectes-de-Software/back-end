@@ -1,7 +1,7 @@
 package org.example.backend.databaseapi.application.controller.usuario;
 
 import lombok.AllArgsConstructor;
-import org.example.backend.databaseapi.application.dto.AuthResponse;
+import org.example.backend.databaseapi.domain.usuario.AuthResponse;
 import org.example.backend.databaseapi.application.exception.IncorrectCredentialsException;
 import org.example.backend.databaseapi.application.port.in.usuario.ActualizarUsuarioPort;
 import org.example.backend.databaseapi.application.port.in.usuario.AltaUsuarioPort;
