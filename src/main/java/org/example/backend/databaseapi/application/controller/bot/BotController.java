@@ -1,6 +1,9 @@
 package org.example.backend.databaseapi.application.controller.bot;
 
 import lombok.AllArgsConstructor;
+import org.example.backend.databaseapi.application.dto.bot.BotDTOMapper;
+import org.example.backend.databaseapi.application.dto.bot.BotDTORequest;
+import org.example.backend.databaseapi.application.dto.bot.BotDTOResponse;
 import org.example.backend.databaseapi.application.port.in.bot.*;
 import org.example.backend.databaseapi.domain.bot.Bot;
 import org.example.backend.databaseapi.domain.bot.BotsFilterRequest;
@@ -25,12 +28,17 @@ public class BotController {
     private final EliminarBotPort eliminarBotPort;
     private final ActualizarBotPort actualizarBotPort;
     private final BotModelAssembler botModelAssembler;
+    private final BotDTOMapper botDTOMapper;
 
     @PostMapping("/bots")
-    ResponseEntity<EntityModel<Bot>> altaBot(@RequestBody Bot newBot){
-        Bot bot=altaBotPort.altaBot(newBot);
+    ResponseEntity<BotDTOResponse> altaBot(@RequestBody BotDTORequest newBot){
+        Bot bot=altaBotPort.altaBot(botDTOMapper.toBot(newBot));
+        BotDTOResponse response=botDTOMapper.toDTOResponse(bot);
+        response.setNWins(0);
+        response.setNLoses(0);
+        response.setNDraws(0);
         return ResponseEntity.created(linkTo(methodOn(BotController.class).buscarBot(bot.getIdBot().value())).toUri())
-                .body(botModelAssembler.toModel(bot));
+                .body(response);
     }
 
     @DeleteMapping("/bots/{id}")
@@ -40,9 +48,9 @@ public class BotController {
     }
 
     @GetMapping("/bots/{id}")
-    ResponseEntity<EntityModel<Bot>> buscarBot(@PathVariable Integer id){
+    ResponseEntity<BotDTOResponse> buscarBot(@PathVariable Integer id){
         Bot bot=buscarBotPort.buscarBot(id);
-        return ResponseEntity.ok(botModelAssembler.toModel(bot));
+        return ResponseEntity.ok(botDTOMapper.toDTOResponse(bot));
     }
 
     @GetMapping("/bots")
