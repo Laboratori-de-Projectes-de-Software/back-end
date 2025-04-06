@@ -28,8 +28,7 @@ class MatchPair {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MatchPair)) return false;
-        MatchPair that = (MatchPair) o;
+        if (!(o instanceof MatchPair that)) return false;
         return bot1 == that.bot1 && bot2 == that.bot2;
     }
 
@@ -53,7 +52,6 @@ public class StartLeagueUseCase implements LeagueStartPortAPI {
         List<Integer> bots = new ArrayList<>(league.getBotIds());
 
         List<MatchPair> possibleMatches = new ArrayList<>();
-        Set<MatchPair> usedMatches = new HashSet<>();
 
         // Generar todas las combinaciones únicas
         for (int i = 0; i < bots.size(); i++) {
@@ -66,6 +64,7 @@ public class StartLeagueUseCase implements LeagueStartPortAPI {
 
         int matchesPerRound = bots.size() / 2;
         Stack<MatchPair> pos = new Stack<>();
+        Stack<MatchPair> aux = new Stack<>();
         pos.addAll(possibleMatches);
 
 
@@ -81,11 +80,13 @@ public class StartLeagueUseCase implements LeagueStartPortAPI {
 
             //Falta revisar si el mismo bot juega otra vez en la misma ronda
             boolean [] used = new boolean[bots.size()];
-            for (int j = 0; j < matchesPerRound; j++) {
-                matchPair = pos.getFirst();
+            int j = 0;
+            aux = new Stack<>();
+            while (j < matchesPerRound) {
+                matchPair = pos.pop();
                 game = new Game();
                 if (used[matchPair.bot1-1] || used[matchPair.bot2-1]) {
-                    pos.push(matchPair);
+                   aux.push(matchPair);
                     continue;
                 }
                 used[matchPair.bot1-1] = true;
@@ -97,8 +98,9 @@ public class StartLeagueUseCase implements LeagueStartPortAPI {
 
                 game = gamePortDB.saveGame(game);
                 round.getGameIds().add(game.getId());
+                j++;
             }
-
+            pos.addAll(aux);
             roundPortDB.saveRound(round);
         }
 

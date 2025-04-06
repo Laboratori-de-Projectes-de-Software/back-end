@@ -5,6 +5,8 @@ import com.alia.back_end_service.domain.bot.usecases.*;
 import com.alia.back_end_service.domain.game.ports.GamePortDB;
 import com.alia.back_end_service.domain.league.ports.LeaguePortDB;
 import com.alia.back_end_service.domain.league.usecases.*;
+import com.alia.back_end_service.domain.message.port.MessagePortDB;
+import com.alia.back_end_service.domain.message.usecases.GetAllMessagesFromMatch;
 import com.alia.back_end_service.domain.round.ports.RoundPortDB;
 import com.alia.back_end_service.domain.user.ports.PasswordEncoderPort;
 import com.alia.back_end_service.domain.user.ports.TokenProviderPort;
@@ -76,4 +78,8 @@ public class SpringConfig {
     public StartLeagueUseCase startLeagueUseCase(LeaguePortDB leaguePortDB, RoundPortDB roundPortDB, GamePortDB gamePortDB) { return new StartLeagueUseCase(leaguePortDB, roundPortDB, gamePortDB); }
     @Bean
     public GetAllLeagueGamesUseCase getAllLeagueGamesUseCase(LeaguePortDB leaguePortDB){return new GetAllLeagueGamesUseCase(leaguePortDB);}
+
+    //Message
+    @Bean
+    public GetAllMessagesFromMatch getAllMessagesFromMatch(MessagePortDB messagePortDB) {return new GetAllMessagesFromMatch(messagePortDB);}
 }

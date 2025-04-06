@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MessageJpaRepository  {
+public interface MessageJpaRepository extends JpaRepository<MessageEntity, Integer> {
+    List<MessageEntity> getAllMessagesByGameId(Integer gameId);
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 
+@Component
 public class MessageMapperImpl implements MessageMapper {
     @Override
     public Message toDomain(MessageEntity entity) {

@@ -36,8 +36,12 @@ public class LeagueJpaAdapter implements LeaguePortDB {
 
     @Override
     public League saveLeague(League league) {
-        LeagueEntity saved = leagueJpaRepository.save(leagueMapper.toEntity(league));
-        return leagueMapper.toDomain(saved);
+        LeagueEntity save = leagueMapper.toEntity(league);
+        for (Integer i: league.getBotIds()) {
+            Optional<BotEntity> botEntity = botJpaRepository.findById(i);
+            botEntity.ifPresent(entity -> save.getBots().add(entity));
+        }
+        return leagueMapper.toDomain(leagueJpaRepository.save(save));
     }
 
     @Override
