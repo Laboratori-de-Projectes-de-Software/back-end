@@ -1,6 +1,6 @@
 package uib.lab.api.application.service;
 
-import uib.lab.api.application.dto.user.UserRegistrationRequest;
+import uib.lab.api.application.dto.user.UserDTORegister;
 import uib.lab.api.domain.entity.User;
 import uib.lab.api.infraestructura.jpaRepositories.UserJpaRepository;
 import uib.lab.api.infraestructura.util.ApiMessage;
@@ -39,13 +39,13 @@ public class AuthenticationService {
         private final String code;
     }
 
-    public ApiMessage register(UserRegistrationRequest userRegistrationRequest, Locale locale) {
-        userJpaRepository.findByUsername(userRegistrationRequest.getUsername()).ifPresent(user -> {
+    public ApiMessage register(UserDTORegister userRegistrationRequest, Locale locale) {
+        userJpaRepository.findByUsername(userRegistrationRequest.getMail()).ifPresent(user -> {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     messageConverter.getMessage(
                             Message.ALREADY_EXISTS,
-                            Set.of(userRegistrationRequest.getUsername()),
+                            Set.of(userRegistrationRequest.getMail()),
                             locale
                     )
             );
@@ -57,11 +57,11 @@ public class AuthenticationService {
         user.setRoles(Set.of(User.Role.USER));
 
         //Creamos el usuario usando el caso de uso de CreateUserCase
-        createUserCase.createUser(user.getUsername(), user.getName(), user.getPassword(), user.getRoles());
+        createUserCase.createUser(user.getMail(), user.getUsername(), user.getPassword(), user.getRoles());
 
         return ApiMessage.builder()
                 .status(HttpStatus.CREATED)
-                .message(messageConverter.getMessage(Message.ENABLED, Set.of(userRegistrationRequest.getName()), locale))
+                .message(messageConverter.getMessage(Message.ENABLED, Set.of(userRegistrationRequest.getUsername()), locale))
                 .build();
     }
 

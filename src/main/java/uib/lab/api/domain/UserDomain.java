@@ -10,33 +10,33 @@ import uib.lab.api.domain.entity.User.Role;
 
 public class UserDomain implements UserDetails {
     private long id;
+    private String mail;
     private String username;
-    private String name;
     private String password;
     private boolean isEnabled;
     private Set<Role> roles;
 
-    public UserDomain(long id, String username, String name, String password, boolean isEnabled, Set<Role> roles) {
+    public UserDomain(long id, String mail, String username, String password, boolean isEnabled, Set<Role> roles) {
         this.id = id;
+        this.mail = mail;
         this.username = username;
-        this.name = name;
         this.password = password;
         this.isEnabled = isEnabled;
         this.roles = roles;
     }
 
-    public UserDomain(long id, String username, String name, String password, boolean isEnabled) {
+    public UserDomain(long id, String mail, String username, String password, boolean isEnabled) {
         this.id = id;
+        this.mail = mail;
         this.username = username;
-        this.name = name;
         this.password = password;
         this.isEnabled = isEnabled;
         this.roles = roles;
     }
 
-    public UserDomain(String username, String name, String password, boolean isEnabled, Set<Role> roles) {
+    public UserDomain(String mail, String username, String password, boolean isEnabled, Set<Role> roles) {
+        this.mail = mail;
         this.username = username;
-        this.name = name;
         this.password = password;
         this.isEnabled = isEnabled;
         this.roles = roles;
@@ -48,8 +48,8 @@ public class UserDomain implements UserDetails {
         return this.id;
     }
 
-    public String getUsername() {
-        return this.username;
+    public String getMail() {
+        return this.mail;
     }
 
     @Override
@@ -67,8 +67,8 @@ public class UserDomain implements UserDetails {
         return true;
     }
 
-    public String getName() {
-        return this.name;
+    public String getUsername() {
+        return this.username;
     }
 
     @Override

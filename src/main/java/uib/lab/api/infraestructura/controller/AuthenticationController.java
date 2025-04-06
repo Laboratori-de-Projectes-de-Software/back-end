@@ -1,6 +1,6 @@
 package uib.lab.api.infraestructura.controller;
 
-import uib.lab.api.application.dto.user.UserRegistrationRequest;
+import uib.lab.api.application.dto.user.UserDTORegister;
 import uib.lab.api.application.service.AuthenticationService;
 import uib.lab.api.infraestructura.util.ApiMessage;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/auth/register")
-    public ResponseEntity<ApiMessage> register(@Valid @RequestBody UserRegistrationRequest user, Locale locale) {
+    public ResponseEntity<ApiMessage> register(@Valid @RequestBody UserDTORegister user, Locale locale) {
         var message = authenticationService.register(user, locale);
         return ResponseEntity.status(message.getStatus()).body(message);
     }

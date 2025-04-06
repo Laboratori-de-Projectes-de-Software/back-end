@@ -55,8 +55,8 @@ public class UserJpaAdapter implements UserPort {
         User entity = userJpaRepository.findById(user.getId())
         .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     
+        entity.setMail(user.getMail());
         entity.setUsername(user.getUsername());
-        entity.setName(user.getName());
         entity.setPassword(user.getPassword());
   
         return userMapper.toDomain(userJpaRepository.save(entity));

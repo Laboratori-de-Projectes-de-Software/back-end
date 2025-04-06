@@ -64,7 +64,7 @@ public class UserService {
                     HttpStatus.NOT_FOUND,
                     messageConverter.getMessage(
                             UserService.Message.NOT_EXISTS_BY_USERNAME,
-                            Set.of(userUpdateRequest.getUsername()),
+                            Set.of(userUpdateRequest.getMail()),
                             locale
                     )
             );
@@ -77,11 +77,11 @@ public class UserService {
         user.setRoles(Set.of(User.Role.USER));
 
         //Actualizamos el usuario usando el caso de uso de UpdateUserCase
-        updateUserUseCase.updateUser(id, user.getUsername(), user.getName(), user.getPassword());
+        updateUserUseCase.updateUser(id, user.getMail(), user.getUsername(), user.getPassword());
 
         return ApiMessage.builder()
                 .status(HttpStatus.CREATED)
-                .message(messageConverter.getMessage(Message.UPDATED, Set.of(userUpdateRequest.getName()), locale))
+                .message(messageConverter.getMessage(Message.UPDATED, Set.of(userUpdateRequest.getUsername()), locale))
                 .build();
     }
 

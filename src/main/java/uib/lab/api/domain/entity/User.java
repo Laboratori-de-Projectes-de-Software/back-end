@@ -27,8 +27,11 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name ="username")
+    private String mail;
+    
+    @Column(name = "name")
     private String username;
-    private String name;
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -40,22 +43,22 @@ public class User implements UserDetails {
 
     private boolean enabled;
 
-    public User(long id, String username, String password) {
+    public User(long id, String mail, String password) {
         this.id = id;
-        this.username = username;
+        this.mail = mail;
         this.password = password;
     }
 
-    public User(long id, String u, String n, String p){
+    public User(long id, String m, String u, String p){
         this.id = id;
-        this.username = u;
-        this.name = n; 
+        this.mail = m;
+        this.username = u; 
         this.password = p;
     }
 
-    public User(String u, String n, String p){
-        this.username = u;
-        this.name = n; 
+    public User(String m, String u, String p){
+        this.mail = m;
+        this.username = u; 
         this.password = p;
     }
 

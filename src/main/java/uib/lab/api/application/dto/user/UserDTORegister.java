@@ -8,14 +8,14 @@ import javax.validation.constraints.*;
 
 @Setter
 @Getter
-public class UserRegistrationRequest {
+public class UserDTORegister {
 
     @Email
     @NotBlank
-    private String username;
+    private String mail;
 
     @NotBlank
-    private String name;
+    private String username;
 
     @Password
     @NotBlank

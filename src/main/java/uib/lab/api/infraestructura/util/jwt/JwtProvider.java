@@ -27,8 +27,8 @@ public abstract class JwtProvider {
     public String generate(User user) {
         return Jwts.builder()
                 .setSubject(String.valueOf(user.getId()))
+                .claim("mail", user.getMail())
                 .claim("username", user.getUsername())
-                .claim("name", user.getName())
                 .setIssuedAt(new Date())
                 .setExpiration(Timestamp.valueOf(LocalDateTime.now().plus(duration, temporalUnit)))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)))

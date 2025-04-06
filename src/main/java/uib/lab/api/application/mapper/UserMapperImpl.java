@@ -14,7 +14,7 @@ public class UserMapperImpl implements UserMapper {
         if (entity == null) {
             return null;
         }
-        return new UserDomain(entity.getId(), entity.getUsername(), entity.getName(), entity.getPassword(), true, entity.getRoles());
+        return new UserDomain(entity.getId(), entity.getMail(), entity.getUsername(), entity.getPassword(), true, entity.getRoles());
     }
 
     @Override
@@ -24,8 +24,8 @@ public class UserMapperImpl implements UserMapper {
         }
         User entity = new User();
         entity.setId(user.getId());
+        entity.setMail(user.getMail());
         entity.setUsername(user.getUsername());
-        entity.setName(user.getName());
         entity.setPassword(user.getPassword());
         entity.setEnabled(true);
         entity.setRoles(user.getRoles());

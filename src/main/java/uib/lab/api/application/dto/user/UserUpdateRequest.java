@@ -12,10 +12,10 @@ public class UserUpdateRequest {
 
     @Email
     @NotBlank
-    private String username;
+    private String mail;
 
     @NotBlank
-    private String name;
+    private String username;
 
     @Password
     @NotBlank
