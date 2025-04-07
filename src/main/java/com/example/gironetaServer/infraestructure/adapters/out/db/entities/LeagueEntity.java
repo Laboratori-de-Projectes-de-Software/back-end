@@ -35,7 +35,7 @@ public class LeagueEntity {
     private UserEntity usuario; // Relación con Usuario
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "liga_bot", joinColumns = @JoinColumn(name = "liga_id"), inverseJoinColumns = @JoinColumn(name = "bot_id"))
+    @JoinTable(name = "Participacion", joinColumns = @JoinColumn(name = "liga_id"), inverseJoinColumns = @JoinColumn(name = "bot_id"))
     private Set<BotEntity> bots; // Relación con Bots
 
     @OneToMany(mappedBy = "liga", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -55,7 +55,7 @@ public class LeagueEntity {
     }
 
     public LeagueEntity(String name, String urlImagen, Integer rounds, Long matchTime, Set<BotEntity> bots,
-                        UserEntity usuario, Set<JornadaEntity> jornadas) {
+            UserEntity usuario, Set<JornadaEntity> jornadas) {
         this.name = name;
         this.urlImagen = urlImagen;
         this.rounds = rounds;
