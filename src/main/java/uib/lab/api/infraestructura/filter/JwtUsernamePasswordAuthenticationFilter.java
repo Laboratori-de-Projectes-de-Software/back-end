@@ -1,6 +1,6 @@
 package uib.lab.api.infraestructura.filter;
 
-import uib.lab.api.application.dto.user.UserLoginRequest;
+import uib.lab.api.application.dto.user.UserDTOLogin;
 import uib.lab.api.infraestructura.util.ApiHttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +24,10 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
     @Override
     @SneakyThrows
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        var user = objectMapper.readValue(request.getInputStream(), UserLoginRequest.class);
+        var user = objectMapper.readValue(request.getInputStream(), UserDTOLogin.class);
 
         return authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+                new UsernamePasswordAuthenticationToken(user.getUser(), user.getPassword())
         );
     }
 
