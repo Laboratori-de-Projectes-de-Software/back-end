@@ -40,12 +40,12 @@ public class AuthenticationService {
     }
 
     public ApiMessage register(UserDTORegister userRegistrationRequest, Locale locale) {
-        userJpaRepository.findByUsername(userRegistrationRequest.getMail()).ifPresent(user -> {
+        userJpaRepository.findByUsername(userRegistrationRequest.getUser()).ifPresent(user -> {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     messageConverter.getMessage(
                             Message.ALREADY_EXISTS,
-                            Set.of(userRegistrationRequest.getMail()),
+                            Set.of(userRegistrationRequest.getUser()),
                             locale
                     )
             );
