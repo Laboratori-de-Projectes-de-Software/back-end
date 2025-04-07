@@ -22,28 +22,28 @@ public class PartidaController {
     private final AltaPartidaPort altaPartidaPort;
     private final BuscarPartidasLigaPort buscarPartidasLigaPort;
     private final BuscarPartidaPort buscarPartidaPort;
-    private final PartidaModelAssembler partidaModelAssembler;
+
+
 
     @PostMapping("/ligas/{id}/partidas")
-    public ResponseEntity<EntityModel<Partida>> altaPartida(@RequestBody Partida requestPartida, @PathVariable String id){
+    public ResponseEntity<Partida> altaPartida(@RequestBody Partida requestPartida, @PathVariable String id){
         Partida partida=altaPartidaPort.altaPartida(requestPartida);
         return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getLiga().value(), partida.getPartidaId().value())).toUri())
-                .body(partidaModelAssembler.toModel(partida));
+                .body(partida);
     }
 
-    @GetMapping("/ligas/{idliga}/partidas")
-    public ResponseEntity<CollectionModel<EntityModel<Partida>>> buscarPartidasLiga(@PathVariable Integer idliga){
-        List<EntityModel<Partida>> ligas= buscarPartidasLigaPort.buscarLigaPartida(idliga)
+    @GetMapping("/league/{leagueId}/match")
+    public ResponseEntity<List<Partida>> buscarPartidasLiga(@PathVariable Integer leagueId){
+        List<Partida> ligas= buscarPartidasLigaPort.buscarLigaPartida(leagueId)
                 .stream()
-                .map(partidaModelAssembler::toModel)
                 .toList();
-        return ResponseEntity.ok(partidaModelAssembler.toCollectionModel(ligas));
+        return ResponseEntity.ok(ligas);
     }
 
     @GetMapping("/ligas/{id}/partidas/{idpartida}")
-    public ResponseEntity<EntityModel<Partida>> buscarPartida(@PathVariable Integer id,@PathVariable Integer idpartida){
+    public ResponseEntity<Partida> buscarPartida(@PathVariable Integer id,@PathVariable Integer idpartida){
         Partida partida=buscarPartidaPort.buscarPartida(idpartida);
         return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getLiga().value(), partida.getPartidaId().value())).toUri())
-                .body(partidaModelAssembler.toModel(partida));
+                .body(partida);
     }
 }

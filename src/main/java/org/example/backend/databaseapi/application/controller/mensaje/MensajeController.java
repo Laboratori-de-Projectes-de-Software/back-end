@@ -1,6 +1,8 @@
 package org.example.backend.databaseapi.application.controller.mensaje;
 
 import lombok.AllArgsConstructor;
+import org.example.backend.databaseapi.application.dto.mensaje.MensajeDTOMapper;
+import org.example.backend.databaseapi.application.dto.mensaje.MessageDTOResponse;
 import org.example.backend.databaseapi.application.port.in.mensaje.BuscarMensajePort;
 import org.example.backend.databaseapi.application.port.in.mensaje.BuscarMensajesBotPort;
 import org.example.backend.databaseapi.application.port.in.mensaje.BuscarMensajesPartidaPort;
@@ -24,24 +26,24 @@ public class MensajeController {
     private final BuscarMensajePort buscarMensajePort;
     private final BuscarMensajesPartidaPort buscarMensajesPartidaPort;
     private final BuscarMensajesBotPort buscarMensajesBotPort;
-    private final MensajeModelAssembler mensajeModelAssembler;
+    private final MensajeDTOMapper mensajeDTOMapper;
 
-    @GetMapping("/ligas/{id}/partidas/{idPartida}/mensajes")
-    public ResponseEntity<CollectionModel<EntityModel<Mensaje>>> buscarMensajesPartida(@PathVariable Integer id, @PathVariable Integer idPartida){
-        List<EntityModel<Mensaje>> mensajes=buscarMensajesPartidaPort.buscarMensajesPartida(idPartida)
+    @GetMapping("match/{matchId}/message")
+    public ResponseEntity<List<MessageDTOResponse>> buscarMensajesPartida(@PathVariable Integer matchId){
+        List<MessageDTOResponse> mensajes=buscarMensajesPartidaPort.buscarMensajesPartida(matchId)
                 .stream()
-                .map(mensajeModelAssembler::toModel)
+                .map(mensajeDTOMapper::toMessageDTOResponse)
                 .toList();
-        return ResponseEntity.ok(mensajeModelAssembler.toCollectionModel(mensajes));
+        return ResponseEntity.ok(mensajes);
     }
 
     @PostMapping("/ligas/{id}/partidas/{idPartida}/mensajes")
-    public ResponseEntity<EntityModel<Mensaje>> nuevoMensaje(@PathVariable Integer id, @PathVariable Integer idPartida,
+    public ResponseEntity<Mensaje> nuevoMensaje(@PathVariable Integer id, @PathVariable Integer idPartida,
                                                              @RequestBody Mensaje requestMensaje){
         Mensaje mensaje=nuevoMensajePort.altaMensaje(requestMensaje);
         return ResponseEntity.created(linkTo(methodOn(MensajeController.class)
                         .buscarMensajesPartida(mensaje.getPartida().value(), mensaje.getMensajeId().value())).toUri())
-                .body(mensajeModelAssembler.toModel(mensaje));
+                .body(mensaje);
     }
 
 }

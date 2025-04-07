@@ -2,7 +2,7 @@ package org.example.backend.databaseapi.application.port.out.liga;
 
 import org.example.backend.databaseapi.domain.liga.Liga;
 
-public interface DeleteLigaPort {
+public interface UpdateLigaPort {
 
-    Liga deleteLiga(Integer ligaId);
+    Liga updateLiga(Liga liga,Integer id);
 }

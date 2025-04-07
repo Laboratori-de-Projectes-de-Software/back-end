@@ -17,7 +17,7 @@ import org.example.backend.databaseapi.application.exception.ValidationException
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Lazy})
-public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLigaPort, FindLigaUsuarioPort, DeleteLigaPort {
+public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLigaPort, FindLigaUsuarioPort, DeleteLigaPort, UpdateLigaPort, AddBotLigaPort {
 
     private final LigaJpaMapper ligaJpaMapper;
     private final LigaJpaRepository ligaJpaRepository;
@@ -102,5 +102,45 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
     }
 
     @Override
-    public void deleteLiga(int id_liga) { ligaJpaRepository.deleteById(id_liga); }
+    @Transactional
+    public Liga deleteLiga(Integer ligaId) {
+        LigaJpaEntity liga=ligaJpaRepository.findById(ligaId)
+                .orElseThrow();
+        ligaJpaRepository.deleteById(ligaId);
+        return ligaJpaMapper.toDomain(liga);
+    }
+
+    @Override
+    @Transactional
+    public Liga updateLiga(Liga liga,Integer id) {
+        LigaJpaEntity entity=LigaJpaEntity.builder()
+                .ligaId(id)
+                .botsLiga(
+                        liga.getBotsLiga()
+                                .stream()
+                                .map(
+                                        botId -> botJpaAdapter.getJpaBot(botId.value())
+                                                .orElseThrow()
+                                )
+                                .toList()
+
+                )
+                .nombre(liga.getNombre())
+                .usuario(usuarioJpaAdapter.getUser(liga.getUsuario().value())
+                        .orElseThrow()
+                )
+                .build();
+        return ligaJpaMapper.toDomain(ligaJpaRepository.save(entity));
+    }
+
+    @Override
+    @Transactional
+    public void addBotLiga(Integer idBot, Integer idLiga) {
+        LigaJpaEntity entity= ligaJpaRepository.findById(idLiga)
+                .orElseThrow();
+        entity.getBotsLiga().add(botJpaAdapter.getJpaBot(idBot)
+                .orElseThrow()
+        );
+        ligaJpaRepository.save(entity);
+    }
 }

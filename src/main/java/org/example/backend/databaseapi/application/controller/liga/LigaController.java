@@ -6,13 +6,19 @@ import org.example.backend.databaseapi.application.port.in.liga.AltaLigaPort;
 import org.example.backend.databaseapi.application.port.in.liga.BuscarAllLigasPort;
 import org.example.backend.databaseapi.application.port.in.liga.BuscarLigaPort;
 import org.example.backend.databaseapi.application.port.in.liga.EliminarLigaPort;
+import org.example.backend.databaseapi.application.dto.liga.LeagueDTORequest;
+import org.example.backend.databaseapi.application.dto.liga.LeagueDTOResponse;
+import org.example.backend.databaseapi.application.dto.liga.LigaDTOMapper;
+import org.example.backend.databaseapi.application.port.in.liga.*;
 import org.example.backend.databaseapi.domain.liga.Liga;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -24,30 +30,58 @@ public class LigaController {
     private final AltaLigaPort altaLigaPort;
     private final BuscarLigaPort buscarLigaPort;
     private final BuscarAllLigasPort buscarAllLigasPort;
-    private final LigaModelAssembler ligaModelAssembler;
+    private final AnadirBotLigaPort anadirBotLigaPort;
+    private final BuscarLigaUsuarioPort buscarLigaUsuarioPort;
+    private final ActualizarLigaPort actualizarLigaPort;
     private final EliminarLigaPort eliminarLigaPort;
+    private final LigaDTOMapper ligaDTOMapper;
 
-    @PostMapping("/ligas")
-    public ResponseEntity<EntityModel<Liga>> altaLiga(@RequestBody Liga requestLiga){
-        Liga liga = altaLigaPort.altaLiga(requestLiga);
+    @PostMapping("/league")
+    public ResponseEntity<LeagueDTOResponse> altaLiga(@RequestBody LeagueDTORequest requestLiga){
+        Liga liga=altaLigaPort.altaLiga(ligaDTOMapper.toLiga(requestLiga));
         return ResponseEntity.created(linkTo(methodOn(LigaController.class).buscarLiga(liga.getLigaId().value())).toUri())
-                .body(ligaModelAssembler.toModel(liga));
+                .body(ligaDTOMapper.toLeagueDTOResponse(liga));
     }
 
-    @GetMapping("/ligas/{id}")
-    public ResponseEntity<EntityModel<Liga>> buscarLiga(@PathVariable Integer id){
+    @PostMapping("/league/{leagueId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addBot(@RequestBody Integer botId,@PathVariable Integer leagueId){
+        anadirBotLigaPort.anadirBotLiga(botId,leagueId);
+    }
+
+    @GetMapping("/league/{id}")
+    public ResponseEntity<LeagueDTOResponse> buscarLiga(@PathVariable Integer id){
         Liga liga=buscarLigaPort.buscarLiga(id);
-        return ResponseEntity.ok(ligaModelAssembler.toModel(liga));
+        return ResponseEntity.ok(ligaDTOMapper.toLeagueDTOResponse(liga));
+    }
+
+    @PutMapping("/league/{leagueId}")
+    public ResponseEntity<LeagueDTOResponse> actualizarLiga(@PathVariable Integer leagueId, @RequestBody LeagueDTORequest request){
+        Liga liga=actualizarLigaPort.actualizarLiga(ligaDTOMapper.toLiga(request),leagueId);
+        return ResponseEntity.ok(ligaDTOMapper.toLeagueDTOResponse(liga));
+    }
+
+    @DeleteMapping("/league/{leagueId}")
+    public ResponseEntity<LeagueDTOResponse> eliminarLiga(@PathVariable Integer leagueId){
+        Liga liga=eliminarLigaPort.eliminarLiga(leagueId);
+        return ResponseEntity.ok(ligaDTOMapper.toLeagueDTOResponse(liga));
     }
 
 
-    @GetMapping("/ligas")
-    public ResponseEntity<CollectionModel<EntityModel<Liga>>> buscarAllLigas(){
-        List<EntityModel<Liga>> ligas= buscarAllLigasPort.buscarAllLigas()
-                .stream()
-                .map(ligaModelAssembler::toModel)
-                .toList();
-        return ResponseEntity.ok(ligaModelAssembler.toCollectionModel(ligas));
+    @GetMapping("/league")
+    public ResponseEntity<List<LeagueDTOResponse>> buscarAllLigas(@RequestParam("owner") Optional<Integer> userId ){
+        List<LeagueDTOResponse> ligas= userId.map(
+                id-> buscarLigaUsuarioPort.buscarLigasUsuario(id)
+                        .stream()
+                        .map(ligaDTOMapper::toLeagueDTOResponse)
+                        .toList()
+        ).orElseGet(
+                ()->buscarAllLigasPort.buscarAllLigas()
+                        .stream()
+                        .map(ligaDTOMapper::toLeagueDTOResponse)
+                        .toList()
+        );
+        return ResponseEntity.ok(ligas);
     }
     /*
      comentado para no desperdiciar mi esfuerzo y para no añadir algo que no se ha pedido

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -27,10 +28,9 @@ public class BotController {
     private final BuscarBotPort buscarBotPort;
     private final EliminarBotPort eliminarBotPort;
     private final ActualizarBotPort actualizarBotPort;
-    private final BotModelAssembler botModelAssembler;
     private final BotDTOMapper botDTOMapper;
 
-    @PostMapping("/bots")
+    @PostMapping("/bot")
     ResponseEntity<BotDTOResponse> altaBot(@RequestBody BotDTORequest newBot){
         Bot bot=altaBotPort.altaBot(botDTOMapper.toBot(newBot));
         BotDTOResponse response=botDTOMapper.toDTOResponse(bot);
@@ -47,45 +47,51 @@ public class BotController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/bots/{id}")
+    @GetMapping("/bot/{id}")
     ResponseEntity<BotDTOResponse> buscarBot(@PathVariable Integer id){
         Bot bot=buscarBotPort.buscarBot(id);
         return ResponseEntity.ok(botDTOMapper.toDTOResponse(bot));
     }
 
-    @GetMapping("/bots")
-    ResponseEntity<CollectionModel<EntityModel<Bot>>> buscarAllBots(){
-        List<EntityModel<Bot>> bots=buscarAllBotsPort.buscarAllBots()
-                .stream()
-                .map(botModelAssembler::toModel)
-                .toList();
-        return ResponseEntity.ok(botModelAssembler.toCollectionModel(bots));
+    @GetMapping("/bot")
+    ResponseEntity<List<BotDTOResponse>> buscarAllBots(@RequestParam("owner") Optional<Integer> userId ){
+        List<BotDTOResponse> bots = userId.map(
+                        integer -> buscarAllUserBotsPort.buscarUserBots(integer)
+                        .stream()
+                        .map(botDTOMapper::toDTOResponse)
+                        .toList()
+                )
+                .orElseGet(
+                        () -> buscarAllBotsPort.buscarAllBots()
+                        .stream()
+                        .map(botDTOMapper::toDTOResponse)
+                        .toList()
+                );
+
+        return ResponseEntity.ok(bots);
     }
 
     @PatchMapping("/bots")
-    ResponseEntity<CollectionModel<EntityModel<Bot>>> buscarAllBotsFilter(@RequestBody BotsFilterRequest request){
-        List<EntityModel<Bot>> bots = buscarAllBotsPort.buscarAllBotsFiltro(request)
+    ResponseEntity<List<Bot>> buscarAllBotsFilter(@RequestBody BotsFilterRequest request){
+        List<Bot> bots = buscarAllBotsPort.buscarAllBotsFiltro(request)
                 .stream()
-                .map(botModelAssembler::toModel)
                 .toList();
-        return ResponseEntity.ok(botModelAssembler.toCollectionModel(bots));
+        return ResponseEntity.ok(bots);
     }
 
     @GetMapping("/usuario/{id}/bots")
-    ResponseEntity<CollectionModel<EntityModel<Bot>>> buscarUserBots(@PathVariable Integer id){
-        List<EntityModel<Bot>> bots=buscarAllUserBotsPort.buscarUserBots(id)
+    ResponseEntity<List<Bot>> buscarUserBots(@PathVariable Integer id){
+        List<Bot> bots=buscarAllUserBotsPort.buscarUserBots(id)
                 .stream()
-                .map(botModelAssembler::toModel)
                 .toList();
-        return ResponseEntity.ok(botModelAssembler.toCollectionModel(bots));
+        return ResponseEntity.ok(bots);
     }
 
-    @PatchMapping("bots/{id}")
-    ResponseEntity<EntityModel<Bot>> actualizarBot(@RequestBody Bot changedBot,@PathVariable Integer id){
-
-        Bot bot=actualizarBotPort.actualizarBot(changedBot, id);
+    @PutMapping("bot/{id}")
+    ResponseEntity<BotDTOResponse> actualizarBot(@RequestBody BotDTORequest changedBot,@PathVariable Integer id){
+        Bot bot=actualizarBotPort.actualizarBot(botDTOMapper.toBot(changedBot), id);
         return ResponseEntity.created(linkTo(methodOn(BotController.class).buscarBot(bot.getIdBot().value())).toUri())
-                .body(botModelAssembler.toModel(bot));
+                .body(botDTOMapper.toDTOResponse(bot));
     }
 
 }
