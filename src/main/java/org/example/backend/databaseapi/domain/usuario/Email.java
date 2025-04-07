@@ -15,4 +15,9 @@ public record Email(String value) {
             throw new ValidationException("Invalid email format: " + value);
         }
     }
+
+    @JsonValue
+    public String value() {
+        return value;
+    }
 }

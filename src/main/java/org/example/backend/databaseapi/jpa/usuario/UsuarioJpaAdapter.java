@@ -30,14 +30,12 @@ public class UsuarioJpaAdapter implements CreateUsuarioPort, FindUsuarioPort, De
     public Optional<Usuario> createUsuario(Usuario usuario) {
         if (usuario.getNombre() == null || usuario.getNombre().isEmpty() ||
                 usuario.getPassword() == null || usuario.getPassword().isEmpty() ||
-                usuario.getEmail() == null || usuario.getEmail().value() == null || usuario.getEmail().value().isEmpty() ||
-                usuario.getUserId() == null) {
+                usuario.getEmail() == null || usuario.getEmail().value() == null || usuario.getEmail().value().isEmpty()) {
 
             throw new ValidationException("Validation failed: " +
                     (usuario.getNombre() == null || usuario.getNombre().isEmpty() ? "Name is required. " : "") +
                     (usuario.getPassword() == null || usuario.getPassword().isEmpty() ? "Password is required. " : "") +
-                    (usuario.getEmail() == null || usuario.getEmail().value() == null || usuario.getEmail().value().isEmpty() ? "Email is required. " : "") +
-                    (usuario.getUserId() == null ? "User ID is required. " : "")
+                    (usuario.getEmail() == null || usuario.getEmail().value() == null || usuario.getEmail().value().isEmpty() ? "Email is required. " : "")
             );
         }
 
