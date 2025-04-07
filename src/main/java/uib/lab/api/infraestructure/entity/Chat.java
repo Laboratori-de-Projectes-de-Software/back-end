@@ -16,6 +16,6 @@ public class Chat {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "game_id")
-    private Game game;
+    @JoinColumn(name = "match_id")
+    private Match match;
 }

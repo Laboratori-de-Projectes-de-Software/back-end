@@ -21,5 +21,5 @@ public class Round {
     private League league;
 
     @OneToMany(mappedBy = "round")
-    private Set<Game> games;
+    private Set<Match> matches;
 }
