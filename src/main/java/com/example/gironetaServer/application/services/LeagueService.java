@@ -352,7 +352,7 @@ public class LeagueService implements CreateLeague {
         Long userId = authenticatedUser.getId();
 
         // Verificar si la liga existe
-        LigaEntity ligaEntity = ligaJpaRepository.findById(leagueId)
+        LeagueEntity ligaEntity = ligaJpaRepository.findById(leagueId)
                 .orElseThrow(() -> new ResourceNotFoundException("Liga no encontrada con id: " + leagueId));
 
         // Verificar si el usuario tiene permisos para modificar esta liga

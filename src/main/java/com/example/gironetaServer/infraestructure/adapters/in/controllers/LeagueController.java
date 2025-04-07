@@ -200,9 +200,9 @@ public class LeagueController {
     public ResponseEntity<?> deleteLeague(@PathVariable Long leagueId) {
         try {
             League league = leagueService.getLeagueById(leagueId);
-            LigaDto leagueDto = ligaMapper.toLeagueDto(league);
+            LeagueResponseDto leagueResponseDto = ligaMapper.toLeagueResponseDto(league);
             leagueService.deleteLeague(leagueId);
-            return ResponseEntity.ok(leagueDto);
+            return ResponseEntity.ok(leagueResponseDto);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponseDto("Not Found",
