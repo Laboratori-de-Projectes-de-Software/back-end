@@ -408,12 +408,13 @@ public class LeagueService implements CreateLeague {
             // Obtener la lista de bots de la liga
             List<BotEntity> bots = new ArrayList<>(ligaEntity.getBots());
             int numBots = bots.size();
+            int totalJornadas = (numBots - 1) * rounds;
 
             // Guardar todos los enfrentamientos previos
             Set<String> enfrentamientosPrevios = new HashSet<>();
 
             // Crear las jornadas
-            for (int i = 1; i <= rounds; i++) {
+            for (int i = 1; i <= totalJornadas; i++) {
                 JornadaEntity jornadaEntity = new JornadaEntity();
                 jornadaEntity.setLiga(ligaEntity);
                 jornadaEntity.setNumJornada(i);
@@ -441,8 +442,12 @@ public class LeagueService implements CreateLeague {
                     String enfrentamientoKey = bot1.getId() + "-" + bot2.getId();
                     String enfrentamientoKeyReverso = bot2.getId() + "-" + bot1.getId();
 
-                    // Verificar que el enfrentamiento no se haya repetido
-                    if (!enfrentamientosPrevios.contains(enfrentamientoKey) && !enfrentamientosPrevios.contains(enfrentamientoKeyReverso)) {
+                    // Verificar que el enfrentamiento no se haya repetido más de 'rounds' veces
+                    long countEnfrentamientos = enfrentamientosPrevios.stream()
+                            .filter(key -> key.equals(enfrentamientoKey) || key.equals(enfrentamientoKeyReverso))
+                            .count();
+
+                    if (countEnfrentamientos < rounds) {
                         EnfrentamientoEntity enfrentamientoEntity = new EnfrentamientoEntity();
                         enfrentamientoEntity.setJornada(jornadaEntity);
                         enfrentamientoEntity.setEstado(EnfrentamientoEntity.Estado.Created);
