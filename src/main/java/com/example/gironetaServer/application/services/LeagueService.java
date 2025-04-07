@@ -8,22 +8,20 @@ import com.example.gironetaServer.domain.exceptions.ForbiddenException;
 import com.example.gironetaServer.domain.exceptions.ResourceNotFoundException;
 import com.example.gironetaServer.domain.exceptions.TimeoutException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
-import com.example.gironetaServer.infraestructure.adapters.out.db.entities.BotEntity;
-import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LeagueEntity;
-import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
+import com.example.gironetaServer.infraestructure.adapters.out.db.entities.*;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.BotJpaRepository;
+import com.example.gironetaServer.infraestructure.adapters.out.db.repository.JornadaJpaRepository;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.LigaJpaRepository;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.UserJpaRepository;
+import com.example.gironetaServer.infraestructure.adapters.out.db.repository.EnfrentamientoJpaRepository;
+import com.example.gironetaServer.infraestructure.adapters.out.db.repository.ResultadoJpaRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class LeagueService implements CreateLeague {
@@ -32,13 +30,19 @@ public class LeagueService implements CreateLeague {
     private final BotJpaRepository botJpaRepository;
     private final LigaJpaRepository ligaJpaRepository;
     private final UserJpaRepository userJpaRepository;
+    private final JornadaJpaRepository jornadaJpaRepository;
+    private final EnfrentamientoJpaRepository enfrentamientoJpaRepository;
+    private final ResultadoJpaRepository resultadoJpaRepository;
 
     public LeagueService(LeagueRepository leagueRepository, BotJpaRepository botJpaRepository,
-            LigaJpaRepository ligaJpaRepository, UserJpaRepository userJpaRepository) {
+                         LigaJpaRepository ligaJpaRepository, UserJpaRepository userJpaRepository, JornadaJpaRepository jornadaJpaRepository, EnfrentamientoJpaRepository enfrentamientoJpaRepository, ResultadoJpaRepository resultadoJpaRepository) {
         this.leagueRepository = leagueRepository;
         this.botJpaRepository = botJpaRepository;
         this.ligaJpaRepository = ligaJpaRepository;
         this.userJpaRepository = userJpaRepository;
+        this.jornadaJpaRepository = jornadaJpaRepository;
+        this.enfrentamientoJpaRepository = enfrentamientoJpaRepository;
+        this.resultadoJpaRepository = resultadoJpaRepository;
     }
 
     @Override
@@ -367,6 +371,105 @@ public class LeagueService implements CreateLeague {
             throw new ConflictException("Error al eliminar la liga: " + e.getMessage());
         } catch (Exception e) {
             throw new ConflictException("Error inesperado al eliminar la liga: " + e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void startLeague(Long leagueId){
+        if (leagueId == null || leagueId <= 0) {
+            throw new IllegalArgumentException("El ID de la liga no puede ser nulo o menor o igual a cero");
+        }
+
+        // Verificar autenticación
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new UnauthorizedException("Usuario no autenticado");
+        }
+
+        UserEntity authenticatedUser = (UserEntity) authentication.getPrincipal();
+        Long userId = authenticatedUser.getId();
+
+        // Verificar si la liga existe
+        LeagueEntity ligaEntity = ligaJpaRepository.findById(leagueId)
+                .orElseThrow(() -> new ResourceNotFoundException("Liga no encontrada con id: " + leagueId));
+
+        // Verificar si el usuario tiene permisos para modificar esta liga
+        if (!ligaEntity.getUsuario().getId().equals(userId)) {
+            throw new ForbiddenException("No tienes permiso para modificar esta liga");
+        }
+
+        // Cambiar el estado de la liga a "Started"
+        try {
+            ligaEntity.setState(LeagueEntity.State.Started);
+            ligaJpaRepository.save(ligaEntity);
+
+            int rounds = ligaEntity.getRounds();
+
+            // Obtener la lista de bots de la liga
+            List<BotEntity> bots = new ArrayList<>(ligaEntity.getBots());
+            int numBots = bots.size();
+
+            // Crear las jornadas
+            // Guardar todos los enfrentamientos previos
+            Set<String> enfrentamientosPrevios = new HashSet<>();
+
+            // Crear las jornadas
+            for (int i = 1; i <= rounds; i++) {
+                JornadaEntity jornadaEntity = new JornadaEntity();
+                jornadaEntity.setLiga(ligaEntity);
+                jornadaEntity.setNumJornada(i);
+
+                // Crear enfrentamientos únicos para la jornada
+                HashSet<EnfrentamientoEntity> enfrentamientos = new HashSet<>();
+
+                for (int j = 0; j < numBots / 2; j++) {
+                    BotEntity bot1 = bots.get(j);
+                    BotEntity bot2 = bots.get(numBots - 1 - j);
+
+                    String enfrentamientoKey = bot1.getId() + "-" + bot2.getId();
+                    String enfrentamientoKeyReverso = bot2.getId() + "-" + bot1.getId();
+
+                    // Verificar que el enfrentamiento no se haya repetido
+                    if (!enfrentamientosPrevios.contains(enfrentamientoKey) && !enfrentamientosPrevios.contains(enfrentamientoKeyReverso)) {
+                        EnfrentamientoEntity enfrentamientoEntity = new EnfrentamientoEntity();
+                        enfrentamientoEntity.setJornada(jornadaEntity);
+                        enfrentamientoEntity.setEstado(EnfrentamientoEntity.Estado.Created);
+                        enfrentamientoEntity.setResultados(new HashSet<>()); // Initialize the resultados set
+
+                        // Crear resultados para cada bot en el enfrentamiento
+                        ResultadoEntity resultadoBot1 = new ResultadoEntity(0, bot1, enfrentamientoEntity);
+                        ResultadoEntity resultadoBot2 = new ResultadoEntity(0, bot2, enfrentamientoEntity);
+                        enfrentamientoEntity.getResultados().add(resultadoBot1);
+                        enfrentamientoEntity.getResultados().add(resultadoBot2);
+
+                        enfrentamientos.add(enfrentamientoEntity);
+                        enfrentamientosPrevios.add(enfrentamientoKey);
+                        enfrentamientosPrevios.add(enfrentamientoKeyReverso);
+                    }
+                }
+
+                jornadaEntity.setEnfrentamientos(enfrentamientos);
+                jornadaJpaRepository.save(jornadaEntity);
+
+                // Guardar cada enfrentamiento y sus resultados
+                for (EnfrentamientoEntity enfrentamiento : enfrentamientos) {
+                    enfrentamientoJpaRepository.save(enfrentamiento);
+                    for (ResultadoEntity resultado : enfrentamiento.getResultados()) {
+                        resultadoJpaRepository.save(resultado);
+                    }
+                }
+
+                // Rotar los bots para la siguiente jornada
+                if (numBots > 1) {
+                    BotEntity lastBot = bots.remove(numBots - 1);
+                    bots.add(1, lastBot);
+                }
+            }
+
+        } catch (DataIntegrityViolationException e) {
+            throw new ConflictException("Error al iniciar la liga: " + e.getMessage());
+        } catch (Exception e) {
+            throw new ConflictException("Error inesperado al iniciar la liga: " + e.getMessage());
         }
     }
 }

@@ -16,8 +16,14 @@ public class EnfrentamientoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Clave primaria autoincremental
 
+    public enum Estado {
+        Created,
+        Started,
+        Finished
+    }
+
     @Column(nullable = false, length = 50)
-    private String estado;
+    private Estado estado;
 
     @ManyToOne
     @JoinColumn(name = "jornada_id", nullable = false)
@@ -29,10 +35,10 @@ public class EnfrentamientoEntity {
     @OneToMany(mappedBy = "enfrentamiento", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ResultadoEntity> resultados; // Relación con Resultado
 
-    protected EnfrentamientoEntity() {
+    public EnfrentamientoEntity() {
     }
 
-    public EnfrentamientoEntity(String estado, JornadaEntity jornada) {
+    public EnfrentamientoEntity(Estado estado, JornadaEntity jornada) {
         this.estado = estado;
         this.jornada = jornada;
     }

@@ -26,7 +26,7 @@ public class JornadaEntity {
     @OneToMany(mappedBy = "jornada", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EnfrentamientoEntity> enfrentamientos; // Relación con Enfrentamiento
 
-    protected JornadaEntity() {
+    public JornadaEntity() {
     }
 
     public JornadaEntity(int numJornada, LeagueEntity liga) {

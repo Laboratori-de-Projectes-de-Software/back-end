@@ -229,4 +229,40 @@ public class LeagueController {
                             "Ocurrió un error inesperado al eliminar la liga: " + e.getMessage()));
         }
     }
+
+    @PostMapping("/league/{leagueId}/start")
+    public ResponseEntity<?> startLeague(@PathVariable Long leagueId) {
+        try {
+            leagueService.startLeague(leagueId);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponseDto("Not Found",
+                            "No se encontró la liga que se intentó iniciar: " + e.getMessage()));
+        } catch (ForbiddenException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ErrorResponseDto("Forbidden",
+                            "No tienes permisos para iniciar esta liga: " + e.getMessage()));
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponseDto("Unauthorized",
+                            "Se requiere autenticación para iniciar esta liga: " + e.getMessage()));
+        } catch (TimeoutException e) {
+            return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
+                    .body(new ErrorResponseDto("Request Timeout",
+                            "La operación excedió el tiempo límite: " + e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponseDto("Bad Request",
+                            "El ID de liga proporcionado no es válido: " + e.getMessage()));
+        } catch (ConflictException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ErrorResponseDto("Conflict",
+                            "No se puede iniciar la liga debido a un conflicto: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponseDto("Internal Server Error",
+                            "Ocurrió un error inesperado al iniciar la liga: " + e.getMessage()));
+        }
+    }
 }
