@@ -1,6 +1,6 @@
 package com.adondeband.back_end_adonde_band.API.usuario;
 
-import com.adondeband.back_end_adonde_band.API.bot.BotDTO;
+import com.adondeband.back_end_adonde_band.API.bot.BotDTOResponse;
 import com.adondeband.back_end_adonde_band.API.imagen.ImagenDTO;
 import com.adondeband.back_end_adonde_band.dominio.rol.Rol;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class UsuarioDTO {
 
     private ImagenDTO imagen;
 
-    private List<BotDTO> bots;
+    private List<BotDTOResponse> bots;
 
     private List<Rol> roles;
 }

@@ -9,7 +9,7 @@ public interface AuthenticationDtoMapper{
 
     default Usuario registerUserDtotoDomain(RegisterUserDto registerUserDto){
         Usuario usuario = new Usuario();
-        usuario.setCorreo(registerUserDto.getEmail());
+        usuario.setCorreo(registerUserDto.getMail());
         usuario.setContrasena(registerUserDto.getPassword());
         usuario.setNombre(new UsuarioId(registerUserDto.getUser()));
         return usuario;
@@ -25,7 +25,7 @@ public interface AuthenticationDtoMapper{
 
     default RegisterUserDto userToRegisterDto(Usuario usuario){
         RegisterUserDto registerUserDto = new RegisterUserDto();
-        registerUserDto.setEmail(usuario.getCorreo());
+        registerUserDto.setMail(usuario.getCorreo());
         registerUserDto.setPassword(usuario.getContrasena());
         registerUserDto.setUser(usuario.getNombre().value());
         return registerUserDto;

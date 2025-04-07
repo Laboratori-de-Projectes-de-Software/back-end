@@ -8,20 +8,21 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class BotDTOMin {
 
-    private String nombre;
+    private String name;
 
-    private String cualidad;
+    private String description;
 
-    private String imagen; // luego quizá sea ImagenDTO
+    private String urlImagen; // luego quizá sea ImagenDTO
 
     private String endpoint;
 
-    public BotDTOMin(BotDTO botDTO) {
-        this.nombre = botDTO.getNombre();
-        this.cualidad = botDTO.getCualidad();
-        this.imagen = botDTO.getImagen();
+    public BotDTOMin(BotDTOResponse botDTO) {
+        this.name = botDTO.getName();
+        this.description = botDTO.getDescription();
+        this.urlImagen = botDTO.getUrlImage();
         this.endpoint = botDTO.getEndpoint();
     }
 }
