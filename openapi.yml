@@ -1,93 +1,8 @@
 openapi: 3.0.0
 info:
   title: Gironeta Server API
-  description: API for Gironeta Server
   version: 1.0.0
-servers:
-  - url: http://localhost:8080
 paths:
-  /api/v0/users:
-    get:
-      summary: Get all users
-      responses:
-        '200':
-          description: A list of users
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserDto'
-  /api/v0/user/{id}:
-    get:
-      summary: Get user by ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: A user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDto'
-        '404':
-          description: User not found
-  /api/v0/user:
-    post:
-      summary: Create a new user
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserDto'
-      responses:
-        '200':
-          description: The created user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDto'
-  /api/v0/user/username/{username}:
-    get:
-      summary: Get user by username
-      parameters:
-        - name: username
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: A user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDto'
-        '404':
-          description: User not found
-  /api/v0/user/email/{email}:
-    get:
-      summary: Get user by email
-      parameters:
-        - name: email
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: A user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDto'
-        '404':
-          description: User not found
   /api/v0/auth/register:
     post:
       summary: Register a new user
@@ -98,12 +13,16 @@ paths:
             schema:
               $ref: '#/components/schemas/RegisterUserDto'
       responses:
-        '200':
-          description: The registered user
+        '201':
+          description: User created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDto'
+                $ref: '#/components/schemas/UserEntity'
+        '400':
+          description: Bad request
+        '409':
+          description: Conflict
   /api/v0/auth/login:
     post:
       summary: Authenticate a user
@@ -115,28 +34,218 @@ paths:
               $ref: '#/components/schemas/LoginUserDto'
       responses:
         '200':
-          description: Authentication response
+          description: Authentication successful
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Unauthorized
+  /api/v0/bot:
+    post:
+      summary: Create a new bot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BotDto'
+      responses:
+        '201':
+          description: Bot created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BotDto'
+        '400':
+          description: Bad request
+        '409':
+          description: Conflict
+    get:
+      summary: Get all bots
+      parameters:
+        - in: query
+          name: owner
+          schema:
+            type: integer
+          description: User ID of the bot owner
+      responses:
+        '200':
+          description: List of bots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BotSummaryDto'
+        '404':
+          description: Not found
+  /api/v0/bot/{botId}:
+    get:
+      summary: Get a bot by ID
+      parameters:
+        - in: path
+          name: botId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Bot details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BotDto'
+        '404':
+          description: Not found
+    put:
+      summary: Update a bot by ID
+      parameters:
+        - in: path
+          name: botId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BotDto'
+      responses:
+        '204':
+          description: Bot updated successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+  /api/v0/league:
+    post:
+      summary: Create a new league
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueDto'
+      responses:
+        '201':
+          description: League created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueResponseDto'
+        '400':
+          description: Bad request
+        '409':
+          description: Conflict
+    get:
+      summary: Get all leagues
+      parameters:
+        - in: query
+          name: owner
+          schema:
+            type: integer
+          description: User ID of the league owner
+      responses:
+        '200':
+          description: List of leagues
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LeagueResponseDto'
+        '404':
+          description: Not found
+  /api/v0/league/{id}:
+    get:
+      summary: Get a league by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: League details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueResponseDto'
+        '404':
+          description: Not found
+    put:
+      summary: Update a league by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueDto'
+      responses:
+        '200':
+          description: League updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueResponseDto'
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+  /api/v0/league/{id}/bot:
+    post:
+      summary: Register a bot to a league
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                botId:
+                  type: integer
+      responses:
+        '201':
+          description: Bot registered successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+  /api/v0/league/{leagueId}:
+    delete:
+      summary: Delete a league by ID
+      parameters:
+        - in: path
+          name: leagueId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: League deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueResponseDto'
+        '404':
+          description: Not found
 components:
   schemas:
-    UserDto:
-      type: object
-      properties:
-        id:
-          type: integer
-        username:
-          type: string
-        email:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
     RegisterUserDto:
       type: object
       properties:
@@ -153,10 +262,105 @@ components:
           type: string
         password:
           type: string
+    UserEntity:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     LoginResponse:
       type: object
       properties:
         token:
           type: string
+        type:
+          type: string
         expiresIn:
           type: integer
+    BotDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        descripcion:
+          type: string
+        urlImagen:
+          type: string
+        endpoint:
+          type: string
+        usuario_id:
+          type: integer
+    BotSummaryDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        urlImagen:
+          type: string
+        usuario_id:
+          type: integer
+    LeagueDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        urlImagen:
+          type: string
+        rounds:
+          type: integer
+        matchTime:
+          type: integer
+        bots:
+          type: array
+          items:
+            type: integer
+        user:
+          type: string
+    LeagueResponseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        urlImagen:
+          type: string
+        rounds:
+          type: integer
+        matchTime:
+          type: integer
+        bots:
+          type: array
+          items:
+            type: integer
+        state:
+          type: string
+        userId:
+          type: integer
+    ErrorResponseDto:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
