@@ -2,8 +2,8 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Juamesitos-Lab_Proj",
-    "summary": "User info service",
-    "description": "",
+    "summary": "User, Bot and League Management API",
+    "description": "API for user registration, bot management, league creation, and match messaging.",
     "termsOfService": "",
     "contact": {
       "name": "API Support",
@@ -18,198 +18,1082 @@
   },
   "servers": [
     {
-      "url": "url de l'api de desenvolupament",
+      "url": "https://dev.api.jaumesitos.com",
       "description": "Development server"
     },
     {
-      "url": "url de l'api en producció",
+      "url": "https://api.jaumesitos.com",
       "description": "Production server"
     }
   ],
-  "components": {
-    "schemas": {
-      "Bot": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "integer", "format": "int32" },
-          "name": { "type": "string" },
-          "model": { "type": "string" },
-          "registrationDate": { "type": "string" },
-          "url": { "type": "string" },
-          "access_credentials": {
-            "type": "object",
-            "properties": {
-              "username": { "type": "string" },
-              "password": { "type": "string" }
-            }
-          }
-        }
-      },
-      "User": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "integer", "format": "int32" },
-          "name": { "type": "string" },
-          "email": { "type": "string" },
-          "role": { "type": "string" }
-        }
-      },
-      "League": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "integer", "format": "int64" },
-          "name": { "type": "string" },
-          "creation_date": { "type": "string", "format": "date-time" },
-          "state": { "type": "string" },
-          "admin": { "type": "integer", "format": "int64" }
-        }
-      },
-      "Classification": {
-        "type": "object",
-        "properties": {
-          "id_league": { "type": "integer", "format": "int64" },
-          "id_bot": { "type": "integer", "format": "int64" },
-          "points": { "type": "integer", "format": "int64" },
-          "matches": { "type": "integer", "format": "int64" },
-          "wins": { "type": "integer", "format": "int64" },
-          "losses": { "type": "integer", "format": "int64" },
-          "draws": { "type": "integer", "format": "int64" },
-          "timestamp": { "type": "string", "format": "date-time" }
-        }
-      },
-      "Confrontation": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "integer", "format": "int64" },
-          "idLeague": { "type": "string" },
-          "idVisitant": { "type": "string" },
-          "idLocal": { "type": "string" },
-          "date": { "type": "string", "format": "date-time" },
-          "result": {
-            "type": "string",
-            "enum": ["local", "visitant", "draw"]
-          }
-        }
-      },
-      "Answer": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "integer" },
-          "argument": { "type": "string" },
-          "author": { "type": "string" },
-          "timestamp": { "type": "string", "format": "date-time" }
-        }
-      }
-    },
-    "parametres": {
-      "UserId": {
-        "name": "userId",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "integer"
-        }
-      }
-    },
-    "responses": {
-      "NotFound": {
-        "description": "Resource not found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "User not found"
-                }
-              }
-            }
-          }
-        }
-      },
-      "BadRequest": {
-        "description": "Bad Request",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Invalid input data"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
   "paths": {
-    "/user": {
+    "/auth/register": {
       "post": {
-        "summary": "Create a new Bot",
-        "description": "Endpoint to create a new bot in the system.",
+        "summary": "Register a new user",
+        "description": "Creates a new user account",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Bot"
+                "$ref": "#/components/schemas/UserDTORegister"
+              }
+            }
+          }
+        },
+        "reponses": {
+          "200": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDTO"
+                }
+              }
+            }
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login a user",
+        "description": "Authenticate user and return token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDTOLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "501": {
+            "$ref": "#/components/responses/NotImplemented"
+          }
+        }
+      }
+    },
+    "/bot": {
+      "post": {
+        "summary": "Create a new bot",
+        "description": "Registers a new bot",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BotDTO"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Bot successfully created.",
+            "description": "Bot created",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Bot"
+                  "$ref": "#/components/schemas/BotResponseDTO"
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid input.",
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all bots or by user",
+        "description": "Returns all bots or those from a specific user",
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bots found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/responses/BadRequest"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BotResponseDTO"
+                  }
                 }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/bot/{botId}": {
+      "get": {
+        "summary": "Get one bot",
+        "parameters": [
+          {
+            "name": "botId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bot found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BotResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update one bot",
+        "parameters": [
+          {
+            "name": "botId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BotDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bot updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BotResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/league": {
+      "post": {
+        "summary": "Create a new league",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeagueDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "League created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeagueResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all leagues (optionally by owner)",
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Leagues found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeagueResponseDTO"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/league/{leagueId}": {
+      "get": {
+        "summary": "Get one league by ID",
+        "parameters": [
+          {
+            "name": "leagueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "League found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeagueResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a league",
+        "parameters": [
+          {
+            "name": "leagueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeagueDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "League updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeagueResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a league",
+        "parameters": [
+          {
+            "name": "leagueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "League deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeagueResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/league/{leagueId}/bot": {
+      "post": {
+        "summary": "Register bot to a league",
+        "parameters": [
+          {
+            "name": "leagueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "botId": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Bot registered to league"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/league/{leagueId}/leaderboard": {
+      "get": {
+        "summary": "Get classification from a league",
+        "parameters": [
+          {
+            "name": "leagueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Classification found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ParticipacionDTO"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/league/{leagueId}/start": {
+      "post": {
+        "summary": "Start a league (creates all matches)",
+        "parameters": [
+          {
+            "name": "leagueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "League started"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/league/{leagueId}/match": {
+      "get": {
+        "summary": "Get all matches from a league",
+        "parameters": [
+          {
+            "name": "leagueId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matches found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MatchResponseDTO"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/match/{matchId}/message": {
+      "get": {
+        "summary": "Get all messages from a match",
+        "parameters": [
+          {
+            "name": "matchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Messages found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MessageResponseDTO"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "408": {
+            "$ref": "#/components/responses/RequestTimeout"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    }
+  },
+  "schemas": {
+    "UserDTORegister": {
+      "type": "object",
+      "required": [
+        "user",
+        "mail",
+        "password"
+      ],
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "mail": {
+          "type": "string",
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
+        }
+      }
+    },
+    "UserDTOLogin": {
+      "type": "object",
+      "required": [
+        "user",
+        "password"
+      ],
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
+        }
+      }
+    },
+    "UserResponseDTO": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "expiresIn": {
+          "type": "integer"
+        },
+        "user": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "integer"
+        }
+      }
+    },
+    "BotDTO": {
+      "type": "object",
+      "required": [
+        "name",
+        "description",
+        "urlImagen",
+        "endpoint"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "urlImagen": {
+          "type": "string",
+          "format": "uri"
+        },
+        "endpoint": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "BotResponseDTO": {
+      "type": "object",
+      "properties": {
+        "botId": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "urlImage": {
+          "type": "string",
+          "format": "uri"
+        },
+        "nWins": {
+          "type": "integer"
+        },
+        "nLoses": {
+          "type": "integer"
+        },
+        "nDraws": {
+          "type": "integer"
+        }
+      }
+    },
+    "LeagueDTO": {
+      "type": "object",
+      "required": [
+        "name",
+        "urlImagen",
+        "rounds",
+        "matchTime",
+        "bots"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "urlImagen": {
+          "type": "string",
+          "format": "uri"
+        },
+        "rounds": {
+          "type": "integer"
+        },
+        "matchTime": {
+          "type": "integer",
+          "description": "Time in seconds"
+        },
+        "bots": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "LeagueResponseDTO": {
+      "type": "object",
+      "properties": {
+        "leagueId": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "urlImagen": {
+          "type": "string",
+          "format": "uri"
+        },
+        "user": {
+          "type": "string"
+        },
+        "rounds": {
+          "type": "integer"
+        },
+        "matchTime": {
+          "type": "integer"
+        },
+        "bots": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "ParticipacionDTO": {
+      "type": "object",
+      "properties": {
+        "id_league": {
+          "type": "integer"
+        },
+        "id_bot": {
+          "type": "integer"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "matches": {
+          "type": "integer"
+        },
+        "wins": {
+          "type": "integer"
+        },
+        "losses": {
+          "type": "integer"
+        },
+        "draws": {
+          "type": "integer"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "MatchResponseDTO": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "ongoing",
+            "finished"
+          ]
+        },
+        "result": {
+          "type": "integer",
+          "enum": [
+            0,
+            1,
+            2
+          ]
+        },
+        "fighters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "roundNumber": {
+          "type": "integer"
+        }
+      }
+    },
+    "MessageResponseDTO": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "botId": {
+          "type": "integer"
+        },
+        "time": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "responses": {
+    "BadRequest": {
+      "description": "Bad Request",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Invalid input data"
               }
             }
           }
         }
       }
     },
-    "/user/{userId}": {
-      "get": {
-        "summary": "Get user by ID",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/UserId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "User found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
+    "Unauthorized": {
+      "description": "Unauthorized",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Authentication required"
               }
             }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "Forbidden": {
+      "description": "Forbidden",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Access denied"
+              }
+            }
+          }
+        }
+      }
+    },
+    "NotFound": {
+      "description": "Resource not found",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Not found"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Conflict": {
+      "description": "Conflict",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Resource already exists"
+              }
+            }
+          }
+        }
+      }
+    },
+    "RequestTimeout": {
+      "description": "Request Timeout",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Request timed out"
+              }
+            }
+          }
+        }
+      }
+    },
+    "InternalServerError": {
+      "description": "Internal Server Error",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "An unexpected error occurred"
+              }
+            }
+          }
+        }
+      }
+    },
+    "NotImplemented": {
+      "description": "Not Implemented",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Feature not implemented"
+              }
+            }
           }
         }
       }
     }
   }
 }
-

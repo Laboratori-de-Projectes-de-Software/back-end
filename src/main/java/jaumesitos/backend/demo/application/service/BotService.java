@@ -16,9 +16,8 @@ public class BotService {
         this.botRepository = botRepository;
     }
 
-    public void registerBot(String name, String modelIA) {
-        Bot bot = new Bot(UUID.randomUUID().toString(), name, modelIA, LocalDateTime.now());
-        botRepository.save(bot);
+    public Bot registerBot(Bot bot) {
+        return botRepository.save(bot);
     }
 
     public Optional<Bot> getBotById(String id) {

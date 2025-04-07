@@ -1,16 +1,16 @@
 package jaumesitos.backend.demo.infrastructure.res.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import java.time.LocalDate;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class BotDTO {
+public class BotResponseDTO {
+    private int botId;
     private String name;
     private String description;
     private String urlImage;
-    private LocalDate endpoint;
+    private int nWins;
+    private int nLoses;
+    private int nDraws;
 }

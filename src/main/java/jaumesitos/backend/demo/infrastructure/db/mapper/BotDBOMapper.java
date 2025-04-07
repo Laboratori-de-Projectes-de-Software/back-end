@@ -7,5 +7,5 @@ import jaumesitos.backend.demo.domain.Bot;
 @Mapper(componentModel = "spring")
 public interface BotDBOMapper {
     BotDBO toDBO(Bot bot);
-    Bot toBot(BotDBO botDBO);
+    Bot toDomain(BotDBO botDBO);
 }

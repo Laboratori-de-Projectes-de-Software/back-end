@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IBotRepository {
-    void save(Bot bot);
+    Bot save(Bot bot);
     Optional<Bot> findById(String id);
     List<Bot> findAll();
 }

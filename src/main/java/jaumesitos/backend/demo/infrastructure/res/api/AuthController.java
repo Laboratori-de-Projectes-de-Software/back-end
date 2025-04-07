@@ -1,6 +1,16 @@
 package jaumesitos.backend.demo.infrastructure.res.api;
 
 
+import jaumesitos.backend.demo.domain.User;
+import jaumesitos.backend.demo.infrastructure.res.dto.BotDTO;
+import jaumesitos.backend.demo.infrastructure.res.dto.UserDTOLogin;
+import jaumesitos.backend.demo.infrastructure.res.dto.UserResponseDTO;
+import jaumesitos.backend.demo.infrastructure.res.mapper.BotDTOMapper;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.RequestBody;
+import jaumesitos.backend.demo.application.service.AuthService;
+import jaumesitos.backend.demo.infrastructure.res.dto.UserDTORegister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +20,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 import jaumesitos.backend.demo.infrastructure.res.mapper.UserDTOMapper;
-import jaumesitos.backend.demo.application.service.UserService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,8 +31,8 @@ import jaumesitos.backend.demo.application.service.UserService;
 @Tag(name = "User Controller", description = "Endpoints for managing users")
 public class AuthController {
 
-    private final UserDTOMapper mapper; //convertidor de DTO a classe de lògica de negoci
-    private final UserService service; //adaptador
+    private final UserDTOMapper userMapper; //convertidor de DTO a classe de lògica de negoci
+    private final AuthService service; //adaptador
 
     //CODIS ERROR:
     //HttpStatus.OK -> 200
@@ -41,5 +53,35 @@ public class AuthController {
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
         return new ResponseEntity<>("Endpoint /api/users/getallUsers", HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/auth/register")
+    public ResponseEntity<?> register(@RequestBody UserDTORegister dto) {
+        try {
+            User user = userMapper.toDomain(dto);
+            service.register(user);
+            return ResponseEntity.ok("User created");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error");
+        }
+    }
+
+    @PostMapping("/auth/login")
+    public ResponseEntity<?> login(@RequestBody UserDTOLogin dto) {
+        try {
+            User user = service.login(dto.getEmail(), dto.getPassword());
+            UserResponseDTO response = userMapper.toResponseDTO(user);
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("message", "User logged");
+            result.put("user", response);
+            return ResponseEntity.ok(result);
+        } catch (UsernameNotFoundException | BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error");
+        }
     }
 }
