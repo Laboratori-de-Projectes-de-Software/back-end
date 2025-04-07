@@ -9,7 +9,7 @@ import com.example.gironetaServer.domain.exceptions.ResourceNotFoundException;
 import com.example.gironetaServer.domain.exceptions.TimeoutException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.BotEntity;
-import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LigaEntity;
+import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LeagueEntity;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.BotJpaRepository;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.LigaJpaRepository;
@@ -69,7 +69,7 @@ public class LeagueService implements CreateLeague {
         if (league.getBots() != null && !league.getBots().isEmpty()) {
             try {
                 // Recuperar la entidad de liga guardada
-                LigaEntity ligaEntity = ligaJpaRepository.findById(savedLeague.getId())
+                LeagueEntity ligaEntity = ligaJpaRepository.findById(savedLeague.getId())
                         .orElseThrow(
                                 () -> new ResourceNotFoundException("No se pudo encontrar la liga recién guardada"));
 
@@ -238,7 +238,7 @@ public class LeagueService implements CreateLeague {
         if (leagueDetails.getBots() != null) {
             try {
                 // Recuperar la entidad de liga actualizada
-                LigaEntity ligaEntity = ligaJpaRepository.findById(updatedLeague.getId())
+                LeagueEntity ligaEntity = ligaJpaRepository.findById(updatedLeague.getId())
                         .orElseThrow(() -> new ResourceNotFoundException(
                                 "No se pudo encontrar la liga recién actualizada"));
 
@@ -301,7 +301,7 @@ public class LeagueService implements CreateLeague {
         Long userId = authenticatedUser.getId();
 
         // Verificar si la liga existe
-        LigaEntity ligaEntity = ligaJpaRepository.findById(leagueId)
+        LeagueEntity ligaEntity = ligaJpaRepository.findById(leagueId)
                 .orElseThrow(() -> new ResourceNotFoundException("Liga no encontrada con id: " + leagueId));
 
         // Verificar si el usuario tiene permisos para modificar esta liga

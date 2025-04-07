@@ -31,7 +31,7 @@ public class BotEntity {
     private UserEntity usuario; // Relación con Usuario
 
     @ManyToMany(mappedBy = "bots")
-    private Set<LigaEntity> ligas = new HashSet<>();
+    private Set<LeagueEntity> ligas = new HashSet<>();
 
     public BotEntity() {
     }
@@ -78,7 +78,7 @@ public class BotEntity {
         return usuario;
     }
 
-    public Set<LigaEntity> getLigas() {
+    public Set<LeagueEntity> getLigas() {
         return ligas;
     }
 
@@ -107,7 +107,7 @@ public class BotEntity {
         this.usuario = usuario;
     }
 
-    public void setLigas(Set<LigaEntity> ligas) {
+    public void setLigas(Set<LeagueEntity> ligas) {
         this.ligas = ligas;
     }
 }

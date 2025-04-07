@@ -9,7 +9,7 @@ import java.util.Set;
 @Table(name = "Liga", uniqueConstraints = {
         @UniqueConstraint(columnNames = "nombre") // El nombre de la liga debe ser único
 })
-public class LigaEntity {
+public class LeagueEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,11 +41,21 @@ public class LigaEntity {
     @OneToMany(mappedBy = "liga", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<JornadaEntity> jornadas; // Relación con Jornadas
 
-    public LigaEntity() {
+    public enum State {
+        Created,
+        Started,
+        Finished
     }
 
-    public LigaEntity(String name, String urlImagen, Integer rounds, Long matchTime, Set<BotEntity> bots,
-            UserEntity usuario, Set<JornadaEntity> jornadas) {
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state", nullable = false)
+    private State state = State.Created; // Estado de la liga
+
+    public LeagueEntity() {
+    }
+
+    public LeagueEntity(String name, String urlImagen, Integer rounds, Long matchTime, Set<BotEntity> bots,
+                        UserEntity usuario, Set<JornadaEntity> jornadas) {
         this.name = name;
         this.urlImagen = urlImagen;
         this.rounds = rounds;
@@ -128,5 +138,13 @@ public class LigaEntity {
 
     public void setJornadas(Set<JornadaEntity> jornadas) {
         this.jornadas = jornadas;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 }

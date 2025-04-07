@@ -2,7 +2,7 @@ package com.example.gironetaServer.infraestructure.adapters.out.db.repository;
 
 import com.example.gironetaServer.application.ports.LeagueRepository;
 import com.example.gironetaServer.domain.League;
-import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LigaEntity;
+import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LeagueEntity;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers.LigaMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +49,7 @@ public class LigaDatabaseRepository implements LeagueRepository {
 
     @Override
     public League save(League league) {
-        LigaEntity leagueEntity = leagueMapper.toEntity(league);
+        LeagueEntity leagueEntity = leagueMapper.toEntity(league);
         leagueEntity = leagueJpaRepository.save(leagueEntity);
         return leagueMapper.toDomain(leagueEntity);
     }

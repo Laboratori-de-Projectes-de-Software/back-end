@@ -21,7 +21,7 @@ public class JornadaEntity {
 
     @ManyToOne
     @JoinColumn(name = "liga_id", nullable = false)
-    private LigaEntity liga; // Relación ManyToOne con Liga
+    private LeagueEntity liga; // Relación ManyToOne con Liga
 
     @OneToMany(mappedBy = "jornada", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EnfrentamientoEntity> enfrentamientos; // Relación con Enfrentamiento
@@ -29,7 +29,7 @@ public class JornadaEntity {
     protected JornadaEntity() {
     }
 
-    public JornadaEntity(int numJornada, LigaEntity liga) {
+    public JornadaEntity(int numJornada, LeagueEntity liga) {
         this.numJornada = numJornada;
         this.liga = liga;
     }

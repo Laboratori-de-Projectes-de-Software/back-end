@@ -18,7 +18,7 @@ public class ParticipacionEntity {
     @Id
     @ManyToOne
     @JoinColumn(name = "liga_id", referencedColumnName = "id")
-    private LigaEntity liga;
+    private LeagueEntity liga;
 
     @Column(nullable = false)
     private int puntuacion;
@@ -37,7 +37,7 @@ public class ParticipacionEntity {
     }
 
     // Constructor con parámetros
-    public ParticipacionEntity(BotEntity bot, LigaEntity liga, int puntuacion, int numGanados, int numEmpatados, int numPerdidos) {
+    public ParticipacionEntity(BotEntity bot, LeagueEntity liga, int puntuacion, int numGanados, int numEmpatados, int numPerdidos) {
         this.bot = bot;
         this.liga = liga;
         this.puntuacion = puntuacion;

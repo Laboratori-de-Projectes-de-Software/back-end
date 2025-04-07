@@ -1,35 +1,28 @@
-package com.example.gironetaServer.domain;
+package com.example.gironetaServer.infraestructure.adapters.in.controllers.dto;
 
 import java.util.List;
 
-public class League {
+public class LeagueDto {
     private Long id;
     private String name;
     private String urlImagen;
     private Integer rounds;
     private Long matchTime;
     private List<Long> bots;
-    private Long userId;
-    private LeagueState state = LeagueState.Creada;
-    public enum LeagueState {
-        Creada,
-        Empezada,
-        Terminada,
+    private String user; // Owner
+
+    public LeagueDto() {
     }
 
-    public League() {
-    }
-
-    public League(Long id, String name, String urlImagen, Integer rounds, Long matchTime, List<Long> bots,
-            Long userId, LeagueState state) {
+    public LeagueDto(Long id, String name, String urlImagen, Integer rounds, Long matchTime, List<Long> bots,
+                     String user) {
         this.id = id;
         this.name = name;
         this.urlImagen = urlImagen;
         this.rounds = rounds;
         this.matchTime = matchTime;
         this.bots = bots;
-        this.userId = userId;
-        this.state = state;
+        this.user = user;
     }
 
     // Métodos getter
@@ -57,8 +50,8 @@ public class League {
         return bots;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getUser() {
+        return user;
     }
 
     // Métodos setter
@@ -86,15 +79,7 @@ public class League {
         this.bots = bots;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public LeagueState getState() {
-        return state;
-    }
-
-    public void setState(LeagueState state) {
-        this.state = state;
+    public void setUser(String user) {
+        this.user = user;
     }
 }

@@ -2,9 +2,10 @@ package com.example.gironetaServer.infraestructure.adapters.in.controllers.mappe
 
 import com.example.gironetaServer.application.ports.UserRepository;
 import com.example.gironetaServer.domain.League;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LigaDto;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LeagueDto;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LeagueResponseDto;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.BotEntity;
-import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LigaEntity;
+import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LeagueEntity;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.BotJpaRepository;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -26,7 +26,7 @@ public class LigaMapper {
         this.botJpaRepository = botJpaRepository;
     }
 
-    public League toDomain(LigaEntity ligaEntity) {
+    public League toDomain(LeagueEntity ligaEntity) {
         League league = new League();
         league.setId(ligaEntity.getId());
         league.setName(ligaEntity.getName());
@@ -46,8 +46,8 @@ public class LigaMapper {
         return league;
     }
 
-    public LigaEntity toEntity(League league) {
-        LigaEntity ligaEntity = new LigaEntity();
+    public LeagueEntity toEntity(League league) {
+        LeagueEntity ligaEntity = new LeagueEntity();
         ligaEntity.setId(league.getId());
         ligaEntity.setName(league.getName());
         ligaEntity.setUrlImagen(league.getUrlImagen());
@@ -67,8 +67,8 @@ public class LigaMapper {
         return ligaEntity;
     }
 
-    public LigaDto toLeagueDto(League league) {
-        LigaDto ligaDto = new LigaDto();
+    public LeagueDto toLeagueDto(League league) {
+        LeagueDto ligaDto = new LeagueDto();
         ligaDto.setId(league.getId());
         ligaDto.setName(league.getName());
         ligaDto.setUrlImagen(league.getUrlImagen());
@@ -87,7 +87,21 @@ public class LigaMapper {
         return ligaDto;
     }
 
-    public static League toAppObject(LigaDto ligaDto) {
+    public LeagueResponseDto toLeagueResponseDto(League league) {
+        LeagueResponseDto leagueResponseDto = new LeagueResponseDto();
+        leagueResponseDto.setId(league.getId());
+        leagueResponseDto.setName(league.getName());
+        leagueResponseDto.setUrlImagen(league.getUrlImagen());
+        leagueResponseDto.setRounds(league.getRounds());
+        leagueResponseDto.setMatchTime(league.getMatchTime());
+        leagueResponseDto.setBots(league.getBots());
+        leagueResponseDto.setState(toEntityState(league.getState()));
+        leagueResponseDto.setUserId(league.getUserId());
+
+        return leagueResponseDto;
+    }
+
+    public static League toAppObject(LeagueDto ligaDto) {
         League league = new League();
         league.setName(ligaDto.getName());
         league.setUrlImagen(ligaDto.getUrlImagen());
@@ -96,4 +110,33 @@ public class LigaMapper {
         league.setBots(ligaDto.getBots());
         return league;
     }
+
+    // Función para convertir el estado del dominio al estado de la infraestructura
+    public static LeagueEntity.State toEntityState(League.LeagueState domainState) {
+        switch (domainState) {
+            case Creada:
+                return LeagueEntity.State.Created;
+            case Empezada:
+                return LeagueEntity.State.Started;
+            case Terminada:
+                return LeagueEntity.State.Finished;
+            default:
+                throw new IllegalArgumentException("Estado de liga no reconocido: " + domainState);
+        }
+    }
+
+    // Función para convertir el estado de la infraestructura al estado del dominio
+    public static League.LeagueState toDomainState(LeagueEntity.State entityState) {
+        switch (entityState) {
+            case Created:
+                return League.LeagueState.Creada;
+            case Started:
+                return League.LeagueState.Empezada;
+            case Finished:
+                return League.LeagueState.Terminada;
+            default:
+                throw new IllegalArgumentException("Estado de liga no reconocido: " + entityState);
+        }
+    }
+
 }
