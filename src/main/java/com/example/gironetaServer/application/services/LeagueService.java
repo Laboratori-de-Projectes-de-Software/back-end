@@ -409,7 +409,6 @@ public class LeagueService implements CreateLeague {
             List<BotEntity> bots = new ArrayList<>(ligaEntity.getBots());
             int numBots = bots.size();
 
-            // Crear las jornadas
             // Guardar todos los enfrentamientos previos
             Set<String> enfrentamientosPrevios = new HashSet<>();
 
@@ -422,9 +421,22 @@ public class LeagueService implements CreateLeague {
                 // Crear enfrentamientos únicos para la jornada
                 HashSet<EnfrentamientoEntity> enfrentamientos = new HashSet<>();
 
+                // Si el número de bots es impar, agregar un bot ficticio
+                if (numBots % 2 != 0) {
+                    BotEntity byeBot = new BotEntity();
+                    byeBot.setId(-1L); // ID ficticio para el bot "bye"
+                    bots.add(byeBot);
+                    numBots++;
+                }
+
                 for (int j = 0; j < numBots / 2; j++) {
                     BotEntity bot1 = bots.get(j);
                     BotEntity bot2 = bots.get(numBots - 1 - j);
+
+                    // Saltar enfrentamientos contra el bot ficticio
+                    if (bot1.getId() == -1L || bot2.getId() == -1L) {
+                        continue;
+                    }
 
                     String enfrentamientoKey = bot1.getId() + "-" + bot2.getId();
                     String enfrentamientoKeyReverso = bot2.getId() + "-" + bot1.getId();
