@@ -335,4 +335,38 @@ public class LeagueService implements CreateLeague {
             throw new ConflictException("Error inesperado al registrar el bot en la liga: " + e.getMessage());
         }
     }
+
+    @Transactional
+    public void deleteLeague(Long leagueId){
+        if (leagueId == null || leagueId <= 0) {
+            throw new IllegalArgumentException("El ID de la liga no puede ser nulo o menor o igual a cero");
+        }
+
+        // Verificar autenticación
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new UnauthorizedException("Usuario no autenticado");
+        }
+
+        UserEntity authenticatedUser = (UserEntity) authentication.getPrincipal();
+        Long userId = authenticatedUser.getId();
+
+        // Verificar si la liga existe
+        LigaEntity ligaEntity = ligaJpaRepository.findById(leagueId)
+                .orElseThrow(() -> new ResourceNotFoundException("Liga no encontrada con id: " + leagueId));
+
+        // Verificar si el usuario tiene permisos para modificar esta liga
+        if (!ligaEntity.getUsuario().getId().equals(userId)) {
+            throw new ForbiddenException("No tienes permiso para modificar esta liga");
+        }
+
+        // Eliminar la liga
+        try {
+            ligaJpaRepository.delete(ligaEntity);
+        } catch (DataIntegrityViolationException e) {
+            throw new ConflictException("Error al eliminar la liga: " + e.getMessage());
+        } catch (Exception e) {
+            throw new ConflictException("Error inesperado al eliminar la liga: " + e.getMessage());
+        }
+    }
 }
