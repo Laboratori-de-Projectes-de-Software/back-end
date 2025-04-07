@@ -4,6 +4,7 @@ import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaPort;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class LigaJpaAdapter implements LigaPort {
     }
 
     @Override
+    @Transactional
     public Liga save(Liga liga) {
         return  ligaJpaMapper.toDomain(
                 ligaJpaRepository.save(
@@ -29,6 +31,7 @@ public class LigaJpaAdapter implements LigaPort {
     }
 
     @Override
+    @Transactional
     public List<Liga> findById(LigaId id) {
         return  ligaJpaRepository.findById(id.value())
                 .stream()
@@ -37,6 +40,7 @@ public class LigaJpaAdapter implements LigaPort {
     }
 
     @Override
+    @Transactional
     public List<Liga> findAll() {
         return  ligaJpaRepository.findAll()
                 .stream()
@@ -45,6 +49,7 @@ public class LigaJpaAdapter implements LigaPort {
     }
 
     @Override
+    @Transactional
     public List<Liga> findLigasUsuario(UsuarioId userId) {
         //TODO
         return List.of();

@@ -2,6 +2,7 @@ package com.adondeband.back_end_adonde_band.jpa.imagen;
 
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
 import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenPort;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class ImagenJpaAdapter implements ImagenPort {
     }
 
     @Override
+    @Transactional
     public Imagen save(Imagen imagen) {
         return  imagenJpaMapper.toDomain(
                     imagenJpaRepository.save(
@@ -25,6 +27,7 @@ public class ImagenJpaAdapter implements ImagenPort {
     }
 
     @Override
+    @Transactional
     public List<Imagen> findByRuta(String ruta) {
         return imagenJpaRepository.findByRuta(ruta)
                 .stream()

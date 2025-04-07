@@ -1,6 +1,7 @@
 package com.adondeband.back_end_adonde_band.dominio.bot;
 
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class BotImpl implements BotService {
     }
 
     @Override
+    @Transactional
     public Bot crearBot(Bot bot) {
         if (botPort.findByNombre(bot.getNombre().value()).isEmpty()) {
             return botPort.save(bot);

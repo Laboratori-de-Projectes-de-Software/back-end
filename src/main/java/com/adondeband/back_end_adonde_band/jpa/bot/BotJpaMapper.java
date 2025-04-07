@@ -9,6 +9,7 @@ import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
 import com.adondeband.back_end_adonde_band.jpa.enfrentamiento.EnfrentamientoJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -17,6 +18,7 @@ import org.mapstruct.factory.Mappers;
             EnfrentamientoJpaMapper.class,
             ParticipacionJpaMapper.class,
             ImagenJpaMapper.class,
+            UsuarioJpaMapper.class
         }, componentModel = "spring")
 public interface BotJpaMapper {
     BotJpaMapper INSTANCE = Mappers.getMapper(BotJpaMapper.class);

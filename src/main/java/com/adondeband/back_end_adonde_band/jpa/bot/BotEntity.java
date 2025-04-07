@@ -30,7 +30,7 @@ public class BotEntity {
     @ManyToOne
     private UsuarioEntity usuario;
 
-    @OneToOne
+    @ManyToOne
     private ImagenEntity imagen;
 
     @OneToMany(mappedBy = "bot")

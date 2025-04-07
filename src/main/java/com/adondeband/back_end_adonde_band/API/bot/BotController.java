@@ -54,8 +54,8 @@ public class BotController {
     }
 
     @PostMapping
-    @Transactional
     public ResponseEntity<BotDTO> crearBot(@RequestBody BotDTOMin botDTOMin) {
+        System.out.println("LLAMANDO A CREARBOT");
 
         BotDTO botDTO = new BotDTO(botDTOMin);
         Bot bot = botMapper.toDomain(botDTO);
@@ -71,6 +71,8 @@ public class BotController {
 
         // Guardar bot y obtener el nuevo bot proveniente de la BD
         Bot nuevoBot = botService.crearBot(bot);
+
+        System.out.println("Bot creado: " + nuevoBot.getNombre());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(botMapper.toDTO(nuevoBot));
     }
