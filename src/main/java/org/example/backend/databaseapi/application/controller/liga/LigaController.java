@@ -9,6 +9,7 @@ import org.example.backend.databaseapi.application.port.in.liga.EliminarLigaPort
 import org.example.backend.databaseapi.application.dto.liga.LeagueDTORequest;
 import org.example.backend.databaseapi.application.dto.liga.LeagueDTOResponse;
 import org.example.backend.databaseapi.application.dto.liga.LigaDTOMapper;
+import org.example.backend.databaseapi.application.dto.resultado.ParticipationDTOResponse;
 import org.example.backend.databaseapi.application.port.in.liga.*;
 import org.example.backend.databaseapi.domain.liga.Liga;
 import org.springframework.hateoas.CollectionModel;
@@ -34,6 +35,7 @@ public class LigaController {
     private final BuscarLigaUsuarioPort buscarLigaUsuarioPort;
     private final ActualizarLigaPort actualizarLigaPort;
     private final EliminarLigaPort eliminarLigaPort;
+    private final ClasificacionLigaPort clasificacionLigaPort;
     private final LigaDTOMapper ligaDTOMapper;
 
     @PostMapping("/league")
@@ -49,10 +51,15 @@ public class LigaController {
         anadirBotLigaPort.anadirBotLiga(botId,leagueId);
     }
 
-    @GetMapping("/league/{id}")
-    public ResponseEntity<LeagueDTOResponse> buscarLiga(@PathVariable Integer id){
-        Liga liga=buscarLigaPort.buscarLiga(id);
+    @GetMapping("/league/{leagueId}")
+    public ResponseEntity<LeagueDTOResponse> buscarLiga(@PathVariable Integer leagueId){
+        Liga liga=buscarLigaPort.buscarLiga(leagueId);
         return ResponseEntity.ok(ligaDTOMapper.toLeagueDTOResponse(liga));
+    }
+
+    @GetMapping("/league/{leagueId}/leaderboard")
+    public ResponseEntity<List<ParticipationDTOResponse>> buscarClasificacion(@PathVariable Integer leagueId){
+        return ResponseEntity.ok(clasificacionLigaPort.getClasificacionesLiga(leagueId));
     }
 
     @PutMapping("/league/{leagueId}")
