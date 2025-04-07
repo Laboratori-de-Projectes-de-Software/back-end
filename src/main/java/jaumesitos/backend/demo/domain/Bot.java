@@ -9,7 +9,7 @@ public class Bot {
     private LocalDateTime registrationDate;
 
 
-    public Bot(String id, String name, String modelIA, LocalDateTime registrationDate) {
+    public Bot(int id, String name, String modelIA, LocalDateTime registrationDate) {
         this.id = id;
         this.name = name;
         this.modelIA = modelIA;
