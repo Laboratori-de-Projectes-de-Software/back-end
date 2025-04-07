@@ -195,4 +195,38 @@ public class LeagueController {
                             "Ocurrió un error inesperado al registrar el bot en la liga: " + e.getMessage()));
         }
     }
+
+    @DeleteMapping("/league/{leagueId}")
+    public ResponseEntity<?> deleteLeague(@PathVariable Long leagueId) {
+        try {
+            League league = leagueService.getLeagueById(leagueId);
+            LigaDto leagueDto = ligaMapper.toLeagueDto(league);
+            leagueService.deleteLeague(leagueId);
+            return ResponseEntity.ok(leagueDto);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponseDto("Not Found",
+                            "No se encontró la liga que se intentó eliminar: " + e.getMessage()));
+        } catch (ForbiddenException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ErrorResponseDto("Forbidden",
+                            "No tienes permisos para eliminar esta liga: " + e.getMessage()));
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponseDto("Unauthorized",
+                            "Se requiere autenticación para eliminar esta liga: " + e.getMessage()));
+        } catch (TimeoutException e) {
+            return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
+                    .body(new ErrorResponseDto("Request Timeout",
+                            "La operación excedió el tiempo límite: " + e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponseDto("Bad Request",
+                            "El ID de liga proporcionado no es válido: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponseDto("Internal Server Error",
+                            "Ocurrió un error inesperado al eliminar la liga: " + e.getMessage()));
+        }
+    }
 }
