@@ -1,0 +1,6 @@
+AppConfig.class
+LeagueRepository.class
+LeagueServiceImpl.class
+LeagueUseCase.class
+LeaguePersistenceAdapter.class
+League.class
