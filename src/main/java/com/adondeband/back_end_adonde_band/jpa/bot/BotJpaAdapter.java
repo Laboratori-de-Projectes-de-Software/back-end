@@ -5,6 +5,7 @@ import com.adondeband.back_end_adonde_band.dominio.bot.BotPort;
 import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,7 +15,6 @@ import java.util.stream.Collectors;
 public class BotJpaAdapter implements BotPort {
 
     private final BotJpaRepository botJpaRepository;
-
     private final BotJpaMapper botJpaMapper;
     private final UsuarioJpaMapper usuarioJpaMapper;
 
@@ -25,13 +25,23 @@ public class BotJpaAdapter implements BotPort {
     }
 
     @Override
+    @Transactional
     public Bot save(Bot bot) {
+        /*
+        // DEBUG
+        BotEntity botEntity = botJpaMapper.toEntity(bot);
+        BotEntity saved = botJpaRepository.save(botEntity);
+        Bot botR = botJpaMapper.toDomain(saved);
+        return botR;
+         */
+
         return botJpaMapper.toDomain(
                 botJpaRepository.save(
                         botJpaMapper.toEntity(bot)));
     }
 
     @Override
+    @Transactional
     public List<Bot> findByNombre(String s) {
         return botJpaRepository.findByNombre(s)
                 .stream()
@@ -40,6 +50,7 @@ public class BotJpaAdapter implements BotPort {
     }
 
     @Override
+    @Transactional
     public List<Bot> findAll() {
         return botJpaRepository.findAll()
                 .stream()
@@ -48,12 +59,14 @@ public class BotJpaAdapter implements BotPort {
     }
 
     @Override
+    @Transactional
     public List<Bot> findBotsUsuario(UsuarioId userId) {
         //TODO
         return List.of();
     }
 
     @Override
+    @Transactional
     public List<Bot> findByUsuario(Usuario usuario) {
         return botJpaRepository.findByUsuario(usuarioJpaMapper.toEntity(usuario))
                 .stream()

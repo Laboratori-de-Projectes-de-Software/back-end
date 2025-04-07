@@ -37,6 +37,15 @@ public interface UsuarioJpaMapper {
         return new UsuarioId(value);
     }
 
+    default UsuarioEntity toUsuarioEntityFromId(UsuarioId id) {
+        if (id == null) {
+            return null;
+        }
+        UsuarioEntity entity = new UsuarioEntity();
+        entity.setNombre(id.value());
+        return entity;
+    }
+
     default String toUsuarioIdString(UsuarioId id) {
         if (id == null) {
             return null;

@@ -3,7 +3,11 @@ package com.adondeband.back_end_adonde_band.API.bot;
 import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotService;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotImpl;
+import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
+import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenImpl;
+import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenService;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +23,14 @@ import java.util.List;
 public class BotController {
 
     private final BotService botService;
+    private final ImagenService imagenService;
     private final BotDtoMapper botMapper;
 
+
     @Autowired
-    public BotController(BotImpl botService, BotDtoMapper botDtoMapper) {
+    public BotController(BotImpl botService, ImagenImpl imagenService, BotDtoMapper botDtoMapper) {
         this.botService = botService;
+        this.imagenService = imagenService;
         this.botMapper = botDtoMapper;
     }
 
@@ -48,6 +55,8 @@ public class BotController {
 
     @PostMapping
     public ResponseEntity<BotDTO> crearBot(@RequestBody BotDTOMin botDTOMin) {
+        System.out.println("LLAMANDO A CREARBOT");
+
         BotDTO botDTO = new BotDTO(botDTOMin);
         Bot bot = botMapper.toDomain(botDTO);
 
@@ -56,7 +65,15 @@ public class BotController {
         // Set UserId into bot
         bot.setUsuario(new UsuarioId(authentication.getName()));
 
+        // Guardar imagen del bot (por si no existe)
+        Imagen imagenSaved = imagenService.guardarImagen(bot.getImagen());
+        bot.setImagen(imagenSaved);
+
+        // Guardar bot y obtener el nuevo bot proveniente de la BD
         Bot nuevoBot = botService.crearBot(bot);
+
+        System.out.println("Bot creado: " + nuevoBot.getNombre());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(botMapper.toDTO(nuevoBot));
     }
 
