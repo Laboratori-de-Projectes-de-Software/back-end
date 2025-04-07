@@ -22,6 +22,7 @@ public class EnfrentamientoEntity {
         Finished
     }
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
     private Estado estado;
 
