@@ -1,4 +1,4 @@
-package uib.lab.api.infraestructura.controller;
+package uib.lab.api.infraestructure.controller;
 
 import lombok.RequiredArgsConstructor;
 
@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import uib.lab.api.application.dto.League.LeagueRequest;
-import uib.lab.api.infraestructura.util.ApiMessage;
+import uib.lab.api.application.dto.league.LeagueRequest;
+import uib.lab.api.infraestructure.util.ApiMessage;
 import uib.lab.api.application.service.LeagueService;
 import javax.validation.Valid;
 import java.util.Locale;

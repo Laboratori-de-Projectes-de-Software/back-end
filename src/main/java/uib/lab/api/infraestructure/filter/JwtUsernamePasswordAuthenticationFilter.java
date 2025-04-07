@@ -1,7 +1,7 @@
-package uib.lab.api.infraestructura.filter;
+package uib.lab.api.infraestructure.filter;
 
 import uib.lab.api.application.dto.user.UserDTOLogin;
-import uib.lab.api.infraestructura.util.ApiHttpResponse;
+import uib.lab.api.infraestructure.util.ApiHttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

@@ -1,4 +1,4 @@
-package uib.lab.api.infraestructura.config;
+package uib.lab.api.infraestructure.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

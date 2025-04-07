@@ -1,11 +1,11 @@
 package uib.lab.api.application.service;
 
 import uib.lab.api.application.dto.user.UserDTORegister;
-import uib.lab.api.domain.entity.User;
-import uib.lab.api.infraestructura.jpaRepositories.UserJpaRepository;
-import uib.lab.api.infraestructura.util.ApiMessage;
-import uib.lab.api.infraestructura.util.message.MessageCode;
-import uib.lab.api.infraestructura.util.message.MessageConverter;
+import uib.lab.api.infraestructure.entity.User;
+import uib.lab.api.infraestructure.jpaRepositories.UserJpaRepository;
+import uib.lab.api.infraestructure.util.ApiMessage;
+import uib.lab.api.infraestructure.util.message.MessageCode;
+import uib.lab.api.infraestructure.util.message.MessageConverter;
 import uib.lab.api.application.usecase.CreateUserUseCase;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

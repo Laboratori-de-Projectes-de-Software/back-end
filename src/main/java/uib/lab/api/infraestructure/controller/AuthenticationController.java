@@ -1,8 +1,8 @@
-package uib.lab.api.infraestructura.controller;
+package uib.lab.api.infraestructure.controller;
 
 import uib.lab.api.application.dto.user.UserDTORegister;
 import uib.lab.api.application.service.AuthenticationService;
-import uib.lab.api.infraestructura.util.ApiMessage;
+import uib.lab.api.infraestructure.util.ApiMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
