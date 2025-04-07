@@ -52,6 +52,7 @@ public class AuthenticationService {
         });
 
         var user = strictMapper.map(userRegistrationRequest, User.class);
+        user.setUsername(userRegistrationRequest.getUser());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(true); 
         user.setRoles(Set.of(User.Role.USER));
@@ -61,7 +62,7 @@ public class AuthenticationService {
 
         return ApiMessage.builder()
                 .status(HttpStatus.CREATED)
-                .message(messageConverter.getMessage(Message.ENABLED, Set.of(userRegistrationRequest.getUsername()), locale))
+                .message(messageConverter.getMessage(Message.ENABLED, Set.of(userRegistrationRequest.getUser()), locale))
                 .build();
     }
 

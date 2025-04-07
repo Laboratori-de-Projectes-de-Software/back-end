@@ -15,7 +15,7 @@ public class UserDTORegister {
     private String mail;
 
     @NotBlank
-    private String username;
+    private String user;
 
     @Password
     @NotBlank
