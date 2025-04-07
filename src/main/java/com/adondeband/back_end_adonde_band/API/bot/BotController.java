@@ -7,7 +7,6 @@ import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
 import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenImpl;
 import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenService;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,10 +53,10 @@ public class BotController {
     }
 
     @PostMapping
-    public ResponseEntity<BotDTO> crearBot(@RequestBody BotDTOMin botDTOMin) {
+    public ResponseEntity<BotDTOResponse> crearBot(@RequestBody BotDTOMin botDTOMin) {
         System.out.println("LLAMANDO A CREARBOT");
 
-        BotDTO botDTO = new BotDTO(botDTOMin);
+        BotDTOResponse botDTO = new BotDTOResponse(botDTOMin);
         Bot bot = botMapper.toDomain(botDTO);
 
         // Obtiene el usuario autenticado desde SecurityContextHolder
@@ -78,12 +77,12 @@ public class BotController {
     }
 
     @GetMapping("/{botId}")
-    public ResponseEntity<List<BotDTO>> obtenerBot(@PathVariable String botId) {
+    public ResponseEntity<List<BotDTOResponse>> obtenerBot(@PathVariable String botId) {
         // Obtener la lista de Bots desde el servicio
         List<Bot> bots = botService.obtenerBotPorNombre(botId);
 
         // Convertir manualmente de Bot a BotDTO
-        List<BotDTO> botDTO = new ArrayList<>();
+        List<BotDTOResponse> botDTO = new ArrayList<>();
         botDTO.add(botMapper.toDTO(bots.getFirst()));
 
         // Devolver la lista de BotDTO en la respuesta HTTP
