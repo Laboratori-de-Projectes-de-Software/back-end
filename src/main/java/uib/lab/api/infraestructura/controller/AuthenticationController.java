@@ -6,7 +6,6 @@ import uib.lab.api.infraestructura.util.ApiMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.Locale;
 
