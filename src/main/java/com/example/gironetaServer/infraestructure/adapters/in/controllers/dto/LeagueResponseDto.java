@@ -1,28 +1,31 @@
 package com.example.gironetaServer.infraestructure.adapters.in.controllers.dto;
 
+import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LeagueEntity;
+
 import java.util.List;
 
-public class LigaDto {
+public class LeagueResponseDto {
     private Long id;
     private String name;
     private String urlImagen;
     private Integer rounds;
     private Long matchTime;
     private List<Long> bots;
-    private String user; // Owner
+    private LeagueEntity.State state;
+    private Long userId; // Owner
 
-    public LigaDto() {
+    public LeagueResponseDto() {
     }
 
-    public LigaDto(Long id, String name, String urlImagen, Integer rounds, Long matchTime, List<Long> bots,
-            String user) {
+    public LeagueResponseDto(Long id, String name, String urlImagen, Integer rounds, Long matchTime, List<Long> bots,
+                     Long userId) {
         this.id = id;
         this.name = name;
         this.urlImagen = urlImagen;
         this.rounds = rounds;
         this.matchTime = matchTime;
         this.bots = bots;
-        this.user = user;
+        this.userId = userId;
     }
 
     // Métodos getter
@@ -50,8 +53,8 @@ public class LigaDto {
         return bots;
     }
 
-    public String getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
     // Métodos setter
@@ -79,7 +82,15 @@ public class LigaDto {
         this.bots = bots;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public LeagueEntity.State getState() {
+        return state;
+    }
+
+    public void setState(LeagueEntity.State state) {
+        this.state = state;
     }
 }

@@ -8,10 +8,11 @@ import com.example.gironetaServer.domain.exceptions.ResourceNotFoundException;
 import com.example.gironetaServer.domain.exceptions.TimeoutException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.ErrorResponseDto;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LeagueResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LigaDto;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LeagueDto;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers.LigaMapper;
 
 import java.util.List;
@@ -31,11 +32,11 @@ public class LeagueController {
     }
 
     @PostMapping("/league")
-    public ResponseEntity<?> createLeague(@RequestBody LigaDto leagueDto) {
+    public ResponseEntity<?> createLeague(@RequestBody LeagueDto leagueDto) {
         try {
             League league = LigaMapper.toAppObject(leagueDto);
             League savedLeague = leagueService.createLeague(league);
-            return ResponseEntity.status(HttpStatus.CREATED).body(ligaMapper.toLeagueDto(savedLeague));
+            return ResponseEntity.status(HttpStatus.CREATED).body(ligaMapper.toLeagueResponseDto(savedLeague));
         } catch (UnauthorizedException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorResponseDto("Unauthorized",
@@ -66,10 +67,10 @@ public class LeagueController {
     public ResponseEntity<?> getAllLeagues(@RequestParam(required = false) Long owner) {
         try {
             List<League> leagues = leagueService.getAllLeagues(owner);
-            List<LigaDto> leagueDtos = leagues.stream()
-                    .map(ligaMapper::toLeagueDto)
+            List<LeagueResponseDto> leagueResponseDto = leagues.stream()
+                    .map(ligaMapper::toLeagueResponseDto)
                     .collect(Collectors.toList());
-            return ResponseEntity.ok(leagueDtos);
+            return ResponseEntity.ok(leagueResponseDto);
         } catch (UnauthorizedException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorResponseDto("Unauthorized",
@@ -92,8 +93,8 @@ public class LeagueController {
     public ResponseEntity<?> getLeagueById(@PathVariable Long id) {
         try {
             League league = leagueService.getLeagueById(id);
-            LigaDto leagueDto = ligaMapper.toLeagueDto(league);
-            return ResponseEntity.ok(leagueDto);
+            LeagueResponseDto leagueResponseDto = ligaMapper.toLeagueResponseDto(league);
+            return ResponseEntity.ok(leagueResponseDto);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponseDto("Not Found",
@@ -122,12 +123,12 @@ public class LeagueController {
     }
 
     @PutMapping("/league/{id}")
-    public ResponseEntity<?> updateLeague(@PathVariable Long id, @RequestBody LigaDto leagueDto) {
+    public ResponseEntity<?> updateLeague(@PathVariable Long id, @RequestBody LeagueDto leagueDto) {
         try {
             League league = LigaMapper.toAppObject(leagueDto);
             League updatedLeague = leagueService.updateLeague(id, league);
-            LigaDto updatedLeagueDto = ligaMapper.toLeagueDto(updatedLeague);
-            return ResponseEntity.ok(updatedLeagueDto);
+            LeagueResponseDto updatedLeagueResponseDto = ligaMapper.toLeagueResponseDto(updatedLeague);
+            return ResponseEntity.ok(updatedLeagueResponseDto);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponseDto("Not Found",
