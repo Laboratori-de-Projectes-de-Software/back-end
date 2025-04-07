@@ -6,14 +6,15 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class Game {
+@Table(name = "matches")
+public class Match {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Enumerated(EnumType.STRING)
-    private GameState state;
+    private MatchState state;
 
     @ManyToOne
     @JoinColumn(name = "bot_id1")
@@ -28,6 +29,6 @@ public class Game {
     private Round round;
 }
 
-enum GameState {
+enum MatchState {
     PENDING, IN_PROGRESS, COMPLETED;
 }

@@ -28,8 +28,8 @@ public class Bot {
     private User user;
 
     @OneToMany(mappedBy = "bot1")
-    private Set<Game> gamesAsBot1;
+    private Set<Match> matchAsBot1;
 
     @OneToMany(mappedBy = "bot2")
-    private Set<Game> gamesAsBot2;
+    private Set<Match> matchAsBot2;
 }
