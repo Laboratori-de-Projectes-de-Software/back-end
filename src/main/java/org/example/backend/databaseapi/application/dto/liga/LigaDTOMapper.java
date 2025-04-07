@@ -2,6 +2,7 @@ package org.example.backend.databaseapi.application.dto.liga;
 
 import org.example.backend.databaseapi.domain.bot.BotId;
 import org.example.backend.databaseapi.domain.liga.Liga;
+import org.example.backend.databaseapi.domain.liga.LigaId;
 import org.example.backend.databaseapi.domain.usuario.UsuarioId;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,6 +23,10 @@ public interface LigaDTOMapper {
     Liga toLiga(LeagueDTORequest request);
 
     default Integer toInteger(UsuarioId id){
+        return id.value();
+    }
+
+    default Integer toInteger(LigaId id){
         return id.value();
     }
 

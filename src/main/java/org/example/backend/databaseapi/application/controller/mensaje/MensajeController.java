@@ -42,7 +42,7 @@ public class MensajeController {
                                                              @RequestBody Mensaje requestMensaje){
         Mensaje mensaje=nuevoMensajePort.altaMensaje(requestMensaje);
         return ResponseEntity.created(linkTo(methodOn(MensajeController.class)
-                        .buscarMensajesPartida(mensaje.getPartida().value(), mensaje.getMensajeId().value())).toUri())
+                        .buscarMensajesPartida(mensaje.getPartida().value())).toUri())
                 .body(mensaje);
     }
 

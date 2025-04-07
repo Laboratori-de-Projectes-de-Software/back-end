@@ -29,28 +29,9 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
     @Override
     @Transactional
     public Optional<Liga> createLiga(Liga liga) {
-        if (liga.getNombre() == null || liga.getNombre().isEmpty() ||
-                liga.getUsuario() == null ||
-                liga.getBotsLiga() == null || liga.getBotsLiga().isEmpty()) {
-
-            throw new ValidationException("Validation failed: " +
-                    (liga.getNombre() == null || liga.getNombre().isEmpty() ? "Name is required. " : "") +
-                    (liga.getUsuario() == null ? "User is required. " : "") +
-                    (liga.getBotsLiga() == null || liga.getBotsLiga().isEmpty() ? "Bots are required. " : "")
-            );
-        }
 
         if(ligaJpaRepository.existsByNombre(liga.getNombre())) {
             return Optional.empty();
-        }
-
-        int numBots = liga.getBotsLiga().size();
-        int maxRondas = (numBots * (numBots - 1)) / 2;
-
-        if (liga.getRondas() > maxRondas) {
-            throw new ValidationException("Número de partidas excede el máximo para " + numBots + " bots: " + maxRondas);
-        } else if (liga.getRondas() <= 0) {
-            liga.setRondas(maxRondas);
         }
 
         LigaJpaEntity ligaJpa = LigaJpaEntity.builder()
@@ -60,6 +41,7 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
                                 .orElseThrow()
                 )
                 .rondas(liga.getRondas())
+                /*
                 .botsLiga(
                     liga.getBotsLiga()
                             .stream()
@@ -69,6 +51,7 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
                             )
                             .toList()
                 )
+                 */
                 .build();
         return Optional.of(ligaJpaMapper.toDomain(ligaJpaRepository.save(ligaJpa)));
     }

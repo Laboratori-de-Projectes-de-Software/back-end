@@ -41,7 +41,8 @@ public class LigaAdapterIntegrationTest {
                 .usuario(new UsuarioId(1))
                 .build();
 
-        created=createLigaPort.createLiga(liga);
+        created=createLigaPort.createLiga(liga)
+                .orElseThrow();
 
         Assertions.assertNotEquals(created,null);
         Assertions.assertTrue(created.getLigaId().value()>0);
