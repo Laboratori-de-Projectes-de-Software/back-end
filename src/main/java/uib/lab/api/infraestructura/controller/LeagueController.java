@@ -15,7 +15,7 @@ import java.util.Locale;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v0/league")
-//@PreAuthorize("isAuthenticated()")
+@PreAuthorize("isAuthenticated()")
 public class LeagueController {
 
     private final LeagueService leagueService;

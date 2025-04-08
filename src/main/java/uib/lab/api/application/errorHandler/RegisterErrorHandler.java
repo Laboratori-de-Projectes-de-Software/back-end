@@ -1,40 +1,39 @@
 package uib.lab.api.application.errorHandler;
-
 import java.util.Locale;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+
 import org.springframework.http.HttpStatus;
 
 import uib.lab.api.infraestructura.util.message.MessageConverter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import uib.lab.api.application.dto.league.LeagueRequest;
+import uib.lab.api.application.dto.user.UserDTORegister;
 import uib.lab.api.infraestructura.util.ApiMessage;
 import uib.lab.api.infraestructura.util.message.MessageCode;
-
-public class LeagueErrorHandler {
+public class RegisterErrorHandler {
     private boolean hasError;
     private StringBuilder messageError;
     private MessageConverter messageConverter;
-    private LeagueRequest leagueRequest;
+    private UserDTORegister userRequest;
     private Locale locale;
 
     @Getter
     @RequiredArgsConstructor
     private enum Message implements MessageCode {
-        NO_NAME("league.no_name_field"),
-        NO_PLAYTIME("league.no_playtime_field"),
-        NO_ROUNDS("league.no_rounds_field");
+        NO_NAME("user.no_name_field"),
+        NO_EMAIL("user.no_email_field"),
+        NO_PASSWORD("user.no_password_field");
 
         private final String code;
     }
 
     private Validator validator;
 
-    public LeagueErrorHandler(LeagueRequest lr, Locale l, MessageConverter messageConverter, Validator validator){
-        this.leagueRequest = lr;
+    public RegisterErrorHandler(UserDTORegister lr, Locale l, MessageConverter messageConverter, Validator validator){
+        this.userRequest = lr;
         this.locale = l;
         this.messageConverter = messageConverter;
         this.hasError = false;
@@ -42,24 +41,24 @@ public class LeagueErrorHandler {
     }
 
     public void checkFieldViolations(){
-        Set<ConstraintViolation<LeagueRequest>> violations = validator.validate(leagueRequest);
+        Set<ConstraintViolation<UserDTORegister>> violations = validator.validate(userRequest);
 
         if (!violations.isEmpty()) {
             this.hasError = true;
             messageError = new StringBuilder();
     
-            for (ConstraintViolation<LeagueRequest> v : violations) {
+            for (ConstraintViolation<UserDTORegister> v : violations) {
                 String campo = v.getPropertyPath().toString();
     
                 switch (campo) {
                     case "name":
                         messageError.append(messageConverter.getMessage(Message.NO_NAME, null, this.locale));
                         break;
-                    case "numRounds":
-                        messageError.append(messageConverter.getMessage(Message.NO_ROUNDS, null, this.locale));
+                    case "email":
+                        messageError.append(messageConverter.getMessage(Message.NO_EMAIL, null, this.locale));
                         break;
-                    case "playTime":
-                        messageError.append(messageConverter.getMessage(Message.NO_PLAYTIME, null, this.locale));
+                    case "password":
+                        messageError.append(messageConverter.getMessage(Message.NO_PASSWORD, null, this.locale));
                         break;
                     default:
                         messageError.append(campo).append(": ").append(v.getMessage());
@@ -80,4 +79,3 @@ public class LeagueErrorHandler {
         return this.hasError;
     }
 }
-
