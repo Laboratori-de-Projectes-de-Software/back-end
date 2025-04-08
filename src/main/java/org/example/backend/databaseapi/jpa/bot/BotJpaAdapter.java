@@ -61,40 +61,22 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
     @Override
     @Transactional
     public Bot updateBot(Bot changedBot, Integer id) {
-        BotJpaEntity foundBot=botJpaRepository.findById(id)
-                .orElseThrow();
-
-        List<LigaJpaEntity> ligas=null;
-        if(changedBot.getLigasBot()!=null){
-            ligas=changedBot.getLigasBot()
-                    .stream()
-                    .filter(Objects::nonNull)
-                    .map(ligaId -> ligaJpaAdapter.getLiga(ligaId.value()))
-                    .toList();
-        }
-
-        //Tal vez se tenga que comprobar si la url ya existe, eso depende de los requisitos,
+        //Tal vez se tenga que comprobar si la url(IA API ENDPOINT) ya existe, eso depende de los requisitos,
         //actualmente podria estar en 2 bots diferentes al no estar especificado
         BotJpaEntity newbot=BotJpaEntity.builder()
-                .idBot(botJpaMapper.toInteger(changedBot.getIdBot()))
                 .url(changedBot.getUrl())
+                .prompt(changedBot.getPrompt())
                 .cualidad(changedBot.getCualidad())
                 .imagen(changedBot.getImagen())
-                .prompt(changedBot.getPrompt())
                 .usuario(
-                        usuarioJpaAdapter.getUser(botJpaMapper.toInteger(changedBot.getUsuario()))
-                                .orElse(foundBot.getUsuario())
+                        usuarioJpaAdapter.getUser(changedBot.getUsuario().value())
+                                .orElseThrow()
                 )
                 .nombre(changedBot.getNombre())
-                .ligasBot(ligas)
+                .idBot(id)
                 .build();
 
-
-        return botJpaMapper.toDomain(
-                botJpaRepository.save(
-                        botJpaMapper.updateBot(newbot,foundBot)
-                )
-        );
+        return botJpaMapper.toDomain(botJpaRepository.save(newbot));
     }
 
     @Override
@@ -118,7 +100,7 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
 
     @Override
     public List<Bot> findAllBotsFilter(BotsFilterRequest request){
-        List<Bot> bots = botJpaRepository.findAll()
+        return botJpaRepository.findAll()
                 .stream()
                 .filter(bot -> request.getCualidad() == null || request.getCualidad().contains(bot.getCualidad()) || bot.getCualidad().contains(request.getCualidad()))
                 .filter(bot -> request.getNombre() == null || request.getNombre().contains(bot.getNombre()) || bot.getNombre().contains(request.getNombre()))
@@ -126,7 +108,6 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
                 .map(botJpaMapper::toDomain)
                 .sorted(getComparator(request.getOrden()))
                 .toList();
-        return bots;
     }
 
     private Comparator<Bot> getComparator(Integer orden) {

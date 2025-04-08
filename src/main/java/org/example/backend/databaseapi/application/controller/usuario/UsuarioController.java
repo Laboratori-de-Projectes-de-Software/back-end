@@ -11,6 +11,7 @@ import org.example.backend.databaseapi.application.service.JwtService;
 import org.example.backend.databaseapi.application.service.PasswordService;
 import org.example.backend.databaseapi.domain.usuario.Usuario;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ public class UsuarioController {
     private final UserModelAssembler userModelAssembler;
     private final ActualizarUsuarioPort actualizarUsuarioPort;
     private final PasswordService passwordService;
+    private final UsuarioDTOMapper usuarioDTOMapper;
     private final JwtService jwtService;
 
     @PostMapping("/register")
@@ -62,7 +64,9 @@ public class UsuarioController {
 
         return ResponseEntity.ok(TokenAndUsuario.builder()
                 .token(token)
-                .usuario(user)
+                .usuario(user.getNombre())
+                .userId(user.getUserId().value())
+                .expiresIn(jwtService.extractExpiration(token))
                 .build());
     }
 

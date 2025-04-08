@@ -31,7 +31,7 @@ public class BotController {
     private final BotDTOMapper botDTOMapper;
 
     @PostMapping("/bot")
-    ResponseEntity<BotDTOResponse> altaBot(@RequestBody BotDTORequest newBot){
+    public ResponseEntity<BotDTOResponse> altaBot(@RequestBody BotDTORequest newBot){
         Bot bot=altaBotPort.altaBot(botDTOMapper.toBot(newBot));
         BotDTOResponse response=botDTOMapper.toDTOResponse(bot);
         response.setNWins(0);
@@ -42,37 +42,27 @@ public class BotController {
     }
 
     @DeleteMapping("/bots/{id}")
-    ResponseEntity<?> eliminarBot(@PathVariable Integer id){
+    public ResponseEntity<?> eliminarBot(@PathVariable Integer id){
         eliminarBotPort.eliminarBot(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/bot/{id}")
-    ResponseEntity<BotDTOResponse> buscarBot(@PathVariable Integer id){
+    public ResponseEntity<BotDTOResponse> buscarBot(@PathVariable Integer id){
         BotDTOResponse bot=buscarBotPort.buscarBot(id);
         return ResponseEntity.ok(bot);
     }
 
     @GetMapping("/bot")
-    ResponseEntity<List<BotDTOResponse>> buscarAllBots(@RequestParam("owner") Optional<Integer> userId ){
-        List<BotDTOResponse> bots = userId.map(
-                        integer -> buscarAllUserBotsPort.buscarUserBots(integer)
-                        .stream()
-                        .map(botDTOMapper::toDTOResponse)
-                        .toList()
-                )
-                .orElseGet(
-                        () -> buscarAllBotsPort.buscarAllBots()
-                        .stream()
-                        .map(botDTOMapper::toDTOResponse)
-                        .toList()
-                );
+    public ResponseEntity<List<BotDTOResponse>> buscarAllBots(@RequestParam("owner") Optional<Integer> userId ){
+        List<BotDTOResponse> bots = userId.map(buscarAllUserBotsPort::buscarUserBots)
+                .orElseGet(buscarAllBotsPort::buscarAllBots);
 
         return ResponseEntity.ok(bots);
     }
 
     @PatchMapping("/bots")
-    ResponseEntity<List<Bot>> buscarAllBotsFilter(@RequestBody BotsFilterRequest request){
+    public ResponseEntity<List<Bot>> buscarAllBotsFilter(@RequestBody BotsFilterRequest request){
         List<Bot> bots = buscarAllBotsPort.buscarAllBotsFiltro(request)
                 .stream()
                 .toList();
@@ -80,15 +70,15 @@ public class BotController {
     }
 
     @GetMapping("/usuario/{id}/bots")
-    ResponseEntity<List<Bot>> buscarUserBots(@PathVariable Integer id){
-        List<Bot> bots=buscarAllUserBotsPort.buscarUserBots(id)
+    public ResponseEntity<List<BotDTOResponse>> buscarUserBots(@PathVariable Integer id){
+        List<BotDTOResponse> bots=buscarAllUserBotsPort.buscarUserBots(id)
                 .stream()
                 .toList();
         return ResponseEntity.ok(bots);
     }
 
     @PutMapping("bot/{id}")
-    ResponseEntity<BotDTOResponse> actualizarBot(@RequestBody BotDTORequest changedBot,@PathVariable Integer id){
+    public ResponseEntity<BotDTOResponse> actualizarBot(@RequestBody BotDTORequest changedBot,@PathVariable Integer id){
         Bot bot=actualizarBotPort.actualizarBot(botDTOMapper.toBot(changedBot), id);
         return ResponseEntity.created(linkTo(methodOn(BotController.class).buscarBot(bot.getIdBot().value())).toUri())
                 .body(botDTOMapper.toDTOResponse(bot));
