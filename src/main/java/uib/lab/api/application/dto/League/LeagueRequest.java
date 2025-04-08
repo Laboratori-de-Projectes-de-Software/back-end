@@ -3,6 +3,7 @@ package uib.lab.api.application.dto.league;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -10,12 +11,14 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class LeagueRequest {
 
-    @NotBlank //(message = "El nombre de la liga es obligatorio")
+    @NotBlank
     private String name;
 
-    @NotNull //(message = "El tiempo de juego es obligatorio")
+    @NotNull
+    @Min(1)
     private int playTime;
 
-    @NotNull //(message = "El número de rondas es obligatorio")
+    @NotNull
+    @Min(1)
     private int numRounds;
 }

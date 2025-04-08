@@ -21,7 +21,7 @@ public class LeagueController {
     private final LeagueService leagueService;
 
     @PostMapping
-    public ResponseEntity<ApiMessage> createLeague(@Valid @RequestBody LeagueRequest leagueRequest, Locale locale) {
+    public ResponseEntity<ApiMessage> createLeague(@RequestBody LeagueRequest leagueRequest, Locale locale) {
         var message = leagueService.createLeague(leagueRequest, locale);
         return ResponseEntity.status(message.getStatus()).body(message);
     }
