@@ -14,8 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import uib.lab.api.application.dto.league.LeagueRequest;
-import uib.lab.api.infraestructure.entity.League;
-import uib.lab.api.infraestructure.jpaRepositories.LeagueJpaRepository;
+import uib.lab.api.infraestructure.jpaEntity.League;
 import uib.lab.api.infraestructure.util.ApiMessage;
 import uib.lab.api.infraestructure.util.message.MessageCode;
 import uib.lab.api.infraestructure.util.message.MessageConverter;
@@ -26,12 +25,12 @@ import uib.lab.api.application.errorHandler.*;;
 @RequiredArgsConstructor
 public class LeagueService {
 
-    @Autowired
-    private Validator validator;
-
-    private final LeagueJpaRepository leagueRepository;
+    //private final LeagueJpaRepository leagueRepository;
     private final MessageConverter messageConverter;
     private final ModelMapper strictMapper;
+
+    @Autowired
+    private Validator validator;
 
     @Getter
     @RequiredArgsConstructor
@@ -55,7 +54,7 @@ public class LeagueService {
 
         
         //Guaramos en la base de datos
-        leagueRepository.save(league);
+        //leagueRepository.save(league);
         
         //Devolvemos mensaje
         return ApiMessage.builder()

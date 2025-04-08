@@ -1,4 +1,4 @@
-package uib.lab.api.infraestructure.entity;
+package uib.lab.api.infraestructure.jpaEntity;
 
 import lombok.*;
 import javax.persistence.*;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class Position {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     private int points;
     private int win;

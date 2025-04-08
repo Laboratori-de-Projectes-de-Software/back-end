@@ -9,5 +9,5 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class IdRequest {
     @NotNull
-    private long id;
+    private int id;
 }

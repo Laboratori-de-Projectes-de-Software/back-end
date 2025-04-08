@@ -16,7 +16,7 @@ public interface UserPort {
     UserDomain update(UserDomain user);
 
     //Método para encontrar un usuario usando su id para buscar
-    Optional<UserDomain> findById(Long id);
+    Optional<UserDomain> findById(int id);
 
     Optional<UserDomain> findByUsername(String username);
 }
