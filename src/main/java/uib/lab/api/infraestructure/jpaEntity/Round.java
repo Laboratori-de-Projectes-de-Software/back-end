@@ -1,4 +1,4 @@
-package uib.lab.api.infraestructure.entity;
+package uib.lab.api.infraestructure.jpaEntity;
 
 import lombok.*;
 import javax.persistence.*;
@@ -12,7 +12,7 @@ import java.util.Set;
 public class Round {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     private LocalDateTime initialDate;
 

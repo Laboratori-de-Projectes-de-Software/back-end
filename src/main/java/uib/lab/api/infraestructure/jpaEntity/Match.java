@@ -1,4 +1,4 @@
-package uib.lab.api.infraestructure.entity;
+package uib.lab.api.infraestructure.jpaEntity;
 
 import lombok.*;
 import javax.persistence.*;
@@ -11,7 +11,7 @@ public class Match {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @Enumerated(EnumType.STRING)
     private MatchState state;

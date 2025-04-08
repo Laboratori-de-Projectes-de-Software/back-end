@@ -1,4 +1,4 @@
-package uib.lab.api.infraestructure.entity;
+package uib.lab.api.infraestructure.jpaEntity;
 
 import lombok.*;
 import javax.persistence.*;
@@ -16,7 +16,7 @@ public class League {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     private String name;
     

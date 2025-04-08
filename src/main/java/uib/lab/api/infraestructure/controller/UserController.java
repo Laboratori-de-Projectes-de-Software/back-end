@@ -1,6 +1,7 @@
 package uib.lab.api.infraestructure.controller;
 
 import org.springframework.http.ResponseEntity;
+import uib.lab.api.domain.BotDomain;
 import uib.lab.api.domain.UserDomain;
 import uib.lab.api.application.dto.user.UserResponse;
 import uib.lab.api.application.dto.user.UserUpdateRequest;
@@ -8,7 +9,6 @@ import uib.lab.api.application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import uib.lab.api.infraestructure.entity.Bot;
 import uib.lab.api.application.service.BotService;
 
 import uib.lab.api.infraestructure.util.ApiMessage;
@@ -26,13 +26,13 @@ public class UserController {
     private final BotService botService;
 
     @GetMapping("/{id}")
-    public UserResponse findById(@PathVariable long id, Locale locale) {
+    public UserResponse findById(@PathVariable int id, Locale locale) {
         return userService.findById(id, locale);
     }
 
     @GetMapping("/{id}/bots")
-    public ResponseEntity<List<Bot>> getBotsByUser(@PathVariable Long id) {
-        List<Bot> bots = botService.getBotsByUser(id);
+    public ResponseEntity<List<BotDomain>> getBotsByUser(@PathVariable int id) {
+        List<BotDomain> bots = botService.getBotsByUser(id);
         return ResponseEntity.ok(bots);
     }
 
@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<ApiMessage> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest user, Locale locale) throws MessagingException {
+    public ResponseEntity<ApiMessage> updateUser(@PathVariable int id, @Valid @RequestBody UserUpdateRequest user, Locale locale) throws MessagingException {
         var message = userService.updateUser(id, user, locale);
         return ResponseEntity.status(message.getStatus()).body(message);
     }

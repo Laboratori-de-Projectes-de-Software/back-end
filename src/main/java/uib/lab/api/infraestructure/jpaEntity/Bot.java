@@ -1,4 +1,4 @@
-package uib.lab.api.infraestructure.entity;
+package uib.lab.api.infraestructure.jpaEntity;
 
 import lombok.*;
 import javax.persistence.*;
@@ -12,16 +12,15 @@ public class Bot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     private String ideologia;
 
+    private String description;
+
     private String url;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(columnDefinition = "LONGBLOB")
-    private byte[] imagen;
+    private String imagen;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -32,4 +31,8 @@ public class Bot {
 
     @OneToMany(mappedBy = "bot2")
     private Set<Match> matchAsBot2;
+
+    public Bot(){
+
+    }
 }

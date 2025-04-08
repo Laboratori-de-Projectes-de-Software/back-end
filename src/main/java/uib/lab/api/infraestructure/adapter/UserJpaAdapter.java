@@ -3,15 +3,13 @@ package uib.lab.api.infraestructure.adapter;
 
 import uib.lab.api.domain.UserDomain;
 import uib.lab.api.application.port.UserPort;
-import uib.lab.api.infraestructure.entity.User;
-import uib.lab.api.application.mapper.UserMapper;
+import uib.lab.api.infraestructure.jpaEntity.User;
+import uib.lab.api.application.mapper.interfaces.UserMapper;
 import uib.lab.api.infraestructure.jpaRepositories.UserJpaRepository;
 
 import java.util.Optional;
-
 import java.util.stream.Collectors;
 import java.util.List;
-
 import org.springframework.stereotype.Component;
 
 @Component
@@ -46,11 +44,6 @@ public class UserJpaAdapter implements UserPort {
     }
 
     @Override
-    public Optional<UserDomain> findById(Long id) {
-        return userJpaRepository.findById(id).map(userMapper::toDomain);
-    }
-
-    @Override
     public UserDomain update(UserDomain user){
         User entity = userJpaRepository.findById(user.getId())
         .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -60,5 +53,10 @@ public class UserJpaAdapter implements UserPort {
         entity.setPassword(user.getPassword());
   
         return userMapper.toDomain(userJpaRepository.save(entity));
+    }
+
+    @Override
+    public Optional<UserDomain> findById(int id) {
+        return userJpaRepository.findById(id).map(userMapper::toDomain);
     }
 }

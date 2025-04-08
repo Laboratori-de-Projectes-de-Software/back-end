@@ -1,7 +1,7 @@
 package uib.lab.api.infraestructure.util;
 
 import uib.lab.api.domain.UserDomain;
-import uib.lab.api.infraestructure.entity.User;
+import uib.lab.api.infraestructure.jpaEntity.User;
 import uib.lab.api.infraestructure.util.jwt.JwtAuthenticationProvider;
 import uib.lab.api.infraestructure.util.message.MessageCode;
 import uib.lab.api.infraestructure.util.message.MessageConverter;
