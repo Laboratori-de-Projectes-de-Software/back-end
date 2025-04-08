@@ -3,7 +3,7 @@ import org.springframework.stereotype.Component;
 
 import uib.lab.api.domain.UserDomain;
 import uib.lab.api.application.port.UserPort;
-import uib.lab.api.domain.entity.User;
+import uib.lab.api.infraestructure.entity.User;
 import java.util.Set;
 
 @Component

@@ -1,6 +1,6 @@
 package uib.lab.api.application.dto.user;
 
-import uib.lab.api.infraestructura.password.Password;
+import uib.lab.api.infraestructure.password.Password;
 import lombok.Getter;
 import lombok.Setter;
 

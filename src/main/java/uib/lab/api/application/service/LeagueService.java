@@ -14,15 +14,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import uib.lab.api.application.dto.league.LeagueRequest;
-import uib.lab.api.application.errorHandler.LeagueErrorHandler;
-import uib.lab.api.domain.entity.League;
-import uib.lab.api.domain.entity.User;
-import uib.lab.api.infraestructura.jpaRepositories.LeagueJpaRepository;
-import uib.lab.api.infraestructura.util.ApiMessage;
-import uib.lab.api.infraestructura.util.message.MessageCode;
-import uib.lab.api.infraestructura.util.message.MessageConverter;
-import javax.validation.Validator;
+import uib.lab.api.infraestructure.entity.League;
+import uib.lab.api.infraestructure.jpaRepositories.LeagueJpaRepository;
+import uib.lab.api.infraestructure.util.ApiMessage;
+import uib.lab.api.infraestructure.util.message.MessageCode;
+import uib.lab.api.infraestructure.util.message.MessageConverter;
 
+import javax.validation.Validator;
+import uib.lab.api.application.errorHandler.*;;
 @Service
 @RequiredArgsConstructor
 public class LeagueService {

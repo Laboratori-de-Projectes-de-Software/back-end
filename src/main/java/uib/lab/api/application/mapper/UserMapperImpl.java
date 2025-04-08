@@ -1,7 +1,7 @@
 package uib.lab.api.application.mapper;
 
 import uib.lab.api.domain.UserDomain;
-import uib.lab.api.domain.entity.User;
+import uib.lab.api.infraestructure.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component

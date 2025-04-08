@@ -1,0 +1,34 @@
+package uib.lab.api.infraestructure.entity;
+
+import lombok.*;
+import javax.persistence.*;
+
+@Entity
+@Getter
+@Setter
+@Table(name = "matches")
+public class Match {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Enumerated(EnumType.STRING)
+    private MatchState state;
+
+    @ManyToOne
+    @JoinColumn(name = "bot_id1")
+    private Bot bot1;
+
+    @ManyToOne
+    @JoinColumn(name = "bot_id2")
+    private Bot bot2;
+
+    @ManyToOne
+    @JoinColumn(name = "round_id")
+    private Round round;
+}
+
+enum MatchState {
+    PENDING, IN_PROGRESS, COMPLETED;
+}
