@@ -22,4 +22,7 @@ public class BotDBO {
     private int wins;
     private int losses;
     private int draws;
+
+    @Column(name = "propietari")
+    private int ownerId;
 }

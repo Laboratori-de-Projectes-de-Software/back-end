@@ -1,8 +1,9 @@
 CREATE TABLE usuari (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(255),
+    name VARCHAR(255),
     email VARCHAR(255),
-    rol VARCHAR(255)
+    password VARCHAR(255),
+    role VARCHAR(255)
 );
 
 CREATE TABLE lliga (
@@ -16,9 +17,13 @@ CREATE TABLE lliga (
 
 CREATE TABLE bot (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(255),
-    data_registre TIMESTAMP,
-    model_ia VARCHAR(255),
+    name VARCHAR(255),
+    description VARCHAR(255),
+    url_image VARCHAR(255),
+    endpoint VARCHAR(255),
+    wins INT DEFAULT 0,
+    losses INT DEFAULT 0,
+    draws INT DEFAULT 0,
     propietari BIGINT,
     FOREIGN KEY (propietari) REFERENCES usuari(id)
 );
@@ -57,5 +62,6 @@ CREATE TABLE resposta (
     FOREIGN KEY (id_enfrontament) REFERENCES enfrontament(id)
 );
 
-INSERT INTO usuari (nom, email, rol)
-VALUES ('admin', 'admin@jaumesitos.com', 'admin');
+-- Usuario por defecto
+INSERT INTO usuari (name, email, password, role)
+VALUES ('admin', 'admin@jaumesitos.com', '$2a$10$u0eP/qrwvru7fPDwRBWWn.H4dTkldNDDxOyndWKdz2RKv74KMA0.i', 'admin');

@@ -2,10 +2,9 @@ package jaumesitos.backend.demo.application.service;
 
 import jaumesitos.backend.demo.domain.User;
 import jaumesitos.backend.demo.application.repository.IUserRepository;
+import jaumesitos.backend.demo.infrastructure.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,7 +14,8 @@ import java.util.Optional;
 public class AuthService {
 
     private final IUserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider tokenProvider;
 
     public void register(User user) {
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
@@ -27,19 +27,25 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public User login(String email, String password) {
+    public String login(String email, String password) {
         Optional<User> userOpt = userRepository.findByEmail(email);
 
         if (userOpt.isEmpty()) {
-            throw new UsernameNotFoundException("Usuario no encontrado");
+            throw new RuntimeException("Usuario no encontrado");
         }
 
         User user = userOpt.get();
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadCredentialsException("Contraseña incorrecta");
+            throw new RuntimeException("Contraseña incorrecta");
         }
 
-        return user;
+        return tokenProvider.generateToken(user.getEmail(), user.getRole());
     }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    }
+
 }

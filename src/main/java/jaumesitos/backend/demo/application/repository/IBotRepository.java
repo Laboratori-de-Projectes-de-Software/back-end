@@ -8,4 +8,5 @@ public interface IBotRepository {
     Bot save(Bot bot);
     Optional<Bot> findById(String id);
     List<Bot> findAll();
+    List<Bot> findByOwnerId(int ownerId);
 }

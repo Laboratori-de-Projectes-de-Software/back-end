@@ -12,5 +12,6 @@ public class BotDTO {
     private String name;
     private String description;
     private String urlImage;
-    private LocalDate endpoint;
+    private String endpoint;
+    private int ownerId;
 }
