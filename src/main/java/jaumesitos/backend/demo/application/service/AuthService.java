@@ -2,7 +2,9 @@ package jaumesitos.backend.demo.application.service;
 
 import jaumesitos.backend.demo.domain.User;
 import jaumesitos.backend.demo.application.repository.IUserRepository;
+import jaumesitos.backend.demo.infrastructure.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,6 +14,8 @@ import java.util.Optional;
 public class AuthService {
 
     private final IUserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider tokenProvider;
 
     public void register(User user) {
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
@@ -19,10 +23,11 @@ public class AuthService {
             throw new IllegalArgumentException("El usuario ya existe");
         }
 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
-    public User login(String email, String password) {
+    public String login(String email, String password) {
         Optional<User> userOpt = userRepository.findByEmail(email);
 
         if (userOpt.isEmpty()) {
@@ -31,10 +36,16 @@ public class AuthService {
 
         User user = userOpt.get();
 
-        if (!password.equals(user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Contraseña incorrecta");
         }
 
-        return user;
+        return tokenProvider.generateToken(user.getEmail(), user.getRole());
     }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    }
+
 }

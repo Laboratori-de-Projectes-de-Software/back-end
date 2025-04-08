@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 import jaumesitos.backend.demo.infrastructure.res.mapper.UserDTOMapper;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,8 +70,12 @@ public class AuthController {
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody UserDTOLogin dto) {
         try {
-            User user = service.login(dto.getEmail(), dto.getPassword());
+            String token = service.login(dto.getEmail(), dto.getPassword());
+            User user = service.getUserByEmail(dto.getEmail());
+
             UserResponseDTO response = userMapper.toResponseDTO(user);
+            response.setToken(token);
+            response.setExpiresIn(LocalDate.now().plusDays(1));
 
             Map<String, Object> result = new HashMap<>();
             result.put("message", "User logged");

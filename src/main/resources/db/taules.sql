@@ -64,4 +64,4 @@ CREATE TABLE resposta (
 
 -- Usuario por defecto
 INSERT INTO usuari (name, email, password, role)
-VALUES ('admin', 'admin@jaumesitos.com', 'admin', 'admin');
+VALUES ('admin', 'admin@jaumesitos.com', '$2a$10$u0eP/qrwvru7fPDwRBWWn.H4dTkldNDDxOyndWKdz2RKv74KMA0.i', 'admin');
