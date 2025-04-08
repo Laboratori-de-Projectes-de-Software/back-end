@@ -1,9 +1,9 @@
 package uib.lab.api.infraestructure.config;
 
+import uib.lab.api.application.service.AuthenticationService;
 import uib.lab.api.infraestructure.filter.JwtTokenVerifierFilter;
 import uib.lab.api.infraestructure.filter.JwtUsernamePasswordAuthenticationFilter;
 import uib.lab.api.infraestructure.handler.AccessDeniedHandler;
-import uib.lab.api.application.service.AuthenticationUserDetailsService;
 import uib.lab.api.infraestructure.util.ApiHttpResponse;
 import uib.lab.api.infraestructure.util.jwt.JwtAuthenticationProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.firewall.HttpStatusRequestRejectedHandler;
 import org.springframework.security.web.firewall.RequestRejectedHandler;
@@ -30,13 +29,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final ApiHttpResponse apiHttpResponse;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final AccessDeniedHandler accessDeniedHandler;
-    private final AuthenticationUserDetailsService authenticationUserDetailsService;
+    private final AuthenticationService authenticationService;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(authenticationUserDetailsService)
-                .passwordEncoder(passwordEncoder());
+                .userDetailsService(authenticationService)
+                .passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -57,11 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling(handler ->
                         handler.authenticationEntryPoint(accessDeniedHandler)
                 );
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
     }
 
     @Bean

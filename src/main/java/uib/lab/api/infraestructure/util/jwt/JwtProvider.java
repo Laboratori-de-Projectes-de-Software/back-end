@@ -1,7 +1,7 @@
 package uib.lab.api.infraestructure.util.jwt;
 
-import uib.lab.api.infraestructure.entity.User;
-import uib.lab.api.infraestructure.jpaRepositories.UserJpaRepository;
+import uib.lab.api.application.port.UserPort;
+import uib.lab.api.infraestructure.jpaEntity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Date;
 @Setter
 @RequiredArgsConstructor
 public abstract class JwtProvider {
-    private final UserJpaRepository userRepository;
+    private final UserPort userPort;
 
     private String secret;
     private int duration;
@@ -43,7 +43,7 @@ public abstract class JwtProvider {
                 .getBody()
                 .getSubject();
 
-        return userRepository.findById(Long.valueOf(id))
+        return userPort.findById(Integer.parseInt(id))
                 .map(user -> new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()))
                 .orElseThrow(() -> new UsernameNotFoundException(id));
     }

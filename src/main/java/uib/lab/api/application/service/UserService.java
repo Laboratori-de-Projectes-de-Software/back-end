@@ -1,12 +1,10 @@
 package uib.lab.api.application.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import uib.lab.api.application.port.UserPort;
 import uib.lab.api.domain.UserDomain;
-import uib.lab.api.application.usecase.GetAllUsersUseCase;
-import uib.lab.api.application.usecase.UpdateUserUseCase;
 import uib.lab.api.application.dto.user.UserUpdateRequest;
-import uib.lab.api.infraestructure.entity.User;
-import uib.lab.api.infraestructure.jpaRepositories.UserJpaRepository;
+import uib.lab.api.infraestructure.jpaEntity.User;
 import uib.lab.api.application.dto.user.UserResponse;
 import uib.lab.api.infraestructure.util.ApiMessage;
 import uib.lab.api.infraestructure.util.message.MessageCode;
@@ -20,17 +18,14 @@ import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import javax.mail.MessagingException;
 
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserJpaRepository userJpaRepository;
+    private final UserPort userPort;
     private final MessageConverter messageConverter;
     private final ModelMapper mapper;
-    private final GetAllUsersUseCase getAllUserCase;
-    private final UpdateUserUseCase updateUserUseCase;
     private final PasswordEncoder passwordEncoder;
 
     @Getter
@@ -43,9 +38,9 @@ public class UserService {
         private final String code;
     }
 
-    public UserResponse findById(long id, Locale locale) {
+    public UserResponse findById(int id, Locale locale) {
         return this.map(
-                userJpaRepository.findById(id).orElseThrow(() ->
+                userPort.findById(id).orElseThrow(() ->
                         new ResponseStatusException(
                                 HttpStatus.BAD_REQUEST,
                                 messageConverter.getMessage(Message.NOT_EXISTS, null, locale)
@@ -55,11 +50,11 @@ public class UserService {
     }
 
     public List<UserDomain> getAllUsers(){
-        return getAllUserCase.getUsers();
+        return userPort.findAll();
     }
 
-    public ApiMessage updateUser(Long id, UserUpdateRequest userUpdateRequest, Locale locale) throws MessagingException {
-        userJpaRepository.findById(id).orElseThrow(() -> {
+    public ApiMessage updateUser(int id, UserUpdateRequest userUpdateRequest, Locale locale) {
+        userPort.findById(id).orElseThrow(() -> {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
                     messageConverter.getMessage(
@@ -71,13 +66,13 @@ public class UserService {
         });
 
         //Si existe revisamos contraseña
-        var user = mapper.map(userUpdateRequest, User.class);
+        var user = mapper.map(userUpdateRequest, UserDomain.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(true);
         user.setRoles(Set.of(User.Role.USER));
 
         //Actualizamos el usuario usando el caso de uso de UpdateUserCase
-        updateUserUseCase.updateUser(id, user.getMail(), user.getUsername(), user.getPassword());
+        userPort.update(user);
 
         return ApiMessage.builder()
                 .status(HttpStatus.CREATED)
@@ -85,7 +80,7 @@ public class UserService {
                 .build();
     }
 
-    private UserResponse map(User user) {
+    private UserResponse map(UserDomain user) {
         return mapper.map(user, UserResponse.class);
     }
 }

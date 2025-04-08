@@ -1,4 +1,4 @@
-package uib.lab.api.infraestructure.entity;
+package uib.lab.api.infraestructure.jpaEntity;
 
 import lombok.*;
 
@@ -25,7 +25,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @Column(name ="username")
     private String mail;
@@ -38,18 +38,18 @@ public class User implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Bot> bots;
 
     private boolean enabled;
 
-    public User(long id, String mail, String password) {
+    public User(int id, String mail, String password) {
         this.id = id;
         this.mail = mail;
         this.password = password;
     }
 
-    public User(long id, String m, String u, String p){
+    public User(int id, String m, String u, String p){
         this.id = id;
         this.mail = m;
         this.username = u; 
