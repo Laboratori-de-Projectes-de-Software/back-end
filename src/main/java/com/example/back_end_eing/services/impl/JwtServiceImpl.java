@@ -26,9 +26,10 @@ public class JwtServiceImpl implements JwtService {
     public String generateToken(Usuario usuario) {
         // Crear el JWT
         return Jwts.builder()
-                .setSubject(usuario.getNombreUsuario())
+                .setSubject(usuario.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setId(usuario.getId().toString())
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -58,8 +59,13 @@ public class JwtServiceImpl implements JwtService {
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
-    private Date extractExpiration(String token) {
+    @Override
+    public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+    @Override
+    public String extractId(String token) {
+        return extractClaim(token, Claims::getId);
     }
 
     private Key getSignInKey() {
