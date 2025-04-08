@@ -6,6 +6,7 @@ import uib.lab.api.domain.UserDomain;
 import uib.lab.api.infraestructure.util.ApiHttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -42,11 +43,19 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
         UserDomain user = (UserDomain) authentication.getPrincipal();
         String token = apiHttpResponse.jwtToken(response, authentication);
 
+        // Extraer el tiempo de expiración
+        Date exp = Jwts.parserBuilder()
+            .setSigningKey(apiHttpResponse.getAuthenticationProvider().getSecret().getBytes()) // Usamos la clave secreta
+            .build()
+            .parseClaimsJws(token)
+            .getBody()
+            .getExpiration();
+
         UserResponseDTO dto = new UserResponseDTO();
         dto.setUserId(user.getId());
         dto.setUser(user.getUsername());
         dto.setToken(token);
-        dto.setExpiresIn(360000000); 
+        dto.setExpiresIn((exp.getTime())/1000); 
     
         response.setContentType("application/json");
         objectMapper.writeValue(response.getOutputStream(), dto);

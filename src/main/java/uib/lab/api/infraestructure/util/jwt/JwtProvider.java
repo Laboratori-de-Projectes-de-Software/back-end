@@ -23,7 +23,7 @@ public abstract class JwtProvider {
     private String secret;
     private int duration;
     private ChronoUnit temporalUnit;
-
+    
     public String generate(User user) {
         return Jwts.builder()
                 .setSubject(String.valueOf(user.getId()))
@@ -46,5 +46,9 @@ public abstract class JwtProvider {
         return userPort.findById(Integer.parseInt(id))
                 .map(user -> new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()))
                 .orElseThrow(() -> new UsernameNotFoundException(id));
+    }
+
+    public String getSecret(){
+        return this.secret;
     }
 }

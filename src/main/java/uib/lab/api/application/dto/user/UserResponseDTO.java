@@ -9,5 +9,5 @@ public class UserResponseDTO {
     private int userId;
     private String user;
     private String token;
-    private Integer expiresIn; 
+    private Long expiresIn; 
 }

@@ -68,4 +68,8 @@ public class ApiHttpResponse {
         objectMapper.writeValue(stream, error);
         stream.flush();
     }
+
+    public JwtAuthenticationProvider getAuthenticationProvider(){
+        return this.jwtAuthenticationProvider;
+    }
 }
