@@ -1,19 +1,20 @@
 package jaumesitos.backend.demo.infrastructure.db.dbo;
 
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 @Getter
 @Setter
+@Table(name = "usuari")
 @NoArgsConstructor
 @Entity
 public class UserDBO {
     @Id
-    private String id;
+    private int id;
     private String name;
     private String email;
     private String password;

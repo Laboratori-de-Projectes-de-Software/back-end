@@ -27,4 +27,6 @@ public class BotService {
     public List<Bot> getAllBots() {
         return botRepository.findAll();
     }
+
+    public List<Bot> getBotsByOwner(int ownerId) { return botRepository.findByOwnerId(ownerId); }
 }

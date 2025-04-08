@@ -5,8 +5,6 @@ import jaumesitos.backend.demo.domain.Bot;
 import jaumesitos.backend.demo.infrastructure.db.dbo.BotDBO;
 import jaumesitos.backend.demo.infrastructure.db.mapper.BotDBOMapper;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.jdbc.Expectation;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,9 +31,16 @@ public class BotDBORepository implements IBotRepository {
 
     @Override
     public List<Bot> findAll() {
-        /*return springDataRepository.findAll().stream()
-                .map(mapper::toBot)
-                .collect(Collectors.toList());*/
-        return null;
+        return springDataRepository.findAll().stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Bot> findByOwnerId(int ownerId) {
+        return springDataRepository.findAllByOwnerId(ownerId)
+                .stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
     }
 }

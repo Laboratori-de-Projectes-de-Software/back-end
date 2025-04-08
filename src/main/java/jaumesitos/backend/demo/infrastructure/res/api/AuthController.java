@@ -6,8 +6,6 @@ import jaumesitos.backend.demo.infrastructure.res.dto.BotDTO;
 import jaumesitos.backend.demo.infrastructure.res.dto.UserDTOLogin;
 import jaumesitos.backend.demo.infrastructure.res.dto.UserResponseDTO;
 import jaumesitos.backend.demo.infrastructure.res.mapper.BotDTOMapper;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.RequestBody;
 import jaumesitos.backend.demo.application.service.AuthService;
 import jaumesitos.backend.demo.infrastructure.res.dto.UserDTORegister;
@@ -78,7 +76,7 @@ public class AuthController {
             result.put("message", "User logged");
             result.put("user", response);
             return ResponseEntity.ok(result);
-        } catch (UsernameNotFoundException | BadCredentialsException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error");

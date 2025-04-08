@@ -4,12 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class UserResponseDTO {
-    private String id;
-    private String name;
-    private String email;
-    private String role;
+    private String token;
+    private LocalDate expiresIn;
+    private String user;
+    private int userId;
 }
