@@ -7,12 +7,12 @@ import javax.validation.Validator;
 
 import org.springframework.http.HttpStatus;
 
-import uib.lab.api.infraestructura.util.message.MessageConverter;
+import uib.lab.api.infraestructure.util.message.MessageConverter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import uib.lab.api.application.dto.user.UserDTORegister;
-import uib.lab.api.infraestructura.util.ApiMessage;
-import uib.lab.api.infraestructura.util.message.MessageCode;
+import uib.lab.api.infraestructure.util.ApiMessage;
+import uib.lab.api.infraestructure.util.message.MessageCode;
 public class RegisterErrorHandler {
     private boolean hasError;
     private StringBuilder messageError;
