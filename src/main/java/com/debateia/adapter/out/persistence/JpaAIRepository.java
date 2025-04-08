@@ -1,20 +1,27 @@
 package com.debateia.adapter.out.persistence;
 
 import com.debateia.application.ports.out.persistence.AIRepository;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-/**
- *
- * @author kjorda
- */
+import java.util.List;
 
+@Component
+@RequiredArgsConstructor
+public class JpaAIRepository implements AIRepository {
+    private final AIJpaRepository aiJpaRepository;
 
-@Repository
-public class JpaAIRepository implements AIRepository{
-    public interface AIRepo extends JpaRepository<AIEntity, Integer> {
-    
+    @Override
+    public List<AIEntity> findAll() {
+        return aiJpaRepository.findAll();
     }
-    
-    
+
+    @Override
+    public List<AIEntity> findByUserId(Integer userId) {
+        return aiJpaRepository.findByUser_Id(userId);
+    }
+
+    public AIEntity save(AIEntity entity) {
+        return aiJpaRepository.save(entity);
+    }
 }
