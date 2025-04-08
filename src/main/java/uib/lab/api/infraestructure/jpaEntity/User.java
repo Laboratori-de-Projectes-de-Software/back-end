@@ -41,6 +41,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Bot> bots;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<League> leagues;
+
     private boolean enabled;
 
     public User(int id, String mail, String password) {

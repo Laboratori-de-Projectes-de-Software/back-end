@@ -16,6 +16,8 @@ public class UserDomain implements UserDetails {
     private boolean isEnabled;
     private Set<Role> roles;
     private int[] botsId;
+    private int[] leaguesId;
+
 
     public UserDomain(int id, String mail, String username, String password, boolean isEnabled, Set<Role> roles) {
         this.id = id;
@@ -120,5 +122,13 @@ public class UserDomain implements UserDetails {
 
     public void setBotsId(int[] botsId) {
         this.botsId = botsId;
+    }
+
+    public int[] getLeaguesId() {
+        return leaguesId;
+    }
+
+    public void setLeaguesId(int[] leaguesId) {
+        this.leaguesId = leaguesId;
     }
 }

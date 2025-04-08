@@ -19,7 +19,7 @@ public class League {
     private int id;
 
     private String name;
-    
+    private String urlImagen;
     private int playTime;
     private int numRounds;
 
@@ -27,5 +27,17 @@ public class League {
     private LeagueState state;
 
     @OneToMany(mappedBy = "league")
-    private Set<Round> round;
+    private Set<Round> rounds;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToMany
+    @JoinTable(
+            name = "league_bot",
+            joinColumns = @JoinColumn(name = "league_id"),
+            inverseJoinColumns = @JoinColumn(name = "bot_id")
+    )
+    private Set<Bot> bots;
 }

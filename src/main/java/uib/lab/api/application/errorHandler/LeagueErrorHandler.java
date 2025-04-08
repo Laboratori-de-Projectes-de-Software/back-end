@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import uib.lab.api.infraestructure.util.message.MessageConverter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import uib.lab.api.application.dto.league.LeagueRequest;
 import uib.lab.api.infraestructure.util.ApiMessage;
 import uib.lab.api.infraestructure.util.message.MessageCode;
 
@@ -18,7 +17,7 @@ public class LeagueErrorHandler {
     private boolean hasError;
     private StringBuilder messageError;
     private MessageConverter messageConverter;
-    private LeagueRequest leagueRequest;
+    private uib.lab.api.application.dto.league.LeagueDTO leagueDTO;
     private Locale locale;
 
     @Getter
@@ -33,8 +32,8 @@ public class LeagueErrorHandler {
 
     private Validator validator;
 
-    public LeagueErrorHandler(LeagueRequest lr, Locale l, MessageConverter messageConverter, Validator validator){
-        this.leagueRequest = lr;
+    public LeagueErrorHandler(uib.lab.api.application.dto.league.LeagueDTO lr, Locale l, MessageConverter messageConverter, Validator validator){
+        this.leagueDTO = lr;
         this.locale = l;
         this.messageConverter = messageConverter;
         this.hasError = false;
@@ -42,13 +41,13 @@ public class LeagueErrorHandler {
     }
 
     public void checkFieldViolations(){
-        Set<ConstraintViolation<LeagueRequest>> violations = validator.validate(leagueRequest);
+        Set<ConstraintViolation<uib.lab.api.application.dto.league.LeagueDTO>> violations = validator.validate(leagueDTO);
 
         if (!violations.isEmpty()) {
             this.hasError = true;
             messageError = new StringBuilder();
     
-            for (ConstraintViolation<LeagueRequest> v : violations) {
+            for (ConstraintViolation<uib.lab.api.application.dto.league.LeagueDTO> v : violations) {
                 String campo = v.getPropertyPath().toString();
     
                 switch (campo) {

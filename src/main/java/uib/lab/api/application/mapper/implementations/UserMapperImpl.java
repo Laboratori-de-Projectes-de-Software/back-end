@@ -5,6 +5,7 @@ import uib.lab.api.application.mapper.interfaces.UserMapper;
 import uib.lab.api.application.port.BotPort;
 import uib.lab.api.domain.UserDomain;
 import uib.lab.api.infraestructure.jpaEntity.Bot;
+import uib.lab.api.infraestructure.jpaEntity.League;
 import uib.lab.api.infraestructure.jpaEntity.User;
 import org.springframework.stereotype.Component;
 
@@ -38,6 +39,13 @@ public class UserMapperImpl implements UserMapper {
                     .mapToInt(bot -> (int) bot.getId())
                     .toArray();
             domain.setBotsId(botsId);
+        }
+
+        if (entity.getLeagues() != null) {
+            int[] leagueIds = entity.getLeagues().stream()
+                    .mapToInt(League::getId)
+                    .toArray();
+            domain.setLeaguesId(leagueIds);
         }
 
         return domain;
