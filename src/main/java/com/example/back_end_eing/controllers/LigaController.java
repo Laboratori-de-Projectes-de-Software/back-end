@@ -74,5 +74,7 @@ public class LigaController {
 
         return new ResponseEntity<>(bots, HttpStatus.OK);
     }
+
 }
+
 
