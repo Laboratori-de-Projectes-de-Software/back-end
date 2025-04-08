@@ -40,7 +40,7 @@ public class ApiHttpResponse {
         this.unauthorized(Message.INVALID_CREDENTIALS, response, locale);
     }
 
-    public void jwtToken(HttpServletResponse response, Authentication authentication) throws IOException {
+    public String jwtToken(HttpServletResponse response, Authentication authentication) throws IOException {
         Object principal = authentication.getPrincipal();
         String token;
 
@@ -52,10 +52,7 @@ public class ApiHttpResponse {
             throw new RuntimeException("Tipo inesperado de usuario autenticado: " + principal.getClass().getName());
         }
 
-        var stream = response.getOutputStream();
-        response.setContentType(MediaType.TEXT_PLAIN_VALUE);
-        objectMapper.writeValue(stream, token);
-        stream.flush();
+        return token;
     }
 
     private void unauthorized(Message message, HttpServletResponse response, Locale locale) throws IOException {
