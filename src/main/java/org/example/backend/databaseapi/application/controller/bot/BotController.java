@@ -49,8 +49,8 @@ public class BotController {
 
     @GetMapping("/bot/{id}")
     ResponseEntity<BotDTOResponse> buscarBot(@PathVariable Integer id){
-        Bot bot=buscarBotPort.buscarBot(id);
-        return ResponseEntity.ok(botDTOMapper.toDTOResponse(bot));
+        BotDTOResponse bot=buscarBotPort.buscarBot(id);
+        return ResponseEntity.ok(bot);
     }
 
     @GetMapping("/bot")
