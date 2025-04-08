@@ -1,6 +1,7 @@
 package com.example.back_end_eing.controllers;
 
 
+import com.example.back_end_eing.services.EnfrentamientoService;
 import com.example.back_end_eing.services.LigaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ public class LigaController {
 
     @Autowired
     private LigaService ligaService;
+    private EnfrentamientoService enfrentamientoService;
 
     @PutMapping("/actualizar")
     public ResponseEntity<Void> actualizarClasificacion(@RequestParam Long liga, @RequestParam Long local, @RequestParam Long visitante, @RequestParam String resultado) {
@@ -44,6 +46,16 @@ public class LigaController {
             return ResponseEntity.status(HttpStatus.CREATED).body("Liga registrada correctamente");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
+        }
+    }
+
+    @PostMapping("/{leagueId}/start")
+    public ResponseEntity<String> generarEnfrentamientos(@RequestParam Long id) {
+        try {
+            enfrentamientoService.generarEnfrentamientos(id);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Enfrentamientos generados correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al generar enfrentamientos" + e.getMessage());
         }
     }
 }
