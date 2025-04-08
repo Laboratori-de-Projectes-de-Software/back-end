@@ -13,9 +13,6 @@ public interface UsuarioDTOMapper {
     @Mapping(target = "nombre", source = "user")
     Usuario toUsuario(UserDTORegister request);
 
-    @Mapping(target = "nombre", source = "user")
-    Usuario toUsuario(UserDTOLogin request);
-
     default Email toEmail(String email){
         return new Email(email);
     }
