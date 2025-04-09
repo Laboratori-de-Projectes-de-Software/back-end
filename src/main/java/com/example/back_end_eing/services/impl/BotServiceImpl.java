@@ -2,6 +2,8 @@ package com.example.back_end_eing.services.impl;
 
 import com.example.back_end_eing.services.BotService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.example.back_end_eing.repositories.BotRepository;
@@ -13,7 +15,9 @@ import com.example.back_end_eing.exceptions.UserNotFoundException;;
 
 @Service
 public class BotServiceImpl implements BotService{
+    @Autowired
     private BotRepository botRepository;
+    @Autowired
     private UsuarioRepository userRepository;
     private Bot bot;
     private Usuario user;
