@@ -1,8 +1,8 @@
 package com.debateia.application.service;
 
-import com.debateia.adapter.in.rest.UserDTOLogin;
-import com.debateia.adapter.in.rest.UserDTORegister;
-import com.debateia.adapter.in.rest.UpdateCredRequest;
+import com.debateia.adapter.in.web.UserDTOLogin;
+import com.debateia.adapter.in.web.UserDTORegister;
+import com.debateia.adapter.in.web.UpdateCredRequest;
 import com.debateia.adapter.out.persistence.UserResponseDTO;
 
 import jakarta.validation.constraints.NotNull;

@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "tbl_user")
 public class UserEntity {
 
   @Id
@@ -33,13 +33,12 @@ public class UserEntity {
   // @OneToMany(mappedBy = "user")
   // private List<Token> tokens;
 
-  // @OneToOne
-  // @JoinColumn(name = "match_id", nullable = true) // clave foranea a id de
+  @OneToOne
+  @JoinColumn(name = "match_id", nullable = true) // clave foranea a id de
   // match
-  // private MatchEntity match;
+  private MatchEntity match;
 
   // mapeo al atributo "user" de la clase AIEntity
-  // @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch =
-  // FetchType.LAZY)
-  // private List<AIEntity> aiList = new ArrayList<>();
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<AIEntity> aiList = new ArrayList<>();
 }

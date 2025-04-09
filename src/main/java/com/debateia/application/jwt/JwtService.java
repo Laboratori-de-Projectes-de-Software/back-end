@@ -3,11 +3,14 @@ package com.debateia.application.jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
+import com.debateia.application.ports.out.persistence.UserRepository;
 import com.debateia.adapter.out.persistence.AuthMapper;
 import com.debateia.adapter.out.persistence.UserEntity;
+import com.debateia.application.ports.out.persistence.UserRepository;
 import com.debateia.domain.User;
 
 import javax.crypto.SecretKey;
@@ -15,8 +18,9 @@ import java.util.Date;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
-
+    private final UserRepository repository;
     @Value("${spring.application.security.jwt.secret-key}")
     private String secretKey;
     @Value("${spring.application.security.jwt.expiration}")
@@ -53,9 +57,18 @@ public class JwtService {
                 .compact();
     }
 
-    public boolean isTokenValid(String token, UserEntity user) {
-        final String username = extractUsername(token);
-        return (username.equals(user.getEmail())) && !isTokenExpired(token);
+    public boolean isTokenValid(String authentication) {
+        System.out.println("AUTHENTICATTIENEJEJNE: " + authentication);
+        if (authentication == null || !authentication.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid auth header");
+        }
+        final String authToken = authentication.substring(7);
+        final String currentEmail = this.extractUsername(authToken);
+        if (currentEmail == null) {
+            return false;
+        }
+        UserEntity userEntity = this.repository.findByEmail(currentEmail).orElseThrow();
+        return (currentEmail.equals(userEntity.getEmail())) && !isTokenExpired(authToken);
     }
 
     private boolean isTokenExpired(String token) {

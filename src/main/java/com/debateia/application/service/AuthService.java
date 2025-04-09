@@ -4,12 +4,12 @@ import com.debateia.adapter.out.persistence.AuthMapper;
 import com.debateia.adapter.out.persistence.Token;
 import com.debateia.adapter.out.persistence.UserEntity;
 import com.debateia.application.jwt.JwtService;
-import com.debateia.adapter.in.rest.UserDTOLogin;
-import com.debateia.adapter.in.rest.UserDTORegister;
+import com.debateia.adapter.in.web.UserDTOLogin;
+import com.debateia.adapter.in.web.UserDTORegister;
 import com.debateia.adapter.out.persistence.UserResponseDTO;
 import com.debateia.application.ports.out.persistence.UserRepository;
 import com.debateia.domain.User;
-import com.debateia.adapter.in.rest.UpdateCredRequest;
+import com.debateia.adapter.in.web.UpdateCredRequest;
 import com.debateia.application.ports.out.persistence.TokenRepository;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -110,11 +110,16 @@ public class AuthService implements AuthUseCase {
         if (currentEmail == null) {
             return null;
         }
-        User user = User.builder().email(request.newEmail())
-                .password(passwordEncoder.encode(request.newPassword())).build();
-        UserEntity userEntity = authMapper.usuarioToEntity(user);
-        userEntity = this.repository.findByEmail(userEntity.getEmail()).orElseThrow();
-        final boolean isTokenValid = jwtService.isTokenValid(authToken, userEntity);
+        /*
+         * User user = User.builder().email(request.newEmail())
+         * .password(passwordEncoder.encode(request.newPassword())).build();
+         * System.out.println("HOALAAALALAMALA: " + user.getEmail());
+         * UserEntity userEntity = authMapper.usuarioToEntity(user);
+         * System.out.println("USER ENTITY: " + userEntity.getEmail());
+         */
+        UserEntity userEntity = this.repository.findByEmail(currentEmail).orElseThrow();
+        final boolean isTokenValid = jwtService.isTokenValid(authentication);
+
         if (!isTokenValid) {
             return null;
         }
@@ -129,7 +134,7 @@ public class AuthService implements AuthUseCase {
         userEntity.setPassword(passwordEncoder.encode(request.newPassword())); // Asegúrate de codificar la nueva
                                                                                // contraseña
         repository.save(userEntity);
-        user = authMapper.entityToUsuario(userEntity);
+        User user = authMapper.entityToUsuario(userEntity);
         // Generar tokens
         final String accessToken = jwtService.generateToken(user);
         final String refreshToken = jwtService.generateRefreshToken(user);
@@ -174,7 +179,7 @@ public class AuthService implements AuthUseCase {
         }
 
         final UserEntity userEntity = this.repository.findByEmail(userEmail).orElseThrow();
-        final boolean isTokenValid = jwtService.isTokenValid(refreshToken, userEntity);
+        final boolean isTokenValid = jwtService.isTokenValid(authentication);
         if (!isTokenValid) {
             return null;
         }

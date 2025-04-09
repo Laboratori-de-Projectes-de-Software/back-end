@@ -1,4 +1,4 @@
-package com.debateia.adapter.in.rest;
+package com.debateia.adapter.in.web;
 
 import com.debateia.application.service.AuthService;
 
@@ -7,10 +7,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.debateia.adapter.in.rest.UserDTOLogin;
-import com.debateia.adapter.in.rest.UserDTORegister;
+import com.debateia.adapter.in.web.UserDTOLogin;
+import com.debateia.adapter.in.web.UserDTORegister;
 import com.debateia.adapter.out.persistence.UserResponseDTO;
-import com.debateia.adapter.in.rest.UpdateCredRequest;
+import com.debateia.adapter.in.web.UpdateCredRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,7 +42,6 @@ public class AuthController {
     @PostMapping("/update-credentials")
     public ResponseEntity<?> updateCredentials(@RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication,
             @RequestBody UpdateCredRequest request) {
-
         final UserResponseDTO response = service.updateCred(authentication, request);
         if (response == null) {
             return ResponseEntity.badRequest().body("Registration failed: Invalid request.");
