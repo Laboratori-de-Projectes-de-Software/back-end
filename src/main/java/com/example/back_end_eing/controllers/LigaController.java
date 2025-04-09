@@ -1,6 +1,7 @@
 package com.example.back_end_eing.controllers;
 
 
+import com.example.back_end_eing.models.Liga;
 import com.example.back_end_eing.services.LigaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,4 +47,15 @@ public class LigaController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
         }
     }
+
+    @GetMapping("/League")
+    public List<Liga> obtenerLigas() {
+        return ligaService.obtenerLigas();
+    }
+
+    @GetMapping
+    public List<Liga> obtenerLigasUser(Long id) {
+        return ligaService.obtenerLigasUser(id);
+    }
+
 }

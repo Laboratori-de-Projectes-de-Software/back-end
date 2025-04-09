@@ -3,6 +3,7 @@ package com.example.back_end_eing.services;
 import java.util.List;
 
 import com.example.back_end_eing.models.Clasificacion;
+import com.example.back_end_eing.models.Liga;
 
 public interface LigaService {
 
@@ -14,4 +15,7 @@ public interface LigaService {
 
     public void LigaRegistro(String nombreLiga, Integer numJornadas, Integer numBots, String estado, Integer jornadaActual, Long id);
 
+    public List<Liga> obtenerLigas();
+
+    public List<Liga> obtenerLigasUser(Long id);
 }

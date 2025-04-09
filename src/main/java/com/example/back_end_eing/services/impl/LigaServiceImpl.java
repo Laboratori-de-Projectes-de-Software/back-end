@@ -6,6 +6,8 @@ import jakarta.transaction.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.stereotype.Service;
 
@@ -121,6 +123,21 @@ public class LigaServiceImpl implements LigaService{
                 break;
         }
     }
+
+
+    public List<Liga> obtenerLigas() {
+        return StreamSupport
+                .stream(ligaRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+    }
+
+    public List<Liga> obtenerLigasUser(Long id) {
+        return StreamSupport
+                .stream(ligaRepository.findAll().spliterator(), false)
+                .filter(liga -> liga.getUsuario().getId().equals(id))
+                .collect(Collectors.toList());
+    }
+
 
     @Transactional
     private void actualizarPosiciones(Long liga){
