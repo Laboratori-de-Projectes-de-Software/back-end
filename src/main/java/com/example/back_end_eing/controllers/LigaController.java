@@ -30,6 +30,7 @@ public class LigaController {
     public ResponseEntity<List<Clasificacion>> obtenerClasificacion(@RequestParam Long liga) {
         List<Clasificacion> clasificacion = ligaService.LigaClasificacion(liga);
         return new ResponseEntity<>(clasificacion, HttpStatus.OK);
+    }
 
     @PostMapping("/Registrar")
     public ResponseEntity<String> registrarLiga(@RequestParam String nombreLiga,
