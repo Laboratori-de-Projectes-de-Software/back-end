@@ -3,7 +3,7 @@ package uib.lab.api.infraestructure.controller;
 import org.springframework.http.ResponseEntity;
 import uib.lab.api.domain.BotDomain;
 import uib.lab.api.domain.UserDomain;
-import uib.lab.api.application.dto.user.UserResponse;
+import uib.lab.api.application.dto.user.UserResponseDTO;
 import uib.lab.api.application.dto.user.UserUpdateRequest;
 import uib.lab.api.application.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class UserController {
     private final BotService botService;
 
     @GetMapping("/{id}")
-    public UserResponse findById(@PathVariable int id, Locale locale) {
+    public UserResponseDTO findById(@PathVariable int id, Locale locale) {
         return userService.findById(id, locale);
     }
 

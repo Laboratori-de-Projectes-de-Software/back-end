@@ -5,7 +5,7 @@ import uib.lab.api.application.port.UserPort;
 import uib.lab.api.domain.UserDomain;
 import uib.lab.api.application.dto.user.UserUpdateRequest;
 import uib.lab.api.infraestructure.jpaEntity.User;
-import uib.lab.api.application.dto.user.UserResponse;
+import uib.lab.api.application.dto.user.UserResponseDTO;
 import uib.lab.api.infraestructure.util.ApiMessage;
 import uib.lab.api.infraestructure.util.message.MessageCode;
 import uib.lab.api.infraestructure.util.message.MessageConverter;
@@ -38,7 +38,7 @@ public class UserService {
         private final String code;
     }
 
-    public UserResponse findById(int id, Locale locale) {
+    public UserResponseDTO findById(int id, Locale locale) {
         return this.map(
                 userPort.findById(id).orElseThrow(() ->
                         new ResponseStatusException(
@@ -80,7 +80,7 @@ public class UserService {
                 .build();
     }
 
-    private UserResponse map(UserDomain user) {
-        return mapper.map(user, UserResponse.class);
+    private UserResponseDTO map(UserDomain user) {
+        return mapper.map(user, UserResponseDTO.class);
     }
 }
