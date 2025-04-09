@@ -2,9 +2,11 @@ package com.alia.back_end_service.jpa.league;
 
 import com.alia.back_end_service.jpa.bot.BotEntity;
 import com.alia.back_end_service.jpa.round.RoundEntity;
+import com.alia.back_end_service.jpa.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CollectionId;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -48,4 +50,9 @@ public class LeagueEntity {
 
     @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<RoundEntity> rounds;
+
+    @ManyToOne
+    @JoinColumn(name = "owner")
+    private UserEntity owner;
+
 }

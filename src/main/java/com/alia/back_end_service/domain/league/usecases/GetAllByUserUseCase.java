@@ -8,11 +8,11 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 @AllArgsConstructor
-public class LeagueGetAllByUserUseCase implements LeagueGetAllByUserPortAPI {
+public class GetAllByUserUseCase implements LeagueGetAllByUserPortAPI {
     private final LeaguePortDB leaguePortDB;
 
     @Override
     public List<League> getAllLeaguesByUser(String username) {
-        return leaguePortDB.getLeaguesByUser(username);
+        return leaguePortDB.findLeaguesByOwner_Username(username);
     }
 }

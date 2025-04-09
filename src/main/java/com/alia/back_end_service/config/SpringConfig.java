@@ -39,8 +39,8 @@ public class SpringConfig {
     }
 
     @Bean
-    LeagueGetAllByUserUseCase getAllUserLeaguesUseCase(LeaguePortDB leaguePortDB) {
-        return new LeagueGetAllByUserUseCase(leaguePortDB);
+    GetAllByUserUseCase getAllUserLeaguesUseCase(LeaguePortDB leaguePortDB) {
+        return new GetAllByUserUseCase(leaguePortDB);
     }
 
 
