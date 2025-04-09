@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="tbl_ai")
+@Table(name = "tbl_ai")
 public class AIEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +16,7 @@ public class AIEntity {
     private String trait;
 
     @Column(nullable = false)
-    private  String secret;
+    private String secret;
 
     @Column(nullable = false)
     private String endpoint;
@@ -26,7 +26,7 @@ public class AIEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false) // clave foranea a id de usuario
-    private UserEntity user;
+    private UserEntityTEsting user;
 
     // mappedBy coincide con el atributo en la clase MessageEntity
     @OneToMany(mappedBy = "ai", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -72,11 +72,11 @@ public class AIEntity {
         this.enabled = enabled;
     }
 
-    public UserEntity getUser() {
+    public UserEntityTEsting getUser() {
         return user;
     }
 
-    public void setUser(UserEntity user) {
+    public void setUser(UserEntityTEsting user) {
         this.user = user;
     }
 

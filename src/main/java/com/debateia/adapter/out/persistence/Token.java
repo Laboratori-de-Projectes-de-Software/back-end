@@ -1,8 +1,5 @@
 package com.debateia.adapter.out.persistence;
 
-
-import com.debateia.domain.User;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +32,7 @@ public final class Token {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity user;
 
     public enum TokenType {
         BEARER

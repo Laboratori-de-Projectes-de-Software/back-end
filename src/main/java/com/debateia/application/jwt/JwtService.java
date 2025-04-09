@@ -1,14 +1,13 @@
 package com.debateia.application.jwt;
 
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.debateia.adapter.in.rest.UserDto;
 import com.debateia.adapter.out.persistence.AuthMapper;
+import com.debateia.adapter.out.persistence.UserEntity;
 import com.debateia.domain.User;
 
 import javax.crypto.SecretKey;
@@ -34,19 +33,19 @@ public class JwtService {
                 .getSubject();
     }
 
-    public String generateToken( UserDto user) {
+    public String generateToken(User user) {
         return buildToken(user, refreshExpiration);
     }
 
-    public String generateRefreshToken(UserDto user) {
+    public String generateRefreshToken(User user) {
         return buildToken(user, refreshExpiration);
     }
 
-    private String buildToken( UserDto user, final long expiration) {
-        
+    private String buildToken(User user, final long expiration) {
+
         return Jwts
                 .builder()
-                .claims(Map.of("name", user.getName()))
+                .claims(Map.of("username", user.getUsername()))
                 .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
@@ -54,7 +53,7 @@ public class JwtService {
                 .compact();
     }
 
-    public boolean isTokenValid(String token, User user) {
+    public boolean isTokenValid(String token, UserEntity user) {
         final String username = extractUsername(token);
         return (username.equals(user.getEmail())) && !isTokenExpired(token);
     }

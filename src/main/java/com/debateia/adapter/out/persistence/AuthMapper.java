@@ -2,14 +2,12 @@ package com.debateia.adapter.out.persistence;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
 import com.debateia.domain.User;
-//import com.debateia.adapter.in.rest.UserDto;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AuthMapper {
-    AuthMapper INSTANCE = Mappers.getMapper(AuthMapper.class);
+    User entityToUsuario(UserEntity usuarioEntity);
 
-    UserDTO usuarioToDto(User usuario);
-    User dtoToUsuario(UserDTO usuarioDto);
+    UserEntity usuarioToEntity(User usuario);
 }
-

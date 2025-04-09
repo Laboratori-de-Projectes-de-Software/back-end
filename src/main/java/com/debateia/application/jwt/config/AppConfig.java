@@ -1,7 +1,5 @@
 package com.debateia.application.jwt.config;
 
-
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.debateia.adapter.out.persistence.UserEntity;
 import com.debateia.application.ports.out.persistence.UserRepository;
-import com.debateia.domain.User;
 
 @Configuration
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class AppConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
-            final User user = repository.findByEmail(username)
+            final UserEntity user = repository.findByEmail(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             return org.springframework.security.core.userdetails.User
                     .builder()
