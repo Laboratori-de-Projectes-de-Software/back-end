@@ -12,7 +12,7 @@ public class BotController {
     @Autowired
     private BotService botService;
 
-    @PostMapping("/Bot")
+    @PostMapping("/api/v0/bot")
     public ResponseEntity<String> registrarBot(@RequestParam String nombre,
                                             @RequestParam String descripcion,
                                             @RequestParam String foto,
