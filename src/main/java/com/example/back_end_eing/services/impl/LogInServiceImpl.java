@@ -6,6 +6,7 @@ import com.example.back_end_eing.dto.UserResponseDTO;
 import com.example.back_end_eing.exceptions.EmailAlreadyExistsException;
 import com.example.back_end_eing.exceptions.UserAlreadyExistsException;
 import com.example.back_end_eing.exceptions.UserNameNotFoundException;
+import com.example.back_end_eing.exceptions.UserNotFoundException;
 import com.example.back_end_eing.models.Usuario;
 import com.example.back_end_eing.repositories.UsuarioRepository;
 import com.example.back_end_eing.services.JwtService;
@@ -22,6 +23,7 @@ public class LogInServiceImpl implements LogInService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
+
     @Override
     public UserResponseDTO signUp(RegisterUserDto registerUserDto){
         if(usuarioRepository.findByEmail(registerUserDto.getEmail()).isPresent()){
@@ -30,11 +32,10 @@ public class LogInServiceImpl implements LogInService {
         if (usuarioRepository.findByNombreUsuario(registerUserDto.getNombreUsuario()).isPresent()) {
             throw new UserAlreadyExistsException();
         }
-
         // Encriptar la contraseña antes de guardarla
         String hashedPassword = passwordEncoder.encode(registerUserDto.getPassword());
 
-        Usuario usuario = new Usuario(registerUserDto.getNombreUsuario(), registerUserDto.getEmail(), hashedPassword, registerUserDto.getFoto());
+        Usuario usuario = new Usuario(registerUserDto.getNombreUsuario(), registerUserDto.getEmail(), hashedPassword, null);
         Usuario savedUsuario = usuarioRepository.save(usuario);
 
         return UserResponseDTO.builder()

@@ -25,6 +25,7 @@ public class LogInController {
 
     @PostMapping("/login")
     public UserResponseDTO loginUser(@RequestBody LogInUserDto logInUserDto) {
+        System.out.println("Hola");
         return logInService.logIn(logInUserDto);
     }
 }

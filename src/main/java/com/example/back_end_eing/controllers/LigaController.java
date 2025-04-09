@@ -1,6 +1,9 @@
 package com.example.back_end_eing.controllers;
 
 
+import com.example.back_end_eing.constants.EstadoLigaConstants;
+import com.example.back_end_eing.dto.LeagueResponseDTO;
+import com.example.back_end_eing.dto.ParticipationResponseDTO;
 import com.example.back_end_eing.services.LigaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,11 +29,11 @@ public class LigaController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/clasificacion")
-    public ResponseEntity<List<Clasificacion>> obtenerClasificacion(@RequestParam Long liga) {
-        List<Clasificacion> clasificacion = ligaService.LigaClasificacion(liga);
-        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
-    }
+//    @GetMapping("/clasificacion")
+//    public ResponseEntity<List<Clasificacion>> obtenerClasificacion(@RequestParam Long liga) {
+//        List<Clasificacion> clasificacion = ligaService.LigaClasificacion(liga);
+//        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
+//    }
 
     @PostMapping("/Registrar")
     public ResponseEntity<String> registrarLiga(@RequestParam String nombreLiga,
