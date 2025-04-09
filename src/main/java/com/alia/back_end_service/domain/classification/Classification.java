@@ -23,7 +23,7 @@ public class Classification {
 
     private Integer lose_matchs;
 
-    private String botId;
+    private Integer botId;
 
-    private Integer roundId;
+    private Integer leagueId;
 }

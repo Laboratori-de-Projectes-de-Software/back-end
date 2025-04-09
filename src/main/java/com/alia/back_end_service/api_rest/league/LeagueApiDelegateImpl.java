@@ -3,10 +3,12 @@ package com.alia.back_end_service.api_rest.league;
 import com.alia.back_end_service.api.LeagueApiDelegate;
 import com.alia.back_end_service.api_model.*;
 import com.alia.back_end_service.api_rest.bot.BotMapperAPI;
+import com.alia.back_end_service.api_rest.classification.ClassificationMapperAPIImpl;
 import com.alia.back_end_service.api_rest.game.GameMapperAPI;
 import com.alia.back_end_service.domain.game.Game;
 import com.alia.back_end_service.domain.league.League;
 import com.alia.back_end_service.domain.league.ports.*;
+import com.alia.back_end_service.jpa.classification.ClassificationMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.coyote.Response;
@@ -33,7 +35,9 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
     private final LeagueUpdatePortAPI leagueUpdatePortAPI;
     private final LeagueGetAllGamesPortAPI leagueGetAllGamesPortAPI;
     private final LeagueGetAllByUserPortAPI leagueGetAllByUserPortAPI;
+    private final LeagueClassificationByLeaguePortAPI leagueClassificationByLeaguePortAPI;
     private final GameMapperAPI gameMapperAPI;
+    private final ClassificationMapperAPIImpl classificationMapperAPI;
 
 
     @Override
@@ -74,7 +78,7 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
 
     @Override
     public ResponseEntity<List<ClassificationResponseDTO>> leagueLeagueIdLeaderboardGet(Integer leagueId) {
-        return LeagueApiDelegate.super.leagueLeagueIdLeaderboardGet(leagueId);
+        return ResponseEntity.status(HttpStatus.OK).body(leagueClassificationByLeaguePortAPI.findClassificationByLeague(leagueId).stream().map(classificationMapperAPI::toApiResponse).toList());
     }
 
     @Override

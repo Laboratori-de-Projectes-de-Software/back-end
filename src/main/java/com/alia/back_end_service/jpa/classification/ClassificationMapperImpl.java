@@ -18,9 +18,9 @@ public class ClassificationMapperImpl implements ClassificationMapper {
         classification.setLose_matchs(entity.getLoseMatchs());
 
         // Extraer el ID del Bot (en este caso, el nombre del bot)
-        classification.setBotId(entity.getBot() != null ? entity.getBot().getName() : null);
+        classification.setBotId(entity.getBot() != null ? entity.getBot().getId() : null);
         // Extraer el ID del Round
-        classification.setRoundId(entity.getRound() != null ? entity.getRound().getId() : null);
+        classification.setLeagueId(entity.getLeague() != null ? entity.getLeague().getId() : null);
 
         return classification;
     }
@@ -36,9 +36,6 @@ public class ClassificationMapperImpl implements ClassificationMapper {
         entity.setWinMatchs(domain.getWin_matchs());
         entity.setTieMatchs(domain.getTie_matchs());
         entity.setLoseMatchs(domain.getLose_matchs());
-
-        // La asignación de las relaciones (bot y round) se debe realizar en otro nivel (por ejemplo, en el adaptador)
-        // Así, aquí no se hace la conversión completa.
 
         return entity;
     }

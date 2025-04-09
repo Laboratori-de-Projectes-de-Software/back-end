@@ -1,7 +1,7 @@
 package com.alia.back_end_service.jpa.classification;
 
 import com.alia.back_end_service.jpa.bot.BotEntity;
-import com.alia.back_end_service.jpa.round.RoundEntity;
+import com.alia.back_end_service.jpa.league.LeagueEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,6 +39,6 @@ public class ClassificationEntity {
     private BotEntity bot;
 
     @ManyToOne
-    @JoinColumn(name = "round_id", nullable = false)
-    private RoundEntity round;
+    @JoinColumn(name = "league_id", nullable = false)
+    private LeagueEntity league;
 }

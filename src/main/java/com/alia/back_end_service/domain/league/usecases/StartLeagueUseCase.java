@@ -1,5 +1,7 @@
 package com.alia.back_end_service.domain.league.usecases;
 
+import com.alia.back_end_service.domain.classification.Classification;
+import com.alia.back_end_service.domain.classification.ports.ClassificationPortDB;
 import com.alia.back_end_service.domain.game.Game;
 import com.alia.back_end_service.domain.game.ports.GamePortDB;
 import com.alia.back_end_service.domain.league.League;
@@ -44,6 +46,7 @@ public class StartLeagueUseCase implements LeagueStartPortAPI {
     private final LeaguePortDB leaguePortDB;
     private final RoundPortDB roundPortDB;
     private final GamePortDB gamePortDB;
+    private final ClassificationPortDB classificationPortDB;
 
     @Override
     public void startLeague(Integer leagueId) {
@@ -64,13 +67,25 @@ public class StartLeagueUseCase implements LeagueStartPortAPI {
 
         int matchesPerRound = bots.size() / 2;
         Stack<MatchPair> pos = new Stack<>();
-        Stack<MatchPair> aux = new Stack<>();
+        Stack<MatchPair> aux;
         pos.addAll(possibleMatches);
 
 
         MatchPair matchPair;
         Round round;
         Game game;
+
+        bots.forEach(botId -> {
+            Classification classification = new Classification();
+            classification.setBotId(botId);
+            classification.setLeagueId(leagueId);
+            classification.setPoints(0);
+            classification.setLose_matchs(0);
+            classification.setWin_matchs(0);
+            classification.setTie_matchs(0);
+            classification.setNumber_matchs(0);
+            classificationPortDB.save(classification);
+        });
         for (int i = 0; i < rounds; i++) {
             round = new Round();
             round.setNumber_round(i+1);
@@ -93,6 +108,7 @@ public class StartLeagueUseCase implements LeagueStartPortAPI {
                 used[matchPair.bot2-1] = true;
                 game.setBot_local_id(matchPair.bot1);
                 game.setBot_visit_id(matchPair.bot2);
+
                 game.setState("En espera");
                 game.setRoundId(round.getId());
 
