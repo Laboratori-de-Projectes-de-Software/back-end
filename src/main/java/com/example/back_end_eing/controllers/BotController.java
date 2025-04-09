@@ -7,13 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/Bot")
 public class BotController {
 
     @Autowired
     private BotService botService;
 
-    @PostMapping("/Registrar")
+    @PostMapping("/api/v0/bot")
     public ResponseEntity<String> registrarBot(@RequestParam String nombre,
                                             @RequestParam String descripcion,
                                             @RequestParam String foto,
