@@ -1,4 +1,4 @@
-package com.debateia.adapter.in.rest;
+package com.debateia.adapter.in.web;
 
 
 import com.debateia.application.service.AuthService;
@@ -8,12 +8,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.debateia.adapter.in.rest.AuthRequest;
-import com.debateia.adapter.in.rest.RegisterRequest;
 import com.debateia.adapter.out.persistence.TokenResponse;
-import com.debateia.adapter.in.rest.UpdateCredRequest;
 
-import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor

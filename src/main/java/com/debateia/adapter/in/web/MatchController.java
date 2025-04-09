@@ -1,4 +1,4 @@
-package com.debateia.adapter.in.rest;
+package com.debateia.adapter.in.web;
 
 /**
  * Handles creating matches, etc...

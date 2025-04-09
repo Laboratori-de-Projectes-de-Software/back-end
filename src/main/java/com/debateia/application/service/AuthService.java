@@ -4,24 +4,20 @@ package com.debateia.application.service;
 import com.debateia.adapter.out.persistence.AuthMapper;
 import com.debateia.adapter.out.persistence.Token;
 import com.debateia.application.jwt.JwtService;
-import com.debateia.adapter.in.rest.AuthRequest;
-import com.debateia.adapter.in.rest.RegisterRequest;
+import com.debateia.adapter.in.web.AuthRequest;
+import com.debateia.adapter.in.web.RegisterRequest;
 import com.debateia.adapter.out.persistence.TokenResponse;
 import com.debateia.application.ports.out.persistence.UserRepository;
 import com.debateia.domain.User;
-import com.debateia.adapter.in.rest.UpdateCredRequest;
+import com.debateia.adapter.in.web.UpdateCredRequest;
 import com.debateia.adapter.in.rest.UserDto;
 import com.debateia.application.ports.out.persistence.TokenRepository;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

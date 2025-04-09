@@ -2,9 +2,9 @@ package com.debateia.application.service;
 
 
 
-import com.debateia.adapter.in.rest.AuthRequest;
-import com.debateia.adapter.in.rest.RegisterRequest;
-import com.debateia.adapter.in.rest.UpdateCredRequest;
+import com.debateia.adapter.in.web.AuthRequest;
+import com.debateia.adapter.in.web.RegisterRequest;
+import com.debateia.adapter.in.web.UpdateCredRequest;
 import com.debateia.adapter.out.persistence.TokenResponse;
 
 import jakarta.validation.constraints.NotNull;

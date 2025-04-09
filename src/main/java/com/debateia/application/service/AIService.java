@@ -1,8 +1,6 @@
 package com.debateia.application.service;
 
-import com.debateia.adapter.in.web.AIDTO;
 import com.debateia.adapter.out.persistence.AIEntity;
-import com.debateia.adapter.out.persistence.UserEntity;
 import com.debateia.application.ports.out.persistence.AIRepository;
 import com.debateia.application.ports.out.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
