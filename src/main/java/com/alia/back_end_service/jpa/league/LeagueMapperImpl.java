@@ -1,13 +1,10 @@
 package com.alia.back_end_service.jpa.league;
 
 import com.alia.back_end_service.domain.league.League;
-import com.alia.back_end_service.jpa.bot.BotMapper;
 import com.alia.back_end_service.jpa.round.RoundEntity;
-import com.alia.back_end_service.jpa.round.RoundMapper;
 import com.alia.back_end_service.jpa.bot.BotEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,6 +43,8 @@ public class LeagueMapperImpl implements LeagueMapper {
         } else {
             league.setRoundIds(Collections.emptyList());
         }
+
+        league.setOwner(entity.getOwner().getUsername());
 
         return league;
     }

@@ -10,13 +10,14 @@ import com.alia.back_end_service.jpa.bot.BotJpaRepository;
 import com.alia.back_end_service.jpa.bot.BotMapper;
 import com.alia.back_end_service.jpa.game.GameEntity;
 import com.alia.back_end_service.jpa.game.GameMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 
 import java.util.List;
 import java.util.Optional;
 
-
+@AllArgsConstructor
 @Component
 public class LeagueJpaAdapter implements LeaguePortDB {
 
@@ -26,13 +27,6 @@ public class LeagueJpaAdapter implements LeaguePortDB {
     private final BotMapper botMapper;
     private final GameMapper gameMapper;
 
-    public LeagueJpaAdapter(LeagueJpaRepository repository, LeagueMapper mapper, BotJpaRepository botJpaRepository, BotMapper botMapper, GameMapper gameMapper) {
-        this.leagueJpaRepository = repository;
-        this.leagueMapper = mapper;
-        this.botJpaRepository = botJpaRepository;
-        this.botMapper = botMapper;
-        this.gameMapper = gameMapper;
-    }
 
     @Override
     public League saveLeague(League league) {
@@ -57,7 +51,6 @@ public class LeagueJpaAdapter implements LeaguePortDB {
             return leagueMapper.toDomain(leagueJpaRepository.save(entity));
         }
         return null;
-
     }
 
     @Override
@@ -93,6 +86,7 @@ public class LeagueJpaAdapter implements LeaguePortDB {
         return entity.map(leagueMapper::toDomain).orElse(null);
     }
 
+    //Posible eliminación
     @Override
     public List<League> getLeaguesByUser(String username) {
         List<LeagueEntity> leagues = leagueJpaRepository.findLeaguesByBots_User_Username(username);
@@ -130,5 +124,11 @@ public class LeagueJpaAdapter implements LeaguePortDB {
         return gameEntities.stream()
                 .map(gameMapper::toDomain)
                 .toList();
+    }
+
+    @Override
+    public List<League> findLeaguesByOwner_Username(String ownerUsername) {
+        List<LeagueEntity> leaguesEntity = leagueJpaRepository.findLeaguesByOwner_Username(ownerUsername);
+        return leaguesEntity.stream().map(leagueMapper::toDomain).toList();
     }
 }

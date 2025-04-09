@@ -34,4 +34,6 @@ public class League {
     private List<Integer> botIds= new ArrayList<>();
 
     private List<Integer> roundIds = new ArrayList<>();
+
+    private String owner;
 }
