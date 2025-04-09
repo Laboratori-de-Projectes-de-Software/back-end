@@ -1,7 +1,8 @@
 package com.example.back_end_eing.controllers;
 
-import com.example.back_end_eing.dto.LogInUserDto;
-import com.example.back_end_eing.dto.RegisterUserDto;
+import com.example.back_end_eing.dto.UserDTOLogin;
+import com.example.back_end_eing.dto.UserDTORegister;
+import com.example.back_end_eing.dto.UserResponseDTO;
 import com.example.back_end_eing.services.LogInService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,27 +17,26 @@ public class LogInController {
     private LogInService logInService;
 
 
-    @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@RequestBody RegisterUserDto registerUser
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody UserDTORegister registerUser
                                                ) {
         try {
             logInService.signUp(registerUser);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Usuario registrado correctamente");
+            return ResponseEntity.status(HttpStatus.OK).body("User created");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar el usuario: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error al registrar el usuario: " + e.getMessage());
         }
     }
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LogInUserDto logInUserDto
+    public ResponseEntity<UserResponseDTO> loginUser(@RequestBody UserDTOLogin userDTOLogin
                                             ) {
         try {
             // Realizar el inicio de sesión
-            String jwtToken = logInService.logIn(logInUserDto);
-            return ResponseEntity.ok("Inicio de sesión exitoso. Token: " + jwtToken);
+            return ResponseEntity.ok(logInService.logIn(userDTOLogin));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error al iniciar sesión: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 }
