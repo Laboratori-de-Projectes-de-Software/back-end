@@ -48,15 +48,18 @@ public class LigaController {
     }
 
     @GetMapping("/{leagueId}")
-    public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Integer leagueId){
+    public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Integer leagueId) {
         List<Integer> lsit = new ArrayList<>();
-        lsit.add(1);lsit.add(2);lsit.add(3);
+        lsit.add(1);
+        lsit.add(2);
+        lsit.add(3);
         LeagueResponseDTO liga = new LeagueResponseDTO(leagueId, EstadoLigaConstants.ABIERTA, "Liga de Barrio",
-                "Antonio",null,
-                16,100L,lsit);
-        return new ResponseEntity<LeagueResponseDTO>(liga, HttpStatus.OK);
+                "Antonio", null,
+                16, 100L, lsit);
+        return new ResponseEntity<>(liga, HttpStatus.OK);
 
     }
+
 
 
     @GetMapping("/{leagueId}/leaderboard")
@@ -72,3 +75,6 @@ public class LigaController {
         return new ResponseEntity<>(bots, HttpStatus.OK);
     }
 }
+
+
+
