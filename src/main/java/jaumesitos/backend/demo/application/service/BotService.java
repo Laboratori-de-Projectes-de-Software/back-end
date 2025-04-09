@@ -4,10 +4,9 @@ import jaumesitos.backend.demo.application.repository.IBotRepository;
 import jaumesitos.backend.demo.domain.Bot;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 @Service
 public class BotService {
     private final IBotRepository botRepository;
@@ -20,7 +19,7 @@ public class BotService {
         return botRepository.save(bot);
     }
 
-    public Optional<Bot> getBotById(String id) {
+    public Optional<Bot> getBotById(int id) {
         return botRepository.findById(id);
     }
 
@@ -29,4 +28,20 @@ public class BotService {
     }
 
     public List<Bot> getBotsByOwner(int ownerId) { return botRepository.findByOwnerId(ownerId); }
+
+    public Bot updateBot(int id, Bot updatedBot) {
+        Optional<Bot> existing = botRepository.findById(id);
+        if (existing.isEmpty()) {
+            throw new RuntimeException("Bot no encontrado");
+        }
+
+        Bot bot = existing.get();
+
+        bot.setName(updatedBot.getName());
+        bot.setDescription(updatedBot.getDescription());
+        bot.setUrlImage(updatedBot.getUrlImage());
+        bot.setEndpoint(updatedBot.getEndpoint());
+
+        return botRepository.save(bot);
+    }
 }

@@ -1,7 +1,10 @@
 package jaumesitos.backend.demo.domain;
 
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class Bot {
     private int id;
     private String name;

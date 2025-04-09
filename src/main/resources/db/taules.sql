@@ -1,5 +1,5 @@
 CREATE TABLE usuari (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
     email VARCHAR(255),
     password VARCHAR(255),
@@ -7,16 +7,16 @@ CREATE TABLE usuari (
 );
 
 CREATE TABLE lliga (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(255),
     data_creacio TIMESTAMP,
     estat VARCHAR(255),
-    admin BIGINT,
+    admin INT,
     FOREIGN KEY (admin) REFERENCES usuari(id)
 );
 
 CREATE TABLE bot (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
     description VARCHAR(255),
     url_image VARCHAR(255),
@@ -24,13 +24,13 @@ CREATE TABLE bot (
     wins INT DEFAULT 0,
     losses INT DEFAULT 0,
     draws INT DEFAULT 0,
-    propietari BIGINT,
-    FOREIGN KEY (propietari) REFERENCES usuari(id)
+    owner_id INT,
+    FOREIGN KEY (owner_id) REFERENCES usuari(id)
 );
 
 CREATE TABLE classificacio (
-    id_lliga BIGINT,
-    id_bot BIGINT,
+    id_lliga INT,
+    id_bot INT,
     punts INT,
     enfrontaments INT,
     guanyats INT,
@@ -42,10 +42,10 @@ CREATE TABLE classificacio (
 );
 
 CREATE TABLE enfrontament (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    id_lliga BIGINT,
-    id_local BIGINT,
-    id_visitant BIGINT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_lliga INT,
+    id_local INT,
+    id_visitant INT,
     data TIMESTAMP,
     resultat VARCHAR(255),
     FOREIGN KEY (id_lliga) REFERENCES lliga(id),
@@ -54,8 +54,8 @@ CREATE TABLE enfrontament (
 );
 
 CREATE TABLE resposta (
-    id_autor BIGINT,
-    id_enfrontament BIGINT,
+    id_autor INT,
+    id_enfrontament INT,
     temps TIMESTAMP,
     text VARCHAR(255),
     FOREIGN KEY (id_autor) REFERENCES bot(id),
@@ -65,3 +65,6 @@ CREATE TABLE resposta (
 -- Usuario por defecto
 INSERT INTO usuari (name, email, password, role)
 VALUES ('admin', 'admin@jaumesitos.com', '$2a$10$u0eP/qrwvru7fPDwRBWWn.H4dTkldNDDxOyndWKdz2RKv74KMA0.i', 'admin');
+
+INSERT INTO usuari (name, email, password, role)
+VALUES ('xisco', 'xisco@jaumesitos.com', '$2a$10$jL0p6tJwrnTwmy/l35W/8u464axyPE5bn/2RmwazKtkRt/tTUdrTS', 'admin');

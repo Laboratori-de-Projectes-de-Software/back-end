@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface IBotRepository {
     Bot save(Bot bot);
-    Optional<Bot> findById(String id);
+    Optional<Bot> findById(int id);
     List<Bot> findAll();
     List<Bot> findByOwnerId(int ownerId);
 }
