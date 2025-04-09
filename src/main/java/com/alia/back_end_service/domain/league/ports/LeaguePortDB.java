@@ -1,6 +1,7 @@
 package com.alia.back_end_service.domain.league.ports;
 
 import com.alia.back_end_service.domain.bot.Bot;
+import com.alia.back_end_service.domain.game.Game;
 import com.alia.back_end_service.domain.league.League;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface LeaguePortDB {
     List<League> getLeaguesByBotId(Integer botId);
 
     boolean existLeagueIdWithBotId(Integer leagueId, Integer botId);
+
+    List<Game> getAllLeagueGamesByLeagueId(Integer leagueId);
 }

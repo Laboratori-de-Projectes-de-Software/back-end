@@ -1,14 +1,17 @@
 package com.alia.back_end_service.jpa.league;
 
 
+import com.alia.back_end_service.jpa.game.GameEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-
+@Repository
 public interface LeagueJpaRepository extends JpaRepository<LeagueEntity, Integer> {
     @EntityGraph(attributePaths = {"bots"})
     List<LeagueEntity> findAll();
@@ -16,11 +19,19 @@ public interface LeagueJpaRepository extends JpaRepository<LeagueEntity, Integer
     @EntityGraph(attributePaths = {"bots"})
     Optional<LeagueEntity> findById(Integer id);
 
-    @Query("SELECT l FROM LeagueEntity l JOIN l.bots b WHERE b.user.username = :username")
-    List<LeagueEntity> findLeaguesByUser(String username); // Ligas con bots del usuario
+    //@Query("SELECT l FROM LeagueEntity l JOIN l.bots b WHERE b.user.username = :username")
+    List<LeagueEntity> findLeaguesByBots_User_Username(String username);
 
     @Query("SELECT l FROM LeagueEntity l JOIN l.bots b WHERE b.id = :botId")
     List<LeagueEntity> findLeaguesByBotId(Integer botId);
 
     boolean existsLeagueEntitiesByIdAndBots_Id(Integer id, Integer botId);
+
+    @Query("""
+    SELECT g FROM GameEntity g
+    JOIN g.round r
+    JOIN r.league l
+    WHERE l.id = :leagueId
+""")
+    List<GameEntity> findAllGamesByLeagueId(@Param("leagueId") Integer leagueId);
 }

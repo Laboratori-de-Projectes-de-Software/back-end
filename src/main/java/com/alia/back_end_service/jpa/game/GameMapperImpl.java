@@ -21,8 +21,8 @@ public class GameMapperImpl implements GameMapper {
     public Game toDomain(GameEntity entity) {
         if (entity == null) return null;
 
-        String botLocalId = (entity.getLocalBot() != null) ? entity.getLocalBot().getName() : null;
-        String botVisitId = (entity.getVisitorBot() != null) ? entity.getVisitorBot().getName() : null;
+        Integer botLocalId = (entity.getLocalBot() != null) ? entity.getLocalBot().getId() : null;
+        Integer botVisitId = (entity.getVisitorBot() != null) ? entity.getVisitorBot().getId() : null;
 
         Integer roundId = (entity.getRound() != null) ? entity.getRound().getId() : null;
 

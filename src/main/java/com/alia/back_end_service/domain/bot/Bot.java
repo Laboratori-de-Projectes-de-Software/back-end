@@ -30,13 +30,13 @@ public class Bot {
 
     private String userId;
 
-    private List<Integer> leagueIds;
+    private List<Integer> leagueIds = new ArrayList<>();
 
-    private List<Integer> messagesIds;
+    private List<Integer> messagesIds  = new ArrayList<>();
 
-    private List<Integer> localGameIds;
+    private List<Integer> localGameIds= new ArrayList<>();
 
-    private List<Integer> visitorGameIds;
+    private List<Integer> visitorGameIds  = new ArrayList<>();
 
-    private List<Integer> classificationIds;
+    private List<Integer> classificationIds = new ArrayList<>();
 }

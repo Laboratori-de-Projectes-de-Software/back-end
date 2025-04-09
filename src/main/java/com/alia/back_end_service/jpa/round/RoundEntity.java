@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -23,29 +24,27 @@ import java.util.List;
 public class RoundEntity {
 
     @Id
-    @Column(nullable = false, unique = true, name = "game_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "game_id")
     private Integer id;
 
-    @Column(nullable = false, name = "number_round")
+    @Column(name = "number_round")
     private Integer number_round;
 
-    @Column(nullable = false, name = "init_time")
+    @Column(name = "init_time")
     private OffsetDateTime init_time;
 
-    @Column(nullable = false, name = "end_time")
+    @Column(name = "end_time")
     private OffsetDateTime end_time;
 
-    @Column(nullable = false, name = "state")
-    private String state;;
+    @Column( name = "state")
+    private String state;
 
     @ManyToOne
-    @JoinColumn(name = "league_id", nullable = false)
+    @JoinColumn(name = "league_id")
     private LeagueEntity league;
 
-    @OneToMany(mappedBy = "round", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<GameEntity> games;
-
-    @OneToMany(mappedBy = "round", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ClassificationEntity> classifications;
+//    @OneToMany(mappedBy = "round", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    private List<ClassificationEntity> classifications = new ArrayList<>();
 
 }

@@ -2,11 +2,14 @@ package com.alia.back_end_service.jpa.league;
 
 
 import com.alia.back_end_service.domain.bot.Bot;
+import com.alia.back_end_service.domain.game.Game;
 import com.alia.back_end_service.domain.league.ports.LeaguePortDB;
 import com.alia.back_end_service.domain.league.League;
 import com.alia.back_end_service.jpa.bot.BotEntity;
 import com.alia.back_end_service.jpa.bot.BotJpaRepository;
 import com.alia.back_end_service.jpa.bot.BotMapper;
+import com.alia.back_end_service.jpa.game.GameEntity;
+import com.alia.back_end_service.jpa.game.GameMapper;
 import org.springframework.stereotype.Component;
 
 
@@ -21,18 +24,24 @@ public class LeagueJpaAdapter implements LeaguePortDB {
     private final BotJpaRepository botJpaRepository;
     private final LeagueMapper leagueMapper;
     private final BotMapper botMapper;
+    private final GameMapper gameMapper;
 
-    public LeagueJpaAdapter(LeagueJpaRepository repository, LeagueMapper mapper, BotJpaRepository botJpaRepository, BotMapper botMapper) {
+    public LeagueJpaAdapter(LeagueJpaRepository repository, LeagueMapper mapper, BotJpaRepository botJpaRepository, BotMapper botMapper, GameMapper gameMapper) {
         this.leagueJpaRepository = repository;
         this.leagueMapper = mapper;
         this.botJpaRepository = botJpaRepository;
         this.botMapper = botMapper;
+        this.gameMapper = gameMapper;
     }
 
     @Override
     public League saveLeague(League league) {
-        LeagueEntity saved = leagueJpaRepository.save(leagueMapper.toEntity(league));
-        return leagueMapper.toDomain(saved);
+        LeagueEntity save = leagueMapper.toEntity(league);
+        for (Integer i: league.getBotIds()) {
+            Optional<BotEntity> botEntity = botJpaRepository.findById(i);
+            botEntity.ifPresent(entity -> save.getBots().add(entity));
+        }
+        return leagueMapper.toDomain(leagueJpaRepository.save(save));
     }
 
     @Override
@@ -86,7 +95,8 @@ public class LeagueJpaAdapter implements LeaguePortDB {
 
     @Override
     public List<League> getLeaguesByUser(String username) {
-        return leagueJpaRepository.findLeaguesByUser(username).stream()
+        List<LeagueEntity> leagues = leagueJpaRepository.findLeaguesByBots_User_Username(username);
+        return leagues.stream()
                 .map(leagueMapper::toDomain)
                 .toList();
     }
@@ -112,5 +122,13 @@ public class LeagueJpaAdapter implements LeaguePortDB {
     @Override
     public boolean existLeagueIdWithBotId(Integer leagueId, Integer botId){
         return leagueJpaRepository.existsLeagueEntitiesByIdAndBots_Id(leagueId, botId);
+    }
+
+    @Override
+    public List<Game> getAllLeagueGamesByLeagueId(Integer leagueId) {
+        List<GameEntity> gameEntities = leagueJpaRepository.findAllGamesByLeagueId(leagueId);
+        return gameEntities.stream()
+                .map(gameMapper::toDomain)
+                .toList();
     }
 }

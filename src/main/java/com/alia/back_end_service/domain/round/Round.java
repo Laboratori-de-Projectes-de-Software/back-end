@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,8 +29,8 @@ public class Round {
 
     private Integer leagueId;
 
-    private List<Integer> gameIds;
+    private List<Integer> gameIds = new ArrayList<>();
 
-    private List<Integer> classificationIds;
+    private List<Integer> classificationIds = new ArrayList<>();
 
 }

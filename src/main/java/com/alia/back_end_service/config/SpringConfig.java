@@ -1,20 +1,17 @@
 package com.alia.back_end_service.config;
 
 import com.alia.back_end_service.domain.bot.port.BotPortDB;
-import com.alia.back_end_service.domain.bot.port.BotRegistrationPortAPI;
-import com.alia.back_end_service.domain.bot.usecases.GetAllBotUseCase;
-import com.alia.back_end_service.domain.bot.usecases.GetBotUseCase;
-import com.alia.back_end_service.domain.bot.usecases.RegisterBotUseCase;
-import com.alia.back_end_service.domain.bot.usecases.UpdateBotUseCase;
-import com.alia.back_end_service.domain.league.League;
+import com.alia.back_end_service.domain.bot.usecases.*;
+import com.alia.back_end_service.domain.game.ports.GamePortDB;
 import com.alia.back_end_service.domain.league.ports.LeaguePortDB;
 import com.alia.back_end_service.domain.league.usecases.*;
+import com.alia.back_end_service.domain.message.port.MessagePortDB;
+import com.alia.back_end_service.domain.message.usecases.GetAllMessagesFromMatch;
+import com.alia.back_end_service.domain.round.ports.RoundPortDB;
 import com.alia.back_end_service.domain.user.ports.PasswordEncoderPort;
 import com.alia.back_end_service.domain.user.ports.TokenProviderPort;
 import com.alia.back_end_service.domain.user.usecases.*;
 import com.alia.back_end_service.domain.user.ports.UserPortDB;
-import com.alia.back_end_service.jwt.JwtProvider;
-import jakarta.validation.Valid;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -37,13 +34,13 @@ public class SpringConfig {
     }
 
     @Bean
-    public GetAllUserBotsUseCase getAllUserBotsUseCase(BotPortDB botPortDB) {
-        return new GetAllUserBotsUseCase(botPortDB);
+    public BotGetAllByUserUseCase getAllUserBotsUseCase(BotPortDB botPortDB) {
+        return new BotGetAllByUserUseCase(botPortDB);
     }
 
     @Bean
-    GetAllUserLeaguesUseCase getAllUserLeaguesUseCase(LeaguePortDB leaguePortDB) {
-        return new GetAllUserLeaguesUseCase(leaguePortDB);
+    LeagueGetAllByUserUseCase getAllUserLeaguesUseCase(LeaguePortDB leaguePortDB) {
+        return new LeagueGetAllByUserUseCase(leaguePortDB);
     }
 
 
@@ -77,4 +74,12 @@ public class SpringConfig {
     public GetAllLeagueBotsUseCase getAllLeagueBotsUseCase(LeaguePortDB leaguePortDB) {return new GetAllLeagueBotsUseCase(leaguePortDB);}
     @Bean
     public DeleteLeagueUseCase deleteLeagueUseCase(LeaguePortDB leaguePortDB) {return new DeleteLeagueUseCase(leaguePortDB);}
+    @Bean
+    public StartLeagueUseCase startLeagueUseCase(LeaguePortDB leaguePortDB, RoundPortDB roundPortDB, GamePortDB gamePortDB) { return new StartLeagueUseCase(leaguePortDB, roundPortDB, gamePortDB); }
+    @Bean
+    public GetAllLeagueGamesUseCase getAllLeagueGamesUseCase(LeaguePortDB leaguePortDB){return new GetAllLeagueGamesUseCase(leaguePortDB);}
+
+    //Message
+    @Bean
+    public GetAllMessagesFromMatch getAllMessagesFromMatch(MessagePortDB messagePortDB) {return new GetAllMessagesFromMatch(messagePortDB);}
 }

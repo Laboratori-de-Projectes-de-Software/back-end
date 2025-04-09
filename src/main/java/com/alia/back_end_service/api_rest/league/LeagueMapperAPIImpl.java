@@ -1,6 +1,7 @@
 package com.alia.back_end_service.api_rest.league;
 
 import com.alia.back_end_service.api_model.LeagueDTO;
+import com.alia.back_end_service.api_model.LeagueResponseDTO;
 import com.alia.back_end_service.domain.bot.Bot;
 import com.alia.back_end_service.domain.league.League;
 import org.springframework.stereotype.Component;
@@ -24,8 +25,9 @@ public class LeagueMapperAPIImpl implements LeagueMapperAPI {
 
 
     @Override
-    public LeagueDTO toApiResponse(League league) {
-        LeagueDTO leagueResponse = new LeagueDTO();
+    public LeagueResponseDTO toApiResponse(League league) {
+        LeagueResponseDTO leagueResponse = new LeagueResponseDTO();
+        leagueResponse.setLeagueId(league.getId());
         leagueResponse.setName(league.getName());
         leagueResponse.setRounds(league.getNumber_match());
         leagueResponse.setMatchTime(league.getTime_match());

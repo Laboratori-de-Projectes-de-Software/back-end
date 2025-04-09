@@ -23,18 +23,18 @@ public class MessageEntity {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "message", unique = false, nullable = false, length = 500)
+    @Column(name = "message", length = 500)
     private String message;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date")
     private String date;
 
     @ManyToOne
-    @JoinColumn(name = "bot_name", nullable = false)
+    @JoinColumn(name = "bot_name")
     private BotEntity bot;
 
     @ManyToOne
-    @JoinColumn(name = "game_id", nullable = false)
+    @JoinColumn(name = "game_id")
     private GameEntity game;
 
 }
