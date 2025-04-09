@@ -24,9 +24,8 @@ public class BotDBORepository implements IBotRepository {
     }
 
     @Override
-    public Optional<Bot> findById(String id) {
-        //return springDataRepository.findById(id).map(mapper::toBot);
-        return null;
+    public Optional<Bot> findById(int id) {
+        return springDataRepository.findById(id).map(mapper::toDomain);
     }
 
     @Override

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Table(name = "bot")
 @NoArgsConstructor
 public class BotDBO {
 
@@ -22,7 +23,5 @@ public class BotDBO {
     private int wins;
     private int losses;
     private int draws;
-
-    @Column(name = "propietari")
     private int ownerId;
 }
