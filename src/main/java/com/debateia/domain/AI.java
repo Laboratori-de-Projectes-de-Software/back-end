@@ -1,6 +1,6 @@
 package com.debateia.domain;
 
-import com.debateia.adapter.out.persistence.UserEntity;
+import com.debateia.adapter.out.persistence.UserEntityTEsting;
 import lombok.Builder;
 
 @Builder
@@ -9,5 +9,5 @@ public class AI {
     private String secret;
     private String endpoint;
     private Boolean enabled = true;
-    private UserEntity user;
+    private UserEntityTEsting user;
 }

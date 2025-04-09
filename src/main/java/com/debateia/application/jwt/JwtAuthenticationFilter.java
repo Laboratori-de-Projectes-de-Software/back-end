@@ -1,6 +1,5 @@
 package com.debateia.application.jwt;
 
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,9 +16,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.debateia.adapter.out.persistence.UserEntity;
 import com.debateia.application.ports.out.persistence.TokenRepository;
 import com.debateia.application.ports.out.persistence.UserRepository;
-import com.debateia.domain.User;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -37,8 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
+            @NonNull FilterChain filterChain) throws ServletException, IOException {
         if (request.getServletPath().contains("/api/v1/auth")) {
             filterChain.doFilter(request, response);
             return;
@@ -59,30 +57,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         final UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-        final boolean isTokenExpiredOrRevoked = tokenRepository.findByToken(jwt)
-                .map(token -> !token.getIsExpired() && !token.getIsRevoked())
-                .orElse(false);
+        /*
+         * final boolean isTokenExpiredOrRevoked = tokenRepository.findByToken(jwt)
+         * .map(token -> !token.getIsExpired() && !token.getIsRevoked())
+         * .orElse(false);
+         */
 
-
-        if (isTokenExpiredOrRevoked) {
-            final Optional<User> user = userRepository.findByEmail(userEmail);
-
-            if (user.isPresent()) {
-                final boolean isTokenValid = jwtService.isTokenValid(jwt, user.get());
-
-                if (isTokenValid) {
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
-                    authToken.setDetails(
-                            new WebAuthenticationDetailsSource().buildDetails(request)
-                    );
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }
-            }
-        }
+        /*
+         * if (isTokenExpiredOrRevoked) {
+         * final Optional<UserEntity> userEntity =
+         * userRepository.findByEmail(userEmail);
+         * 
+         * if (userEntity.isPresent()) {
+         * final boolean isTokenValid = jwtService.isTokenValid(jwt, userEntity.get());
+         * 
+         * if (isTokenValid) {
+         * UsernamePasswordAuthenticationToken authToken = new
+         * UsernamePasswordAuthenticationToken(
+         * userDetails,
+         * null,
+         * userDetails.getAuthorities());
+         * authToken.setDetails(
+         * new WebAuthenticationDetailsSource().buildDetails(request));
+         * SecurityContextHolder.getContext().setAuthentication(authToken);
+         * }
+         * }
+         * }
+         */
 
         filterChain.doFilter(request, response);
     }
