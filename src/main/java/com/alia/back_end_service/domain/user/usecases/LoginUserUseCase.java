@@ -8,6 +8,7 @@ import com.alia.back_end_service.domain.user.ports.TokenProviderPort;
 import com.alia.back_end_service.domain.user.ports.UserLoginPortAPI;
 import com.alia.back_end_service.domain.user.ports.UserPortDB;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 @RequiredArgsConstructor
 public class LoginUserUseCase implements UserLoginPortAPI {
@@ -15,7 +16,10 @@ public class LoginUserUseCase implements UserLoginPortAPI {
     private final PasswordEncoderPort passwordEncoderPort;
     private final TokenProviderPort tokenProviderPort;
 
-    public String login(User userLogin) {
+    @Value("${security.jwt.expiration-time}")
+    private long jwtExpiration;
+
+    public User login(User userLogin) {
         User user = userPortDB.findByUsername(userLogin.getUsername())
                 .orElseThrow(UserNotFoundException::new);
 
@@ -23,6 +27,9 @@ public class LoginUserUseCase implements UserLoginPortAPI {
             throw new InvalidPasswordException();
         }
 
-        return tokenProviderPort.generateToken(user);
+        user.setToken(tokenProviderPort.generateToken(user));
+        user.setExpiresIn(jwtExpiration);
+
+        return user;
     }
 }

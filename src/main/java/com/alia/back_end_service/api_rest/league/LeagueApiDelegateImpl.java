@@ -73,7 +73,7 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<ClassificationResponseDTO>> leagueLeagueIdLeaderboardGet(Integer leagueId) {
+    public ResponseEntity<List<ParticipationResponseDTO>> leagueLeagueIdLeaderboardGet(Integer leagueId) {
         return LeagueApiDelegate.super.leagueLeagueIdLeaderboardGet(leagueId);
     }
 

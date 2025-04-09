@@ -29,11 +29,6 @@ public class SpringConfig {
     }
 
     @Bean
-    public GetUserUseCase getUserUseCase(UserPortDB userPortDB) {
-        return new GetUserUseCase(userPortDB);
-    }
-
-    @Bean
     public BotGetAllByUserUseCase getAllUserBotsUseCase(BotPortDB botPortDB) {
         return new BotGetAllByUserUseCase(botPortDB);
     }
