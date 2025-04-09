@@ -1,13 +1,15 @@
 package com.debateia.adapter.in.web.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
+@Data
 @JsonTypeName("LeagueDTO")
-public class MatchDTO {
+public class MatchDTO implements Serializable {
     private String name;
     private String urlImagen;
     private Integer rounds;

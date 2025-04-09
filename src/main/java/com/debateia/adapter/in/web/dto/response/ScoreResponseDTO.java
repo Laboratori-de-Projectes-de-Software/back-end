@@ -1,15 +1,14 @@
 package com.debateia.adapter.in.web.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@RequiredArgsConstructor
-@Setter
-@Getter
+import java.io.Serializable;
+
+@NoArgsConstructor
+@Data
 @JsonTypeName("ParticipationResponseDTO")
-public class ScoreResponseDTO {
+public class ScoreResponseDTO implements Serializable {
     private int botId;
     private String name;
     private int points;

@@ -12,7 +12,7 @@
 <artifactId>debateia</artifactId>
 <version>0.0.1-SNAPSHOT</version>
 <name>debateia</name>
-<description>Demo project for Spring Boot</description>
+<description>Backend liga de chatbots</description>
 <url/>
 <licenses>
 	<license/>

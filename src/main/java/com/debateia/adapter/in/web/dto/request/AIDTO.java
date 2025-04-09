@@ -1,11 +1,14 @@
 package com.debateia.adapter.in.web.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
-@RequiredArgsConstructor
+import java.io.Serializable;
+
+@NoArgsConstructor
+@Data
 @JsonTypeName("BotDTO")
-public class AIDTO {
+public class AIDTO implements Serializable {
     private String name;
     private String description;
     private String urlImagen;

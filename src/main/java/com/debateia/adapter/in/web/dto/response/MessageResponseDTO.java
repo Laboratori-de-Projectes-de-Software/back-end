@@ -1,13 +1,12 @@
 package com.debateia.adapter.in.web.dto.response;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@RequiredArgsConstructor
-@Getter
-@Setter
-public class MessageResponseDTO {
+import java.io.Serializable;
+
+@NoArgsConstructor
+@Data
+public class MessageResponseDTO implements Serializable {
     private String text;
     private int botId;
     private String time;

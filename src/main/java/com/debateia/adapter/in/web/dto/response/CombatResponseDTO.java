@@ -2,17 +2,15 @@ package com.debateia.adapter.in.web.dto.response;
 
 import com.debateia.adapter.in.web.dto.State;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
-@RequiredArgsConstructor
-@Getter
-@Setter
+@NoArgsConstructor
+@Data
 @JsonTypeName("MatchResponseDTO")
-public class CombatResponseDTO {
+public class CombatResponseDTO implements Serializable {
     private int matchId;
     private State state;
     private int result;

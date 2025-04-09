@@ -1,15 +1,14 @@
 package com.debateia.adapter.in.web.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@RequiredArgsConstructor
-@Getter
-@Setter
+import java.io.Serializable;
+
+@NoArgsConstructor
+@Data
 @JsonTypeName("BotSummaryResponseDTO")
-public class AISummaryResponseDTO {
+public class AISummaryResponseDTO implements Serializable {
     private String nombre;
     private int id;
     private String description;

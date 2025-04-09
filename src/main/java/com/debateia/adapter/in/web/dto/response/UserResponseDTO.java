@@ -1,15 +1,13 @@
 package com.debateia.adapter.in.web.dto.response;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-@RequiredArgsConstructor
-@Getter
-@Setter
-public class UserResponseDTO {
+@NoArgsConstructor
+@Data
+public class UserResponseDTO implements Serializable {
     private String token;
     private LocalDate expiresIn;
     private String user;

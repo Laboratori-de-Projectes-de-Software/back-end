@@ -1,9 +1,12 @@
 package com.debateia.adapter.in.web.dto.request;
 
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
-@RequiredArgsConstructor
-public class UserDTOLogin {
+import java.io.Serializable;
+
+@NoArgsConstructor
+@Data
+public class UserDTOLogin implements Serializable {
     private String user;
     private String password;
 }

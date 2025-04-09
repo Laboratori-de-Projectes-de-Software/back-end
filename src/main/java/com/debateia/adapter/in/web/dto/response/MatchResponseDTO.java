@@ -2,17 +2,15 @@ package com.debateia.adapter.in.web.dto.response;
 
 import com.debateia.adapter.in.web.dto.State;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
-@RequiredArgsConstructor
-@Getter
-@Setter
+@NoArgsConstructor
+@Data
 @JsonTypeName("LeagueResponseDTO")
-public class MatchResponseDTO {
+public class MatchResponseDTO implements Serializable {
     private int leagueId;
     private State state;
     private String name;
