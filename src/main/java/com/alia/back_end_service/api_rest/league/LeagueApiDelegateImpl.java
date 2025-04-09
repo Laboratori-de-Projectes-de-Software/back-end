@@ -12,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -54,7 +55,6 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-
     @Override
     public ResponseEntity<List<LeagueResponseDTO>> leagueGet(String owner) {
         List<League> leagues;
@@ -94,10 +94,12 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-
     @Override
     public ResponseEntity<Void> leaguePost(LeagueDTO leagueDTO) {
-        leagueCreatePortAPI.createLeague(leagueMapperAPI.toDomainCreate(leagueDTO));
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        League league = leagueMapperAPI.toDomainCreate(leagueDTO);
+        league.setOwner(username);
+        leagueCreatePortAPI.createLeague(league);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

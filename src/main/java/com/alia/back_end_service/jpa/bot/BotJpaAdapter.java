@@ -59,7 +59,7 @@ public class BotJpaAdapter implements BotPortDB {
         BotEntity botEntity = botMapper.toEntity(bot);
 
         // Resolver relación con usuario
-        UserEntity userEntity = userJpaRepository.findById(bot.getUserId())
+        UserEntity userEntity = userJpaRepository.findByUsername(bot.getUserId())
                 .orElseThrow(UserNotFoundException::new);
 
         botEntity.setUser(userEntity);

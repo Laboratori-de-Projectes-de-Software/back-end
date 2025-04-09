@@ -27,7 +27,6 @@ public class JwtProvider {
     public String generateToken(UserSecurityAdapter usuario) {
         HashMap<String, Object> claims = new HashMap<>();
         claims.put("username", usuario.getUsername());
-        claims.put("password", usuario.getPassword());
         return generateToken(claims,usuario);
     }
 

@@ -20,6 +20,9 @@ import java.util.List;
 public class UserEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     @Column(name = "username", unique = true, nullable = false)
     private String username;
 

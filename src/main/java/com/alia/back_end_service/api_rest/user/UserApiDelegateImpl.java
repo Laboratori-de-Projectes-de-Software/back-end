@@ -30,6 +30,6 @@ public class UserApiDelegateImpl implements AuthApiDelegate {
     @Override
     public ResponseEntity<Void> authRegisterPost(UserDTORegister userDTORegister) {
         userRegistrationPortAPI.registerUser(userMapperPortAPI.toDomainRegister(userDTORegister));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(201).build();
     }
 }
