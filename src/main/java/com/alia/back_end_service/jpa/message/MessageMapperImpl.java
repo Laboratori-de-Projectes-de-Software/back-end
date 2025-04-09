@@ -27,7 +27,7 @@ public class MessageMapperImpl implements MessageMapper {
         }
 
         // Extraer el identificador del Bot (asumimos que BotEntity.getName() es el ID)
-        domain.setBotId(entity.getBot() != null ? entity.getBot().getName() : null);
+        domain.setBotId(entity.getBot() != null ? entity.getBot().getId() : null);
 
         // Extraer el ID del Game
         domain.setGameId(entity.getGame() != null ? entity.getGame().getId() : null);

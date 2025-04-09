@@ -96,9 +96,7 @@ public class LeagueApiDelegateImpl implements LeagueApiDelegate {
 
     @Override
     public ResponseEntity<Void> leaguePost(LeagueDTO leagueDTO) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         League league = leagueMapperAPI.toDomainCreate(leagueDTO);
-        league.setOwner(username);
         leagueCreatePortAPI.createLeague(league);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

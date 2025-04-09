@@ -20,6 +20,7 @@ public class LeagueMapperAPIImpl implements LeagueMapperAPI {
         league.setTime_match(leagueCreate.getMatchTime());
         league.setInit_time(null);
         league.setState("Espera"); // Crear enum
+        league.setOwner(leagueCreate.getUserId());
         return league;
     }
 
