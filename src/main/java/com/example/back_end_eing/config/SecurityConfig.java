@@ -13,8 +13,7 @@ public class SecurityConfig {
         http
                 .csrf().disable() // Desactivar CSRF solo en desarrollo
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/perfil/**").permitAll() // Permitir acceso sin autenticación
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/api/v0/auth/**").permitAll()
                         .anyRequest().authenticated() // El resto de endpoints requieren login
                 );
 
