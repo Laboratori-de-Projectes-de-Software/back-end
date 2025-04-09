@@ -1,7 +1,9 @@
 package com.example.back_end_eing.services;
 
+import com.example.back_end_eing.dto.BotDTO;
+
 public interface BotService {
     
-    public void BotRegistro(String nombre, String descripcion, String foto, Integer victorias, Integer numJornadas, String API, Long id);
+    public void BotRegistro(BotDTO botdto);
 
 }

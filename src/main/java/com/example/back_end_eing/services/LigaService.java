@@ -2,6 +2,7 @@ package com.example.back_end_eing.services;
 
 import java.util.List;
 
+import com.example.back_end_eing.dto.LeagueDTO;
 import com.example.back_end_eing.models.Clasificacion;
 
 public interface LigaService {
@@ -12,6 +13,6 @@ public interface LigaService {
     //Devolver la liga ordenada por clasificación
     public List<Clasificacion> LigaClasificacion(Long liga);
 
-    public void LigaRegistro(String nombreLiga, Integer numJornadas, Integer numBots, String estado, Integer jornadaActual, Long id);
+    public void LigaRegistro(LeagueDTO ligadto);
 
 }

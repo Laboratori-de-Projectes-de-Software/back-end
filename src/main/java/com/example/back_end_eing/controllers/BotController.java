@@ -1,5 +1,6 @@
 package com.example.back_end_eing.controllers;
 
+import com.example.back_end_eing.dto.BotDTO;
 import com.example.back_end_eing.services.BotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +17,11 @@ public class BotController {
     public ResponseEntity<String> registrarBot(@RequestParam String nombre,
                                             @RequestParam String descripcion,
                                             @RequestParam String foto,
-                                            @RequestParam int victorias,
-                                            @RequestParam int numJornadas,
                                             @RequestParam String API,
-                                            @RequestParam Long id) {
+                                            @RequestParam int id) {
         try {
-            botService.BotRegistro(nombre, descripcion, foto, victorias, numJornadas, API, id);
+            BotDTO botdto = new BotDTO(nombre, descripcion, foto, API, id);
+            botService.BotRegistro(botdto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Bot registrado correctamente");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar el bot: " + e.getMessage());

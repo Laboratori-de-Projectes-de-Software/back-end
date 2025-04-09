@@ -2,6 +2,7 @@ package com.example.back_end_eing.controllers;
 
 
 import com.example.back_end_eing.constants.EstadoLigaConstants;
+import com.example.back_end_eing.dto.LeagueDTO;
 import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
 import com.example.back_end_eing.services.LigaService;
@@ -14,13 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v0/league")
+@RequestMapping("api/v0")
 public class LigaController {
 
     @Autowired
     private LigaService ligaService;
 
-    @PutMapping("/actualizar")
+    @PutMapping("/league/actualizar")
     public ResponseEntity<Void> actualizarClasificacion(@RequestParam Long liga, @RequestParam Long local, @RequestParam Long visitante, @RequestParam String resultado) {
         ligaService.LigaActualización(liga, local, visitante, resultado);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -32,22 +33,23 @@ public class LigaController {
 //        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
 //    }
 
-    @PostMapping("/Registrar")
+    @PostMapping("/league")
     public ResponseEntity<String> registrarLiga(@RequestParam String nombreLiga,
+                                                @RequestParam String urlImagen,
                                                 @RequestParam Integer numJornadas,
+                                                @RequestParam long matchTime,
                                                 @RequestParam Integer numBots,
-                                                @RequestParam String estado,
-                                                @RequestParam Integer jornadaActual,
-                                                @RequestParam Long id) {
+                                                @RequestParam int id) {
         try {
-            ligaService.LigaRegistro(nombreLiga, numJornadas, numBots, estado, jornadaActual, id);
+            LeagueDTO ligadto = new LeagueDTO(nombreLiga, urlImagen, numJornadas, matchTime, numBots, id);
+            ligaService.LigaRegistro(ligadto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Liga registrada correctamente");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
         }
     }
 
-    @GetMapping("/{leagueId}")
+    @GetMapping("/league/{leagueId}")
     public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Integer leagueId){
         List<Integer> lsit = new ArrayList<>();
         lsit.add(1);lsit.add(2);lsit.add(3);
@@ -59,7 +61,7 @@ public class LigaController {
     }
 
 
-    @GetMapping("/{leagueId}/leaderboard")
+    @GetMapping("/league/{leagueId}/leaderboard")
     public ResponseEntity<List<ParticipationResponseDTO>> obtenerClasificacion(@PathVariable Long leagueId) {
         System.out.println(leagueId);
         List<ParticipationResponseDTO> bots = new ArrayList<>();

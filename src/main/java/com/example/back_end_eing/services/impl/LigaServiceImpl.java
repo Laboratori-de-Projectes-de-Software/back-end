@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.back_end_eing.repositories.BotRepository;
@@ -18,20 +19,22 @@ import com.example.back_end_eing.exceptions.ClasificacionLigaNotFoundException;
 import com.example.back_end_eing.exceptions.ClasificacionNotFoundException;
 import com.example.back_end_eing.exceptions.LigaNotFoundException;
 import com.example.back_end_eing.constants.EstadoLigaConstants;
+import com.example.back_end_eing.dto.LeagueDTO;
 import com.example.back_end_eing.exceptions.IncorrectNumBotsException;
-import org.springframework.stereotype.Service;
 import com.example.back_end_eing.exceptions.UserNotFoundException;
 import com.example.back_end_eing.models.Liga;
 import com.example.back_end_eing.models.Usuario;
-import com.example.back_end_eing.repositories.LigaRepository;
 import com.example.back_end_eing.repositories.UsuarioRepository;
-import com.example.back_end_eing.services.LigaService;
 
 @Service
 public class LigaServiceImpl implements LigaService{
+    @Autowired
     private BotRepository botRepository;
+    @Autowired
     private LigaRepository ligaRepository;
-    private ClasificacionRepository clasificacionRepository;  
+    @Autowired
+    private ClasificacionRepository clasificacionRepository;
+    @Autowired
     private UsuarioRepository usuarioRepository;
     private Liga liga;
     private Usuario usuario;
@@ -91,7 +94,6 @@ public class LigaServiceImpl implements LigaService{
         }
     }
 
-    @Transactional
     private void actualizarPuntos(Clasificacion clasificacion, String resultado, boolean local){
         switch (resultado) {
             case "local":
@@ -120,6 +122,7 @@ public class LigaServiceImpl implements LigaService{
             default:
                 break;
         }
+        clasificacionRepository.save(clasificacion);
     }
 
     @Transactional
@@ -134,22 +137,23 @@ public class LigaServiceImpl implements LigaService{
 
     
 
-    public void LigaRegistro(String nombreLiga, Integer numJornadas, Integer numBots, String estado, Integer jornadaActual, Long id){
+    public void LigaRegistro(LeagueDTO ligaDto){
         // solo un número de bots par, controlar en el front-end números > 0
-        if (numBots % 2 != 0) {
-            throw new IncorrectNumBotsException(numBots);
+        if (ligaDto.getBots().length % 2 != 0) {
+            throw new IncorrectNumBotsException(ligaDto.getBots().length);
         }
-        usuario = getUsuario(id);
+        usuario = getUsuario(ligaDto.getCreador());
         // establecer estado = ABIERTA por defecto si el usuario no lo especifica
+        String estado = null;
         if (estado == null || estado.isEmpty()) {
             estado = EstadoLigaConstants.ABIERTA;
         }
-        liga = new Liga(nombreLiga, numJornadas, numBots, estado, jornadaActual, usuario);
+        liga = new Liga(ligaDto.getName(), ligaDto.getRounds(), ligaDto.getBots().length, estado, ligaDto.getUrlImagen(), 1, usuario);
         ligaRepository.save(liga);
     }
 
-    private Usuario getUsuario(Long id){
-        return usuarioRepository.findById(id)
+    private Usuario getUsuario(int id){
+        return usuarioRepository.findById((long) id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 }

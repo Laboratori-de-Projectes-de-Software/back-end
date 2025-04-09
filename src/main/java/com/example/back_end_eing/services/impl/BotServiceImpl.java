@@ -3,13 +3,13 @@ package com.example.back_end_eing.services.impl;
 import com.example.back_end_eing.services.BotService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.example.back_end_eing.repositories.BotRepository;
 import com.example.back_end_eing.repositories.UsuarioRepository;
 import com.example.back_end_eing.models.Bot;
 import com.example.back_end_eing.models.Usuario;
+import com.example.back_end_eing.dto.BotDTO;
 import com.example.back_end_eing.exceptions.RepeatedBotException;
 import com.example.back_end_eing.exceptions.UserNotFoundException;;
 
@@ -22,21 +22,21 @@ public class BotServiceImpl implements BotService{
     private Bot bot;
     private Usuario user;
 
-    public void BotRegistro(String nombre, String descripcion, String foto, Integer victorias, Integer numJornadas, String API, Long id){
+    public void BotRegistro(BotDTO botdto){
         //mirar si existe un bot con esa api        
-        if(botRepository.findByApiKey(API).isEmpty()){
+        if(botRepository.findByApiKey(botdto.getEndpoint()).isEmpty()){
             //crear objeto usuario segun el id
-            user = getUser(id);
-            bot = new Bot(nombre, descripcion, foto, victorias, numJornadas, API, user);
+            user = getUser(botdto.getUserId());
+            bot = new Bot(botdto, user);
             //registrar bot a la base de datos
             botRepository.save(bot);
         }else{
-            throw(new RepeatedBotException(API));
+            throw(new RepeatedBotException(botdto.getEndpoint()));
         }
     }
 
-    private Usuario getUser(Long id){
-        return userRepository.findById(id)
+    private Usuario getUser(int id){
+        return userRepository.findById((long) id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
