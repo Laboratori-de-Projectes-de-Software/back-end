@@ -23,7 +23,7 @@ public abstract class JwtProvider {
     private String secret;
     private int duration;
     private ChronoUnit temporalUnit;
-
+    
     public String generate(User user) {
         return Jwts.builder()
                 .setSubject(String.valueOf(user.getId()))
