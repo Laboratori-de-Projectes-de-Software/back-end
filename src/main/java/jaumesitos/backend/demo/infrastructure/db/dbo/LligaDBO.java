@@ -1,5 +1,7 @@
 package jaumesitos.backend.demo.infrastructure.db.dbo;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,9 +16,13 @@ import java.time.LocalDateTime;
 @Entity
 
 public class LligaDBO {
-    LocalDateTime data;
+
     @Id
-    String nom;
-    Boolean estat;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private LocalDateTime data;
+    private String nom;
+    private Boolean estat;
 
 }

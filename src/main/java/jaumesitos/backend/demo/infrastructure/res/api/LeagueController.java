@@ -68,8 +68,17 @@ public class LeagueController {
 
     @Operation(summary = "Get a League by Id", description = "Per obtenir una lliga")
     @GetMapping("/leagues/{id}")
-    public ResponseEntity<?> getLeagueById(@PathVariable Long id) {
-        return new ResponseEntity<>("Endpoint GET /api/leagues/" + id + " -> GET ONE LEAGUE", HttpStatus.ACCEPTED);
+    public ResponseEntity<?> getLeagueById(@PathVariable int id) {
+        try {
+            var lliga = service.getLeagueById(id);
+            if (lliga == null) {
+                return new ResponseEntity<>("Liga no encontrada", HttpStatus.NOT_FOUND);
+            }
+            LligaDTO dto = mapper.toDTO(lliga);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @Operation(summary = "Update a League by Id", description = "Per actualitzar una lliga")
     @PutMapping("/leagues/{id}")

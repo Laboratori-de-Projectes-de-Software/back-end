@@ -1,4 +1,4 @@
-CREATE TABLE usuari (
+CREATE TABLE IF NOT EXISTS usuari (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
     email VARCHAR(255),
@@ -6,7 +6,7 @@ CREATE TABLE usuari (
     role VARCHAR(255)
 );
 
-CREATE TABLE lliga (
+CREATE TABLE IF NOT EXISTS lliga (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(255),
     data_creacio TIMESTAMP,
@@ -15,7 +15,7 @@ CREATE TABLE lliga (
     FOREIGN KEY (admin) REFERENCES usuari(id)
 );
 
-CREATE TABLE bot (
+CREATE TABLE IF NOT EXISTS bot (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
     description VARCHAR(255),
@@ -28,7 +28,7 @@ CREATE TABLE bot (
     FOREIGN KEY (propietari) REFERENCES usuari(id)
 );
 
-CREATE TABLE classificacio (
+CREATE TABLE IF NOT EXISTS classificacio (
     id_lliga BIGINT,
     id_bot BIGINT,
     punts INT,
@@ -41,7 +41,7 @@ CREATE TABLE classificacio (
     FOREIGN KEY (id_bot) REFERENCES bot(id)
 );
 
-CREATE TABLE enfrontament (
+CREATE TABLE IF NOT EXISTS enfrontament (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     id_lliga BIGINT,
     id_local BIGINT,
@@ -53,7 +53,7 @@ CREATE TABLE enfrontament (
     FOREIGN KEY (id_visitant) REFERENCES bot(id)
 );
 
-CREATE TABLE resposta (
+CREATE TABLE IF NOT EXISTS resposta (
     id_autor BIGINT,
     id_enfrontament BIGINT,
     temps TIMESTAMP,
