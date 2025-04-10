@@ -94,19 +94,25 @@ public class BotService {
     }
 
     public ApiResponse<BotResponseDTO> getBotById(Integer botId) {
-        BotDomain bot = botPort.findById(botId)
-                .orElseThrow(() -> new IllegalArgumentException("Bot not found with ID: " + botId));
+        try {
+            BotDomain bot = botPort.findById(botId)
+                    .orElseThrow(() -> new IllegalArgumentException("Bot not found with ID: " + botId));
 
-        BotResponseDTO botResponseDTO = new BotResponseDTO(
-                bot.getId(),
-                bot.getIdeologia(),
-                bot.getDescription(),
-                bot.getUrlImagen(),
-                bot.getNWins(),
-                bot.getNLosses(),
-                bot.getNDraws()
-        );
-
-        return new ApiResponse(200, "Bot found", botResponseDTO);
+            BotResponseDTO botResponseDTO = new BotResponseDTO(
+                    bot.getId(),
+                    bot.getIdeologia(),
+                    bot.getDescription(),
+                    bot.getUrlImagen(),
+                    bot.getNWins(),
+                    bot.getNLosses(),
+                    bot.getNDraws()
+            );
+            return new ApiResponse<>(200, "Bot found", botResponseDTO);
+        } catch (IllegalArgumentException e) {
+            return new ApiResponse<>(404, "Bot not found");
+        } catch (Exception e) {
+            return new ApiResponse<>(500, "Internal Server Error");
+        }
     }
+
 }
