@@ -34,15 +34,18 @@ public class BotService {
             bot.setUrlImagen(botDTO.getUrlImagen());
             bot.setUrl(botDTO.getEndpoint());
             bot.setUserId(user.getId());
+            bot.setNWins(0);
+            bot.setNLosses(0);
+            bot.setNDraws(0);
             bot = botPort.save(bot);
             BotResponseDTO botResponseDTO = new BotResponseDTO(
                     bot.getId(),
                     bot.getIdeologia(),
                     bot.getDescription(),
                     bot.getUrlImagen(),
-                    0,
-                    0,
-                    0
+                    bot.getNWins(),
+                    bot.getNLosses(),
+                    bot.getNDraws()
             );
 
             return new ApiResponse<>(201, "Bot created", botResponseDTO);
@@ -99,9 +102,9 @@ public class BotService {
                 bot.getIdeologia(),
                 bot.getDescription(),
                 bot.getUrlImagen(),
-                -1, //TODO
-                -1, //TODO
-                -1 //TODO
+                bot.getNWins(),
+                bot.getNLosses(),
+                bot.getNDraws()
         );
 
         return new ApiResponse(200, "Bot found", botResponseDTO);

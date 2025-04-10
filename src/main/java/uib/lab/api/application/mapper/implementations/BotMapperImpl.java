@@ -34,6 +34,9 @@ public class BotMapperImpl implements BotMapper {
                 entity.getUrl(),
                 entity.getDescription(),
                 entity.getImagen(),
+                entity.getNWins(),
+                entity.getNLosses(),
+                entity.getNDraws(),
                 entity.getUser().getId(),
                 extractMatchIds(entity.getMatchAsBot1()),
                 extractMatchIds(entity.getMatchAsBot2()));
@@ -55,6 +58,9 @@ public class BotMapperImpl implements BotMapper {
         entity.setDescription(bot.getDescription());
         entity.setImagen(bot.getUrlImagen());
         entity.setUrl(bot.getUrl());
+        entity.setNWins(bot.getNWins());
+        entity.setNLosses(bot.getNLosses());
+        entity.setNDraws(bot.getNDraws());
 
         if (includeUser) {
             UserDomain user = userPort.findById(bot.getUserId())
