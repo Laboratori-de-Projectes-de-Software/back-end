@@ -47,4 +47,8 @@ public abstract class JwtProvider {
                 .map(user -> new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()))
                 .orElseThrow(() -> new UsernameNotFoundException(id));
     }
+
+    public String getSecret(){
+        return this.secret;
+    }
 }

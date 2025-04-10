@@ -3,16 +3,11 @@ package uib.lab.api.infraestructure.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uib.lab.api.application.dto.bot.BotDTO;
-import uib.lab.api.application.dto.bot.BotResponseDTO;
 import uib.lab.api.application.service.BotService;
-
+import uib.lab.api.infraestructure.util.ApiResponse;
 import javax.validation.Valid;
-import java.util.Locale;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +17,12 @@ public class BotController {
     private final BotService botService;
 
     @PostMapping
-    public BotResponseDTO createBot(@Valid @RequestBody BotDTO botDTO, Locale locale) {
-        return botService.save(botDTO, locale);
+    public ApiResponse createBot(@Valid @RequestBody BotDTO botDTO) {
+        return botService.save(botDTO);
+    }
+
+    @GetMapping
+    public ApiResponse getBotsByUser(@RequestParam(required = false) Integer owner) {
+        return botService.getBotsByUser(owner);
     }
 }

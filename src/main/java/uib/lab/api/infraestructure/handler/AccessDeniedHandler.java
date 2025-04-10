@@ -16,6 +16,6 @@ public class AccessDeniedHandler implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
-        apiHttpResponse.unauthorized(response, request.getLocale());
+        apiHttpResponse.unauthorized(response);
     }
 }

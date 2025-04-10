@@ -1,13 +1,11 @@
 package uib.lab.api.infraestructure.controller;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import uib.lab.api.application.dto.league.LeagueDTO;
 import uib.lab.api.application.service.LeagueService;
-import java.util.Locale;
+import uib.lab.api.infraestructure.util.ApiResponse;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +16,7 @@ public class LeagueController {
     private final LeagueService leagueService;
 
     @PostMapping
-    public Object createLeague(@RequestBody LeagueDTO leagueDTO, Locale locale) {
-        return leagueService.createLeague(leagueDTO, locale);
+    public ApiResponse createLeague(@RequestBody LeagueDTO leagueDTO) {
+        return leagueService.createLeague(leagueDTO);
     }
 }
