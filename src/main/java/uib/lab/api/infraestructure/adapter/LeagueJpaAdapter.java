@@ -1,12 +1,14 @@
 package uib.lab.api.infraestructure.adapter;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import uib.lab.api.application.mapper.interfaces.LeagueMapper;
 import uib.lab.api.application.mapper.interfaces.UserMapper;
 import uib.lab.api.application.port.LeaguePort;
+import uib.lab.api.domain.BotDomain;
 import uib.lab.api.domain.LeagueDomain;
 import uib.lab.api.domain.UserDomain;
 import uib.lab.api.infraestructure.jpaEntity.League;
@@ -24,7 +26,14 @@ public class LeagueJpaAdapter implements LeaguePort {
     public LeagueJpaAdapter(final LeagueJpaRepository leagueJpaRepository, final LeagueMapper leagueMapper, final UserMapper userMapper){
         this.leagueJpaRepository = leagueJpaRepository;
         this.leagueMapper = leagueMapper;
-        this.userMapper = userMapper;
+        this.userMapper 
+        
+        = userMapper;
+    }
+
+      @Override
+    public Optional<LeagueDomain> findById(int id) {
+        return leagueJpaRepository.findLeagueById(id).map(leagueMapper::toDomain);
     }
 
     @Override

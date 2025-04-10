@@ -5,12 +5,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import uib.lab.api.application.dto.bot.BotResponseDTO;
 import uib.lab.api.application.dto.bot.BotSummaryResponseDTO;
 import uib.lab.api.application.dto.league.LeagueDTO;
 import uib.lab.api.application.dto.league.LeagueResponseDTO;
 import uib.lab.api.application.mapper.implementations.LeagueMapperImpl;
 import uib.lab.api.application.port.LeaguePort;
 import uib.lab.api.application.port.UserPort;
+import uib.lab.api.domain.BotDomain;
 import uib.lab.api.domain.LeagueDomain;
 import uib.lab.api.domain.UserDomain;
 import uib.lab.api.infraestructure.jpaEntity.League;
@@ -104,6 +106,30 @@ public class LeagueService {
             return new ApiResponse(404, "Leagues not found");
         } catch (Exception e) {
             return new ApiResponse(500, "Internal Server Error");
+        }
+    }
+
+
+    public ApiResponse<LeagueResponseDTO> getLeagueById(Integer leagueId){
+        try {
+            LeagueDomain league = leaguePort.findById(leagueId)
+                    .orElseThrow(() -> new IllegalArgumentException("League not found with ID: " + leagueId));
+
+            LeagueResponseDTO leagueResponseDTO = new LeagueResponseDTO(  
+                    league.getId(),
+                    league.getState().name(),
+                    league.getName(),
+                    league.getUrlImagen(),
+                    league.getPlayTime(),
+                    league.getNumRounds(),
+                    league.getUserId(),
+                    league.getBotIds());
+
+            return new ApiResponse<>(200, "League found", leagueResponseDTO);
+        } catch (IllegalArgumentException e) {
+            return new ApiResponse<>(404, "League not found");
+        } catch (Exception e) {
+            return new ApiResponse<>(500, "Internal Server Error");
         }
     }
 }
