@@ -27,4 +27,9 @@ public class LeagueController {
     public ApiResponse getAllLeagues(@RequestParam(required = false) Integer owner) {
         return leagueService.getAllLeagues(owner);
     }
+
+    @GetMapping("/{leagueId}")
+    public ApiResponse getLeagueById(@PathVariable int leagueId) {
+        return leagueService.getLeagueById(leagueId);
+    }
 }
