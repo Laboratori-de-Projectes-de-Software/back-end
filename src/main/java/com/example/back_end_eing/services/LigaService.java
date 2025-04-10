@@ -15,7 +15,7 @@ public interface LigaService {
 
     public void LigaRegistro(String nombreLiga, Integer numJornadas, Integer numBots, String estado, Integer jornadaActual, Long id);
 
-    public List<Liga> obtenerLigas();
+    public Iterable<Liga> obtenerLigas();
 
     public List<Liga> obtenerLigasUser(Long id);
 }

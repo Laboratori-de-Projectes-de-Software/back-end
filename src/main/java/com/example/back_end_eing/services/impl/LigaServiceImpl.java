@@ -125,10 +125,8 @@ public class LigaServiceImpl implements LigaService{
     }
 
 
-    public List<Liga> obtenerLigas() {
-        return StreamSupport
-                .stream(ligaRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+    public Iterable<Liga> obtenerLigas() {
+        return ligaRepository.findAll();
     }
 
     public List<Liga> obtenerLigasUser(Long id) {

@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import com.example.back_end_eing.models.Clasificacion;
 import com.example.back_end_eing.services.LigaService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/liga")
+@RequestMapping("/api/v0/league")
 
 public class LigaController {
 
@@ -30,11 +31,11 @@ public class LigaController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/clasificacion")
-    public ResponseEntity<List<Clasificacion>> obtenerClasificacion(@RequestParam Long liga) {
-        List<Clasificacion> clasificacion = ligaService.LigaClasificacion(liga);
-        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
-    }
+//    @GetMapping("/clasificacion")
+//    public ResponseEntity<List<Clasificacion>> obtenerClasificacion2(@RequestParam Long liga) {
+//        List<Clasificacion> clasificacion = ligaService.LigaClasificacion(liga);
+//        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
+//    }
 
     @PostMapping("/Registrar")
     public ResponseEntity<String> registrarLiga(@RequestParam String nombreLiga,
@@ -51,8 +52,9 @@ public class LigaController {
         }
     }
 
-    @GetMapping("/League")
-    public List<Liga> obtenerLigas() {
+    @GetMapping("/all")
+    public Iterable<Liga> obtenerLigas() {
+        System.out.println("ey");
         return ligaService.obtenerLigas();
     }
 
@@ -60,8 +62,6 @@ public class LigaController {
     public List<Liga> obtenerLigasUser(Long id) {
         return ligaService.obtenerLigasUser(id);
     }
-
-}
 
     @GetMapping("/{leagueId}")
     public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Integer leagueId){
@@ -88,3 +88,4 @@ public class LigaController {
         return new ResponseEntity<>(bots, HttpStatus.OK);
     }
 
+}
