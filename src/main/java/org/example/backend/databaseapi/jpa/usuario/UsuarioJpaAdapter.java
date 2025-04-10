@@ -10,7 +10,6 @@ import org.example.backend.databaseapi.application.port.out.usuario.DeleteUsuari
 import org.example.backend.databaseapi.application.port.out.usuario.FindUsuarioPort;
 import org.example.backend.databaseapi.application.port.out.usuario.UpdateUsuarioPort;
 import org.example.backend.databaseapi.application.service.PasswordService;
-import org.example.backend.databaseapi.domain.usuario.Email;
 import org.example.backend.databaseapi.domain.usuario.Usuario;
 import org.springframework.stereotype.Component;
 

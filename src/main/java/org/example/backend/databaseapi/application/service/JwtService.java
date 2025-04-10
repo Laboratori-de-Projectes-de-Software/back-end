@@ -2,17 +2,14 @@ package org.example.backend.databaseapi.application.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.example.backend.databaseapi.domain.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -30,13 +27,7 @@ public class JwtService {
     }
 
     public String generateToken(Usuario usuario) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", usuario.getUserId());
-        claims.put("email", usuario.getEmail());
-        claims.put("nombre", usuario.getNombre());
-
         return Jwts.builder()
-                .claims(claims)
                 .subject(usuario.getEmail().value())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
@@ -44,7 +35,7 @@ public class JwtService {
                 .compact();
     }
 
-    public String extractUsername(String token) {
+    public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -69,8 +60,9 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    public Boolean validateToken(String token, Usuario usuario) {
-        final String username = extractUsername(token);
-        return (username.equals(usuario.getEmail().value()) && !isTokenExpired(token));
+    public Boolean isTokenValid(String token, UserDetails userDetails) {
+        final String email = extractUserEmail(token);
+        // username is email, see CustomUserDetailsService
+        return (email.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 }
