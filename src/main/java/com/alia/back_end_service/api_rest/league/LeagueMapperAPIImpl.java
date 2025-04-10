@@ -33,6 +33,7 @@ public class LeagueMapperAPIImpl implements LeagueMapperAPI {
         leagueResponse.setMatchTime(league.getTime_match());
         leagueResponse.setBots(league.getBotIds());
         leagueResponse.setOwner(league.getOwner());
+        leagueResponse.setState(league.getState());
         return leagueResponse;
     }
 }
