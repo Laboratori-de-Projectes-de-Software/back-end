@@ -32,7 +32,7 @@ public class LigaController {
     }
 
 //    @GetMapping("/clasificacion")
-//    public ResponseEntity<List<Clasificacion>> obtenerClasificacion2(@RequestParam Long liga) {
+//    public ResponseEntity<List<Clasificacion>> obtenerClasificacion(@RequestParam Long liga) {
 //        List<Clasificacion> clasificacion = ligaService.LigaClasificacion(liga);
 //        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
 //    }
