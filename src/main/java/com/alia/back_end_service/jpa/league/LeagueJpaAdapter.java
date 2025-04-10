@@ -52,6 +52,15 @@ public class LeagueJpaAdapter implements LeaguePortDB {
             entity.setNumber_match(league.getNumber_match()==null? entity.getNumber_match():league.getNumber_match());
             entity.setTime_match(league.getTime_match() == null? entity.getTime_match():league.getTime_match());
             entity.setState(league.getState() == null? entity.getState():league.getState());
+            List<BotEntity> updatedBots = league.getBotIds().stream()
+                    .map(botId -> botJpaRepository.findById(botId))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .toList();
+
+            entity.getBots().clear();
+            entity.getBots().addAll(updatedBots);
+
             return leagueMapper.toDomain(leagueJpaRepository.save(entity));
         }
         return null;
