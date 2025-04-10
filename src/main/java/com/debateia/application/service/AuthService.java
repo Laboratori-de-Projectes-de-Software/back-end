@@ -18,6 +18,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -36,18 +41,26 @@ public class AuthService implements AuthUseCase {
 
     @Override
     public UserResponseDTO register(final UserDTORegister request) {
-        if (!request.password().equals(request.confirmPassword())) {
+        /* if (!request.password().equals(request.confirmPassword())) {
+            return null;
+        } */
+        if (repository.existsByMail(request.email())) {
             return null;
         }
-        User user = User.builder().username(request.username()).email(request.email())
+    
+        // Verifica si el nombre de usuario ya está registrado
+        if (repository.existsByUsername(request.user())) {
+            return null;
+        }
+        User user = User.builder().username(request.user()).mail(request.email())
                 .password(passwordEncoder.encode(request.password())).build();
         final UserEntity userEntity = authMapper.usuarioToEntity(user);
         /*
-         * final User user = User.builder()
-         * .name(userDto.getName())
-         * .email(userDto.getEmail())
-         * .password(passwordEncoder.encode(userDto.getPassword()))
-         * .build();
+          final User user = User.builder()
+          .name(userDto.getName())
+          .email(userDto.getEmail())
+          .password(passwordEncoder.encode(userDto.getPassword()))
+          .build();
          */
 
         final UserEntity savedUserEntity = repository.save(userEntity);
@@ -55,22 +68,32 @@ public class AuthService implements AuthUseCase {
         final String jwtToken = jwtService.generateToken(user);
         final String refreshToken = jwtService.generateRefreshToken(user);
         // saveUserToken(savedUser, jwtToken);
-        return new UserResponseDTO(jwtToken, expiration, user.getUsername(), userEntity.getId());
+        // Obtener la fecha actual (Instant)
+        Instant now = Instant.now();
+
+        // Sumar los milisegundos de expiración al tiempo actual
+        Instant expirationInstant = now.plusMillis(expiration);
+
+        // Convertir el Instant a LocalDate
+        LocalDate expirationDate = expirationInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+        return new UserResponseDTO(jwtToken, expirationDate, user.getUsername());
     }
 
     @Override
     public UserResponseDTO authenticate(final UserDTOLogin request) {
+        
         try {
             // Intentar autenticar al usuario
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            request.email(),
+                            request.user(),
                             request.password()));
-            User user = User.builder().email(request.email())
+                            
+            User user = User.builder().username(request.user())
                     .password(passwordEncoder.encode(request.password())).build();
             UserEntity userEntity = authMapper.usuarioToEntity(user);
             // Buscar al usuario en la base de datos
-            userEntity = repository.findByMail(userEntity.getMail())
+            userEntity = repository.findByUsername(userEntity.getUsername())
                     .orElseThrow(() -> null);
             user = authMapper.entityToUsuario(userEntity);
             // Generar tokens
@@ -82,7 +105,15 @@ public class AuthService implements AuthUseCase {
             // saveUserToken(user, accessToken);
 
             // Devolver la respuesta con los tokens
-            return new UserResponseDTO(accessToken, expiration, user.getUsername(), userEntity.getId());
+            // Obtener la fecha actual (Instant)
+        Instant now = Instant.now();
+
+        // Sumar los milisegundos de expiración al tiempo actual
+        Instant expirationInstant = now.plusMillis(expiration);
+
+        // Convertir el Instant a LocalDate
+        LocalDate expirationDate = expirationInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+        return new UserResponseDTO(accessToken, expirationDate, user.getUsername());
 
         } catch (BadCredentialsException e) {
             // Manejar credenciales incorrectas
@@ -135,7 +166,15 @@ public class AuthService implements AuthUseCase {
         // Generar tokens
         final String accessToken = jwtService.generateToken(user);
         final String refreshToken = jwtService.generateRefreshToken(user);
-        return new UserResponseDTO(accessToken, expiration, user.getUsername(), userEntity.getId());
+        // Obtener la fecha actual (Instant)
+        Instant now = Instant.now();
+
+        // Sumar los milisegundos de expiración al tiempo actual
+        Instant expirationInstant = now.plusMillis(expiration);
+
+        // Convertir el Instant a LocalDate
+        LocalDate expirationDate = expirationInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+        return new UserResponseDTO(accessToken, expirationDate, user.getUsername());
     }
 
     /*
@@ -184,8 +223,15 @@ public class AuthService implements AuthUseCase {
         final String accessToken = jwtService.generateRefreshToken(user);
         // revokeAllUserTokens(user);
         // saveUserToken(user, accessToken);
+        // Obtener la fecha actual (Instant)
+        Instant now = Instant.now();
 
-        return new UserResponseDTO(accessToken, expiration, user.getUsername(), userEntity.getId());
+        // Sumar los milisegundos de expiración al tiempo actual
+        Instant expirationInstant = now.plusMillis(expiration);
+
+        // Convertir el Instant a LocalDate
+        LocalDate expirationDate = expirationInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+        return new UserResponseDTO(accessToken, expirationDate, user.getUsername());
     }
 
 }

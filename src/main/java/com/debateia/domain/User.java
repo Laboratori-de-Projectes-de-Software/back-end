@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class User {
     /* Anadir atributos necesarios para trabajar con el dominio que esten en las Entities/DTOs */
     private String username;
-    private String email;
+    private String mail;
     private String password;
 
 }

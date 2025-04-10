@@ -19,7 +19,7 @@ import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuer
  * @author kjorda
  */
 public class JpaUserRepository implements UserRepository {
-    public interface UserRepo extends JpaRepository<UserEntityTEsting, Integer> {
+    public interface UserRepo extends JpaRepository<UserEntity, Integer> {
 
     }
 
@@ -213,6 +213,18 @@ public class JpaUserRepository implements UserRepository {
     public boolean existsByMail(String email) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'existsByEmail'");
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'existsByUsername'");
+    }
+
+    @Override
+    public Optional<UserEntity> findByUsername(String username) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByUsername'");
     }
 
 }

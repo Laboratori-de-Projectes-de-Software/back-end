@@ -27,7 +27,8 @@ public class AuthController {
         if (response == null) {
             return ResponseEntity.badRequest().body("Registration failed: Invalid request.");
         }
-        return ResponseEntity.ok(response);
+        // return ResponseEntity.ok(response);
+        return ResponseEntity.ok(null);
     }
 
     @PostMapping("/login")
