@@ -51,6 +51,7 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
                     .getExpiration();
 
             UserResponseDTO dto = new UserResponseDTO();
+            dto.setUserId(user.getId());
             dto.setUser(user.getUsername());
             dto.setToken(token);
             dto.setExpiresIn((exp.getTime())/1000);
