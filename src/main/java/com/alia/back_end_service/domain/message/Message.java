@@ -24,7 +24,7 @@ public class Message {
 
     private OffsetDateTime date; // Formato UTC
 
-    private Integer botId;
+    private String botId;
 
     private Integer gameId;
 

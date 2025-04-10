@@ -371,7 +371,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ParticipationResponseDTO'
+                  $ref: '#/components/schemas/ClassificationResponseDTO'
         '400':
           description: Invalid input data
         '401':
@@ -484,7 +484,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-
     UserDTOLogin:
       type: object
       required:
@@ -498,7 +497,6 @@ components:
           type: string
           format: password
           example: 'securePassword123'
-
     UserDTORegister:
       type: object
       required:
@@ -519,23 +517,13 @@ components:
           format: password
           pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$"
           example: 'StrongPass123'
-
     UserResponseDTO:
       type: object
       required:
         - token
-        - expiresIn
-        - user
-        - userId
       properties:
         token:
           type: string
-        expiresIn:
-          type: string
-        user:
-          type: string
-        userId:
-          type: integer
 
     BotDTO:
       type: object
@@ -544,7 +532,6 @@ components:
         - description
         - urlImagen
         - endpoint
-        - userId
       properties:
         endpoint:
           type: string
@@ -559,8 +546,6 @@ components:
         urlImagen:
           type: string
           format: uri
-        userId:
-          type: string
 
     BotSummaryResponseDTO:
       type: object
@@ -583,72 +568,38 @@ components:
 
     LeagueDTO:
       type: object
-      required:
-        - name
-        - urlImagen
-        - rounds
-        - matchTime
-        - bots
-        - userId
       properties:
         name:
           type: string
-        urlImagen:
-          type: string
-          format: uri
         matchTime:
           type: integer
-          format: int64
         rounds:
           type: integer
         bots:
           type: array
           items:
             type: integer
-        userId:
-          type: integer
 
     LeagueResponseDTO:
       type: object
-      required:
-        - leagueId
-        - state
-        - name
-        - urlImagen
-        - user
-        - rounds
-        - matchTime
-        - bots
       properties:
         leagueId:
           type: integer
-        state:
-          type: string
         name:
           type: string
-        urlImagen:
-          type: string
-          format: uri
-        user:
-          type: integer
         matchTime:
           type: integer
-          format: int64
         rounds:
           type: integer
         bots:
           type: array
           items:
             type: integer
+        owner:
+          type: string
 
-
-    ParticipationResponseDTO:
+    ClassificationResponseDTO:
       type: object
-      required:
-        - botId
-        - name
-        - points
-        - position
       properties:
         botId:
           type: integer
@@ -658,18 +609,17 @@ components:
           type: integer
         position:
           type: integer
+        nWins:
+          type: integer
+        nLosses:
+          type: integer
+        nDraws:
+          type: integer
+
 
     MatchResponseDTO:
       type: object
-      required:
-        - matchId
-        - state
-        - result
-        - fighters
-        - roundNumber
       properties:
-        matchId:
-          type: integer
         state:
           type: string
         result:
@@ -677,21 +627,17 @@ components:
         fighters:
           type: array
           items:
-            type: string
+            type: integer
         roundNumber:
           type: integer
 
     MessageResponseDTO:
       type: object
-      required:
-        - text
-        - botId
-        - time
       properties:
         text:
           type: string
         botId:
-          type: integer
+          type: string
         time:
           type: string
           format: date-time

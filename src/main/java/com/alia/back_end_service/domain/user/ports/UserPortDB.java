@@ -12,7 +12,7 @@ public interface UserPortDB {
     Optional<User> findByEmail(String email);
 
     //Create
-    void save(User user);
+    User save(User user);
 
     //Delete
     void delete(String username);

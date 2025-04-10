@@ -24,9 +24,9 @@ public class Game {
 
     private String result_visit;
 
-    private String bot_local_name;
+    private Integer bot_local_id;
 
-    private String bot_visit_name;
+    private Integer bot_visit_id;
 
     private Integer roundId;
 

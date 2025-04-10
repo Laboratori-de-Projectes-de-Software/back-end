@@ -25,7 +25,7 @@ public class League {
 
     private OffsetDateTime end_time;
 
-    private Long time_match;
+    private Integer time_match;
 
     private Integer number_match;
 
@@ -35,5 +35,5 @@ public class League {
 
     private List<Integer> roundIds = new ArrayList<>();
 
-    private Integer owner;
+    private String owner;
 }

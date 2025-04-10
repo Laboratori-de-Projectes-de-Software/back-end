@@ -33,8 +33,10 @@ public class UserJpaAdapter implements UserPortDB {
     }
 
     @Override
-    public void save(User user) {
-        userJpaRepository.save(userMapper.toEntity(user));
+    public User save(User user) {
+        UserEntity savedEntity = userJpaRepository.save(userMapper.toEntity(user));
+        // No asignamos bots en el alta de un Usuario
+        return userMapper.toDomain(savedEntity);
     }
 
     @Override

@@ -1,9 +1,14 @@
 package com.alia.back_end_service.domain.user;
 
+import com.alia.back_end_service.domain.bot.Bot;
+import com.alia.back_end_service.jpa.bot.BotEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,14 +16,13 @@ import lombok.Setter;
 @Setter
 public class User {
 
-    private Integer id;
-
     private String username;
 
     private String mail;
 
     private String password;
 
-    private String token;
-    private Long expiresIn;
+    private Role role;
+
+    private List<String> botIds = new ArrayList<>();
 }
