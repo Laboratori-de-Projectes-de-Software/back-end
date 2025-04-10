@@ -4,14 +4,19 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import uib.lab.api.application.dto.bot.BotSummaryResponseDTO;
 import uib.lab.api.application.dto.league.LeagueDTO;
 import uib.lab.api.application.dto.league.LeagueResponseDTO;
 import uib.lab.api.application.mapper.implementations.LeagueMapperImpl;
 import uib.lab.api.application.port.LeaguePort;
 import uib.lab.api.application.port.UserPort;
 import uib.lab.api.domain.LeagueDomain;
+import uib.lab.api.domain.UserDomain;
 import uib.lab.api.infraestructure.jpaEntity.League;
 import uib.lab.api.infraestructure.util.ApiResponse;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +56,54 @@ public class LeagueService {
             return new ApiResponse<>(409, "Conflict: League already exists");
         } catch (Exception ex) {
             return new ApiResponse<>(500, "Internal Server Error");
+        }
+    }
+
+
+    public ApiResponse<List<LeagueResponseDTO>> getAllLeagues(Integer owner) {
+        try{
+            List<LeagueResponseDTO> leagueList;
+            if (owner != null){
+                 UserDomain user = userPort.findById(owner)
+                        .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + owner));
+                
+                leagueList = leaguePort.findAllByUser(user)
+                .stream()
+                .map(league -> new LeagueResponseDTO(  
+                league.getId(),
+                league.getState().name(),
+                league.getName(),
+                league.getUrlImagen(),
+                league.getPlayTime(),
+                league.getNumRounds(),
+                league.getUserId(),
+                league.getBotIds()))
+                .collect(Collectors.toList());
+
+            }else{
+                leagueList = leaguePort.findAllLeagues()
+                .stream()
+                .map(league -> new LeagueResponseDTO(  
+                league.getId(),
+                league.getState().name(),
+                league.getName(),
+                league.getUrlImagen(),
+                league.getPlayTime(),
+                league.getNumRounds(),
+                league.getUserId(),
+                league.getBotIds()))
+                .collect(Collectors.toList());
+            }
+            
+            if (!leagueList.isEmpty()) {
+                return new ApiResponse(200, "Leagues found", leagueList);
+            } else {
+                return new ApiResponse(404, "No leagues found");
+            }
+        } catch (IllegalArgumentException e) {
+            return new ApiResponse(404, "Leagues not found");
+        } catch (Exception e) {
+            return new ApiResponse(500, "Internal Server Error");
         }
     }
 }
