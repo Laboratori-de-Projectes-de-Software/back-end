@@ -10,11 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+    /* Anadir atributos necesarios para trabajar con el dominio que esten en las Entities/DTOs */
     private String username;
     private String email;
     private String password;
 
-    public String getUsername() {
-        return username;
-    }
 }

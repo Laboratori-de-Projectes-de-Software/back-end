@@ -1,7 +1,7 @@
 package com.debateia.adapter.out.persistence;
 
+import com.debateia.adapter.out.persistence.entities.UserEntity;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import com.debateia.domain.User;
 

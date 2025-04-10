@@ -3,14 +3,10 @@ package com.debateia.domain;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Builder
-public class Match {
+public class Participation {
     /* Anadir atributos necesarios para trabajar con el dominio que esten en las Entities/DTOs */
-    private League league;
-    private List<Messages> msgs;
-
-
+    private Integer aiId;
+    private Integer combatId;
 }

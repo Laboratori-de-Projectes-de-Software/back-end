@@ -1,28 +1,26 @@
 package com.debateia.adapter.in.web;
 
-import com.debateia.adapter.out.persistence.AIEntity;
-import com.debateia.application.service.AIService;
+import com.debateia.adapter.out.persistence.entities.BotEntity;
+import com.debateia.application.service.BotService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/bot")
 @RequiredArgsConstructor
-public class AIController {
-    private final AIService aiService;
+public class BotController {
+    private final BotService botService;
 
     @GetMapping
-    public List<AIEntity> getAIs(
+    public List<BotEntity> getBots(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authenticate,
             @RequestParam(name = "owner", required = false) Integer ownerId) {
-        return aiService.getAIs(Optional.ofNullable(ownerId));
+        return botService.getBots(Optional.ofNullable(ownerId));
     }
 
     /*

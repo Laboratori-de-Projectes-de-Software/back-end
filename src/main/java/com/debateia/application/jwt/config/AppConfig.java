@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.debateia.adapter.out.persistence.UserEntity;
+import com.debateia.adapter.out.persistence.entities.UserEntity;
 import com.debateia.application.ports.out.persistence.UserRepository;
 
 @Configuration
@@ -24,11 +24,11 @@ public class AppConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
-            final UserEntity user = repository.findByEmail(username)
+            final UserEntity user = repository.findByMail(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             return org.springframework.security.core.userdetails.User
                     .builder()
-                    .username(user.getEmail())
+                    .username(user.getMail())
                     .password(user.getPassword())
                     .build();
         };

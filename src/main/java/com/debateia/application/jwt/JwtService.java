@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.debateia.application.ports.out.persistence.UserRepository;
-import com.debateia.adapter.out.persistence.AuthMapper;
-import com.debateia.adapter.out.persistence.UserEntity;
-import com.debateia.application.ports.out.persistence.UserRepository;
+import com.debateia.adapter.out.persistence.entities.UserEntity;
 import com.debateia.domain.User;
 
 import javax.crypto.SecretKey;
@@ -67,8 +65,8 @@ public class JwtService {
         if (currentEmail == null) {
             return false;
         }
-        UserEntity userEntity = this.repository.findByEmail(currentEmail).orElseThrow();
-        return (currentEmail.equals(userEntity.getEmail())) && !isTokenExpired(authToken);
+        UserEntity userEntity = this.repository.findByMail(currentEmail).orElseThrow();
+        return (currentEmail.equals(userEntity.getMail())) && !isTokenExpired(authToken);
     }
 
     private boolean isTokenExpired(String token) {

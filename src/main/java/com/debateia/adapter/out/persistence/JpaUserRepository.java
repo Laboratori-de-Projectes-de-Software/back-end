@@ -1,5 +1,6 @@
 package com.debateia.adapter.out.persistence;
 
+import com.debateia.adapter.out.persistence.entities.UserEntity;
 import com.debateia.application.ports.out.persistence.UserRepository;
 
 import java.util.List;
@@ -203,13 +204,13 @@ public class JpaUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<UserEntity> findByEmail(String email) {
+    public Optional<UserEntity> findByMail(String mail) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findByEmail'");
     }
 
     @Override
-    public boolean existsByEmail(String email) {
+    public boolean existsByMail(String email) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'existsByEmail'");
     }

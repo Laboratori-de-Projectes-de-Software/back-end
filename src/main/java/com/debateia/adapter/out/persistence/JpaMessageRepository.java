@@ -1,5 +1,6 @@
 package com.debateia.adapter.out.persistence;
 
+import com.debateia.adapter.out.persistence.entities.MessageEntity;
 import com.debateia.application.ports.out.persistence.MessageRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 

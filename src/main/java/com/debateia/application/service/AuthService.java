@@ -1,8 +1,7 @@
 package com.debateia.application.service;
 
 import com.debateia.adapter.out.persistence.AuthMapper;
-import com.debateia.adapter.out.persistence.Token;
-import com.debateia.adapter.out.persistence.UserEntity;
+import com.debateia.adapter.out.persistence.entities.UserEntity;
 import com.debateia.application.jwt.JwtService;
 import com.debateia.adapter.in.web.UserDTOLogin;
 import com.debateia.adapter.in.web.UserDTORegister;
@@ -21,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -73,7 +70,7 @@ public class AuthService implements AuthUseCase {
                     .password(passwordEncoder.encode(request.password())).build();
             UserEntity userEntity = authMapper.usuarioToEntity(user);
             // Buscar al usuario en la base de datos
-            userEntity = repository.findByEmail(userEntity.getEmail())
+            userEntity = repository.findByMail(userEntity.getMail())
                     .orElseThrow(() -> null);
             user = authMapper.entityToUsuario(userEntity);
             // Generar tokens
@@ -117,7 +114,7 @@ public class AuthService implements AuthUseCase {
          * UserEntity userEntity = authMapper.usuarioToEntity(user);
          * System.out.println("USER ENTITY: " + userEntity.getEmail());
          */
-        UserEntity userEntity = this.repository.findByEmail(currentEmail).orElseThrow();
+        UserEntity userEntity = this.repository.findByMail(currentEmail).orElseThrow();
         final boolean isTokenValid = jwtService.isTokenValid(authentication);
 
         if (!isTokenValid) {
@@ -125,12 +122,12 @@ public class AuthService implements AuthUseCase {
         }
 
         // Verificar si el nuevo email ya está en uso
-        if (repository.existsByEmail(request.newEmail()) && !currentEmail.equals(request.newEmail())) {
+        if (repository.existsByMail(request.newEmail()) && !currentEmail.equals(request.newEmail())) {
             return null;
         }
 
         // Actualizar las credenciales
-        userEntity.setEmail(request.newEmail());
+        userEntity.setMail(request.newEmail());
         userEntity.setPassword(passwordEncoder.encode(request.newPassword())); // Asegúrate de codificar la nueva
                                                                                // contraseña
         repository.save(userEntity);
@@ -178,7 +175,7 @@ public class AuthService implements AuthUseCase {
             return null;
         }
 
-        final UserEntity userEntity = this.repository.findByEmail(userEmail).orElseThrow();
+        final UserEntity userEntity = this.repository.findByMail(userEmail).orElseThrow();
         final boolean isTokenValid = jwtService.isTokenValid(authentication);
         if (!isTokenValid) {
             return null;

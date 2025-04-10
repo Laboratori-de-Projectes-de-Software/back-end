@@ -1,5 +1,6 @@
 package com.debateia.adapter.out.persistence;
 
+import com.debateia.adapter.out.persistence.entities.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

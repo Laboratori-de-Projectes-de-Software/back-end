@@ -1,6 +1,8 @@
 package com.debateia.adapter.out.persistence;
 
-import io.jsonwebtoken.security.Message;
+import com.debateia.adapter.out.persistence.entities.BotEntity;
+import com.debateia.adapter.out.persistence.entities.LeagueEntity;
+import com.debateia.adapter.out.persistence.entities.UserEntity;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -24,11 +26,11 @@ public class UserEntityTEsting {
 
     @OneToOne
     @JoinColumn(name = "match_id", nullable = false) // clave foranea a id de match
-    private MatchEntity match;
+    private LeagueEntity match;
 
     // mapeo al atributo "user" de la clase AIEntity
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<AIEntity> aiList = new ArrayList<>();
+    private List<BotEntity> aiList = new ArrayList<>();
 
     public UserEntityTEsting() {
     }

@@ -1,7 +1,7 @@
 package com.debateia.application.service;
 
-import com.debateia.adapter.out.persistence.AIEntity;
-import com.debateia.application.ports.out.persistence.AIRepository;
+import com.debateia.adapter.out.persistence.entities.BotEntity;
+import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,15 +10,15 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AIService {
-    private final AIRepository aiRepository;
+public class BotService {
+    private final BotRepository botRepository;
     private final UserRepository userRepository;
 
-    public List<AIEntity> getAIs(Optional<Integer> ownerId) {
+    public List<BotEntity> getBots(Optional<Integer> ownerId) {
         if (ownerId.isPresent()) {
-            return aiRepository.findByUserId(ownerId.get());
+            return botRepository.findByUserId(ownerId.get());
         } else {
-            return aiRepository.findAll();
+            return botRepository.findAll();
         }
     }
 
