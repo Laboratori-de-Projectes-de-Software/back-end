@@ -106,9 +106,10 @@ public class StartLeagueUseCase implements LeagueStartPortAPI {
                 }
                 used[matchPair.bot1-1] = true;
                 used[matchPair.bot2-1] = true;
-                game.setBot_local_id(matchPair.bot1);
-                game.setBot_visit_id(matchPair.bot2);
 
+                game.setBot_local_name(matchPair.bot1);
+                game.setBot_visit_name(matchPair.bot2);
+              
                 game.setState("En espera");
                 game.setRoundId(round.getId());
 

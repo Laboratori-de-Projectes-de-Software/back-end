@@ -44,7 +44,7 @@ public class LeagueMapperImpl implements LeagueMapper {
             league.setRoundIds(Collections.emptyList());
         }
 
-        league.setOwner(entity.getOwner().getUsername());
+        league.setOwner(entity.getOwner().getId());
 
         return league;
     }

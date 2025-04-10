@@ -10,6 +10,7 @@ import com.alia.back_end_service.jpa.bot.BotJpaRepository;
 import com.alia.back_end_service.jpa.bot.BotMapper;
 import com.alia.back_end_service.jpa.game.GameEntity;
 import com.alia.back_end_service.jpa.game.GameMapper;
+import com.alia.back_end_service.jpa.user.UserEntity;
 import com.alia.back_end_service.jpa.user.UserJpaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,7 @@ public class LeagueJpaAdapter implements LeaguePortDB {
             botEntity.ifPresent(entity -> save.getBots().add(entity));
         }
 
-        var o = userJpaRepository.findByUsername(league.getOwner());
+        Optional <UserEntity> o = userJpaRepository.findById(league.getOwner());
         save.setOwner(o.get());
         return leagueMapper.toDomain(leagueJpaRepository.save(save));
     }

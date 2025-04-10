@@ -18,9 +18,9 @@ public class GameMapperAPIImpl implements GameMapperAPI {
         MatchResponseDTO matchDTO = new MatchResponseDTO();
         matchDTO.setState(game.getState());
         matchDTO.setResult(result);
-        List<Integer> fighters = new ArrayList<>();
-        fighters.add(game.getBot_local_id());
-        fighters.add(game.getBot_visit_id());
+        List<String> fighters = new ArrayList<>();
+        fighters.add(game.getBot_local_name());
+        fighters.add(game.getBot_visit_name());
         matchDTO.setFighters(fighters);
         matchDTO.setRoundNumber(game.getRoundId());
         return matchDTO;

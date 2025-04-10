@@ -16,6 +16,7 @@ import java.util.List;
 @Table(name = "leagues")
 @Getter
 @Setter
+
 public class LeagueEntity {
 
     @Id
@@ -32,7 +33,7 @@ public class LeagueEntity {
     private OffsetDateTime end_time;
 
     @Column(name = "time_match", nullable = false)
-    private Integer time_match;
+    private Long time_match;
 
     @Column(name = "number_match", nullable = false)
     private Integer number_match;
@@ -46,6 +47,7 @@ public class LeagueEntity {
             joinColumns = @JoinColumn(name = "league_id"),
             inverseJoinColumns = @JoinColumn(name = "bot_id")
     )
+
     private List<BotEntity> bots = new ArrayList<>();
 
     @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

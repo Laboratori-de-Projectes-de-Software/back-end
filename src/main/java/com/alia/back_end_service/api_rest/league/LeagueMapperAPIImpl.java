@@ -20,6 +20,7 @@ public class LeagueMapperAPIImpl implements LeagueMapperAPI {
         league.setTime_match(leagueCreate.getMatchTime());
         league.setInit_time(null);
         league.setState("Espera"); // Crear enum
+        league.setOwner(leagueCreate.getUserId());
         return league;
     }
 
@@ -32,7 +33,7 @@ public class LeagueMapperAPIImpl implements LeagueMapperAPI {
         leagueResponse.setRounds(league.getNumber_match());
         leagueResponse.setMatchTime(league.getTime_match());
         leagueResponse.setBots(league.getBotIds());
-        leagueResponse.setOwner(league.getOwner());
+        leagueResponse.setUser(league.getOwner());
         return leagueResponse;
     }
 }
