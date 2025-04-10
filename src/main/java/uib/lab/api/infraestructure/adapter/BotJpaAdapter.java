@@ -41,6 +41,13 @@ public class BotJpaAdapter implements BotPort {
                 .collect(Collectors.toList());
     }
 
+    public List<BotDomain> findAll() {
+        return botJpaRepository.findAll()
+                .stream()
+                .map(botMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public BotDomain save(BotDomain botDomain) {
         Bot botEntity = botMapper.toEntity(botDomain);

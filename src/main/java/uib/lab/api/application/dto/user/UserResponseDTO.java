@@ -6,8 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserResponseDTO {
-    private int userId;
     private String user;
     private String token;
-    private Long expiresIn; 
+    private Long expiresIn;
 }

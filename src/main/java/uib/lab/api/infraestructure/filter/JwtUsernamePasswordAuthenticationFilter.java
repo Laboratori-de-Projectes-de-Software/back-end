@@ -1,13 +1,11 @@
 package uib.lab.api.infraestructure.filter;
 
+import io.jsonwebtoken.Jwts;
 import uib.lab.api.application.dto.user.UserDTOLogin;
 import uib.lab.api.application.dto.user.UserResponseDTO;
 import uib.lab.api.domain.UserDomain;
 import uib.lab.api.infraestructure.util.ApiHttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import uib.lab.api.infraestructure.util.ApiResponse;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,32 +38,37 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,Authentication authentication) throws IOException {
-        //Recogemos el usuario
-        UserDomain user = (UserDomain) authentication.getPrincipal();
-        String token = apiHttpResponse.jwtToken(response, authentication);
+        try {
 
-        // Extraer el tiempo de expiración
-        Date exp = Jwts.parserBuilder()
-            .setSigningKey(apiHttpResponse.getAuthenticationProvider().getSecret().getBytes()) // Usamos la clave secreta
-            .build()
-            .parseClaimsJws(token)
-            .getBody()
-            .getExpiration();
+            UserDomain user = (UserDomain) authentication.getPrincipal();
+            String token = apiHttpResponse.jwtToken(authentication);
 
-        UserResponseDTO dto = new UserResponseDTO();
-        dto.setUserId(user.getId());
-        dto.setUser(user.getUsername());
-        dto.setToken(token);
-        dto.setExpiresIn((exp.getTime())/1000); 
-    
-        response.setContentType("application/json");
-        objectMapper.writeValue(response.getOutputStream(), dto);
+            Date exp = Jwts.parserBuilder()
+                    .setSigningKey(apiHttpResponse.getAuthenticationProvider().getSecret().getBytes())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getExpiration();
+
+            UserResponseDTO dto = new UserResponseDTO();
+            dto.setUser(user.getUsername());
+            dto.setToken(token);
+            dto.setExpiresIn((exp.getTime())/1000);
+
+            ApiResponse<UserResponseDTO> apiResponse = new ApiResponse<>(200, "User logged", dto);
+
+            response.setContentType("application/json");
+            objectMapper.writeValue(response.getOutputStream(), apiResponse);
+
+        } catch (Exception e) {
+            apiHttpResponse.internalServerError(response);
+        }
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request,
                                               HttpServletResponse response,
                                               AuthenticationException e) throws IOException {
-        apiHttpResponse.invalidCredentials(response, request.getLocale());
+        apiHttpResponse.invalidCredentials(response);
     }
 }

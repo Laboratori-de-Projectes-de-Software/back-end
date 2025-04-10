@@ -9,5 +9,6 @@ import java.util.Optional;
 public interface BotPort {
     Optional<BotDomain> findById(int id);
     List<BotDomain> findAllByUser(UserDomain user);
+    List<BotDomain> findAll();
     BotDomain save(BotDomain bot);
 }

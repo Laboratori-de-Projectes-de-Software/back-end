@@ -1,71 +1,55 @@
 package uib.lab.api.application.service;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Locale;
-
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.server.ResponseStatusException;
 import uib.lab.api.application.dto.league.LeagueDTO;
 import uib.lab.api.application.dto.league.LeagueResponseDTO;
 import uib.lab.api.application.port.LeaguePort;
+import uib.lab.api.application.port.UserPort;
 import uib.lab.api.domain.LeagueDomain;
 import uib.lab.api.infraestructure.jpaEntity.League;
-import uib.lab.api.infraestructure.util.message.MessageCode;
-import uib.lab.api.infraestructure.util.message.MessageConverter;
+import uib.lab.api.infraestructure.util.ApiResponse;
 
-import javax.validation.Validator;
-import uib.lab.api.application.errorHandler.*;
 @Service
 @RequiredArgsConstructor
 public class LeagueService {
 
     private final LeaguePort leaguePort;
-    private final MessageConverter messageConverter;
+    private final UserPort userPort;
     private final ModelMapper strictMapper;
 
-    @Autowired
-    private Validator validator;
+    public ApiResponse<LeagueResponseDTO> createLeague(LeagueDTO leagueDTO) {
+        try {
 
-    @Getter
-    @RequiredArgsConstructor
-    private enum Message implements MessageCode {
-        CREATED("league.created");
-        private final String code;
-    }
+            userPort.findById(leagueDTO.getUserId())
+                    .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + leagueDTO.getUserId()));
 
-    public Object createLeague(LeagueDTO leagueDTO, Locale locale) {
-        //Comprobamos si faltan campos obligatorios
-        LeagueErrorHandler fieldErrorHandler = new LeagueErrorHandler(leagueDTO, locale, messageConverter, validator);
-        fieldErrorHandler.checkFieldViolations();
+            var league = strictMapper.map(leagueDTO, LeagueDomain.class);
+            league.setState(League.LeagueState.PENDING);
 
-        if(fieldErrorHandler.hasError()){
-            return fieldErrorHandler.getApiMessageError();
+            LeagueDomain leagueDomain = leaguePort.save(league);
+
+            LeagueResponseDTO leagueResponseDTO = new LeagueResponseDTO(
+                    leagueDomain.getId(),
+                    leagueDomain.getState().name(),
+                    leagueDomain.getName(),
+                    leagueDomain.getUrlImagen(),
+                    leagueDomain.getPlayTime(),
+                    leagueDomain.getNumRounds(),
+                    leagueDomain.getUserId(),
+                    leagueDomain.getBotIds()
+            );
+
+            return new ApiResponse<>(201, "League created", leagueResponseDTO);
+
+        } catch (IllegalArgumentException e) {
+            return new ApiResponse<>(404, "Not Found: Required entity not found");
+        } catch (ResponseStatusException e) {
+            return new ApiResponse<>(409, "Conflict: League already exists");
+        } catch (Exception ex) {
+            return new ApiResponse<>(500, "Internal Server Error");
         }
-
-        //Mapeamos campos y seteamos liga a PENDING
-        var league = strictMapper.map(leagueDTO, LeagueDomain.class);
-        league.setState(League.LeagueState.PENDING);
-
-        
-        //Guaramos en la base de datos
-        LeagueDomain leagueDomain = leaguePort.save(league);
-        
-        //Devolvemos la liga
-        return new LeagueResponseDTO(
-                leagueDomain.getId(),
-                leagueDomain.getState().name(),
-                leagueDomain.getName(),
-                leagueDomain.getUrlImagen(),
-                leagueDomain.getPlayTime(),
-                leagueDomain.getNumRounds(),
-                leagueDomain.getUserId(),
-                leagueDomain.getBotIds()
-        );
     }
-
-
 }

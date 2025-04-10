@@ -1,46 +1,36 @@
 package uib.lab.api.infraestructure.util;
 
-import uib.lab.api.domain.UserDomain;
-import uib.lab.api.infraestructure.jpaEntity.User;
-import uib.lab.api.infraestructure.util.jwt.JwtAuthenticationProvider;
-import uib.lab.api.infraestructure.util.message.MessageCode;
-import uib.lab.api.infraestructure.util.message.MessageConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import uib.lab.api.domain.UserDomain;
+import uib.lab.api.infraestructure.jpaEntity.User;
+import uib.lab.api.infraestructure.util.jwt.JwtAuthenticationProvider;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Locale;
 
 @Component
 @RequiredArgsConstructor
 public class ApiHttpResponse {
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
-    private final MessageConverter messageConverter;
     private final ObjectMapper objectMapper;
 
-    @Getter
-    @RequiredArgsConstructor
-    private enum Message implements MessageCode {
-        NOT_AUTHORIZED("user.not-authorized"),
-        INVALID_CREDENTIALS("user.invalid-credentials");
-
-        private final String code;
+    public void unauthorized(HttpServletResponse response) throws IOException {
+        writeJsonResponse(response, HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
-    public void unauthorized(HttpServletResponse response, Locale locale) throws IOException {
-        this.unauthorized(Message.NOT_AUTHORIZED, response, locale);
+    public void invalidCredentials(HttpServletResponse response) throws IOException {
+        this.unauthorized(response);
     }
 
-    public void invalidCredentials(HttpServletResponse response, Locale locale) throws IOException {
-        this.unauthorized(Message.INVALID_CREDENTIALS, response, locale);
+    public void internalServerError(HttpServletResponse response) throws IOException {
+        writeJsonResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
     }
 
-    public String jwtToken(HttpServletResponse response, Authentication authentication) throws IOException {
+    public String jwtToken(Authentication authentication) {
         Object principal = authentication.getPrincipal();
         String token;
 
@@ -55,21 +45,18 @@ public class ApiHttpResponse {
         return token;
     }
 
-    private void unauthorized(Message message, HttpServletResponse response, Locale locale) throws IOException {
-        var stream = response.getOutputStream();
-        var error = ApiMessage.builder()
-                .status(HttpStatus.UNAUTHORIZED)
-                .message(messageConverter.getMessage(message, null, locale))
-                .build();
+    public JwtAuthenticationProvider getAuthenticationProvider(){
+        return this.jwtAuthenticationProvider;
+    }
 
-        response.setStatus(error.getStatus().value());
+    private void writeJsonResponse(HttpServletResponse response, HttpStatus status, String message) throws IOException {
+        var stream = response.getOutputStream();
+        var error = new ApiResponse<>(status.value(), message);
+
+        response.setStatus(status.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         objectMapper.writeValue(stream, error);
         stream.flush();
-    }
-
-    public JwtAuthenticationProvider getAuthenticationProvider(){
-        return this.jwtAuthenticationProvider;
     }
 }
