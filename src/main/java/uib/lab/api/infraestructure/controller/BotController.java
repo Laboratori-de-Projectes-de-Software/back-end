@@ -25,4 +25,9 @@ public class BotController {
     public ApiResponse getBotsByUser(@RequestParam(required = false) Integer owner) {
         return botService.getBotsByUser(owner);
     }
+
+    @GetMapping
+    public ApiResponse getBotById(@RequestParam Integer botId) {
+        return botService.getBotById(botId);
+    }
 }
