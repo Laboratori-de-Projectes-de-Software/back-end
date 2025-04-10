@@ -4,13 +4,14 @@ import com.debateia.application.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.debateia.adapter.in.web.UserDTOLogin;
-import com.debateia.adapter.in.web.UserDTORegister;
+import com.debateia.adapter.in.web.dto.request.UpdateCredRequest;
+import com.debateia.adapter.in.web.dto.request.UserDTOLogin;
+import com.debateia.adapter.in.web.dto.request.UserDTORegister;
 import com.debateia.adapter.out.persistence.UserResponseDTO;
-import com.debateia.adapter.in.web.UpdateCredRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,21 +24,23 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserDTORegister request) {
-        final UserResponseDTO response = service.register(request);
-        if (response == null) {
-            return ResponseEntity.badRequest().body("Registration failed: Invalid request.");
-        }
+        //final UserResponseDTO response = service.register(request);
+        /* if (response == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Registration failed: Email or Username already exists.");
+
+        } */
         // return ResponseEntity.ok(response);
-        return ResponseEntity.ok(null);
+        return service.register(request);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody UserDTOLogin request) {
-        final UserResponseDTO response = service.authenticate(request);
-        if (response == null) {
+        //final UserResponseDTO response = service.authenticate(request);
+        /* if (response == null) {
             return ResponseEntity.badRequest().body("Registration failed: Invalid request.");
-        }
-        return ResponseEntity.ok(response);
+        } */
+        //return ResponseEntity.ok(response);
+        return service.authenticate(request);
     }
 
     @PostMapping("/update-credentials")
