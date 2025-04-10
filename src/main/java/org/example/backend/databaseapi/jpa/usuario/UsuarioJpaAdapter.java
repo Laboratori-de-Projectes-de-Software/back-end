@@ -77,7 +77,7 @@ public class UsuarioJpaAdapter implements CreateUsuarioPort, FindUsuarioPort, De
         Usuario prevUser = findUsuario(id).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"))    ;
 
         // si está intentando cambiar el email y ya está cogido
-        if(!Objects.equals(prevUser.getEmail(), changedUser.getEmail()) &&
+        if(!Objects.equals(prevUser.getEmail().value(), changedUser.getEmail().value()) &&
                 usuarioJpaRepository.existsByEmail(changedUser.getEmail().value())){
             throw new ResourceAlreadyExistsException("Este email no está disponible");
         }

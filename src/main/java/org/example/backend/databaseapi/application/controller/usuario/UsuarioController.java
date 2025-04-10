@@ -1,7 +1,14 @@
 package org.example.backend.databaseapi.application.controller.usuario;
 
 import lombok.AllArgsConstructor;
+<<<<<<< HEAD
 import org.example.backend.databaseapi.domain.usuario.TokenAndUsuario;
+=======
+import org.example.backend.databaseapi.domain.usuario.AuthResponse;
+import org.example.backend.databaseapi.application.dto.usuario.UserDTOLogin;
+import org.example.backend.databaseapi.application.dto.usuario.UserDTORegister;
+import org.example.backend.databaseapi.application.dto.usuario.UsuarioDTOMapper;
+>>>>>>> 31e71e3 (small fix)
 import org.example.backend.databaseapi.application.exception.IncorrectCredentialsException;
 import org.example.backend.databaseapi.application.port.in.usuario.ActualizarUsuarioPort;
 import org.example.backend.databaseapi.application.port.in.usuario.AltaUsuarioPort;
