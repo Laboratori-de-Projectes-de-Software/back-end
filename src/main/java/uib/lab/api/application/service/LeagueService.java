@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import uib.lab.api.application.dto.league.LeagueDTO;
 import uib.lab.api.application.dto.league.LeagueResponseDTO;
+import uib.lab.api.application.mapper.implementations.LeagueMapperImpl;
 import uib.lab.api.application.port.LeaguePort;
 import uib.lab.api.application.port.UserPort;
 import uib.lab.api.domain.LeagueDomain;
@@ -18,7 +19,8 @@ public class LeagueService {
 
     private final LeaguePort leaguePort;
     private final UserPort userPort;
-    private final ModelMapper strictMapper;
+    private final LeagueMapperImpl leagueMapper;
+
 
     public ApiResponse<LeagueResponseDTO> createLeague(LeagueDTO leagueDTO) {
         try {
@@ -26,10 +28,9 @@ public class LeagueService {
             userPort.findById(leagueDTO.getUserId())
                     .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + leagueDTO.getUserId()));
 
-            var league = strictMapper.map(leagueDTO, LeagueDomain.class);
-            league.setState(League.LeagueState.PENDING);
+            LeagueDomain domain = leagueMapper.toDomain(leagueDTO);
 
-            LeagueDomain leagueDomain = leaguePort.save(league);
+            LeagueDomain leagueDomain = leaguePort.save(domain);
 
             LeagueResponseDTO leagueResponseDTO = new LeagueResponseDTO(
                     leagueDomain.getId(),

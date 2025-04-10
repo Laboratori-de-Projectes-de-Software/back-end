@@ -33,7 +33,7 @@ public class League {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "league_bot",
             joinColumns = @JoinColumn(name = "league_id"),

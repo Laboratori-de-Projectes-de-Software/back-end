@@ -1,4 +1,6 @@
 package uib.lab.api.application.mapper.implementations;
+import lombok.RequiredArgsConstructor;
+import uib.lab.api.application.dto.league.LeagueDTO;
 import uib.lab.api.application.mapper.interfaces.BotMapper;
 import uib.lab.api.application.mapper.interfaces.LeagueMapper;
 import org.springframework.stereotype.Component;
@@ -9,6 +11,7 @@ import uib.lab.api.domain.LeagueDomain;
 import uib.lab.api.domain.UserDomain;
 import uib.lab.api.infraestructure.jpaEntity.Bot;
 import uib.lab.api.infraestructure.jpaEntity.League;
+import uib.lab.api.infraestructure.jpaRepositories.BotJpaRepository;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -16,19 +19,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class LeagueMapperImpl implements LeagueMapper {
 
-    private final BotPort botPort;
     private final UserPort userPort;
     private final UserMapper userMapper;
-    private final BotMapper botMapper;
-
-    public LeagueMapperImpl(BotPort botPort, UserPort userPort, UserMapper userMapper, BotMapper botMapper) {
-        this.botPort = botPort;
-        this.userPort = userPort;
-        this.userMapper = userMapper;
-        this.botMapper = botMapper;
-    }
+    private final BotJpaRepository botJpaRepository;
 
     @Override
     public LeagueDomain toDomain(League entity) {
@@ -53,37 +49,43 @@ public class LeagueMapperImpl implements LeagueMapper {
     }
 
     @Override
-    public League toEntity(LeagueDomain domain) {
-        return toEntity(domain, true);
-    }
-
-    public League toEntity(LeagueDomain domain, boolean includeUser) {
-        if (domain == null) {
+    public LeagueDomain toDomain(LeagueDTO dto) {
+        if (dto == null) {
             return null;
         }
 
+        return new LeagueDomain(
+                0,
+                dto.getName(),
+                dto.getUrlImagen(),
+                dto.getMatchTime(),
+                dto.getRounds(),
+                League.LeagueState.PENDING,
+                dto.getUserId(),
+                dto.getBots() != null ? dto.getBots() : new int[0]
+        );
+    }
+
+    @Override
+    public League toEntity(LeagueDomain domain) {
         League entity = new League();
-        entity.setId(domain.getId());
         entity.setName(domain.getName());
-        entity.setUrlImagen(domain.getUrlImagen());
         entity.setPlayTime(domain.getPlayTime());
         entity.setNumRounds(domain.getNumRounds());
         entity.setState(domain.getState());
+        entity.setUrlImagen(domain.getUrlImagen());
+        UserDomain user = userPort.findById(domain.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + domain.getUserId()));
+        entity.setUser(userMapper.toEntity(user, false));
 
-        // Asignar usuario creador
-        if (includeUser) {
-            UserDomain user = userPort.findById(domain.getUserId())
-                    .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + domain.getUserId()));
-            entity.setUser(userMapper.toEntity(user, false));
-        }
-
-        // Asignar bots a la liga
         if (domain.getBotIds() != null) {
             Set<Bot> bots = Arrays.stream(domain.getBotIds())
-                    .mapToObj(id -> botPort.findById(id)
-                            .map(botDomain -> botMapper.toEntity(botDomain, false))
-                            .orElseThrow(() -> new IllegalArgumentException("Bot not found with ID: " + id)))
+                    .mapToObj(id -> botJpaRepository.findById(id)
+                            .orElseThrow(() -> new IllegalArgumentException("Bot not found: " + id)))
                     .collect(Collectors.toSet());
+            for (Bot bot : bots) {
+                bot.getLeagues().add(entity);
+            }
             entity.setBots(bots);
         } else {
             entity.setBots(new HashSet<>());

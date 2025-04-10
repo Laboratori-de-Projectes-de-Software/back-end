@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import uib.lab.api.application.dto.league.LeagueDTO;
 import uib.lab.api.application.service.LeagueService;
 import uib.lab.api.infraestructure.util.ApiResponse;
+import javax.transaction.Transactional;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ public class LeagueController {
 
     private final LeagueService leagueService;
 
+    @Transactional
     @PostMapping
     public ApiResponse createLeague(@RequestBody LeagueDTO leagueDTO) {
         return leagueService.createLeague(leagueDTO);
