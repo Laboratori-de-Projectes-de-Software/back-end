@@ -22,6 +22,10 @@ public class Bot {
 
     private String imagen;
 
+    private int nWins;
+    private int nLosses;
+    private int nDraws;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

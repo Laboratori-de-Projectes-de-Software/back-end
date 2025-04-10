@@ -7,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 import uib.lab.api.application.dto.bot.BotDTO;
 import uib.lab.api.application.dto.bot.BotResponseDTO;
 import uib.lab.api.application.dto.bot.BotSummaryResponseDTO;
+import uib.lab.api.application.port.MatchPort;
 import uib.lab.api.application.port.UserPort;
 import uib.lab.api.application.port.BotPort;
 import uib.lab.api.domain.BotDomain;
@@ -33,15 +34,18 @@ public class BotService {
             bot.setUrlImagen(botDTO.getUrlImagen());
             bot.setUrl(botDTO.getEndpoint());
             bot.setUserId(user.getId());
+            bot.setNWins(0);
+            bot.setNLosses(0);
+            bot.setNDraws(0);
             bot = botPort.save(bot);
             BotResponseDTO botResponseDTO = new BotResponseDTO(
                     bot.getId(),
                     bot.getIdeologia(),
                     bot.getDescription(),
                     bot.getUrlImagen(),
-                    0,
-                    0,
-                    0
+                    bot.getNWins(),
+                    bot.getNLosses(),
+                    bot.getNDraws()
             );
 
             return new ApiResponse<>(201, "Bot created", botResponseDTO);
@@ -88,4 +92,27 @@ public class BotService {
             return new ApiResponse(500, "Internal Server Error");
         }
     }
+
+    public ApiResponse<BotResponseDTO> getBotById(Integer botId) {
+        try {
+            BotDomain bot = botPort.findById(botId)
+                    .orElseThrow(() -> new IllegalArgumentException("Bot not found with ID: " + botId));
+
+            BotResponseDTO botResponseDTO = new BotResponseDTO(
+                    bot.getId(),
+                    bot.getIdeologia(),
+                    bot.getDescription(),
+                    bot.getUrlImagen(),
+                    bot.getNWins(),
+                    bot.getNLosses(),
+                    bot.getNDraws()
+            );
+            return new ApiResponse<>(200, "Bot found", botResponseDTO);
+        } catch (IllegalArgumentException e) {
+            return new ApiResponse<>(404, "Bot not found");
+        } catch (Exception e) {
+            return new ApiResponse<>(500, "Internal Server Error");
+        }
+    }
+
 }
