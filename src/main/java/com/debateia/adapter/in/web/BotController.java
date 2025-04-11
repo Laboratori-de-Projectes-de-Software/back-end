@@ -24,7 +24,7 @@ public class BotController {
     private final JwtService jwtService;
 
     @GetMapping
-    public ResponseEntity<List<BotSummaryResponseDTO>> getBots(
+    public ResponseEntity<List<BotSummaryResponseDTO>> getAllBots(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authenticate,
             @RequestParam(name = "owner", required = false) Integer ownerId) {
         if (!jwtService.isTokenValid(authenticate)) {
@@ -47,18 +47,46 @@ public class BotController {
         BotEntity botEntity = toEntity(botDto);
         botEntity = botService.createBot(botEntity, botDto.getUserId()); // meter en BD si el usuario existe
         if (botEntity == null) { // Caso: se queria anadir un bot para un usuario que no existe
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
         }
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(convertToResponseDto(botEntity));
     }
 
+    @GetMapping("/{botId}")
+    public ResponseEntity<BotResponseDTO> getBotById(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authenticate,
+            @PathVariable Integer botId) {
+        if (!jwtService.isTokenValid(authenticate)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        BotEntity botEntity = botService.getBotById(botId);
+        if (botEntity == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .build();
+        }
+        return ResponseEntity.ok(convertToResponseDto(botEntity));
+    }
 
-
-
-
-
+    @PutMapping("/{botId}")
+    public ResponseEntity<BotResponseDTO> updateBot(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authenticate,
+            @PathVariable Integer botId,
+            @RequestBody BotDTO botDto) {
+        if (!jwtService.isTokenValid(authenticate)) {
+            return ResponseEntity.
+                    status(HttpStatus.UNAUTHORIZED)
+                    .build();
+        }
+        BotEntity botEntity = toEntity(botDto);
+        BotResponseDTO response = convertToResponseDto(botService.updateBot(botId, botEntity));
+        return ResponseEntity
+                .ok(response);
+    }
 
     private BotSummaryResponseDTO convertToSummaryDTO(BotEntity bot) {
         BotSummaryResponseDTO dto = new BotSummaryResponseDTO();

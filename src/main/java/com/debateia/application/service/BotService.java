@@ -33,4 +33,20 @@ public class BotService {
         }
     }
 
+    public BotEntity getBotById(Integer botId) {
+        Optional<BotEntity> botEntity = botRepository.findById(botId);
+        return botEntity.orElse(null);
+    }
+
+    public BotEntity updateBot(Integer botId, BotEntity newBot) {
+        Optional<BotEntity> currentBot = botRepository.findById(botId);
+        if (currentBot.isEmpty()) {
+            return null;
+        }
+        newBot.setWins(currentBot.get().getWins());
+        newBot.setDraws(currentBot.get().getDraws());
+        newBot.setLosses(currentBot.get().getLosses());
+        return botRepository.save(newBot);
+    }
+
 }
