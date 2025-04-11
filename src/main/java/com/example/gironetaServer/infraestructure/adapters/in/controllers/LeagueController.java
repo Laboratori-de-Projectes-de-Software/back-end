@@ -9,6 +9,7 @@ import com.example.gironetaServer.domain.exceptions.TimeoutException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.ErrorResponseDto;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LeagueResponseDto;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.ParticipationResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -263,6 +264,43 @@ public class LeagueController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponseDto("Internal Server Error",
                             "Ocurrió un error inesperado al iniciar la liga: " + e.getMessage()));
+        }
+    }
+
+
+    //Obtener clasificación de una liga (ordenada)
+    @GetMapping("/league/{leagueId}/leaderboard")
+    public ResponseEntity<?> getLeaderboardFromLeague(@PathVariable Long leagueId) {
+        try {
+
+            // Obtenemos la lista de participaciones (leaderboard)
+            List<ParticipationResponseDto> leaderboard = leagueService.getLeaderboardFromLeague(leagueId);
+
+            if(leaderboard.isEmpty()) {
+                throw new ResourceNotFoundException("No existe la liga");
+            }
+            return ResponseEntity.ok(leaderboard);
+
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponseDto("Not Found",
+                            "No se encontró la clasificación: " + e.getMessage()));
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponseDto("Unauthorized",
+                            "Se requiere autenticación para mirar la clasificación: " + e.getMessage()));
+        } catch (TimeoutException e) {
+            return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
+                    .body(new ErrorResponseDto("Request Timeout",
+                            "La operación excedió el tiempo límite: " + e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponseDto("Bad Request",
+                            "El ID de liga proporcionado no es válido: " + e.getMessage()));
+        }  catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponseDto("Internal Server Error",
+                            "Ocurrió un error inesperado al obtener la clasificación: " + e.getMessage()));
         }
     }
 }

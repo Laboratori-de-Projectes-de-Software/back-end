@@ -1,7 +1,7 @@
 package com.example.gironetaServer.infraestructure.adapters.in.controllers.dto;
 
 public class BotDto {
-    private Long id;
+    private Long id; //El consenso usa INT no LONG
     private String name;
     private String descripcion;
     private String urlImagen;

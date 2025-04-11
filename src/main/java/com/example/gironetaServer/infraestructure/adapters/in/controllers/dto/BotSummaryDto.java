@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BotSummaryDto {
-    private Long id;
+    private Long id; //El consenso usa INT no LONG
     private String name;
     private String urlImagen;
     private Long usuario_id;

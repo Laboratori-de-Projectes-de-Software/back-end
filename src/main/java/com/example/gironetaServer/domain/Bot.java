@@ -1,7 +1,7 @@
 package com.example.gironetaServer.domain;
 
 public class Bot {
-    private Long id;
+    private Long id; //El consenso usa INT no LONG
     private String name;
     private String descripcion;
     private String urlImagen;
