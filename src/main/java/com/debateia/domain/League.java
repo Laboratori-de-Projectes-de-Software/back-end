@@ -12,6 +12,5 @@ import java.util.List;
 public class League {
     /* Anadir atributos necesarios para trabajar con el dominio que esten en las Entities/DTOs */
     private Date date;
-    private List<Match> matches = new ArrayList<>();
-
+    private List<Match> matches;
 }

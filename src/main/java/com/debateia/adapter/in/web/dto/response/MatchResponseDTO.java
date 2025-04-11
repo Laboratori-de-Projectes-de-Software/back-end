@@ -9,14 +9,11 @@ import java.util.List;
 
 @NoArgsConstructor
 @Data
-@JsonTypeName("LeagueResponseDTO")
+@JsonTypeName("MatchResponseDTO")
 public class MatchResponseDTO implements Serializable {
-    private int leagueId;
+    private int matchId;
     private State state;
-    private String name;
-    private String urlImagen;
-    private int user;
-    private Integer rounds;
-    private long matchTime;
-    private List<Integer> bots;
+    private int result;
+    private List<String> fighters;
+    private int roundNumber;
 }
