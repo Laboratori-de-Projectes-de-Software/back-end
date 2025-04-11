@@ -66,7 +66,10 @@ public class AuthApiDelegate
 
         String jwtToken = jwtService.generateToken(userDetails);
 
-        LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
+        LoginResponse loginResponse = new LoginResponse()
+                .setToken(jwtToken)
+                .setExpiresIn(System.currentTimeMillis() + jwtService.getExpirationTime())
+                .setUser(authenticatedUser.getNombre());
 
         return ResponseEntity.ok(loginResponse);
     }
