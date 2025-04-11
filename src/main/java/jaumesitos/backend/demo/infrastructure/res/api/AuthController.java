@@ -1,14 +1,12 @@
 package jaumesitos.backend.demo.infrastructure.res.api;
 
 
+import io.swagger.v3.oas.annotations.Operation;
 import jaumesitos.backend.demo.domain.User;
-import jaumesitos.backend.demo.infrastructure.res.dto.BotDTO;
-import jaumesitos.backend.demo.infrastructure.res.dto.UserDTOLogin;
-import jaumesitos.backend.demo.infrastructure.res.dto.UserResponseDTO;
+import jaumesitos.backend.demo.infrastructure.res.dto.*;
 import jaumesitos.backend.demo.infrastructure.res.mapper.BotDTOMapper;
 import org.springframework.web.bind.annotation.RequestBody;
 import jaumesitos.backend.demo.application.service.AuthService;
-import jaumesitos.backend.demo.infrastructure.res.dto.UserDTORegister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

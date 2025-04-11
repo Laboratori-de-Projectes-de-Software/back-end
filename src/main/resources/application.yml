@@ -3,6 +3,8 @@ spring:
     active: devel
 
 ---
+server:
+  port: 8082
 
 spring:
   config:

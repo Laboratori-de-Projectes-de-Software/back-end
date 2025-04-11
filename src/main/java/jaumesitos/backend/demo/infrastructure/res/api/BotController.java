@@ -6,6 +6,7 @@ import jaumesitos.backend.demo.domain.Bot;
 import jaumesitos.backend.demo.domain.User;
 import jaumesitos.backend.demo.infrastructure.res.dto.BotDTO;
 import jaumesitos.backend.demo.infrastructure.res.dto.BotResponseDTO;
+import jaumesitos.backend.demo.infrastructure.res.dto.LeagueDTO;
 import jaumesitos.backend.demo.infrastructure.res.mapper.BotDTOMapper;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,7 +57,6 @@ public class BotController {
             BotResponseDTO response = botMapper.toResponseDTO(saved);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating bot");
         }

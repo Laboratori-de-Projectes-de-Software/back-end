@@ -32,7 +32,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/auth/register", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/bot/**", "/league/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/bot/**", "/leagues/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/leagues/**").authenticated()  // POST requires authentication
+                        .requestMatchers(HttpMethod.PUT, "/leagues/**").authenticated()   // PUT requires authentication
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
