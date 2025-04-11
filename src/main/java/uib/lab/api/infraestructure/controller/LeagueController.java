@@ -6,9 +6,12 @@ import org.springframework.web.bind.annotation.*;
 import uib.lab.api.application.dto.league.LeagueDTO;
 import uib.lab.api.application.dto.user.UserResponseDTO;
 import uib.lab.api.application.service.LeagueService;
+import uib.lab.api.application.service.MatchService;
+import uib.lab.api.infraestructure.jpaEntity.Match;
 import uib.lab.api.infraestructure.util.ApiResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +20,7 @@ import javax.validation.Valid;
 public class LeagueController {
 
     private final LeagueService leagueService;
+    private final MatchService matchService;
 
     @Transactional
     @PostMapping
@@ -39,4 +43,8 @@ public class LeagueController {
         return leagueService.updateLeague(leagueId, leagueDTO);
     }
 
+    @PostMapping("/{leagueId}/start")
+    public ApiResponse<List<Match>> startLeague(@PathVariable int leagueId) {
+        return matchService.startLeague(leagueId);
+    }
 }

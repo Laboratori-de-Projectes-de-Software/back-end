@@ -9,6 +9,10 @@ import javax.persistence.*;
 @Table(name = "matches")
 public class Match {
 
+    public enum MatchState {
+        PENDING, IN_PROGRESS, COMPLETED;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -27,8 +31,4 @@ public class Match {
     @ManyToOne
     @JoinColumn(name = "round_id")
     private Round round;
-}
-
-enum MatchState {
-    PENDING, IN_PROGRESS, COMPLETED;
 }
