@@ -7,10 +7,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -33,6 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
+
         if (request.getServletPath().contains("/api/v1/auth")) {
             filterChain.doFilter(request, response);
             return;
@@ -44,44 +47,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        final String jwt = authHeader.substring(7);
-        final String userEmail = jwtService.extractUsername(jwt);
-        System.out.println("USER EMAIL: "+userEmail);
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (userEmail == null || authentication != null) {
-            filterChain.doFilter(request, response);
+        final String jwt = authHeader.substring(7);  // Extraemos el token del header
+        final String userEmail = jwtService.extractUsername(jwt);  // Extraemos el email del token
+        System.out.println("USER EMAIL: " + userEmail);
+
+        if (userEmail == null || SecurityContextHolder.getContext().getAuthentication() != null) {
+            filterChain.doFilter(request, response);  // Si no hay email o ya hay un usuario autenticado, continuamos con el filtro
             return;
         }
 
-        final UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-        /*
-         * final boolean isTokenExpiredOrRevoked = tokenRepository.findByToken(jwt)
-         * .map(token -> !token.getIsExpired() && !token.getIsRevoked())
-         * .orElse(false);
-         */
+        // Validamos el token con el método que ya tienes
+        boolean isTokenValid = jwtService.isTokenValid(authHeader);
+        if (isTokenValid) {
+            // Si el token es válido, autenticamos al usuario
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
-        /*
-         * if (isTokenExpiredOrRevoked) {
-         * final Optional<UserEntity> userEntity =
-         * userRepository.findByEmail(userEmail);
-         * 
-         * if (userEntity.isPresent()) {
-         * final boolean isTokenValid = jwtService.isTokenValid(jwt, userEntity.get());
-         * 
-         * if (isTokenValid) {
-         * UsernamePasswordAuthenticationToken authToken = new
-         * UsernamePasswordAuthenticationToken(
-         * userDetails,
-         * null,
-         * userDetails.getAuthorities());
-         * authToken.setDetails(
-         * new WebAuthenticationDetailsSource().buildDetails(request));
-         * SecurityContextHolder.getContext().setAuthentication(authToken);
-         * }
-         * }
-         * }
-         */
+            // Configuramos la autenticación en el contexto de seguridad
+            var authToken = new UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    null,
+                    userDetails.getAuthorities()
+            );
+            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+        }
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request, response);  // Continuamos con el filtro
     }
+
+
 }

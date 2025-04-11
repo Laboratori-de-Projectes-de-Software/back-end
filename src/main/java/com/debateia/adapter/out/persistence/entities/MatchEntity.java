@@ -21,15 +21,15 @@ public class MatchEntity {
     @Column(name = "match_id")
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "league_id", nullable = false)
     private LeagueEntity league;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bot1_id", nullable = false)
     private BotEntity bot1;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bot2_id", nullable = false)
     private BotEntity bot2;
 

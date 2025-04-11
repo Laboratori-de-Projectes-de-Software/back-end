@@ -27,12 +27,12 @@ public class BotEntity {
 
     private String description;
 
-    @Column(name = "urlImagen")
-    private String urlImage;
+    @Column(name = "url_imagen")
+    private String url_imagen;
 
     private String endpoint;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
@@ -45,6 +45,6 @@ public class BotEntity {
     @Column(name = "n_draws")
     private Integer draws;
 
-    @OneToMany(mappedBy = "bot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bot", fetch = FetchType.LAZY)
     private List<MessageEntity> messages = new ArrayList<>();
 }

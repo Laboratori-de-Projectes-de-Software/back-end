@@ -41,15 +41,22 @@ public class BotController {
     public ResponseEntity<BotResponseDTO> createBot(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authenticate,
             @RequestBody BotDTO botDto) {
-        if (!jwtService.isTokenValid(authenticate)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        System.out.println("EL POST SE EJECUTA OK Y M***** Y J****");
+        //if (!jwtService.isTokenValid(authenticate)) {
+        //    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        //}
         BotEntity botEntity = toEntity(botDto);
-        botEntity = botService.createBot(botEntity, botDto.getUserId()); // meter en BD si el usuario existe
-        if (botEntity == null) { // Caso: se queria anadir un bot para un usuario que no existe
+        try {
+            botEntity = botService.createBot(botEntity, botDto.getUserId()); // meter en BD si el usuario existe
+        } catch (IllegalArgumentException e) { // Bot ya existia
             return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
+                    .status(HttpStatus.CONFLICT)
                     .build();
+        }
+        if (botEntity == null) { // Caso: se queria anadir un bot para un usuario que no existe
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .build();
         }
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -100,9 +107,12 @@ public class BotController {
         BotEntity entity = new BotEntity();
         entity.setDescription(dto.getDescription());
         entity.setName(dto.getName());
-        entity.setId(dto.getUserId());
-        entity.setUrlImage(dto.getUrlImagen());
+        entity.setId(null); // id = auto increment
+        entity.setUrl_imagen(dto.getUrlImagen());
         entity.setEndpoint(dto.getEndpoint());
+        entity.setLosses(0);
+        entity.setWins(0);
+        entity.setDraws(0);
         return entity;
     }
 
@@ -111,7 +121,7 @@ public class BotController {
         dto.setBotId(bot.getId());
         dto.setName(bot.getName());
         dto.setDescription(bot.getDescription());
-        dto.setUrlImage(bot.getUrlImage());
+        dto.setUrlImage(bot.getUrl_imagen());
         dto.setNLosses(bot.getLosses());
         dto.setNWins(bot.getWins());
         dto.setNDraws(bot.getDraws());

@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface BotJpaRepository extends JpaRepository<BotEntity, Integer> {
     List<BotEntity> findByUser_Id(Integer userId); /* Spring Data JPA genera la consulta automaticamente */
-
+    boolean existsByName(String name);
 }

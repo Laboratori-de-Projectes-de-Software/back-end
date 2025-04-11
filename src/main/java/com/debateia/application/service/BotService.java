@@ -4,6 +4,9 @@ import com.debateia.adapter.out.persistence.entities.BotEntity;
 import com.debateia.adapter.out.persistence.entities.UserEntity;
 import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -23,9 +26,14 @@ public class BotService {
         }
     }
 
+    @Transactional
     public BotEntity createBot(BotEntity botEntity, Integer userId) {
         Optional<UserEntity> owner = userRepository.findById(userId);
+
         if (owner.isPresent()) { // usuario existe
+            if (botRepository.exists(botEntity.getName())) { //
+                throw new IllegalArgumentException("El bot a añadir ya existe");
+            }
             botEntity.setUser(owner.get()); // anadir relacion del bot al usuario
             return botRepository.save(botEntity);
         } else {

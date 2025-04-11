@@ -10,5 +10,6 @@ public interface BotRepository {
     List<BotEntity> findAll();
     List<BotEntity> findByUserId(Integer userId);
     BotEntity save(BotEntity entity);
+    boolean exists(String name);
     Optional<BotEntity> findById(Integer botId);
 }

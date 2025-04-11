@@ -22,11 +22,13 @@ public class JpaBotRepository implements BotRepository {
     public List<BotEntity> findByUserId(Integer userId) {
         return botJpaRepository.findByUser_Id(userId);
     }
-
     public BotEntity save(BotEntity entity) {
         return botJpaRepository.save(entity);
     }
     public Optional<BotEntity> findById(Integer botId) {
         return botJpaRepository.findById(botId);
+    }
+    public boolean exists(String name) {
+        return botJpaRepository.existsByName(name);
     }
 }
