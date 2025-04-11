@@ -3,15 +3,20 @@ package com.debateia.domain;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
 @Builder
 public class League {
-    /* Anadir atributos necesarios para trabajar con el dominio que esten en las Entities/DTOs */
-    private Date date;
-    private List<Match> matches = new ArrayList<>();
-
+    
+    private int leagueId;
+    private String name;
+    private String urlImagen;
+    private int rounds;
+    private long matchTime;
+    
+    private List<Match> matches;
+    private List<Integer> bots;
+    private String state;
+    private User user;
 }

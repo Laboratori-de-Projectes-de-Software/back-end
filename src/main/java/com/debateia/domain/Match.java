@@ -8,9 +8,14 @@ import java.util.List;
 @Data
 @Builder
 public class Match {
-    /* Anadir atributos necesarios para trabajar con el dominio que esten en las Entities/DTOs */
+    private int matchId;
     private League league;
-    private List<Messages> msgs;
-
-
+    private List<Messages> messages;
+    private Bot bot1;
+    private Bot bot2;
+    private String state;
+    private int result;
+    private Integer roundNumber;
+    
+    private List<String> fighters; // nombre de los bots (bot.trait)
 }
