@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -24,5 +25,8 @@ public class JpaBotRepository implements BotRepository {
 
     public BotEntity save(BotEntity entity) {
         return botJpaRepository.save(entity);
+    }
+    public Optional<BotEntity> findById(Integer botId) {
+        return botJpaRepository.findById(botId);
     }
 }

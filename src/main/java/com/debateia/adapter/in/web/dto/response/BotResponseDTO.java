@@ -7,8 +7,7 @@ import java.io.Serializable;
 
 @NoArgsConstructor
 @Data
-@JsonTypeName("BotResponseDTO")
-public class AIResponseDTO implements Serializable {
+public class BotResponseDTO implements Serializable {
     private int botId;
     private String name;
     private String description;

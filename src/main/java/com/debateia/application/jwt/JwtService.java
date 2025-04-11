@@ -32,8 +32,9 @@ public class JwtService {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .getSubject();
+                .get("username", String.class); // ← Accedemos al claim personalizado "username"
     }
+    
 
     public String generateToken(User user) {
         return buildToken(user, refreshExpiration);
@@ -48,7 +49,7 @@ public class JwtService {
         return Jwts
                 .builder()
                 .claims(Map.of("username", user.getUsername()))
-                .subject(user.getEmail())
+                .subject(user.getMail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey())
@@ -65,8 +66,8 @@ public class JwtService {
         if (currentEmail == null) {
             return false;
         }
-        UserEntity userEntity = this.repository.findByMail(currentEmail).orElseThrow();
-        return (currentEmail.equals(userEntity.getMail())) && !isTokenExpired(authToken);
+        UserEntity userEntity = this.repository.findByUsername(currentEmail).orElseThrow();
+        return (currentEmail.equals(userEntity.getUsername())) && !isTokenExpired(authToken);
     }
 
     private boolean isTokenExpired(String token) {
