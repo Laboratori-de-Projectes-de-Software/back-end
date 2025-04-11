@@ -20,6 +20,17 @@ public class LigaController {
     @Autowired
     private LigaService ligaService;
 
+    @PutMapping("/actualizar")
+    public ResponseEntity<Void> actualizarClasificacion(@RequestParam Long liga, @RequestParam Long local, @RequestParam Long visitante, @RequestParam String resultado) {
+        ligaService.LigaActualizacion(liga, local, visitante, resultado);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+//    @GetMapping("/clasificacion")
+//    public ResponseEntity<List<Clasificacion>> obtenerClasificacion(@RequestParam Long liga) {
+//        List<Clasificacion> clasificacion = ligaService.LigaClasificacion(liga);
+//        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
+//    }
 
     @PostMapping("/Registrar")
     public ResponseEntity<String> registrarLiga(@RequestParam String nombreLiga,
@@ -58,7 +69,7 @@ public class LigaController {
     @GetMapping("/{leagueId}/leaderboard")
     public ResponseEntity<List<ParticipationResponseDTO>> obtenerClasificacion(@PathVariable Long leagueId) {
 
-         List<ParticipationResponseDTO> clasificacion = ligaService.getClasificacion(leagueId);
+        List<ParticipationResponseDTO> clasificacion = ligaService.getClasificacion(leagueId);
 
         return new ResponseEntity<>(clasificacion, HttpStatus.OK);
     }
