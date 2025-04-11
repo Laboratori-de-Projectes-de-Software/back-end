@@ -7,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 import uib.lab.api.application.dto.bot.BotDTO;
 import uib.lab.api.application.dto.bot.BotResponseDTO;
 import uib.lab.api.application.dto.bot.BotSummaryResponseDTO;
+import uib.lab.api.application.dto.bot.BotUpdateRequestDTO;
 import uib.lab.api.application.port.MatchPort;
 import uib.lab.api.application.port.UserPort;
 import uib.lab.api.application.port.BotPort;
@@ -112,6 +113,45 @@ public class BotService {
             return new ApiResponse<>(404, "Bot not found");
         } catch (Exception e) {
             return new ApiResponse<>(500, "Internal Server Error");
+        }
+    }
+    public ApiResponse<BotResponseDTO> updateBot(int botId, BotUpdateRequestDTO request) {
+        try {
+            // Buscar el bot existente
+            BotDomain existingBot = botPort.findById(botId)
+                    .orElseThrow(() -> new IllegalArgumentException("Bot not found with ID: " + botId));
+
+            // Actualizar los campos editables
+            existingBot.setIdeologia(request.getName());
+            existingBot.setDescription(request.getDescription());
+            existingBot.setUrlImagen(request.getUrlImagen());
+            existingBot.setUrl(request.getEndpoint());
+
+            // Guardar el bot actualizado
+            botPort.save(existingBot);
+
+            // Crear y devolver el BotResponseDTO
+            BotResponseDTO responseDTO = new BotResponseDTO(
+                    existingBot.getId(),
+                    existingBot.getIdeologia(),
+                    existingBot.getDescription(),
+                    existingBot.getUrlImagen(),
+                    existingBot.getNWins(),
+                    existingBot.getNLosses(),
+                    existingBot.getNDraws()
+            );
+
+            return new ApiResponse<>(200, "Bot updated", responseDTO);
+
+        } catch (IllegalArgumentException e) {
+            return new ApiResponse<>(404, "Bot not found with the provided ID");
+        } catch (ResponseStatusException e) {
+            if (e.getStatus() == HttpStatus.FORBIDDEN) {
+                return new ApiResponse<>(403, "You do not have permission to update this bot");
+            }
+            return new ApiResponse<>(500, "Error updating bot");
+        } catch (Exception e) {
+            return new ApiResponse<>(500, "Error updating bot");
         }
     }
 

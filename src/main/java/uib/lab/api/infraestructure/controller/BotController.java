@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uib.lab.api.application.dto.bot.BotDTO;
+import uib.lab.api.application.dto.bot.BotUpdateRequestDTO;
 import uib.lab.api.application.service.BotService;
 import uib.lab.api.infraestructure.util.ApiResponse;
 import javax.validation.Valid;
@@ -29,5 +30,10 @@ public class BotController {
     @GetMapping("/{botId}")
     public ApiResponse getBotById(@PathVariable int botId) {
         return botService.getBotById(botId);
+    }
+
+    @PutMapping("/{botId}")
+    public ApiResponse updateBot(@PathVariable int botId, @Valid @RequestBody BotUpdateRequestDTO request) {
+        return botService.updateBot(botId, request);
     }
 }
