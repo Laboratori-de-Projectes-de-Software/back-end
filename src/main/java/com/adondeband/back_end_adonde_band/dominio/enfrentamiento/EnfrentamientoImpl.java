@@ -10,4 +10,8 @@ public class EnfrentamientoImpl implements EnfrentamientoService {
     public Enfrentamiento insertarEnfrentamiento(Enfrentamiento enfrentamiento) {
         return enfrentamientoPort.save(enfrentamiento);
     }
+
+    public Enfrentamiento obtenerEnfrentamiento(Long idPartido) {
+        return enfrentamientoPort.findById(idPartido);
+    }
 }

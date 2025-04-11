@@ -20,4 +20,13 @@ public class EnfrentamientoJpaAdapter implements EnfrentamientoPort {
                 enfrentamientoJpaRepository.save(
                         enfrentamientoMapper.toEntity(enfrentamiento)));
     }
+
+    @Override
+    public Enfrentamiento findById(Long idPartido) {
+        return enfrentamientoJpaRepository.findById(idPartido)
+                .map(enfrentamientoMapper::toDomain)
+                .orElse(null);
+    }
+
+
 }
