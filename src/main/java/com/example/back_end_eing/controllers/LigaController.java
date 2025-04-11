@@ -2,6 +2,7 @@ package com.example.back_end_eing.controllers;
 
 
 import com.example.back_end_eing.constants.EstadoLigaConstants;
+import com.example.back_end_eing.dto.LeagueDTO;
 import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
 import com.example.back_end_eing.services.LigaService;
@@ -20,7 +21,7 @@ public class LigaController {
     @Autowired
     private LigaService ligaService;
 
-    @PutMapping("/actualizar")
+    @PutMapping("/league/actualizar")
     public ResponseEntity<Void> actualizarClasificacion(@RequestParam Long liga, @RequestParam Long local, @RequestParam Long visitante, @RequestParam String resultado) {
         ligaService.LigaActualizacion(liga, local, visitante, resultado);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -32,20 +33,22 @@ public class LigaController {
 //        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
 //    }
 
-    @PostMapping("/Registrar")
+    @PostMapping("")
     public ResponseEntity<String> registrarLiga(@RequestParam String nombreLiga,
+                                                @RequestParam String urlImagen,
                                                 @RequestParam Integer numJornadas,
+                                                @RequestParam long matchTime,
                                                 @RequestParam Integer numBots,
-                                                @RequestParam String estado,
-                                                @RequestParam Integer jornadaActual,
-                                                @RequestParam Long id) {
+                                                @RequestParam int id) {
         try {
-            ligaService.LigaRegistro(nombreLiga, numJornadas, numBots, estado, jornadaActual, id);
+            LeagueDTO ligadto = new LeagueDTO(nombreLiga, urlImagen, numJornadas, matchTime, numBots, id);
+            ligaService.LigaRegistro(ligadto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Liga registrada correctamente");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
         }
     }
+
 
     @GetMapping("/{leagueId}")
     public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Long leagueId){
@@ -62,7 +65,6 @@ public class LigaController {
         ligaService.deleteLiga(leagueId);
 
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
 
