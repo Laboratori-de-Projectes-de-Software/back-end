@@ -23,7 +23,7 @@ public class LligaService {
         return illigarepository.getLeagues(owner);
     }
 
-    public Lliga getLeagueById(int id) {
+    public League getLeagueById(int id) {
         return illigarepository.findById(id).orElseThrow(() -> new RuntimeException("Liga no encontrada"));
     }
 
@@ -32,4 +32,5 @@ public class LligaService {
             throw new RuntimeException("No existe esta liga");
         }
     }
+
 }

@@ -35,6 +35,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/bot/**", "/leagues/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/leagues/**").authenticated()  // POST requires authentication
                         .requestMatchers(HttpMethod.PUT, "/leagues/**").authenticated()   // PUT requires authentication
+                        .requestMatchers(HttpMethod.GET, "/league/**").authenticated()  // GET requires authentication
+                        .requestMatchers(HttpMethod.DELETE, "/league/**").authenticated()   // DELETE requires authentication
+
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

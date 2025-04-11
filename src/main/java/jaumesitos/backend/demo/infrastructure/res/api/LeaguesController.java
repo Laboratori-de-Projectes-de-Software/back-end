@@ -11,6 +11,7 @@ import jaumesitos.backend.demo.infrastructure.db.mapper.LLigaDBOMapper;
 import jaumesitos.backend.demo.infrastructure.res.dto.*;
 import jaumesitos.backend.demo.infrastructure.res.mapper.BotDTOMapper;
 import jaumesitos.backend.demo.infrastructure.res.mapper.LligaDTOMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestBody;
 import jaumesitos.backend.demo.application.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,9 @@ import java.util.Map;
 @RequestMapping("")
 @Tag(name = "Leagues Controller", description = "Endpoints for managing users")
 public class LeaguesController {
+    @Qualifier("userDTOMapper")
     private final UserDTOMapper userMapper; //convertidor de DTO a classe de lògica de negoci
+    @Qualifier("lligaDTOMapper")
     private final LligaDTOMapper mapper;
     private final AuthService service; //adaptador
     private final LligaService leagueservice;
@@ -73,6 +76,27 @@ public class LeaguesController {
         return new ResponseEntity<>("Classificació del bot creada correctament", HttpStatus.ACCEPTED);
     }
 
+    @GetMapping("/league/id/{leagueId}")
+    public ResponseEntity<?> findLeagueById(@PathVariable Integer leagueId) {
+        try {
+            League league = leagueservice.getLeagueById(leagueId);
+            LeagueResponseDTO response = mapper.toResponseDTO(league);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Liga no encontrada", HttpStatus.NOT_FOUND);
+        }
+    }
 
+    @DeleteMapping("/league/{leagueId}")
+    public ResponseEntity<?> deleteLeagueById(@PathVariable int leagueId) {
+        try {
+            leagueservice.deleteLeagueById(leagueId);
+            return ResponseEntity.ok("Liga eliminada correctamente");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la liga");
+        }
+    }
 
 }
