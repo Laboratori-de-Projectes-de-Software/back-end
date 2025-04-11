@@ -21,13 +21,13 @@ public class TestUsuarioMapper {
     public void comprobarUsuarioEntityToUsuario() {
         UsuarioEntity usuarioEntity = new UsuarioEntity();
         usuarioEntity.setNombre("nombre");
-        usuarioEntity.setCorreo("correo");
+        usuarioEntity.setCorreo("correo@gmail.com");
         usuarioEntity.setContrasena("contrasena");
 
         Usuario usuario = usuarioJpaMapper.toDomain(usuarioEntity);
 
         assertEquals(usuarioEntity.getNombre(), usuario.getNombre());
-        assertEquals(usuarioEntity.getCorreo(), usuario.getCorreo());
+        assertEquals(usuarioEntity.getCorreo(), usuario.getCorreo().value());
         assertEquals(usuarioEntity.getContrasena(), usuario.getContrasena());
     }
 }

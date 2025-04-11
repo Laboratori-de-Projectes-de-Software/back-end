@@ -136,7 +136,5 @@ public class TestLigaService {
         Participacion pGuardada = participacionService.insertarParticipacion(new Participacion(bot1.getNombre().value(), laliga.getId().value()));
 
         assertEquals(pGuardada.getBot(), bot1.getNombre());
-
-
     }
 }
