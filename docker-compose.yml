@@ -7,7 +7,6 @@
 #    Se pot accedir a nes phpMyAdmin per mirar si ses taules de sa bd s'han creat i després se pot utilizar swagger per mirar si funciona.
 #    Hi ha un usuari predefinit que se crea quan s'executa es docker-compose
 
-
 version: "3.9"
 services:
   mysql:
