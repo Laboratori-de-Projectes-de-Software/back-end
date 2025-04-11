@@ -33,7 +33,7 @@ public class LigaController {
 //        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
 //    }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<String> registrarLiga(@RequestParam String nombreLiga,
                                                 @RequestParam String urlImagen,
                                                 @RequestParam Integer numJornadas,

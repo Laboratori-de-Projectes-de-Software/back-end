@@ -61,7 +61,7 @@ public class LigaServiceImpl implements LigaService{
     @Override
     public List<ParticipationResponseDTO> getClasificacion(Long id) {
 
-        Liga liga = ligaRepository.findById(id)
+        ligaRepository.findById(id)
                     .orElseThrow(() -> new LigaNotFoundException(id));
 
         List<Clasificacion> clasificaciones = clasificacionRepository.findByLigaId(id) != null
@@ -91,6 +91,9 @@ public class LigaServiceImpl implements LigaService{
 
         List<Integer> bots = clasificacionRepository.findBotIdsByLigaId(id);
 
+        return new LeagueResponseDTO(league, bots);
+
+    }
     private void actualizarPuntos(Clasificacion clasificacion, String resultado, boolean local){
         switch (resultado) {
             case "local":
@@ -119,7 +122,7 @@ public class LigaServiceImpl implements LigaService{
             default:
                 break;
         }
-        clasificacionRepository.save(clasificacion)
+        clasificacionRepository.save(clasificacion);
     }
 
     @Override
