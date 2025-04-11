@@ -8,6 +8,7 @@ import uib.lab.api.application.dto.user.UserResponseDTO;
 import uib.lab.api.application.service.LeagueService;
 import uib.lab.api.infraestructure.util.ApiResponse;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,4 +33,10 @@ public class LeagueController {
     public ApiResponse getLeagueById(@PathVariable int leagueId) {
         return leagueService.getLeagueById(leagueId);
     }
+
+    @PutMapping("/{leagueId}")
+    public ApiResponse updateLeague(@PathVariable int leagueId, @Valid @RequestBody LeagueDTO leagueDTO) {
+        return leagueService.updateLeague(leagueId, leagueDTO);
+    }
+
 }

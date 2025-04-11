@@ -2,6 +2,7 @@ package uib.lab.api.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -127,6 +128,39 @@ public class LeagueService {
 
             return new ApiResponse<>(200, "League found", leagueResponseDTO);
         } catch (IllegalArgumentException e) {
+            return new ApiResponse<>(404, "League not found");
+        } catch (Exception e) {
+            return new ApiResponse<>(500, "Internal Server Error");
+        }
+    }
+
+    public ApiResponse<LeagueResponseDTO> updateLeague(int leagueId, LeagueDTO dto) {
+        try {
+            LeagueDomain league = leaguePort.findById(leagueId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "League not found"));
+
+            league.setName(dto.getName());
+            league.setUrlImagen(dto.getUrlImagen());
+            league.setPlayTime(dto.getMatchTime());
+            league.setNumRounds(dto.getRounds());
+            league.setUserId(dto.getUserId());
+            league.setBotIds(dto.getBots());
+
+            LeagueDomain updatedLeague = leaguePort.save(league);
+
+            LeagueResponseDTO responseDTO = new LeagueResponseDTO(
+                    updatedLeague.getId(),
+                    updatedLeague.getState().name(),
+                    updatedLeague.getName(),
+                    updatedLeague.getUrlImagen(),
+                    updatedLeague.getPlayTime(),
+                    updatedLeague.getNumRounds(),
+                    updatedLeague.getUserId(),
+                    updatedLeague.getBotIds()
+            );
+
+            return new ApiResponse<>(200, "League updated", responseDTO);
+        }catch (ResponseStatusException e) {
             return new ApiResponse<>(404, "League not found");
         } catch (Exception e) {
             return new ApiResponse<>(500, "Internal Server Error");

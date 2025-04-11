@@ -146,12 +146,9 @@ public class BotService {
         } catch (IllegalArgumentException e) {
             return new ApiResponse<>(404, "Bot not found with the provided ID");
         } catch (ResponseStatusException e) {
-            if (e.getStatus() == HttpStatus.FORBIDDEN) {
-                return new ApiResponse<>(403, "You do not have permission to update this bot");
-            }
-            return new ApiResponse<>(500, "Error updating bot");
+            return new ApiResponse<>(500, "Internal Server Error");
         } catch (Exception e) {
-            return new ApiResponse<>(500, "Error updating bot");
+            return new ApiResponse<>(500, "Internal Server Error");
         }
     }
 
