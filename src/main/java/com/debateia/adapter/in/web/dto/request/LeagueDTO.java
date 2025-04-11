@@ -15,5 +15,5 @@ public class LeagueDTO implements Serializable {
     private Integer rounds;
     private long matchTime;
     private List<Integer> bots;
-    private int userId;
+    //private int userId;
 }

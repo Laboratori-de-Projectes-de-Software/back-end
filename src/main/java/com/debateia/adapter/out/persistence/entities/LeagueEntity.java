@@ -19,13 +19,13 @@ public class LeagueEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "league_id")
-    private Integer id;
+    private Integer leagueId;
 
     @Column(nullable = false)
     private String name;
 
     @Column(name = "urlImagen")
-    private String urlImage;
+    private String urlImagen;
 
     private String state;
 

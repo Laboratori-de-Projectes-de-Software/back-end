@@ -1,5 +1,6 @@
 package com.debateia.domain;
 
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    /* Anadir atributos necesarios para trabajar con el dominio que esten en las Entities/DTOs */
+    private int userId;
     private String username;
     private String mail;
     private String password;
-
+    
+    private String token;
+    private LocalDate expiresIn;
 }

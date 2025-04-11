@@ -1,8 +1,9 @@
 package com.debateia.adapter.in.web;
+import com.debateia.adapter.in.web.dto.response.LeagueResponseDTO;
+import com.debateia.adapter.mapper.LeagueMapper;
 import com.debateia.application.ports.in.rest.LeagueUseCase;
 import com.debateia.domain.League;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -11,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
-@RequestMapping("/league")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class LeagueController {
     private final LeagueUseCase leagueUseCase;
+    private final LeagueMapper leagueMapper;
     
-    @GetMapping("/{id}")
-    public League getLeague( // TODO: Should return LeagueDTO, not league.
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authenticate,
-            @PathVariable Integer id) {
-        return leagueUseCase.getLeague(id);
+    @GetMapping("/league/{id}")
+    public LeagueResponseDTO getLeague(@PathVariable Integer id) {
+        League lg = leagueUseCase.getLeague(id);
+        return leagueMapper.toLeagueResponseDTO(lg);
     }
 }

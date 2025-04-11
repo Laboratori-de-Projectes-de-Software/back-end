@@ -1,8 +1,9 @@
 package com.debateia.adapter.out.persistence;
 
+import com.debateia.adapter.mapper.LeagueMapper;
 import com.debateia.adapter.out.persistence.entities.LeagueEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.debateia.application.ports.out.persistence.LeagueRepository;
+import com.debateia.domain.League;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,16 +16,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JpaLeagueRepository implements LeagueRepository {
     
-    // Using Spring Data JPA to autogenerate query methods given this interface specification
-    public interface LeagueRepo extends JpaRepository<LeagueEntity, Integer> {
-        
-    }
-    
-    private final LeagueRepo leagueRepo;
+    private final LeagueJpaRepository leagueRepo;
+    private final LeagueMapper leagueMapper;
     
     @Override
-    public LeagueEntity findByLeagueId(int leagueId) {
-        return leagueRepo.findById(leagueId).orElse(null);
+    public League findByLeagueId(int leagueId) {
+        LeagueEntity le = leagueRepo.findById(leagueId).orElse(null);
+        return leagueMapper.toLeagueDomain(le);
     }
 
 }
