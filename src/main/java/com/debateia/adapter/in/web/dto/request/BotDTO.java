@@ -8,7 +8,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 @JsonTypeName("BotDTO")
-public class AIDTO implements Serializable {
+public class BotDTO implements Serializable {
     private String name;
     private String description;
     private String urlImagen;

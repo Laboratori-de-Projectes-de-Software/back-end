@@ -7,9 +7,8 @@ import java.io.Serializable;
 
 @NoArgsConstructor
 @Data
-@JsonTypeName("BotSummaryResponseDTO")
-public class AISummaryResponseDTO implements Serializable {
-    private String nombre;
+public class BotSummaryResponseDTO implements Serializable {
+    private String name;
     private int id;
     private String description;
 }

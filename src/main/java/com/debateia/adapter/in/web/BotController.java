@@ -1,10 +1,16 @@
 package com.debateia.adapter.in.web;
 
+import com.debateia.adapter.in.web.dto.request.BotDTO;
+import com.debateia.adapter.in.web.dto.response.BotResponseDTO;
+import com.debateia.adapter.in.web.dto.response.BotSummaryResponseDTO;
 import com.debateia.adapter.out.persistence.entities.BotEntity;
+import com.debateia.application.jwt.JwtService;
 import com.debateia.application.service.BotService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,28 +21,72 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BotController {
     private final BotService botService;
+    private final JwtService jwtService;
 
     @GetMapping
-    public List<BotEntity> getBots(
+    public ResponseEntity<List<BotSummaryResponseDTO>> getBots(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authenticate,
             @RequestParam(name = "owner", required = false) Integer ownerId) {
-        return botService.getBots(Optional.ofNullable(ownerId));
+        if (!jwtService.isTokenValid(authenticate)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        List<BotEntity> bots = botService.getBots(Optional.ofNullable(ownerId));
+        List<BotSummaryResponseDTO> response = bots.stream()
+                .map(this::convertToSummaryDTO)
+                .toList();
+        return ResponseEntity.ok(response);
     }
 
-    /*
-     * @PostMapping
-     * public ResponseEntity<AIDTO> createAI(@RequestBody AIDTO dto) {
-     * AIDTO created = aiService.create(dto);
-     * return ResponseEntity.created(URI.create("/bot/" +
-     * created.getId())).body(created);
-     * }
-     * 
-     * 
-     * @PutMapping("/{botId}")
-     * public ResponseEntity<AIDTO> updateAI(@PathVariable Integer
-     * botId, @RequestBody AIDTO dto) {
-     * AIDTO updated = aiService.update(botId, dto);
-     * return ResponseEntity.ok(updated);
-     * }
-     */
+    @PostMapping
+    public ResponseEntity<BotResponseDTO> createBot(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authenticate,
+            @RequestBody BotDTO botDto) {
+        if (!jwtService.isTokenValid(authenticate)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        BotEntity botEntity = toEntity(botDto);
+        botEntity = botService.createBot(botEntity, botDto.getUserId()); // meter en BD si el usuario existe
+        if (botEntity == null) { // Caso: se queria anadir un bot para un usuario que no existe
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(convertToResponseDto(botEntity));
+    }
+
+
+
+
+
+
+
+    private BotSummaryResponseDTO convertToSummaryDTO(BotEntity bot) {
+        BotSummaryResponseDTO dto = new BotSummaryResponseDTO();
+        dto.setName(bot.getName());
+        dto.setId(bot.getId());
+        dto.setDescription(bot.getDescription());
+        return dto;
+    }
+
+    private BotEntity toEntity(BotDTO dto) {
+        BotEntity entity = new BotEntity();
+        entity.setDescription(dto.getDescription());
+        entity.setName(dto.getName());
+        entity.setId(dto.getUserId());
+        entity.setUrlImage(dto.getUrlImagen());
+        entity.setEndpoint(dto.getEndpoint());
+        return entity;
+    }
+
+    private BotResponseDTO convertToResponseDto(BotEntity bot) {
+        BotResponseDTO dto = new BotResponseDTO();
+        dto.setBotId(bot.getId());
+        dto.setName(bot.getName());
+        dto.setDescription(bot.getDescription());
+        dto.setUrlImage(bot.getUrlImage());
+        dto.setNLosses(bot.getLosses());
+        dto.setNWins(bot.getWins());
+        dto.setNDraws(bot.getDraws());
+        return dto;
+    }
 }
