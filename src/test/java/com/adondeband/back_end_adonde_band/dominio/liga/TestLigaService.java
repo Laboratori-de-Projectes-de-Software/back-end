@@ -74,7 +74,7 @@ public class TestLigaService {
         List<Liga> ligasFound = ligaService.obtenerLigaPorId(id);
 
         // Assert
-        assert(!ligasFound.isEmpty());
+        assert (!ligasFound.isEmpty());
         assertEquals(ligaSaved.getId().value(), ligasFound.getFirst().getId().value());
         assertEquals(ligaSaved.getNombre(), ligasFound.getFirst().getNombre());
     }
@@ -99,7 +99,7 @@ public class TestLigaService {
         List<Liga> ligasFound = ligaService.obtenerTodasLasLigas();
 
         // Assert
-        assert(ligasFound.size() == 5);
+        assert (ligasFound.size() == 5);
         assertEquals("Liga 1", ligasFound.getFirst().getNombre());
     }
 
@@ -136,8 +136,5 @@ public class TestLigaService {
         Participacion pGuardada = participacionService.insertarParticipacion(new Participacion(bot1.getNombre().value(), laliga.getId().value()));
 
         assertEquals(pGuardada.getBot(), bot1.getNombre());
-
-
-
     }
 }

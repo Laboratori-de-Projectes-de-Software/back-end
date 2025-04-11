@@ -16,9 +16,11 @@ import java.util.List;
 @Accessors(chain = true)
 public class Usuario {
 
-    private UsuarioId nombre;
+    private UsuarioId id;
 
-    private String correo;
+    private String nombre;
+
+    private CorreoId correo;
 
     private String contrasena;
 

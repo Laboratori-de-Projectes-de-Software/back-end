@@ -6,7 +6,9 @@ import com.adondeband.back_end_adonde_band.dominio.bot.BotImpl;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
 import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenImpl;
 import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenService;
+import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,22 +26,26 @@ public class BotController {
     private final BotService botService;
     private final ImagenService imagenService;
     private final BotDtoMapper botMapper;
+    private final UsuarioService usuarioService;
 
 
     @Autowired
-    public BotController(BotImpl botService, ImagenImpl imagenService, BotDtoMapper botDtoMapper) {
+    public BotController(BotImpl botService, ImagenImpl imagenService, BotDtoMapper botDtoMapper, UsuarioService usuarioService) {
         this.botService = botService;
         this.imagenService = imagenService;
         this.botMapper = botDtoMapper;
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping
-    public ResponseEntity<List<BotDTOMin>> listarBots(@RequestParam(value = "owner", required = false) String userId) {
+    public ResponseEntity<List<BotDTOMin>> listarBots(@RequestParam(value = "owner", required = false) Long userId) {
+        // Obtiene el nombre del usuario autenticado desde SecurityContextHolder
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Set UserId en el bot
         // Obtener listado de bots
         List<Bot> bots = (userId == null)
                 ? botService.obtenerTodosLosBots()
-                : botService.obtenerBotsPorUsuario(new UsuarioId(
-                    SecurityContextHolder.getContext().getAuthentication().getName()));
+                : botService.obtenerBotsPorIdUsuario(new UsuarioId(userId));
 
         // comprobar que la lista no está vacía
         if (bots.isEmpty()) {
@@ -59,10 +65,13 @@ public class BotController {
         BotDTOResponse botDTO = new BotDTOResponse(botDTOMin);
         Bot bot = botMapper.toDomain(botDTO);
 
-        // Obtiene el usuario autenticado desde SecurityContextHolder
+        // Obtiene el nombre del usuario autenticado desde SecurityContextHolder
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // Set UserId into bot
-        bot.setUsuario(new UsuarioId(authentication.getName()));
+
+        //Obtener el id de usuario autenticado
+        Usuario user = usuarioService.obtenerUsuarioPorNombre(authentication.getName());
+        // Set UserId en el bot
+        bot.setUsuario(user.getId());
 
         // Guardar imagen del bot (por si no existe)
         Imagen imagenSaved = imagenService.guardarImagen(bot.getImagen());

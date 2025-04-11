@@ -3,6 +3,7 @@ package com.adondeband.back_end_adonde_band.jpa.usuario;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionId;
 import com.adondeband.back_end_adonde_band.dominio.rol.RolId;
+import com.adondeband.back_end_adonde_band.dominio.usuario.CorreoId;
 import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import com.adondeband.back_end_adonde_band.jpa.bot.BotEntity;
@@ -29,24 +30,31 @@ public interface UsuarioJpaMapper {
     // Mapea de Usuario a UsuarioEntity
     UsuarioEntity toEntity(Usuario usuario);
 
+    UsuarioEntity toEntity(UsuarioId id);
+
+    default CorreoId map(String correo) {
+        if (correo == null) {
+            return null;
+        }
+        return new CorreoId(correo);
+    }
+
+    default String map(CorreoId correoId) {
+        if (correoId == null) {
+            return null;
+        }
+        return correoId.value(); // Assuming CorreoId has a `getValue` method.
+    }
+
     // Mapeo de atributos
-    default UsuarioId toUsuarioId(String value) {
+    default UsuarioId toUsuarioId(Long value) {
         if (value == null) {
             return null;
         }
         return new UsuarioId(value);
     }
 
-    default UsuarioEntity toUsuarioEntityFromId(UsuarioId id) {
-        if (id == null) {
-            return null;
-        }
-        UsuarioEntity entity = new UsuarioEntity();
-        entity.setNombre(id.value());
-        return entity;
-    }
-
-    default String toUsuarioIdString(UsuarioId id) {
+    default Long UserToLong(UsuarioId id) {
         if (id == null) {
             return null;
         }
@@ -63,5 +71,10 @@ public interface UsuarioJpaMapper {
             return null;
         }
         return new BotId(entity.getNombre());
+    }
+
+    default UsuarioId toUsuarioId(UsuarioEntity entity) {
+        if(entity == null) return null;
+        return new UsuarioId(entity.getId());
     }
 }

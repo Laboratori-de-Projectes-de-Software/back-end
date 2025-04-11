@@ -19,7 +19,6 @@ public class TestEnfrentamientoMapper {
     private EnfrentamientoJpaMapper enfrentamientoJpaMapper;
 
 
-
     // Test no terminado hay que hacer los mapper, este objeto es muy complejo para testearlo ahora
     @Test
     public void comprobarEnfrentamientoEntityToEnfrentamientoSencillo() {

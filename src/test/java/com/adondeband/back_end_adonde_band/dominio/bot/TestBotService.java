@@ -59,7 +59,7 @@ public class TestBotService {
         List<Bot> botsFound = botService.obtenerTodosLosBots();
 
         // Assert
-        assert(botsFound.size() == 5);
+        assert (botsFound.size() == 5);
         assertEquals("Bot 1", botsFound.getFirst().getNombre().value());
         assertEquals("Cualidad 1", botsFound.getFirst().getCualidad());
     }

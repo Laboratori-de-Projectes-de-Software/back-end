@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 @Getter
 @Setter
 @Entity
-public class ParticipacionEntity {
+public class  ParticipacionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

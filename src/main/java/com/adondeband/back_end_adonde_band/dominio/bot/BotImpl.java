@@ -37,7 +37,7 @@ public class BotImpl implements BotService {
     }
 
     @Override
-    public List<Bot> obtenerBotsPorUsuario(UsuarioId userId) {
+    public List<Bot> obtenerBotsPorIdUsuario(UsuarioId userId) {
         return botPort.findBotsUsuario(userId);
     }
 }

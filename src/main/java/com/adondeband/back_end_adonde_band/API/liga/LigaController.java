@@ -35,7 +35,7 @@ public class LigaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<LigaDTO>> listarLigas(@RequestParam(value = "owner", required = false) String userId) {
+    public ResponseEntity<List<LigaDTO>> listarLigas(@RequestParam(value = "owner", required = false) Long userId) {
         // TODO
         List<Liga> ligas = (userId != null) ? ligaService.obtenerLigasPorUsuario(new UsuarioId(userId)) : ligaService.obtenerTodasLasLigas();
 

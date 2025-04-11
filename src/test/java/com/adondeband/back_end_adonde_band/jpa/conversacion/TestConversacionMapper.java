@@ -37,8 +37,6 @@ public class TestConversacionMapper {
         assertEquals(conversacionEntity.getFicheroRuta(), conversacion.getFicheroRuta());
 
 
-
-
     }
 
 }

@@ -4,6 +4,7 @@ import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotPort;
 import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
 import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
@@ -61,19 +62,15 @@ public class BotJpaAdapter implements BotPort {
     @Override
     @Transactional
     public List<Bot> findBotsUsuario(UsuarioId userId) {
-        //TODO
-        return List.of();
-    }
+        // Buscar UsuarioEntity en la base de datos usando el repositorio
+        UsuarioEntity usuarioEntity = botJpaRepository.findByUsuario(
+                usuarioJpaMapper.toEntity(userId)
+        ).getFirst().getUsuario();
 
-    @Override
-    @Transactional
-    public List<Bot> findByUsuario(Usuario usuario) {
-        return botJpaRepository.findByUsuario(usuarioJpaMapper.toEntity(usuario))
+        // Mapear los bots asociados al usuario
+        return botJpaRepository.findByUsuario(usuarioEntity)
                 .stream()
                 .map(botJpaMapper::toDomain)
                 .collect(Collectors.toList());
-
     }
-
-
 }

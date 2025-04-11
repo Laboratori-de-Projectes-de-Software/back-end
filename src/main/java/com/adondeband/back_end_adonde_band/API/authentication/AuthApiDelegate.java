@@ -3,8 +3,11 @@ package com.adondeband.back_end_adonde_band.API.authentication;
 import com.adondeband.back_end_adonde_band.dominio.authentication.AuthenticationImpl;
 import com.adondeband.back_end_adonde_band.dominio.authentication.AuthenticationService;
 import com.adondeband.back_end_adonde_band.dominio.authentication.JwtService;
+import com.adondeband.back_end_adonde_band.dominio.exception.UserAlreadyExistsException;
 import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -37,15 +40,18 @@ public class AuthApiDelegate
     }
 
     @GetMapping("/test")
-    public  String getPath() {
+    public String getPath() {
         return "api/v0/auth";
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Usuario> register(@RequestBody RegisterUserDto registerUserDto) {
-        Usuario registeredUser = authenticationService.signup(authenticationDtoMapper.registerUserDtotoDomain(registerUserDto) );
-
-        return ResponseEntity.ok(registeredUser);
+    public ResponseEntity<Usuario> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
+        try {
+            Usuario registeredUser = authenticationService.signup(authenticationDtoMapper.registerUserDtotoDomain(registerUserDto));
+            return ResponseEntity.ok(registeredUser);
+        } catch (UserAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
     }
 
     @PostMapping("/login")
@@ -53,7 +59,7 @@ public class AuthApiDelegate
         Usuario authenticatedUser = authenticationService.authenticate(authenticationDtoMapper.loginUserDtotoDomain(loginUserDto));
 
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                authenticatedUser.getNombre().value(),
+                authenticatedUser.getNombre(),
                 authenticatedUser.getContrasena(),
                 new ArrayList<>()
         );
