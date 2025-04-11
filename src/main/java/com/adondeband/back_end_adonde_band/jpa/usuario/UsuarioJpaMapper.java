@@ -29,24 +29,17 @@ public interface UsuarioJpaMapper {
     // Mapea de Usuario a UsuarioEntity
     UsuarioEntity toEntity(Usuario usuario);
 
+    UsuarioEntity toEntity(UsuarioId id);
+
     // Mapeo de atributos
-    default UsuarioId toUsuarioId(String value) {
+    default UsuarioId toUsuarioId(Long value) {
         if (value == null) {
             return null;
         }
         return new UsuarioId(value);
     }
 
-    default UsuarioEntity toUsuarioEntityFromId(UsuarioId id) {
-        if (id == null) {
-            return null;
-        }
-        UsuarioEntity entity = new UsuarioEntity();
-        entity.setNombre(id.value());
-        return entity;
-    }
-
-    default String toUsuarioIdString(UsuarioId id) {
+    default Long UserToLong(UsuarioId id) {
         if (id == null) {
             return null;
         }
@@ -63,5 +56,10 @@ public interface UsuarioJpaMapper {
             return null;
         }
         return new BotId(entity.getNombre());
+    }
+
+    default UsuarioId toUsuarioId(UsuarioEntity entity) {
+        if(entity == null) return null;
+        return new UsuarioId(entity.getId());
     }
 }

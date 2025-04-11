@@ -25,7 +25,7 @@ public class ApplicationConfiguration {
     UserDetailsService userDetailsService() {
         return username -> usuarioPort.findByNombre(username)
                 .map(usuario -> new org.springframework.security.core.userdetails.User(
-                        usuario.getNombre().value(),
+                        usuario.getNombre(),
                         usuario.getContrasena(),
                         new ArrayList<>()))
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));

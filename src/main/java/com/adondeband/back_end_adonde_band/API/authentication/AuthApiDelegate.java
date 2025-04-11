@@ -53,7 +53,7 @@ public class AuthApiDelegate
         Usuario authenticatedUser = authenticationService.authenticate(authenticationDtoMapper.loginUserDtotoDomain(loginUserDto));
 
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                authenticatedUser.getNombre().value(),
+                authenticatedUser.getNombre(),
                 authenticatedUser.getContrasena(),
                 new ArrayList<>()
         );

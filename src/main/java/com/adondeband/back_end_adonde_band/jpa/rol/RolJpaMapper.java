@@ -30,9 +30,4 @@ public interface RolJpaMapper {
         if(id == null) return null;
         return id.value();
     }
-
-    default UsuarioId toUsuarioId(UsuarioEntity entity) {
-        if(entity == null) return null;
-        return new UsuarioId(entity.getNombre());
-    }
 }

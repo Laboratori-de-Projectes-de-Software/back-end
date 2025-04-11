@@ -46,13 +46,6 @@ public interface BotJpaMapper {
         return id.value();
     }
 
-    default UsuarioId toUsuarioId(UsuarioEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-        return new UsuarioId(entity.getNombre());
-    }
-
     default ParticipacionId toParticipacionId(ParticipacionEntity entity) {
         if (entity == null) {
             return null;

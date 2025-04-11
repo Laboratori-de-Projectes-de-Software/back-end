@@ -13,6 +13,4 @@ public interface BotPort {
     List<Bot> findAll();
 
     List<Bot> findBotsUsuario(UsuarioId userId);
-
-    List<Bot> findByUsuario(Usuario usuario);
 }

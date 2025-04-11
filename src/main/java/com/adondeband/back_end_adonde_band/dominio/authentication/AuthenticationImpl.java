@@ -39,12 +39,12 @@ public class AuthenticationImpl implements AuthenticationService {
     public Usuario authenticate(Usuario input) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        input.getNombre().value(),
+                        input.getNombre(),
                         input.getContrasena()
                 )
         );
 
-        return usuarioPort.findByNombre(input.getNombre().value())
+        return usuarioPort.findByNombre(input.getNombre())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

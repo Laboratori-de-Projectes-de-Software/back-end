@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
@@ -63,7 +64,7 @@ public class TestParticipacionMapper {
         p_e.setLiga(ligaEntity);
 
         // Act
-        Participacion p= participacionJpaMapper.toDomain(p_e);
+        Participacion p = participacionJpaMapper.toDomain(p_e);
 
         // Assert
         // Assert Participacion

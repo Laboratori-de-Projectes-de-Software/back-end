@@ -31,7 +31,6 @@ public class TestLigaMapper {
         ligaEntity.setFechaFin(LocalDateTime.now());
 
 
-
         // Act
         Liga liga = ligaJpaMapper.toDomain(ligaEntity);
 

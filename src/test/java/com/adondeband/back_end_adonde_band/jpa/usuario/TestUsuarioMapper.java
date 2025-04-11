@@ -26,7 +26,7 @@ public class TestUsuarioMapper {
 
         Usuario usuario = usuarioJpaMapper.toDomain(usuarioEntity);
 
-        assertEquals(usuarioEntity.getNombre(), usuario.getNombre().value());
+        assertEquals(usuarioEntity.getNombre(), usuario.getNombre());
         assertEquals(usuarioEntity.getCorreo(), usuario.getCorreo());
         assertEquals(usuarioEntity.getContrasena(), usuario.getContrasena());
     }

@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class TestBotMapper {
 
@@ -26,6 +27,7 @@ public class TestBotMapper {
 
         UsuarioEntity usuarioEntity = new UsuarioEntity();
         usuarioEntity.setNombre("Usuario 1");
+        usuarioEntity.setId(1L);
         botEntity.setUsuario(usuarioEntity);
 
         // Act
@@ -33,7 +35,7 @@ public class TestBotMapper {
 
         // Assert
         assertEquals(bot.getNombre().value(), botEntity.getNombre());
-        assertEquals(bot.getCualidad(), botEntity.getCualidad());
-        assertEquals(bot.getUsuario().value(), botEntity.getUsuario().getNombre());
+        assertEquals(bot.getCualidad(), botEntity.getCualidad());;
+        assertEquals(bot.getUsuario().value(), botEntity.getUsuario().getId());
     }
 }

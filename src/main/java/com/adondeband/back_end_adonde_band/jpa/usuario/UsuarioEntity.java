@@ -15,6 +15,8 @@ import java.util.List;
 public class UsuarioEntity {
 
     @Id
+    private Long id;
+
     @Column(nullable = false, unique = true, length = 36)
     private String nombre;
 

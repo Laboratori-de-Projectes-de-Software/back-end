@@ -11,14 +11,14 @@ public interface AuthenticationDtoMapper{
         Usuario usuario = new Usuario();
         usuario.setCorreo(registerUserDto.getMail());
         usuario.setContrasena(registerUserDto.getPassword());
-        usuario.setNombre(new UsuarioId(registerUserDto.getUser()));
+        usuario.setNombre(registerUserDto.getUser());
         return usuario;
     }
 
     default Usuario loginUserDtotoDomain(LoginUserDto loginUserDto){
 
         Usuario usuario = new Usuario();
-        usuario.setNombre(new UsuarioId(loginUserDto.getUser()));
+        usuario.setNombre(loginUserDto.getUser());
         usuario.setContrasena(loginUserDto.getPassword());
         return usuario;
     }
@@ -27,13 +27,13 @@ public interface AuthenticationDtoMapper{
         RegisterUserDto registerUserDto = new RegisterUserDto();
         registerUserDto.setMail(usuario.getCorreo());
         registerUserDto.setPassword(usuario.getContrasena());
-        registerUserDto.setUser(usuario.getNombre().value());
+        registerUserDto.setUser(usuario.getNombre());
         return registerUserDto;
     }
 
     default LoginUserDto userToLoginDTO(Usuario usuario){
         LoginUserDto loginUserDto = new LoginUserDto();
-        loginUserDto.setUser(usuario.getNombre().value());
+        loginUserDto.setUser(usuario.getNombre());
         loginUserDto.setPassword(usuario.getContrasena());
         return loginUserDto;
     }

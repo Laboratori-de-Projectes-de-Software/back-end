@@ -16,7 +16,9 @@ import java.util.List;
 @Accessors(chain = true)
 public class Usuario {
 
-    private UsuarioId nombre;
+    private UsuarioId id;
+
+    private String nombre;
 
     private String correo;
 

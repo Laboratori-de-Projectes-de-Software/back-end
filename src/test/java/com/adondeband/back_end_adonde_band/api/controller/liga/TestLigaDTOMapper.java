@@ -33,7 +33,6 @@ public class TestLigaDTOMapper {
         ligaEntity.setFechaFin(LocalDateTime.now());
 
 
-
         // Act
         Liga liga = ligaJpaMapper.toDomain(ligaEntity);
 

@@ -11,5 +11,5 @@ public interface BotService {
 
     List<Bot> obtenerTodosLosBots();
 
-    List<Bot> obtenerBotsPorUsuario(UsuarioId userId);
+    List<Bot> obtenerBotsPorIdUsuario(UsuarioId userId);
 }
