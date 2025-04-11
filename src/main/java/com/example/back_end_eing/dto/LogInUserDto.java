@@ -5,7 +5,6 @@ import lombok.Value;
 public class LogInUserDto {
     String nombreUsuario;
     String password;
-
 }
 
 

@@ -18,7 +18,7 @@ public class BackEndEingConfiguration{
     private final UsuarioRepository userRepository;
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> userRepository.findByNombreUsuario(username)
+        return mail -> userRepository.findByEmail(mail)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
     }
     @Bean

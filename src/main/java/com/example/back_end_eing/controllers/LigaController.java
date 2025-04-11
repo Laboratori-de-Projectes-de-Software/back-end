@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v0")
+@RequestMapping("api/v0/league")
 public class LigaController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class LigaController {
 
     @PutMapping("/league/actualizar")
     public ResponseEntity<Void> actualizarClasificacion(@RequestParam Long liga, @RequestParam Long local, @RequestParam Long visitante, @RequestParam String resultado) {
-        ligaService.LigaActualización(liga, local, visitante, resultado);
+        ligaService.LigaActualizacion(liga, local, visitante, resultado);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -33,7 +33,7 @@ public class LigaController {
 //        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
 //    }
 
-    @PostMapping("/league")
+    @PostMapping("")
     public ResponseEntity<String> registrarLiga(@RequestParam String nombreLiga,
                                                 @RequestParam String urlImagen,
                                                 @RequestParam Integer numJornadas,
@@ -49,28 +49,30 @@ public class LigaController {
         }
     }
 
-    @GetMapping("/league/{leagueId}")
-    public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Integer leagueId){
-        List<Integer> lsit = new ArrayList<>();
-        lsit.add(1);lsit.add(2);lsit.add(3);
-        LeagueResponseDTO liga = new LeagueResponseDTO(leagueId, EstadoLigaConstants.ABIERTA, "Liga de Barrio",
-                "Antonio",null,
-                16,100L,lsit);
-        return new ResponseEntity<LeagueResponseDTO>(liga, HttpStatus.OK);
+
+    @GetMapping("/{leagueId}")
+    public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Long leagueId){
+
+        LeagueResponseDTO liga = ligaService.getLiga(leagueId);
+
+        return new ResponseEntity<>(liga, HttpStatus.OK);
 
     }
 
+    @DeleteMapping("/{leagueId}")
+    public ResponseEntity<Void> deleteLiga(@PathVariable Long leagueId){
 
-    @GetMapping("/league/{leagueId}/leaderboard")
+        ligaService.deleteLiga(leagueId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @GetMapping("/{leagueId}/leaderboard")
     public ResponseEntity<List<ParticipationResponseDTO>> obtenerClasificacion(@PathVariable Long leagueId) {
-        System.out.println(leagueId);
-        List<ParticipationResponseDTO> bots = new ArrayList<>();
 
-        bots.add(new ParticipationResponseDTO(1, "Elgeneroso", 18, 1));
-        bots.add(new ParticipationResponseDTO(2, "Ellisto", 2, 3));
-        bots.add(new ParticipationResponseDTO(3, "Laambale", 3, 2));
-        bots.add(new ParticipationResponseDTO(4, "elcabron", 0, 4));
+        List<ParticipationResponseDTO> clasificacion = ligaService.getClasificacion(leagueId);
 
-        return new ResponseEntity<>(bots, HttpStatus.OK);
+        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
     }
 }
