@@ -45,7 +45,7 @@ public class AuthService implements AuthUseCase {
 
     @Override
 public ResponseEntity<?> register(final UserDTORegister request) {
-    if (repository.existsByMail(request.email())) {
+    if (repository.existsByMail(request.mail())) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body("Email already exists.");
     }
@@ -58,7 +58,7 @@ public ResponseEntity<?> register(final UserDTORegister request) {
 
     User user = User.builder()
             .username(request.user())
-            .mail(request.email())
+            .mail(request.mail())
             .password(passwordEncoder.encode(request.password()))
             .build();
     final UserEntity userEntity = authMapper.usuarioToEntity(user);

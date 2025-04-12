@@ -17,7 +17,7 @@ public interface UserMapper {
     @Mapping(target = "token", ignore = true)
     @Mapping(target = "expiresIn", ignore = true)
     @Mapping(target = "username", source = "user")
-    @Mapping(target = "mail", source = "email")
+    @Mapping(target = "mail", source = "mail")
     User toUserDomain(UserDTORegister userDTORegister);
 
     // Map from UserDTOLogin to domain User
