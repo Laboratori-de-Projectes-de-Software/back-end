@@ -17,10 +17,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.back_end_eing.repositories.BotRepository;
 import com.example.back_end_eing.repositories.ClasificacionRepository;
 import com.example.back_end_eing.repositories.LigaRepository;
 import com.example.back_end_eing.models.Clasificacion;
+import com.example.back_end_eing.exceptions.ClasificacionLigaNotFoundException;
+import com.example.back_end_eing.exceptions.ClasificacionNotFoundException; */
+
 import com.example.back_end_eing.exceptions.LigaNotFoundException;
 import com.example.back_end_eing.constants.EstadoLigaConstants;
 import com.example.back_end_eing.dto.LeagueDTO;
@@ -34,8 +36,8 @@ import com.example.back_end_eing.repositories.UsuarioRepository;
 @Service
 public class LigaServiceImpl implements LigaService{
 
-    @Autowired
-    private BotRepository botRepository;
+    //@Autowired
+    //private BotRepository botRepository;
     @Autowired
     private LigaRepository ligaRepository;
 
@@ -83,6 +85,7 @@ public class LigaServiceImpl implements LigaService{
 
     }
 
+
     public List<LeagueResponseDTO> obtenerLigas() {
         List<Liga> ligas = ligaRepository.findAll();
 
@@ -114,7 +117,6 @@ public class LigaServiceImpl implements LigaService{
                 .filter(liga -> liga.getUsuario().getId().equals(id))
                 .collect(Collectors.toList());
     }
-
 
 
     @Override

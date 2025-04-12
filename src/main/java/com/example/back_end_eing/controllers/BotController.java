@@ -26,13 +26,9 @@ public class BotController {
                                             @RequestParam String foto,
                                             @RequestParam String API,
                                             @RequestParam int id) {
-        try {
-            BotDTO botdto = new BotDTO(nombre, descripcion, foto, API, id);
-            botService.BotRegistro(botdto);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Bot registrado correctamente");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar el bot: " + e.getMessage());
-        }
+        BotDTO botdto = new BotDTO(nombre, descripcion, foto, API, id);
+        botService.BotRegistro(botdto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Bot registrado correctamente");
     }
 
     @GetMapping()
