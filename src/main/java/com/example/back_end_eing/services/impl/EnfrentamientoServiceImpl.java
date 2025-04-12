@@ -58,15 +58,16 @@ public class EnfrentamientoServiceImpl implements EnfrentamientoService {
 
             Set<Enfrentamiento> enfrentamientos = new HashSet<>();
 
-            Bot oponenteFijo = listaRotativa.getFirst();
-            if (oponenteFijo != null && primerBot != null) {
+            if (!listaRotativa.isEmpty()) {
+                Bot oponenteFijo = listaRotativa.getFirst();
                 Enfrentamiento enfrentamiento = crearEnfrentamiento(jornadaGuardada, primerBot, oponenteFijo);
                 enfrentamientos.add(enfrentamiento);
             }
 
-            for (int k = 1; k < numeroBots / 2; k++) {
+            int mitad = numeroBots / 2;
+            for (int k = 1; k < mitad; k++) {
                 Bot bot1 = listaRotativa.get(k);
-                Bot bot2 = listaRotativa.get(numeroBots - 1 - k);
+                Bot bot2 = listaRotativa.get(listaRotativa.size() - k);
 
                 if (bot1 != null && bot2 != null) {
                     Enfrentamiento enfremamiento = crearEnfrentamiento(jornadaGuardada, bot1, bot2);
