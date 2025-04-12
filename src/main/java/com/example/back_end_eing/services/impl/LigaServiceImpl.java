@@ -6,7 +6,6 @@ import com.example.back_end_eing.dto.ParticipationResponseDTO;
 
 import com.example.back_end_eing.services.LigaService;
 
-import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,9 +21,6 @@ import com.example.back_end_eing.repositories.BotRepository;
 import com.example.back_end_eing.repositories.ClasificacionRepository;
 import com.example.back_end_eing.repositories.LigaRepository;
 import com.example.back_end_eing.models.Clasificacion;
-import com.example.back_end_eing.exceptions.BotNotFoundException;
-import com.example.back_end_eing.exceptions.ClasificacionLigaNotFoundException;
-import com.example.back_end_eing.exceptions.ClasificacionNotFoundException;
 import com.example.back_end_eing.exceptions.LigaNotFoundException;
 import com.example.back_end_eing.constants.EstadoLigaConstants;
 import com.example.back_end_eing.dto.LeagueDTO;
@@ -42,29 +38,13 @@ public class LigaServiceImpl implements LigaService{
     private BotRepository botRepository;
     @Autowired
     private LigaRepository ligaRepository;
-    private ClasificacionRepository clasificacionRepository;
-    private UsuarioRepository usuarioRepository;
+
     @Autowired
     private ClasificacionRepository clasificacionRepository;
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    private Liga liga;
 
-    private Usuario usuario;
-
-    @Override
-    public void LigaActualizacion(Long liga, Long local, Long visitante, String resultado) {
-       // comprobaciones(local, visitante, liga);
-
-//        //actualizaciones de puntos
-//        Clasificacion clasificacion = clasificacionRepository.findByBotIdAndLigaId(local, liga);
-//        actualizarPuntos(clasificacion, resultado, true);
-//        //clasificacion = clasificacionRepository.findByBotIdAndLigaId(visitante, liga);
-//        //actualizarPuntos(clasificacion, resultado, false);
-//
-//        //actualizarPosiciones(liga);
-    }
 
     @Override
     public List<ParticipationResponseDTO> getClasificacion(Long id) {
@@ -102,37 +82,6 @@ public class LigaServiceImpl implements LigaService{
         return new LeagueResponseDTO(league, bots);
 
     }
-    private void actualizarPuntos(Clasificacion clasificacion, String resultado, boolean local){
-        switch (resultado) {
-            case "local":
-                if(local){
-                    clasificacion.setVictorias(clasificacion.getVictorias()+1);
-                    clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+3);
-                }else{
-                    clasificacion.setVictorias(clasificacion.getDerrotas()+1);
-                }
-                break;
-
-            case "visitante":
-                if(local){
-                    clasificacion.setVictorias(clasificacion.getDerrotas()+1);
-                }else{
-                    clasificacion.setVictorias(clasificacion.getVictorias()+1);
-                    clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+3);
-                }
-                break;
-
-            case "empate":
-                clasificacion.setEmpates(clasificacion.getEmpates()+1);
-                clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+1);
-                break;
-        
-            default:
-                break;
-        }
-        clasificacionRepository.save(clasificacion);
-    }
-
 
     public List<LeagueResponseDTO> obtenerLigas() {
         List<Liga> ligas = ligaRepository.findAll();
@@ -145,7 +94,7 @@ public class LigaServiceImpl implements LigaService{
             leagueResponseDTOS.add(
                     LeagueResponseDTO.builder()
                             .leagueId(liga.getId().intValue())
-                            .state(liga.getEstado())
+                            .status(liga.getEstado())
                             .name(liga.getNombreLiga())
                             .user(liga.getUsuario().getNombreUsuario())
                             .urlImagen(null)
@@ -167,14 +116,7 @@ public class LigaServiceImpl implements LigaService{
     }
 
 
-    @Transactional
-    private void actualizarPosiciones(Long liga){
-        List<Clasificacion> clasificaciones = LigaClasificacion(liga);
-        int pos = 1;
-        for (Clasificacion clasificacion : clasificaciones) {
-            clasificacion.setPosicion(pos);
-            pos++;
-        }
+
     @Override
     public void deleteLiga(Long id) {
         Liga league = ligaRepository.findById(id)
@@ -183,86 +125,23 @@ public class LigaServiceImpl implements LigaService{
         ligaRepository.delete(league);
     }
 
-
-    /********** PRIVATE METHODS **********/
-
-//    private void comprobaciones(Long local, Long visitante, Long liga){
-//        botExiste(local);
-//        botExiste(visitante);
-//        ligaExiste(liga);
-//        clasificacionExiste(local, liga);
-//        clasificacionExiste(visitante, liga);
-//    }
-
-
-//    private void clasificacionExisteLiga(long liga){
-//        if(clasificacionRepository.findByLigaId(liga) == null){
-//            throw new ClasificacionLigaNotFoundException(liga);
-//        }
-//    }
-//
-//    @Transactional
-//    protected void actualizarPuntos(Clasificacion clasificacion, String resultado, boolean local){
-//        switch (resultado) {
-//            case "local":
-//                if(local){
-//                    clasificacion.setVictorias(clasificacion.getVictorias()+1);
-//                    clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+3);
-//                }else{
-//                    clasificacion.setVictorias(clasificacion.getDerrotas()+1);
-//                }
-//                break;
-//
-//            case "visitante":
-//                if(local){
-//                    clasificacion.setVictorias(clasificacion.getDerrotas()+1);
-//                }else{
-//                    clasificacion.setVictorias(clasificacion.getVictorias()+1);
-//                    clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+3);
-//                }
-//                break;
-//
-//            case "empate":
-//                clasificacion.setEmpates(clasificacion.getEmpates()+1);
-//                clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+1);
-//                break;
-//
-//            default:
-//                break;
-//        }
-//    }
-//
-////    @Transactional
-////    protected void actualizarPosiciones(Long liga){
-////        List<Clasificacion> clasificaciones = LigaClasificacion(liga);
-////        int pos = 1;
-////        for (Clasificacion clasificacion : clasificaciones) {
-////            clasificacion.setPosicion(pos);
-////            pos++;
-////        }
-////    }
-
-    
-
     public void LigaRegistro(LeagueDTO ligaDto){
         // solo un número de bots par, controlar en el front-end números > 0
         if (ligaDto.getBots().length % 2 != 0) {
             throw new IncorrectNumBotsException(ligaDto.getBots().length);
         }
-        Usuario usuario = getUsuario(id);
-        usuario = getUsuario(ligaDto.getCreador());
+        Usuario usuario = getUsuario(ligaDto.getCreador());
         // establecer estado = ABIERTA por defecto si el usuario no lo especifica
-        String estado = null;
-        if (estado == null || estado.isEmpty()) {
-            estado = EstadoLigaConstants.ABIERTA;
-        }
-        Liga liga = new Liga(nombreLiga, numJornadas, numBots, estado, jornadaActual, usuario);
-        liga = new Liga(ligaDto.getName(), ligaDto.getRounds(), ligaDto.getBots().length, estado, ligaDto.getUrlImagen(), 1, usuario);
+
+        String estado = EstadoLigaConstants.ABIERTA;
+        Liga liga = new Liga(ligaDto.getName(), ligaDto.getRounds(), ligaDto.getBots().length, estado, ligaDto.getUrlImagen(), 1, usuario);
         ligaRepository.save(liga);
     }
+
 
     private Usuario getUsuario(int id){
         return usuarioRepository.findById((long) id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 }
+
