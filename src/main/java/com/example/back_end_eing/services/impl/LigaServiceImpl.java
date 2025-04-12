@@ -4,6 +4,7 @@ import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.models.Bot;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
 
+import com.example.back_end_eing.repositories.BotRepository;
 import com.example.back_end_eing.services.LigaService;
 
 
@@ -21,7 +22,7 @@ import com.example.back_end_eing.repositories.ClasificacionRepository;
 import com.example.back_end_eing.repositories.LigaRepository;
 import com.example.back_end_eing.models.Clasificacion;
 import com.example.back_end_eing.exceptions.ClasificacionLigaNotFoundException;
-import com.example.back_end_eing.exceptions.ClasificacionNotFoundException; */
+import com.example.back_end_eing.exceptions.ClasificacionNotFoundException;
 
 import com.example.back_end_eing.exceptions.LigaNotFoundException;
 import com.example.back_end_eing.constants.EstadoLigaConstants;
@@ -37,7 +38,7 @@ import com.example.back_end_eing.repositories.UsuarioRepository;
 public class LigaServiceImpl implements LigaService{
 
     //@Autowired
-    //private BotRepository botRepository;
+    private BotRepository botRepository;
     @Autowired
     private LigaRepository ligaRepository;
 
@@ -100,7 +101,7 @@ public class LigaServiceImpl implements LigaService{
                             .status(liga.getEstado())
                             .name(liga.getNombreLiga())
                             .user(liga.getUsuario().getNombreUsuario())
-                            .urlImagen(null)
+                            .urlImagen(liga.getImagen())
                             .rounds(liga.getNumJornadas())
                             .matchTime(null)
                             .bots(bots.stream().map((bot -> bot.getId().intValue())).toList())

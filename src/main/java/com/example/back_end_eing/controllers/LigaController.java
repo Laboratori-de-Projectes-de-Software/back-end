@@ -6,6 +6,7 @@ import com.example.back_end_eing.services.EnfrentamientoService;
 import com.example.back_end_eing.dto.LeagueDTO;
 import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
+import com.example.back_end_eing.services.CloudinaryService;
 
 import com.example.back_end_eing.services.LigaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.ArrayList;
 
 import java.util.List;
 
@@ -24,7 +27,8 @@ public class LigaController {
     private LigaService ligaService;
     private EnfrentamientoService enfrentamientoService;
 
-
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @PostMapping
     public ResponseEntity<String> registrarLiga(@RequestParam String nombreLiga,
@@ -33,21 +37,30 @@ public class LigaController {
                                                 @RequestParam long matchTime,
                                                 @RequestParam Integer numBots,
                                                 @RequestParam int id) {
-        LeagueDTO ligadto = new LeagueDTO(nombreLiga, urlImagen, numJornadas, matchTime, numBots, id);
-        ligaService.LigaRegistro(ligadto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Liga registrada correctamente");
-    }
+        String urlImagenCloudinary;
+        if (urlImagen == null || urlImagen.isEmpty()) {
+            urlImagenCloudinary = "https://res.cloudinary.com/dtzvhifv3/image/upload/v1744457121/jrszyhh9ogmedybfvve8.webp";
+        }else {
+            try {
+                urlImagenCloudinary = cloudinaryService.uploadBase64(urlImagen);
+            } catch (IOException e) {
+                return ResponseEntity.status(500).body("Error al subir la imagen a Cloudinary: " + e.getMessage());
+            }
+        }
+
+        try {
+            LeagueDTO ligadto = new LeagueDTO(nombreLiga, urlImagenCloudinary, numJornadas, matchTime, numBots, id);
+            ligaService.LigaRegistro(ligadto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Liga registrada correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
+        }
+            }
 
     @GetMapping("/all")
     public List<LeagueResponseDTO> obtenerLigas() {
         return ligaService.obtenerLigas();
     }
-
-    //ESTE MÉODO NO PUEDE DEVOLVER LA ENTITY, HAY QUE PASAR EL DTO
-//    @GetMapping
-//    public List<Liga> obtenerLigasUser(Long id) {
-//        return ligaService.obtenerLigasUser(id);
-//    }
 
 
     @GetMapping("/{leagueId}")
