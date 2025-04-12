@@ -1,5 +1,6 @@
 package com.example.back_end_eing.dto;
 
+import lombok.*;
 import com.example.back_end_eing.models.Bot;
 import com.example.back_end_eing.models.Liga;
 import lombok.AllArgsConstructor;
@@ -9,13 +10,13 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 public class LeagueResponseDTO {
     private Integer leagueId;
-    private String status;
+    private String state;
     private String name;
     private String user; //owner
     private String urlImagen;

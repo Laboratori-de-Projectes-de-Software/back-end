@@ -5,11 +5,15 @@ import com.example.back_end_eing.constants.EstadoLigaConstants;
 import com.example.back_end_eing.dto.LeagueDTO;
 import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
+import com.example.back_end_eing.models.Liga;
 import com.example.back_end_eing.services.LigaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.back_end_eing.models.Clasificacion;
+import com.example.back_end_eing.services.LigaService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +51,16 @@ public class LigaController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
         }
+    }
+
+    @GetMapping("/all")
+    public List<LeagueResponseDTO> obtenerLigas() {
+        return ligaService.obtenerLigas();
+    }
+
+    @GetMapping
+    public List<Liga> obtenerLigasUser(Long id) {
+        return ligaService.obtenerLigasUser(id);
     }
 
 

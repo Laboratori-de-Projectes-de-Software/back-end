@@ -2,10 +2,12 @@ package com.example.back_end_eing.services;
 
 import java.util.List;
 
+import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.dto.LeagueDTO;
 import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
 import com.example.back_end_eing.models.Clasificacion;
+import com.example.back_end_eing.models.Liga;
 
 public interface LigaService {
 
@@ -16,6 +18,10 @@ public interface LigaService {
     List<ParticipationResponseDTO> getClasificacion(Long ligaId);
 
     public void LigaRegistro(LeagueDTO ligadto);
+
+    public List<LeagueResponseDTO> obtenerLigas();
+
+    public List<Liga> obtenerLigasUser(Long id);
 
     LeagueResponseDTO getLiga(Long id);
 
