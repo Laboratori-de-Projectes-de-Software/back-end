@@ -3,6 +3,7 @@ package jaumesitos.backend.demo.infrastructure.res.api;
 import io.swagger.v3.oas.annotations.Operation;
 import jaumesitos.backend.demo.application.service.ClassificacioService;
 import jaumesitos.backend.demo.application.service.LligaService;
+import jaumesitos.backend.demo.application.service.MatchService;
 import jaumesitos.backend.demo.config.DuplicateEntityException;
 import jaumesitos.backend.demo.domain.Classificacio;
 import jaumesitos.backend.demo.domain.League;
@@ -43,6 +44,8 @@ public class LeaguesController {
     private final AuthService service; //adaptador
     private final LligaService leagueservice;
     private final ClassificacioService classificationservice;
+    public final MatchService matchservice;
+
     @PostMapping("/league")
     public ResponseEntity<?> postLeague(@RequestBody LeagueDTO dto) {
         try{
@@ -98,5 +101,4 @@ public class LeaguesController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la liga");
         }
     }
-
 }

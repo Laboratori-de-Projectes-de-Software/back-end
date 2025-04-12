@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class EnfrentamentDTO {
+public class MatchDTO {
     private String id;
     private String idBotLocal;
     private String idBotVisitant;

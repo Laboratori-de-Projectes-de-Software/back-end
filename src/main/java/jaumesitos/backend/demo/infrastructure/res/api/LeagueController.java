@@ -1,7 +1,9 @@
 package jaumesitos.backend.demo.infrastructure.res.api;
 
 
-import jaumesitos.backend.demo.infrastructure.res.dto.LligaDTO;
+import jaumesitos.backend.demo.application.service.MatchService;
+import jaumesitos.backend.demo.infrastructure.res.dto.LeagueDTO;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +28,10 @@ import jaumesitos.backend.demo.application.service.LligaService;
 @Tag(name = "League Controller", description = "Endpoints for managing leagues")
 public class LeagueController {
 
+    @Qualifier("lligaDTOMapper")
     private final LligaDTOMapper mapper;
     private final LligaService service;
+    private final MatchService matchService;
 
     //CODIS ERROR:
     //HttpStatus.OK -> 200
@@ -43,7 +47,7 @@ public class LeagueController {
     //HttpStatus.GATEWAY_TIMEOUT -> 504
 
     //SWAGGER:
-    //http://localhost:8080/swagger-ui/index.html#/
+    //http://localhost:8082/swagger-ui/index.html#/
 
     @Operation(summary = "Home endpoint", description = "Returns a welcome message")
     @GetMapping("")
@@ -53,7 +57,7 @@ public class LeagueController {
 
     @Operation(summary = "Post a League", description = "Afegeix una lliga a la base de dades")
     @PostMapping("/leagues")
-    public ResponseEntity<?> postLliga(@RequestBody LligaDTO lligadto) {
+    public ResponseEntity<?> postLliga(@RequestBody LeagueDTO lligadto) {
 
 //        return new ResponseEntity<>(mapper.toDTO(service.postLliga(mapper.toDomain(lligadto))),
 //                HttpStatus.CREATED);
@@ -73,7 +77,7 @@ public class LeagueController {
     }
     @Operation(summary = "Update a League by Id", description = "Per actualitzar una lliga")
     @PutMapping("/leagues/{id}")
-    public ResponseEntity<?> updateLeague(@PathVariable Long id, @RequestBody LligaDTO lligadto) {
+    public ResponseEntity<?> updateLeague(@PathVariable Long id, @RequestBody LeagueDTO lligadto) {
         return new ResponseEntity<>("Endpoint PUT /api/leagues/" + id + " -> UPDATE A LEAGUE", HttpStatus.ACCEPTED);
     }
 
