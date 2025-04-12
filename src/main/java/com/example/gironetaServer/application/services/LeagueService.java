@@ -39,7 +39,7 @@ public class LeagueService implements CreateLeague {
 
 
     public LeagueService(LeagueRepository leagueRepository, BotJpaRepository botJpaRepository,
-                         LigaJpaRepository ligaJpaRepository, UserJpaRepository userJpaRepository, JornadaJpaRepository jornadaJpaRepository, EnfrentamientoJpaRepository enfrentamientoJpaRepository, ResultadoJpaRepository resultadoJpaRepository,
+                         LigaJpaRepository ligaJpaRepository, UserJpaRepository userJpaRepository, JornadaJpaRepository jornadaJpaRepository, EnfrentamientoJpaRepository enfrentamientoJpaRepository,
                          ParticipacionRepository participacionRepository, ParticipacionJpaRepository participacionJpaRepository,
                          EnfrentamientoRepository enfrentamientoRepository
                          ) {
@@ -530,7 +530,7 @@ public class LeagueService implements CreateLeague {
     @Transactional
     public List<MatchResponseDTO> getMatchesFromLeague(Long leagueId) {
 
-              return enfrentamientoRepository.findByLeagueId(leagueId);
+        return enfrentamientoRepository.findByLeagueId(leagueId);
 
     }
 }
