@@ -3,6 +3,7 @@ package org.example.backend.databaseapi.jpa.partida;
 import jakarta.persistence.*;
 import lombok.*;
 
+import org.example.backend.databaseapi.application.dto.partida.Result;
 import org.example.backend.databaseapi.domain.partida.Estado;
 import org.example.backend.databaseapi.jpa.liga.LigaJpaEntity;
 import org.springframework.data.annotation.CreatedBy;
@@ -32,7 +33,8 @@ public class PartidaJpaEntity {
     @Column(name="round_number")
     private Integer roundNumber;
 
-    private Integer resultado;
+    @Enumerated(EnumType.STRING)
+    private Result resultado;
 
     @ManyToOne(optional = false)
     @JoinColumn(name="id_liga")

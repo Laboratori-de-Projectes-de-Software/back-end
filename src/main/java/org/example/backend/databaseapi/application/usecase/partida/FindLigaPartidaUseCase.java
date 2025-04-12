@@ -31,7 +31,7 @@ public class FindLigaPartidaUseCase implements BuscarPartidasLigaPort {
                         new MatchDTOResponse(
                             partida.getPartidaId().value(),
                             partida.getEstado().toString(),
-                            partida.getResult(),
+                            partida.getResult().toString(),
                             findPartidaResultadoPort.findPartidaResultado(idliga)
                                     .stream()
                                     .map(resultado -> findBotPort.findBot(resultado.getResultadoId().botvalue())
