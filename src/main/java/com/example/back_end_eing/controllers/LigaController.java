@@ -39,7 +39,7 @@ public class LigaController {
                                                 @RequestParam int id) {
         String urlImagenCloudinary;
         if (urlImagen == null || urlImagen.isEmpty()) {
-            urlImagenCloudinary = "https://res.cloudinary.com/dtzvhifv3/image/upload/v1744457121/jrszyhh9ogmedybfvve8.webp";
+            urlImagenCloudinary = null;
         }else {
             try {
                 urlImagenCloudinary = cloudinaryService.uploadBase64(urlImagen);
