@@ -639,9 +639,6 @@ components:
           type: integer
           format: int32
           example: 3600
-        userId:
-          type: integer
-          format: int64
         user:
           type: string
           example: adondeboy
@@ -660,14 +657,9 @@ components:
         endpoint:
           type: string
           description: "URL del endpoint del bot"
-        userId:
-          type: integer
-          format: int64
-          description: "Id del usuario propietario del bot"
       required:
         - name
         - description
-        - urlImagen
         - endpoint
     BotResponseDTO:
       type: object
@@ -681,7 +673,7 @@ components:
         description:
           type: string
           description: "Descripción del bot"
-        urlImagen:
+        urlImage:
           type: string
           description: "URL de la imagen del bot"
         nWins:
@@ -696,7 +688,7 @@ components:
     BotSummaryResponseDTO:
       type: object
       properties:
-        botId:
+        id:
           type: integer
           format: int64
         name:
@@ -712,9 +704,6 @@ components:
           example: LaLiga EA Sports
         urlImagen:
           type: string
-        userId:
-          type: integer
-          format: int64
         rounds:
           type: integer
           format: int32
@@ -737,11 +726,8 @@ components:
         name:
           type: string
           example: LaLiga EA Sports
-        urlImagen:
+        urlImage:
           type: string
-        userId:
-          type: integer
-          format: int64
         rounds:
           type: integer
           format: int32
@@ -754,21 +740,11 @@ components:
           items:
             type: integer
             format: int64
-        clasificacion:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParticipationResponseDTO'
-      required:
-        - leagueId
-        - state
-        - name
-        - urlImagen
-        - userId
-        - rounds
-        - matchTime
-        - bots
     MatchResponseDTO:
       properties:
+        matchId:
+          type: integer
+          format: int64
         state:
           $ref: '#/components/schemas/Estado'
         result:
@@ -785,11 +761,6 @@ components:
         roundNumber:
           type: integer
           format: int32
-      required:
-        - state
-        - result
-        - fighters
-        - roundNumber
     MessageResponseDTO:
       properties:
         text:
@@ -806,6 +777,9 @@ components:
         botId:
           type: integer
           format: int64
+        name:
+          type: string
+          description: "Nombre del bot"
         position:
           type: integer
           format: int32
