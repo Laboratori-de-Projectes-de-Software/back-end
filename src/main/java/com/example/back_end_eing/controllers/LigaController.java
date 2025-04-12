@@ -2,6 +2,7 @@ package com.example.back_end_eing.controllers;
 
 
 import com.example.back_end_eing.constants.EstadoLigaConstants;
+import com.example.back_end_eing.dto.LeagueDTO;
 import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
 import com.example.back_end_eing.models.Liga;
@@ -18,16 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v0/league")
-
+@RequestMapping("api/v0/league")
 public class LigaController {
 
     @Autowired
     private LigaService ligaService;
 
-    @PutMapping("/actualizar")
+    @PutMapping("/league/actualizar")
     public ResponseEntity<Void> actualizarClasificacion(@RequestParam Long liga, @RequestParam Long local, @RequestParam Long visitante, @RequestParam String resultado) {
-        ligaService.LigaActualización(liga, local, visitante, resultado);
+        ligaService.LigaActualizacion(liga, local, visitante, resultado);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -37,15 +37,16 @@ public class LigaController {
 //        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
 //    }
 
-    @PostMapping("/Registrar")
+    @PostMapping
     public ResponseEntity<String> registrarLiga(@RequestParam String nombreLiga,
+                                                @RequestParam String urlImagen,
                                                 @RequestParam Integer numJornadas,
+                                                @RequestParam long matchTime,
                                                 @RequestParam Integer numBots,
-                                                @RequestParam String estado,
-                                                @RequestParam Integer jornadaActual,
-                                                @RequestParam Long id) {
+                                                @RequestParam int id) {
         try {
-            ligaService.LigaRegistro(nombreLiga, numJornadas, numBots, estado, jornadaActual, id);
+            LeagueDTO ligadto = new LeagueDTO(nombreLiga, urlImagen, numJornadas, matchTime, numBots, id);
+            ligaService.LigaRegistro(ligadto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Liga registrada correctamente");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
@@ -62,29 +63,30 @@ public class LigaController {
         return ligaService.obtenerLigasUser(id);
     }
 
-    @GetMapping("/{leagueId}")
-    public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Integer leagueId){
-        List<Integer> lsit = new ArrayList<>();
-        lsit.add(1);lsit.add(2);lsit.add(3);
-        LeagueResponseDTO liga = new LeagueResponseDTO(leagueId, EstadoLigaConstants.ABIERTA, "Liga de Barrio",
-                "Antonio",null,
-                16,100L,lsit);
-        return new ResponseEntity<LeagueResponseDTO>(liga, HttpStatus.OK);
 
+    @GetMapping("/{leagueId}")
+    public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Long leagueId){
+
+        LeagueResponseDTO liga = ligaService.getLiga(leagueId);
+
+        return new ResponseEntity<>(liga, HttpStatus.OK);
+
+    }
+
+    @DeleteMapping("/{leagueId}")
+    public ResponseEntity<Void> deleteLiga(@PathVariable Long leagueId){
+
+        ligaService.deleteLiga(leagueId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
     @GetMapping("/{leagueId}/leaderboard")
     public ResponseEntity<List<ParticipationResponseDTO>> obtenerClasificacion(@PathVariable Long leagueId) {
-        System.out.println(leagueId);
-        List<ParticipationResponseDTO> bots = new ArrayList<>();
 
-        bots.add(new ParticipationResponseDTO(1, "Elgeneroso", 18, 1));
-        bots.add(new ParticipationResponseDTO(2, "Ellisto", 2, 3));
-        bots.add(new ParticipationResponseDTO(3, "Laambale", 3, 2));
-        bots.add(new ParticipationResponseDTO(4, "elcabron", 0, 4));
+        List<ParticipationResponseDTO> clasificacion = ligaService.getClasificacion(leagueId);
 
-        return new ResponseEntity<>(bots, HttpStatus.OK);
+        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
     }
-
 }

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UsuarioService {
 
-    public PerfilUsuarioDTO getDatosPerfil(Long userId);
+    public PerfilUsuarioDTO getDatosPerfil(int userId);
 }
