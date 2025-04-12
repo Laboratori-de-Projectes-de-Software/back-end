@@ -21,7 +21,7 @@ public class LeagueJpaAdapter implements LeaguePort {
 
     private final LeagueJpaRepository leagueJpaRepository;
     private final LeagueMapper leagueMapper;
-     private final UserMapper userMapper;
+    private final UserMapper userMapper;
 
     public LeagueJpaAdapter(final LeagueJpaRepository leagueJpaRepository, final LeagueMapper leagueMapper, final UserMapper userMapper){
         this.leagueJpaRepository = leagueJpaRepository;

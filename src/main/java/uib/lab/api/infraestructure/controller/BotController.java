@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v0/bot")
-@PreAuthorize("isAuthenticated()")
+//@PreAuthorize("isAuthenticated()")
 public class BotController {
     private final BotService botService;
 
