@@ -5,10 +5,11 @@ import org.example.backend.databaseapi.application.port.in.liga.BuscarLigaUsuari
 import org.example.backend.databaseapi.application.port.out.liga.FindLigaUsuarioPort;
 import org.example.backend.databaseapi.domain.liga.Liga;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 @AllArgsConstructor
 public class FindLigasUsuarioUseCase implements BuscarLigaUsuarioPort {
 

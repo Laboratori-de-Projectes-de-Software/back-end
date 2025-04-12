@@ -5,8 +5,9 @@ import org.example.backend.databaseapi.application.port.in.resultado.CrearResult
 import org.example.backend.databaseapi.application.port.out.resultado.CreateResultadoPort;
 import org.example.backend.databaseapi.domain.resultado.Resultado;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @AllArgsConstructor
 public class CreateResultadoUseCase implements CrearResultadoPort {
 

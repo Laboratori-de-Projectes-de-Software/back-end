@@ -33,6 +33,7 @@ public class BotJpaEntity{
 
     @NotBlank(message="El enlace al bot no puede estar vacio")
     private String url;
+    @Lob
     private String imagen;
 
     @NotBlank(message="El nombre del bot no puede estar vacio")

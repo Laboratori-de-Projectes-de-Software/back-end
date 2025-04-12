@@ -11,6 +11,7 @@ import org.example.backend.databaseapi.application.port.out.usuario.FindUsuarioP
 import org.example.backend.databaseapi.application.port.out.usuario.UpdateUsuarioPort;
 import org.example.backend.databaseapi.application.service.PasswordService;
 import org.example.backend.databaseapi.domain.usuario.Usuario;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @Component
 @AllArgsConstructor
 public class UsuarioJpaAdapter implements CreateUsuarioPort, FindUsuarioPort, DeleteUsuarioPort, UpdateUsuarioPort {
+
 
     private final UsuarioJpaRepository usuarioJpaRepository;
     private final UsuarioJpaMapper usuarioJpaMapper;

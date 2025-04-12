@@ -24,44 +24,32 @@ public class ResultadoController {
     private final BuscarResultadosPartidaPort buscarResultadosPartidaPort;
     private final BuscarResultadosBotPort buscarResultadosBotPort;
     private final BuscarResultadosLiga buscarResultadosLiga;
-    private final ResultadoModelAssembler resultadoModelAssembler;
 
-    @PostMapping("/ligas/{idliga}/partidas/{idpartida}/resultado")
-    public ResponseEntity<EntityModel<Resultado>> crearResultado(@RequestBody Resultado resultadoRequest, @PathVariable Integer idliga, @PathVariable Integer idpartida){
+    //ESTA ES UNA POSIBLE FUNCION QUE PODRIA SERVIR EN UN FUTURO, ACTUALMENTE NO TIENE ENDPOINT ASIGNADO
+    public ResponseEntity<Resultado> crearResultado(@RequestBody Resultado resultadoRequest, @PathVariable Integer idpartida){
         Resultado resultado=createResultadoPort.createResultado(resultadoRequest);
         return ResponseEntity.created(linkTo(methodOn(ResultadoController.class)
-                        .buscarResultadosPartida(
-                                idpartida,
-                                idliga))
+                        .buscarResultadosPartida(idpartida))
                         .toUri())
-                .body(resultadoModelAssembler.toModel(resultado));
+                .body(resultado);
     }
 
-    @GetMapping("/ligas/{idliga}/partidas/{idpartida}/resultado/{botId}")
-    public ResponseEntity<CollectionModel<EntityModel<Resultado>>> buscarResultadosBot(@PathVariable Integer botId, @PathVariable Integer idliga, @PathVariable Integer idpartida){
-        List<EntityModel<Resultado>> resultados= buscarResultadosBotPort.buscarResultadosBot(botId)
-                .stream()
-                .map(resultadoModelAssembler::toModel)
-                .toList();
-        return ResponseEntity.ok(resultadoModelAssembler.toCollectionModel(resultados));
+    //ESTA ES UNA POSIBLE FUNCION QUE PODRIA SERVIR EN UN FUTURO, ACTUALMENTE NO TIENE ENDPOINT ASIGNADO
+    public ResponseEntity<List<Resultado>> buscarResultadosBot(@PathVariable Integer botId){
+        List<Resultado> resultados= buscarResultadosBotPort.buscarResultadosBot(botId);
+        return ResponseEntity.ok(resultados);
     }
 
-    @GetMapping("/ligas/{idliga}/partidas/{partidaId}/resultado")
-    public ResponseEntity<CollectionModel<EntityModel<Resultado>>> buscarResultadosPartida(@PathVariable Integer partidaId, @PathVariable Integer idliga){
-        List<EntityModel<Resultado>> resultados= buscarResultadosPartidaPort.buscarResultadosPartida(partidaId)
-                .stream()
-                .map(resultadoModelAssembler::toModel)
-                .toList();
-        return ResponseEntity.ok(resultadoModelAssembler.toCollectionModel(resultados));
+    //ESTA ES UNA POSIBLE FUNCION QUE PODRIA SERVIR EN UN FUTURO, ACTUALMENTE NO TIENE ENDPOINT ASIGNADO
+    public ResponseEntity<List<Resultado>> buscarResultadosPartida(@PathVariable Integer partidaId){
+        List<Resultado> resultados= buscarResultadosPartidaPort.buscarResultadosPartida(partidaId);
+        return ResponseEntity.ok(resultados);
     }
 
-    @GetMapping("/ligas/{idliga}/partidas/resultados")
-    public ResponseEntity<CollectionModel<EntityModel<Resultado>>> buscarResultadosLiga(@PathVariable Integer idliga){
-        List<EntityModel<Resultado>> resultados= buscarResultadosLiga.buscarResultadosLiga(idliga)
-                .stream()
-                .map(resultadoModelAssembler::toModel)
-                .toList();
-        return ResponseEntity.ok(resultadoModelAssembler.toCollectionModel(resultados));
+    //ESTA ES UNA POSIBLE FUNCION QUE PODRIA SERVIR EN UN FUTURO, ACTUALMENTE NO TIENE ENDPOINT ASIGNADO
+    public ResponseEntity<List<Resultado>> buscarResultadosLiga(@PathVariable Integer idliga){
+        List<Resultado> resultados= buscarResultadosLiga.buscarResultadosLiga(idliga);
+        return ResponseEntity.ok(resultados);
     }
 
 }

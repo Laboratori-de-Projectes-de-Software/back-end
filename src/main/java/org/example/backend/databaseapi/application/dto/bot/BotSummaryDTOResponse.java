@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 public class BotSummaryDTOResponse {
 
-    private String nombre;
+    private String name;
     private Integer id;
-    private String cualidad;
+    private String description;
 }

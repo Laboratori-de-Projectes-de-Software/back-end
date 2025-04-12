@@ -16,17 +16,9 @@ public class Partida {
 
     private PartidaId partidaId;
     private LigaId liga; //Notnull
+    private Integer result;
+    private Integer roundNumber;
     private Estado estado;
-    private Integer duracionTotal;
-    private LocalDateTime fecha; //Notnull
+    private Long duracionTotal;
 
-    @Override
-    public String toString() {
-        return "Partida{" +
-                "partidaId=" + partidaId +
-                ", liga=" + liga +
-                ", duracionTotal=" + duracionTotal +
-                ", fecha=" + fecha +
-                '}';
-    }
 }

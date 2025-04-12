@@ -63,10 +63,9 @@ public class BotAdapterIntegrationTest {
     @Test
     @Order(3)
     public void updateBotTest(){
-        Bot bot=Bot.builder()
-                .prompt("Eres un bot beep boop pero 2 veces mas")
-                .url("urlawaaaaa2")
-                .build();
+        Bot bot=created;
+        bot.setNombre("UpdatedName");
+        bot.setPrompt("UpdatedPromptNumber2");
 
         created=updateBotPort.updateBot(bot,created.getIdBot().value());
 

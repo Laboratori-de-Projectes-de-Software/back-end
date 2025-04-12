@@ -29,13 +29,16 @@ public class PartidaJpaEntity {
     @Enumerated(EnumType.STRING)
     private Estado estado;
 
+    @Column(name="round_number")
+    private Integer roundNumber;
+
+    private Integer resultado;
+
     @ManyToOne(optional = false)
     @JoinColumn(name="id_liga")
     private LigaJpaEntity liga;
 
     @Column(name="duracion_total")
-    private Integer duracionTotal;
-
-    private LocalDateTime fecha;
+    private Long duracionTotal;
 
 }

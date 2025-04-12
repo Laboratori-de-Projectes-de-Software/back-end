@@ -11,6 +11,7 @@ import java.util.List;
 @ToString
 public class MatchDTOResponse {
 
+    private Integer matchId;
     private String state;
     private Integer result;
     private List<String> fighters;

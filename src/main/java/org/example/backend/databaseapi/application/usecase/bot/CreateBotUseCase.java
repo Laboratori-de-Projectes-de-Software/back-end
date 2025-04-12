@@ -6,8 +6,9 @@ import org.example.backend.databaseapi.application.port.in.bot.AltaBotPort;
 import org.example.backend.databaseapi.application.port.out.bot.CreateBotPort;
 import org.example.backend.databaseapi.domain.bot.Bot;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @AllArgsConstructor
 public class CreateBotUseCase implements AltaBotPort {
 

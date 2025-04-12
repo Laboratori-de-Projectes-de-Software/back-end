@@ -5,8 +5,9 @@ import org.example.backend.databaseapi.application.port.in.partida.AltaPartidaPo
 import org.example.backend.databaseapi.application.port.out.partida.CreatePartidaPort;
 import org.example.backend.databaseapi.domain.partida.Partida;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @AllArgsConstructor
 public class CreatePartidaUseCase implements AltaPartidaPort {
 

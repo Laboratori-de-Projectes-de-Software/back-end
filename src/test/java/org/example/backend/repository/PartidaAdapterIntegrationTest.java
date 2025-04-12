@@ -42,8 +42,8 @@ public class PartidaAdapterIntegrationTest {
     public void createPartidaTest(){
         Partida partida= Partida.builder()
                 .liga(new LigaId(1))
-                .estado(Estado.EnProgreso)
-                .duracionTotal(3456)
+                .estado(Estado.IN_PROCESS)
+                .duracionTotal(3456L)
                 .build();
 
         created=createPartidaPort.createPartida(partida);

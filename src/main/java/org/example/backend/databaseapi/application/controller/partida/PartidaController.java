@@ -1,6 +1,7 @@
 package org.example.backend.databaseapi.application.controller.partida;
 
 import lombok.AllArgsConstructor;
+import org.example.backend.databaseapi.application.dto.partida.MatchDTOResponse;
 import org.example.backend.databaseapi.application.port.in.partida.AltaPartidaPort;
 import org.example.backend.databaseapi.application.port.in.partida.BuscarPartidaPort;
 import org.example.backend.databaseapi.application.port.in.partida.BuscarPartidasLigaPort;
@@ -24,26 +25,23 @@ public class PartidaController {
     private final BuscarPartidaPort buscarPartidaPort;
 
 
-
-    @PostMapping("/ligas/{id}/partidas")
-    public ResponseEntity<Partida> altaPartida(@RequestBody Partida requestPartida, @PathVariable String id){
-        Partida partida=altaPartidaPort.altaPartida(requestPartida);
-        return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getLiga().value(), partida.getPartidaId().value())).toUri())
-                .body(partida);
-    }
-
     @GetMapping("/league/{leagueId}/match")
-    public ResponseEntity<List<Partida>> buscarPartidasLiga(@PathVariable Integer leagueId){
-        List<Partida> ligas= buscarPartidasLigaPort.buscarLigaPartida(leagueId)
-                .stream()
-                .toList();
+    public ResponseEntity<List<MatchDTOResponse>> buscarPartidasLiga(@PathVariable Integer leagueId){
+        List<MatchDTOResponse> ligas= buscarPartidasLigaPort.buscarLigaPartida(leagueId);
         return ResponseEntity.ok(ligas);
     }
 
-    @GetMapping("/ligas/{id}/partidas/{idpartida}")
-    public ResponseEntity<Partida> buscarPartida(@PathVariable Integer id,@PathVariable Integer idpartida){
+    //ESTA ES UNA POSIBLE FUNCION QUE PODRIA SERVIR EN UN FUTURO, ACTUALMENTE NO TIENE ENDPOINT ASIGNADO
+    public ResponseEntity<Partida> buscarPartida(@PathVariable Integer idpartida){
         Partida partida=buscarPartidaPort.buscarPartida(idpartida);
-        return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getLiga().value(), partida.getPartidaId().value())).toUri())
+        return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getPartidaId().value())).toUri())
+                .body(partida);
+    }
+
+    //ESTA ES UNA POSIBLE FUNCION QUE PODRIA SERVIR EN UN FUTURO, ACTUALMENTE NO TIENE ENDPOINT ASIGNADO
+    public ResponseEntity<Partida> altaPartida(@RequestBody Partida requestPartida){
+        Partida partida=altaPartidaPort.altaPartida(requestPartida);
+        return ResponseEntity.created(linkTo(methodOn(PartidaController.class).buscarPartida(partida.getPartidaId().value())).toUri())
                 .body(partida);
     }
 }

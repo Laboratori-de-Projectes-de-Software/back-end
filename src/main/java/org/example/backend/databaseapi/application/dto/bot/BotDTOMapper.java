@@ -20,9 +20,9 @@ public interface BotDTOMapper {
     @Mapping(target = "prompt", source = "description")
     @Mapping(target = "nombre", source = "name")
     @Mapping(target = "imagen", source = "urlImagen")
-    @Mapping(target = "usuario", source = "userId")
     Bot toBot(BotDTORequest request);
 
+    @Mapping(target = "description", source = "prompt")
     @Mapping(target = "id", source = "idBot")
     BotSummaryDTOResponse toSummaryDTO(Bot bot);
 

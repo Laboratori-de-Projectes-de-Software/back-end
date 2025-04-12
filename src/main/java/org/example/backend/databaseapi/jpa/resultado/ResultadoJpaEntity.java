@@ -16,14 +16,14 @@ import org.example.backend.databaseapi.jpa.partida.PartidaJpaEntity;
 public class ResultadoJpaEntity {
 
     @Id
-    @OneToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="id_bot")
     private BotJpaEntity bot;
 
     @Id
-    @OneToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="id_partida")
     private PartidaJpaEntity partida;
-    private Integer puntuacion;//notnull
+    private Integer puntuacion;
 
 }

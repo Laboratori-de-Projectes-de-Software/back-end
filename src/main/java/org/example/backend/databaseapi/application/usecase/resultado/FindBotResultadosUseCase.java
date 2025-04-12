@@ -5,10 +5,11 @@ import org.example.backend.databaseapi.application.port.in.resultado.BuscarResul
 import org.example.backend.databaseapi.application.port.out.resultado.FindBotResultadoPort;
 import org.example.backend.databaseapi.domain.resultado.Resultado;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 @AllArgsConstructor
 public class FindBotResultadosUseCase implements BuscarResultadosBotPort {
 

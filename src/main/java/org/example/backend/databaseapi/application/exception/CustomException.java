@@ -17,6 +17,13 @@ public class CustomException {
         return new ErrorInfo(req.getRequestURL(), ex);
     }
 
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    @ExceptionHandler(MetodoNoPermitido.class)
+    @ResponseBody
+    public final ErrorInfo MetodoNoPermitido(HttpServletRequest req, Exception ex) {
+        return new ErrorInfo(req.getRequestURL(), ex);
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseBody

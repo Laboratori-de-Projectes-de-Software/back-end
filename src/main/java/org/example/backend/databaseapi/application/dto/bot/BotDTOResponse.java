@@ -15,6 +15,6 @@ public class BotDTOResponse {
     private String urlImagen;
     private Integer nWins;
     private Integer nDraws;
-    private Integer nLoses;
+    private Integer nLosses;
 
 }

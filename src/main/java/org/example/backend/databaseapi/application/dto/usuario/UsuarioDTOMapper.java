@@ -10,6 +10,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface UsuarioDTOMapper {
 
 
+    @Mapping(target = "email", source = "mail")
     @Mapping(target = "nombre", source = "user")
     Usuario toUsuario(UserDTORegister request);
 

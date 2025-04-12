@@ -2,18 +2,23 @@ package org.example.backend.databaseapi.jpa.liga;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.backend.databaseapi.application.exception.MetodoNoPermitido;
 import org.example.backend.databaseapi.application.port.out.liga.*;
 import org.example.backend.databaseapi.domain.bot.Bot;
 import org.example.backend.databaseapi.domain.liga.Liga;
+import org.example.backend.databaseapi.domain.partida.Estado;
 import org.example.backend.databaseapi.jpa.bot.BotJpaAdapter;
 import org.example.backend.databaseapi.jpa.bot.BotJpaEntity;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaAdapter;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.example.backend.databaseapi.application.exception.ValidationException;
+import org.springframework.web.server.MethodNotAllowedException;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Lazy})
@@ -40,18 +45,15 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
                         usuarioJpaAdapter.getUser(liga.getUsuario().value())
                                 .orElseThrow()
                 )
+                .estado(Estado.PENDANT)
                 .rondas(liga.getRondas())
-                /*
-                .botsLiga(
-                    liga.getBotsLiga()
-                            .stream()
-                            .map(
-                                botId -> botJpaAdapter.getJpaBot(botId.value())
-                                        .orElseThrow()
-                            )
-                            .toList()
+                .matchTime(liga.getMatchTime())
+                .botsLiga(liga.getBotsLiga()
+                        .stream()
+                        .map(id->botJpaAdapter.getJpaBot(id.value()).orElseThrow())
+                        .toList()
                 )
-                 */
+                .urlImagen(liga.getUrlImagen())
                 .build();
         return Optional.of(ligaJpaMapper.toDomain(ligaJpaRepository.save(ligaJpa)));
     }
@@ -86,9 +88,12 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
 
     @Override
     @Transactional
-    public Liga deleteLiga(Integer ligaId) {
+    public Liga deleteLiga(Integer ligaId,Integer userId) {
         LigaJpaEntity liga=ligaJpaRepository.findById(ligaId)
                 .orElseThrow();
+        if(!Objects.equals(liga.getUsuario().getUserId(), userId)){
+            throw new MetodoNoPermitido("No eres el dueño de la liga");
+        }
         ligaJpaRepository.deleteById(ligaId);
         return ligaJpaMapper.toDomain(liga);
     }
@@ -96,24 +101,25 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
     @Override
     @Transactional
     public Liga updateLiga(Liga liga,Integer id) {
-        LigaJpaEntity entity=LigaJpaEntity.builder()
+        LigaJpaEntity ligaJpa = LigaJpaEntity.builder()
                 .ligaId(id)
-                .botsLiga(
-                        liga.getBotsLiga()
-                                .stream()
-                                .map(
-                                        botId -> botJpaAdapter.getJpaBot(botId.value())
-                                                .orElseThrow()
-                                )
-                                .toList()
-
-                )
                 .nombre(liga.getNombre())
-                .usuario(usuarioJpaAdapter.getUser(liga.getUsuario().value())
-                        .orElseThrow()
+                .usuario(
+                        usuarioJpaAdapter.getUser(liga.getUsuario().value())
+                                .orElseThrow()
                 )
+                .estado(Estado.PENDANT)
+                .rondas(liga.getRondas())
+                .matchTime(liga.getMatchTime())
+                .botsLiga(liga.getBotsLiga()
+                        .stream()
+                        .map(botId -> botJpaAdapter.getJpaBot(botId.value())
+                                .orElseThrow())
+                        .toList()
+                )
+                .urlImagen(liga.getUrlImagen())
                 .build();
-        return ligaJpaMapper.toDomain(ligaJpaRepository.save(entity));
+        return ligaJpaMapper.toDomain(ligaJpaRepository.save(ligaJpa));
     }
 
     @Override

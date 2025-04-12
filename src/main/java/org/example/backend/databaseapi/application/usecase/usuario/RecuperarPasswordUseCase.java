@@ -6,6 +6,7 @@ import org.example.backend.databaseapi.application.port.out.usuario.FindUsuarioP
 import org.example.backend.databaseapi.application.port.out.usuario.UpdateUsuarioPort;
 import org.example.backend.databaseapi.domain.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Lazy
 public class RecuperarPasswordUseCase implements RecuperarPasswordPort {
+
 
     private final FindUsuarioPort usuarioPort;
     private final UpdateUsuarioPort updateUsuarioPort;

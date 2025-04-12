@@ -5,12 +5,12 @@ import org.example.backend.databaseapi.application.exception.ResourceNotFoundExc
 import org.example.backend.databaseapi.application.port.in.usuario.BuscarUsuarioPort;
 import org.example.backend.databaseapi.application.port.out.usuario.FindUsuarioPort;
 import org.example.backend.databaseapi.domain.usuario.Usuario;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class FindUsuarioUseCase implements BuscarUsuarioPort {
-
 
     private final FindUsuarioPort findUserPort;
 

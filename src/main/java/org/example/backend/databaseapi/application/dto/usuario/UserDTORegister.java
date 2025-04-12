@@ -10,6 +10,7 @@ import lombok.*;
 public class UserDTORegister {
 
     private String user;
-    private String password; // TODO: debería hacerse un check para no permitir contraseñas inseguras
-    private String email;
+    private String password;
+    private String mail;
+
 }

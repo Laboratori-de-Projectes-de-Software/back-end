@@ -11,3 +11,4 @@ public class TokenAndPassword {
     private String token;
     private String nuevaPassword; // TODO: debería hacerse un check para no permitir contraseñas inseguras
 }
+

@@ -12,7 +12,6 @@ import java.util.List;
 public class LeagueDTORequest {
 
     private String name;
-    private Integer userId;
     private String urlImagen;
     private Integer rounds;
     private Long matchTime;

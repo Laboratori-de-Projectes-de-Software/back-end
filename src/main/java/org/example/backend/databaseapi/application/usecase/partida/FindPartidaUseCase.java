@@ -5,8 +5,9 @@ import org.example.backend.databaseapi.application.port.in.partida.BuscarPartida
 import org.example.backend.databaseapi.application.port.out.partida.FindPartidaPort;
 import org.example.backend.databaseapi.domain.partida.Partida;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @AllArgsConstructor
 public class FindPartidaUseCase implements BuscarPartidaPort {
 

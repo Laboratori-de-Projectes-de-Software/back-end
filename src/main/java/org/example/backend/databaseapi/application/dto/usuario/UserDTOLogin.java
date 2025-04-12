@@ -8,7 +8,7 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 public class UserDTOLogin {
-    private String mail;
+    private String user;
     private String password;
 
 }

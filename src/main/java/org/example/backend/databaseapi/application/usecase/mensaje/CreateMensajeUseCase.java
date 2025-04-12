@@ -5,8 +5,9 @@ import org.example.backend.databaseapi.application.port.in.mensaje.NuevoMensajeP
 import org.example.backend.databaseapi.application.port.out.mensaje.CreateMensajePort;
 import org.example.backend.databaseapi.domain.mensaje.Mensaje;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @AllArgsConstructor
 public class CreateMensajeUseCase implements NuevoMensajePort {
 

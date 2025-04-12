@@ -33,7 +33,7 @@ public class UserAdapterIntegrationTest {
     public void createUsuarioTest(){
         Usuario user=Usuario.builder()
                 .nombre("Test")
-                .email(new Email("Test"))
+                .email(new Email("Test@gmail.com"))
                 .password("pass")
                 .build();
 
@@ -60,7 +60,7 @@ public class UserAdapterIntegrationTest {
     public void updateUsuarioTest(){
         Usuario updatedUser=Usuario.builder()
                 .nombre("TestUpdated")
-                .email(new Email("TestUpdatedMail"))
+                .email(new Email("TestUpdatedMail@gmail.com"))
                 .build();
 
         created=updateUsuarioPort.updateUsuario(updatedUser,created.getUserId().value());

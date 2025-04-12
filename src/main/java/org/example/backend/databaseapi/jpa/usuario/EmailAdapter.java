@@ -66,7 +66,7 @@ public class EmailAdapter implements EmailPort {
 
             message.setContent(htmlContent, "text/html; charset=UTF-8");
 
-            Transport.send(message);
+           // Transport.send(message);
 
         } catch (MessagingException e) {
             throw new RuntimeException("Error al enviar correo de recuperación", e);

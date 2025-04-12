@@ -17,6 +17,7 @@ import org.example.backend.databaseapi.application.port.in.usuario.EliminarUsuar
 import org.example.backend.databaseapi.application.service.JwtService;
 import org.example.backend.databaseapi.application.service.PasswordService;
 import org.example.backend.databaseapi.domain.usuario.Usuario;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,6 @@ public class UsuarioController {
     private final AltaUsuarioPort altaUsuarioPort;
     private final BuscarUsuarioPort buscarUsuarioPort;
     private final EliminarUsuarioPort eliminarUsuarioPort;
-    private final UserModelAssembler userModelAssembler;
     private final ActualizarUsuarioPort actualizarUsuarioPort;
     private final PasswordService passwordService;
     private final UsuarioDTOMapper usuarioDTOMapper;
@@ -49,11 +49,6 @@ public class UsuarioController {
                 .build());
     }
 
-    @GetMapping("/usuario/{id}")
-    ResponseEntity<EntityModel<Usuario>> buscarUsuario(@PathVariable Integer id){
-        Usuario user = buscarUsuarioPort.buscarUsuario(id);
-        return ResponseEntity.ok(userModelAssembler.toModel(user));
-    }
 
     @PostMapping("/login")
     public ResponseEntity<TokenAndUsuario> login(@RequestBody Usuario request) {
@@ -77,16 +72,22 @@ public class UsuarioController {
                 .build());
     }
 
-    @DeleteMapping("/usuario/{id}")
+    //ESTA ES UNA POSIBLE FUNCION QUE PODRIA SERVIR EN UN FUTURO, ACTUALMENTE NO TIENE ENDPOINT ASIGNADO
+    ResponseEntity<Usuario> buscarUsuario(@PathVariable Integer id){
+        Usuario user = buscarUsuarioPort.buscarUsuario(id);
+        return ResponseEntity.ok(user);
+    }
+
+    //ESTA ES UNA POSIBLE FUNCION QUE PODRIA SERVIR EN UN FUTURO, ACTUALMENTE NO TIENE ENDPOINT ASIGNADO
     ResponseEntity<?> eliminarUsuario(@PathVariable Integer id){
         eliminarUsuarioPort.deleteUsuario(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/usuario/{id}")
-    ResponseEntity<EntityModel<Usuario>> actualizarUsuario(@RequestBody Usuario usuario, @PathVariable Integer id){
+    //ESTA ES UNA POSIBLE FUNCION QUE PODRIA SERVIR EN UN FUTURO, ACTUALMENTE NO TIENE ENDPOINT ASIGNADO
+    ResponseEntity<Usuario> actualizarUsuario(@RequestBody Usuario usuario, @PathVariable Integer id){
         Usuario user = actualizarUsuarioPort.actualizarUsuario(usuario, id);
         return ResponseEntity.created(linkTo(methodOn(UsuarioController.class).buscarUsuario(user.getUserId().value())).toUri())
-                .body(userModelAssembler.toModel(user));
+                .body(user);
     }
 }

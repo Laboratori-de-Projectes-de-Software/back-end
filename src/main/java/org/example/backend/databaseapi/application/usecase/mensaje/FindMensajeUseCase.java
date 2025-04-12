@@ -5,8 +5,9 @@ import org.example.backend.databaseapi.application.port.in.mensaje.BuscarMensaje
 import org.example.backend.databaseapi.application.port.out.mensaje.FindMensajePort;
 import org.example.backend.databaseapi.domain.mensaje.Mensaje;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @AllArgsConstructor
 public class FindMensajeUseCase implements BuscarMensajePort {
 

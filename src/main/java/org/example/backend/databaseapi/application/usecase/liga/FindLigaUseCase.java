@@ -5,8 +5,9 @@ import org.example.backend.databaseapi.application.port.in.liga.BuscarLigaPort;
 import org.example.backend.databaseapi.application.port.out.liga.FindLigaPort;
 import org.example.backend.databaseapi.domain.liga.Liga;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @AllArgsConstructor
 public class FindLigaUseCase implements BuscarLigaPort {
 

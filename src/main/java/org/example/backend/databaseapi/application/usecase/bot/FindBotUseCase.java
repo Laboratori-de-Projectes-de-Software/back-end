@@ -9,10 +9,11 @@ import org.example.backend.databaseapi.application.port.out.resultado.FindBotRes
 import org.example.backend.databaseapi.domain.bot.Bot;
 import org.example.backend.databaseapi.domain.resultado.Resultado;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 @AllArgsConstructor
 public class FindBotUseCase implements BuscarBotPort {
 

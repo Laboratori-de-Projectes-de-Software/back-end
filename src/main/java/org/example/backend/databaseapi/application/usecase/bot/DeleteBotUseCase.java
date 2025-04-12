@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import org.example.backend.databaseapi.application.port.in.bot.EliminarBotPort;
 import org.example.backend.databaseapi.application.port.out.bot.DeleteBotPort;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @AllArgsConstructor
 public class DeleteBotUseCase implements EliminarBotPort {
 

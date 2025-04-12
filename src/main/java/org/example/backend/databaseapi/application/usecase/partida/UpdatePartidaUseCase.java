@@ -5,10 +5,11 @@ import org.example.backend.databaseapi.application.port.out.partida.UpdatePartid
 import org.example.backend.databaseapi.domain.liga.Liga;
 import org.example.backend.databaseapi.domain.partida.Partida;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 
-@Component
+@Service
 @AllArgsConstructor
 public class UpdatePartidaUseCase {
 

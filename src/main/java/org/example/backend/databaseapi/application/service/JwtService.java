@@ -29,6 +29,7 @@ public class JwtService {
     public String generateToken(Usuario usuario) {
         return Jwts.builder()
                 .subject(usuario.getEmail().value())
+                .claim("userId",usuario.getUserId().value())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignInKey())
@@ -46,6 +47,10 @@ public class JwtService {
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    public Integer extractUserId(String token){
+        return extractAllClaims(token).get("userId", Integer.class);
     }
 
     private Claims extractAllClaims(String token) {

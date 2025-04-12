@@ -29,7 +29,7 @@ public class PartidaJpaAdapter implements CreatePartidaPort, FindLigaPartidaPort
         PartidaJpaEntity entity=PartidaJpaEntity.builder()
                 .estado(partida.getEstado())
                 .duracionTotal(partida.getDuracionTotal())
-                .fecha(partida.getFecha())
+                .roundNumber(partida.getRoundNumber())
                 .liga(ligaJpaAdapter.getLiga(partida.getLiga().value()))
                 .build();
         return partidaJpaMapper.toDomain(

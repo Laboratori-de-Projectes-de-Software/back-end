@@ -10,7 +10,6 @@ import lombok.*;
 public class BotDTORequest {
 
     private String name;
-    private Integer userId;
     private String description;
     private String urlImagen;
     private String endpoint;

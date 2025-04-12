@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.backend.databaseapi.domain.bot.BotId;
+import org.example.backend.databaseapi.domain.partida.Estado;
 import org.example.backend.databaseapi.domain.usuario.UsuarioId;
 
 import java.util.List;
@@ -16,9 +17,12 @@ import java.util.List;
 public class Liga {
 
     private final LigaId ligaId;
+    private Estado estado;
     private List<BotId> botsLiga;
     private UsuarioId usuario;
     private String nombre;
+    private Long matchTime;
+    private String urlImagen;
     private int rondas;
 
     @Override

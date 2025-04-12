@@ -11,13 +11,14 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring",nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT)
 public interface LigaDTOMapper {
 
+    @Mapping(target = "rounds", source = "rondas")
     @Mapping(target = "name", source = "nombre")
     @Mapping(target = "user", source = "usuario")
     @Mapping(target = "leagueId", source = "ligaId")
     @Mapping(target = "bots", source = "botsLiga")
     LeagueDTOResponse toLeagueDTOResponse(Liga liga);
 
-    @Mapping(target = "usuario", source = "userId")
+    @Mapping(target = "rondas", source = "rounds")
     @Mapping(target = "nombre", source = "name")
     @Mapping(target = "botsLiga", source = "bots")
     Liga toLiga(LeagueDTORequest request);

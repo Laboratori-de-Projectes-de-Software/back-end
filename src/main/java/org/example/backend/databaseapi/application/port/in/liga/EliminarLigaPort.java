@@ -4,5 +4,5 @@ import org.example.backend.databaseapi.domain.liga.Liga;
 
 public interface EliminarLigaPort {
 
-    Liga eliminarLiga(Integer ligaId);
+    Liga eliminarLiga(Integer ligaId,Integer userId);
 }
