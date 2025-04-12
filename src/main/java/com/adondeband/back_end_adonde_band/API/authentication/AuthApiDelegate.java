@@ -9,7 +9,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -56,21 +58,24 @@ public class AuthApiDelegate
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        Usuario authenticatedUser = authenticationService.authenticate(authenticationDtoMapper.loginUserDtotoDomain(loginUserDto));
+        try {
+            Usuario authenticatedUser = authenticationService.authenticate(authenticationDtoMapper.loginUserDtotoDomain(loginUserDto));
+            UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+                    authenticatedUser.getNombre(),
+                    authenticatedUser.getContrasena(),
+                    new ArrayList<>()
+            );
 
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                authenticatedUser.getNombre(),
-                authenticatedUser.getContrasena(),
-                new ArrayList<>()
-        );
+            String jwtToken = jwtService.generateToken(userDetails);
 
-        String jwtToken = jwtService.generateToken(userDetails);
+            LoginResponse loginResponse = new LoginResponse()
+                    .setToken(jwtToken)
+                    .setExpiresIn(System.currentTimeMillis() + jwtService.getExpirationTime())
+                    .setUser(authenticatedUser.getNombre());
 
-        LoginResponse loginResponse = new LoginResponse()
-                .setToken(jwtToken)
-                .setExpiresIn(System.currentTimeMillis() + jwtService.getExpirationTime())
-                .setUser(authenticatedUser.getNombre());
-
-        return ResponseEntity.ok(loginResponse);
+            return ResponseEntity.ok(loginResponse);
+        }catch (UsernameNotFoundException | BadCredentialsException e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 }
