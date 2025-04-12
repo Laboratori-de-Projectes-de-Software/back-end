@@ -16,6 +16,7 @@ public enum ErrorCodes {
     INCORRECT_NUM_BOTS(11008, "INCORRECT_NUM_BOTS", "Numero incorrecto de bots asignados al registro de la liga"),
     CLASIFICATION_NOT_FOUND(11009, "CLASIFICATION_NOT_FOUND", "Clasificación inexistente");
 
+
     private final int code;
     private final String type;
     private final String message;

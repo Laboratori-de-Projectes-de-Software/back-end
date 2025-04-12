@@ -1,17 +1,17 @@
 package com.example.back_end_eing.controllers;
 
 
-import com.example.back_end_eing.constants.EstadoLigaConstants;
 import com.example.back_end_eing.dto.LeagueDTO;
 import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
+
 import com.example.back_end_eing.services.LigaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 @RestController
@@ -21,17 +21,7 @@ public class LigaController {
     @Autowired
     private LigaService ligaService;
 
-    @PutMapping("/league/actualizar")
-    public ResponseEntity<Void> actualizarClasificacion(@RequestParam Long liga, @RequestParam Long local, @RequestParam Long visitante, @RequestParam String resultado) {
-        ligaService.LigaActualizacion(liga, local, visitante, resultado);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
-//    @GetMapping("/clasificacion")
-//    public ResponseEntity<List<Clasificacion>> obtenerClasificacion(@RequestParam Long liga) {
-//        List<Clasificacion> clasificacion = ligaService.LigaClasificacion(liga);
-//        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
-//    }
 
     @PostMapping
     public ResponseEntity<String> registrarLiga(@RequestParam String nombreLiga,
@@ -44,6 +34,17 @@ public class LigaController {
         ligaService.LigaRegistro(ligadto);
         return ResponseEntity.status(HttpStatus.CREATED).body("Liga registrada correctamente");
     }
+
+    @GetMapping("/all")
+    public List<LeagueResponseDTO> obtenerLigas() {
+        return ligaService.obtenerLigas();
+    }
+
+    //ESTE MÉODO NO PUEDE DEVOLVER LA ENTITY, HAY QUE PASAR EL DTO
+//    @GetMapping
+//    public List<Liga> obtenerLigasUser(Long id) {
+//        return ligaService.obtenerLigasUser(id);
+//    }
 
 
     @GetMapping("/{leagueId}")
