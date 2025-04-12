@@ -10,5 +10,6 @@ public interface BotPort {
     Optional<BotDomain> findById(int id);
     List<BotDomain> findAllByUser(UserDomain user);
     List<BotDomain> findAll();
+    List<BotDomain> findAllByIdIn(List<Integer> ids);
     BotDomain save(BotDomain bot);
 }

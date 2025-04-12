@@ -6,8 +6,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import uib.lab.api.application.mapper.interfaces.MatchMapper;
+import uib.lab.api.application.mapper.interfaces.RoundMapper;
 import uib.lab.api.application.port.MatchPort;
-import uib.lab.api.domain.MatchDomain;import uib.lab.api.infraestructure.jpaRepositories.MatchJpaRepository;
+import uib.lab.api.domain.LeagueDomain;
+import uib.lab.api.domain.MatchDomain;
+import uib.lab.api.infraestructure.jpaEntity.Round;
+import uib.lab.api.infraestructure.jpaRepositories.MatchJpaRepository;
+import uib.lab.api.infraestructure.jpaRepositories.RoundJpaRepository;
 
 
 @Component
@@ -31,5 +36,14 @@ public class MatchJpaAdapter implements MatchPort {
                 .stream()
                 .map(matchMapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MatchDomain> findAllByLeague(LeagueDomain league){
+        return matchJpaRepository.findAllByRound_League_Id(league.getId())
+        .stream()
+        .map(matchMapper::toDomain)
+        .collect(Collectors.toList());
+
     }
 }

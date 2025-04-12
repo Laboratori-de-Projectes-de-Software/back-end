@@ -8,6 +8,7 @@ import uib.lab.api.application.dto.user.UserResponseDTO;
 import uib.lab.api.application.service.LeagueService;
 import uib.lab.api.application.service.MatchService;
 import uib.lab.api.infraestructure.jpaEntity.Match;
+import uib.lab.api.application.service.MatchService;
 import uib.lab.api.infraestructure.util.ApiResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -42,6 +43,12 @@ public class LeagueController {
     public ApiResponse updateLeague(@PathVariable int leagueId, @Valid @RequestBody LeagueDTO leagueDTO) {
         return leagueService.updateLeague(leagueId, leagueDTO);
     }
+
+    @GetMapping("/{leagueId}/match")
+    public ApiResponse getMatchesByLeague(@PathVariable int leagueId){
+        return matchService.getMatchesByLeague(leagueId);
+    }
+}
 
     @PostMapping("/{leagueId}/start")
     public ApiResponse<List<Match>> startLeague(@PathVariable int leagueId) {
