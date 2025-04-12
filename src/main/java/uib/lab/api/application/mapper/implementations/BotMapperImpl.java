@@ -31,6 +31,7 @@ public class BotMapperImpl implements BotMapper {
             return null;
         }
         return new BotDomain(entity.getId(),
+                entity.getName(),
                 entity.getIdeologia(),
                 entity.getUrl(),
                 entity.getDescription(),
@@ -56,6 +57,7 @@ public class BotMapperImpl implements BotMapper {
 
         Bot entity = new Bot();
         entity.setId(bot.getId());
+        entity.setName(bot.getName());
         entity.setIdeologia(bot.getIdeologia());
         entity.setDescription(bot.getDescription());
         entity.setImagen(bot.getUrlImagen());

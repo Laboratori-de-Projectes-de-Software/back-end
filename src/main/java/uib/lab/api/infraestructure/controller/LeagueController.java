@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import uib.lab.api.application.dto.league.LeagueDTO;
 import uib.lab.api.application.dto.user.UserResponseDTO;
 import uib.lab.api.application.service.LeagueService;
+import uib.lab.api.application.service.MatchService;
 import uib.lab.api.infraestructure.util.ApiResponse;
 import javax.transaction.Transactional;
 
@@ -16,6 +17,7 @@ import javax.transaction.Transactional;
 public class LeagueController {
 
     private final LeagueService leagueService;
+    private final MatchService matchService;
 
     @Transactional
     @PostMapping
@@ -31,5 +33,10 @@ public class LeagueController {
     @GetMapping("/{leagueId}")
     public ApiResponse getLeagueById(@PathVariable int leagueId) {
         return leagueService.getLeagueById(leagueId);
+    }
+
+    @GetMapping("/{leagueId}/match")
+    public ApiResponse getMatchesByLeague(@PathVariable int leagueId){
+        return matchService.getMatchesByLeague(leagueId);
     }
 }

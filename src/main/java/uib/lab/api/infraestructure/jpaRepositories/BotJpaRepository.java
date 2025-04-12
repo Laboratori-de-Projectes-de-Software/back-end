@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface BotJpaRepository extends JpaRepository<Bot, Integer> {
     List<Bot> findAllByUser(User user);
     Optional<Bot> findBotById(int id);
+    List<Bot> findAllByIdIn(List<Integer> botIds);
 }
