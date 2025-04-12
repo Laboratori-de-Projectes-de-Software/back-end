@@ -31,6 +31,7 @@ public class BotService {
 
             BotDomain bot = new BotDomain();
             bot.setIdeologia(botDTO.getName());
+            bot.setName(botDTO.getName());
             bot.setDescription(botDTO.getDescription());
             bot.setUrlImagen(botDTO.getUrlImagen());
             bot.setUrl(botDTO.getEndpoint());

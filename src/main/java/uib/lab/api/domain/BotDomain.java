@@ -9,6 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BotDomain {
     private int id;
+    private String name;
     private String ideologia;
     private String url;
     private String urlImagen;

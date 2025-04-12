@@ -43,9 +43,11 @@ public class MatchMapperImpl implements MatchMapper{
         return new MatchDomain(
             entity.getId(),
             entity.getState(),
+            entity.getResult(),
             entity.getBot1().getId(),
             entity.getBot2().getId(),
             entity.getRound().getId(),
+            entity.getRounds(),
             chatsId
         );
     }
@@ -55,6 +57,7 @@ public class MatchMapperImpl implements MatchMapper{
         Match entity = new Match();
         entity.setId(domain.getId());
         entity.setState(domain.getState());
+        entity.setResult(domain.getResult());
         BotDomain bot1 = botPort.findById(domain.getBotId1())
                 .orElseThrow(() -> new IllegalArgumentException("Bot not found with ID: " + domain.getBotId1()));
         entity.setBot1(botMapper.toEntity(bot1, false));
@@ -67,6 +70,8 @@ public class MatchMapperImpl implements MatchMapper{
         .orElseThrow(() -> new IllegalArgumentException("Round not found with ID: " + domain.getRoundId()));
         entity.setRound(roundMapper.toEntity(round));
 
+        entity.setRounds(domain.getRounds());
+        
         if (domain.getChatsId() != null) {
             Set<Chat> chats = Arrays.stream(domain.getChatsId())
                     .mapToObj(id -> chatJpaRepository.findById(id)

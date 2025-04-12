@@ -11,8 +11,13 @@ import javax.persistence.*;
 @Setter
 @Table(name = "matches")
 public class Match {
+
     public enum MatchState {
         PENDING, IN_PROGRESS, COMPLETED;
+    }
+
+    public enum MatchResult{
+        LOCAL, VISITING, DRAW;
     }
     
     @Id
@@ -21,6 +26,11 @@ public class Match {
 
     @Enumerated(EnumType.STRING)
     private MatchState state;
+
+    @Enumerated(EnumType.STRING)
+    private MatchResult result;
+
+    private int rounds;
 
     @ManyToOne
     @JoinColumn(name = "bot_id1")

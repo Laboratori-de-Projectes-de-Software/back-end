@@ -5,21 +5,25 @@ import uib.lab.api.infraestructure.jpaEntity.Match;
 public class MatchDomain {
     private int id;
     private Match.MatchState state;
+    private Match.MatchResult result;
     private int botId1;
     private int botId2;
     private int roundId;
+    private int rounds;
     private int[] chatsId;
 
     public MatchDomain(){
 
     }
 
-    public MatchDomain(int id, Match.MatchState state, int botId1, int botId2, int roundId, int[] chatsId){
+    public MatchDomain(int id, Match.MatchState state, Match.MatchResult result, int botId1, int botId2, int roundId, int rounds, int[] chatsId){
         this.id = id;
         this.state = state;
+        this.result = result;
         this.botId1 = botId1;
         this.botId2 = botId2;
         this.roundId = roundId;
+        this.rounds = rounds;
         this.chatsId = chatsId;
     }
     
@@ -37,6 +41,14 @@ public class MatchDomain {
 
     public Match.MatchState getState(){
         return this.state;
+    }
+
+    public void setResult(Match.MatchResult result){
+        this.result = result;
+    }
+
+    public Match.MatchResult getResult(){
+        return this.result;
     }
 
     
@@ -64,6 +76,14 @@ public class MatchDomain {
 
     public int getRoundId(){
         return this.roundId;
+    }
+
+    public void setRounds(int rounds){
+        this.rounds = rounds;
+    }
+
+    public int getRounds(){
+        return this.rounds;
     }
 
     public int[] getChatsId() {

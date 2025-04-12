@@ -10,6 +10,7 @@ import uib.lab.api.infraestructure.jpaEntity.Bot;
 import uib.lab.api.infraestructure.jpaEntity.User;
 import uib.lab.api.infraestructure.jpaRepositories.BotJpaRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,5 +55,11 @@ public class BotJpaAdapter implements BotPort {
         Bot savedBot = botJpaRepository.save(botEntity);
         System.out.println("Bot guardado con ID: " + savedBot.getId());
         return botMapper.toDomain(savedBot);
+    }
+
+    @Override
+    public List<BotDomain> findAllByIdIn(List<Integer> id){
+      return botJpaRepository.findAllByIdIn(id).stream().map(botMapper::toDomain)
+      .collect(Collectors.toList());
     }
 }
