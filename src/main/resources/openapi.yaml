@@ -786,13 +786,29 @@ components:
         points:
           type: integer
           format: int32
-    Estado:
+        nWins:
+          type: integer
+          format: int32
+        nDraws:
+          type: integer
+          format: int32
+        nLosses:
+          type: integer
+          format: int32
+    Status:
       type: string
       description: Estado de la liga
       enum:
-        - pendiente
-        - en curso
-        - finalizado
+        - PENDING
+        - IN_PROGRESS
+        - COMPLETED
+    Result:
+      type: string
+      description: Ganador del partido
+      enum:
+          - LOCAL
+          - VISITING
+          - DRAW
     Error:
       type: object
       properties:
