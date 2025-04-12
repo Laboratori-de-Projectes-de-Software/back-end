@@ -5,12 +5,14 @@ import com.example.back_end_eing.dto.BotDTO;
 import com.example.back_end_eing.dto.BotResponseDTO;
 import com.example.back_end_eing.dto.BotSummaryResponseDTO;
 import com.example.back_end_eing.services.BotService;
+import com.example.back_end_eing.services.CloudinaryService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,6 +21,8 @@ public class BotController {
 
     @Autowired
     private BotService botService;
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @PostMapping()
     public ResponseEntity<String> registrarBot(@RequestParam String nombre,
@@ -26,8 +30,20 @@ public class BotController {
                                             @RequestParam String foto,
                                             @RequestParam String API,
                                             @RequestParam int id) {
+
+        String urlFoto;
+        if (foto == null || foto.isEmpty()) {
+            urlFoto = "";
+        }else {
+            try {
+                urlFoto = cloudinaryService.uploadBase64(foto);
+            } catch (IOException e) {
+                return ResponseEntity.status(500).body("Error al subir la imagen a Cloudinary: " + e.getMessage());
+            }
+        }
+
         try {
-            BotDTO botdto = new BotDTO(nombre, descripcion, foto, API, id);
+            BotDTO botdto = new BotDTO(nombre, descripcion, urlFoto, API, id);
             botService.BotRegistro(botdto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Bot registrado correctamente");
         } catch (Exception e) {

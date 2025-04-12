@@ -5,12 +5,14 @@ import com.example.back_end_eing.constants.EstadoLigaConstants;
 import com.example.back_end_eing.dto.LeagueDTO;
 import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
+import com.example.back_end_eing.services.CloudinaryService;
 import com.example.back_end_eing.services.LigaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,10 @@ public class LigaController {
 
     @Autowired
     private LigaService ligaService;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
 
     @PutMapping("/league/actualizar")
     public ResponseEntity<Void> actualizarClasificacion(@RequestParam Long liga, @RequestParam Long local, @RequestParam Long visitante, @RequestParam String resultado) {
@@ -40,8 +46,19 @@ public class LigaController {
                                                 @RequestParam long matchTime,
                                                 @RequestParam Integer numBots,
                                                 @RequestParam int id) {
+        String urlImagenCloudinary;
+        if (urlImagen == null || urlImagen.isEmpty()) {
+            urlImagenCloudinary = "";
+        }else {
+            try {
+                urlImagenCloudinary = cloudinaryService.uploadBase64(urlImagen);
+            } catch (IOException e) {
+                return ResponseEntity.status(500).body("Error al subir la imagen a Cloudinary: " + e.getMessage());
+            }
+        }
+
         try {
-            LeagueDTO ligadto = new LeagueDTO(nombreLiga, urlImagen, numJornadas, matchTime, numBots, id);
+            LeagueDTO ligadto = new LeagueDTO(nombreLiga, urlImagenCloudinary, numJornadas, matchTime, numBots, id);
             ligaService.LigaRegistro(ligadto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Liga registrada correctamente");
         } catch (Exception e) {
