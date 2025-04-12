@@ -35,15 +35,19 @@ public class Liga {
     private String estado;
 
     @Column
+    private String imagen;
+
+    @Column
     private Integer jornadaActual;
 
     //******* CONSTRUCTOR *******
     public Liga() {}
-    public Liga(String nombreLiga, Integer numJornadas, Integer numBots, String estado, Integer jornadaActual, Usuario usuario) {
+    public Liga(String nombreLiga, Integer numJornadas, Integer numBots, String estado, String imagen, Integer jornadaActual, Usuario usuario) {
         this.nombreLiga = nombreLiga;
         this.numJornadas = numJornadas;
         this.numBots = numBots;
         this.estado = estado;
+        this.imagen = imagen;
         this.jornadaActual = jornadaActual;
         this.usuario = usuario;
     }

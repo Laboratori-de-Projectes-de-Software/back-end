@@ -18,7 +18,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 
     @Override
-    public PerfilUsuarioDTO getDatosPerfil(Long id) {
+    public PerfilUsuarioDTO getDatosPerfil(int id) {
 
         Usuario usuario = getPerfilByUserId(id);
         String img = !Objects.equals(usuario.getFoto(), "")
@@ -36,8 +36,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
 
-    private Usuario getPerfilByUserId(Long id) {
-        return usuarioRepository.findById(id)
+    private Usuario getPerfilByUserId(int id) {
+        return usuarioRepository.findById((long) id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
     }

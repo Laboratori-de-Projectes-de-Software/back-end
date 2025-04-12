@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/perfil")
+@RequestMapping("/api/v0/perfil")
 public class UsuarioController {
 
     @Autowired
@@ -20,7 +20,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping("/{userId}")
-    public PerfilUsuarioDTO getPerfil(@PathVariable Long userId) {
+    public PerfilUsuarioDTO getPerfil(@PathVariable int userId) {
         return usuarioService.getDatosPerfil(userId);
     }
 }

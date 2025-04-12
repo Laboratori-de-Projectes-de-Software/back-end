@@ -3,8 +3,8 @@ package com.example.back_end_eing.dto;
 import lombok.Value;
 
 @Value
-public class UserDTORegister {
-    private String user;
-    private String mail;
+public class RegisterUserDto {
+    private String nombreUsuario;
+    private String email;
     private String password;
 }
