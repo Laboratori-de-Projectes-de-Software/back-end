@@ -1,6 +1,7 @@
 package com.example.back_end_eing.controllers;
 
 
+import com.example.back_end_eing.dto.BotRequestDTO;
 import com.example.back_end_eing.services.EnfrentamientoService;
 
 import com.example.back_end_eing.dto.LeagueDTO;
@@ -15,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import java.util.List;
 
@@ -25,7 +25,9 @@ public class LigaController {
 
     @Autowired
     private LigaService ligaService;
+    @Autowired
     private EnfrentamientoService enfrentamientoService;
+
 
     @Autowired
     private CloudinaryService cloudinaryService;
@@ -40,7 +42,7 @@ public class LigaController {
         String urlImagenCloudinary;
         if (urlImagen == null || urlImagen.isEmpty()) {
             urlImagenCloudinary = null;
-        }else {
+        } else {
             try {
                 urlImagenCloudinary = cloudinaryService.uploadBase64(urlImagen);
             } catch (IOException e) {
@@ -55,7 +57,7 @@ public class LigaController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
         }
-            }
+    }
 
     @GetMapping("/all")
     public List<LeagueResponseDTO> obtenerLigas() {
@@ -64,7 +66,7 @@ public class LigaController {
 
 
     @GetMapping("/{leagueId}")
-    public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Long leagueId){
+    public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Long leagueId) {
 
         LeagueResponseDTO liga = ligaService.getLiga(leagueId);
 
@@ -73,7 +75,7 @@ public class LigaController {
     }
 
     @DeleteMapping("/{leagueId}")
-    public ResponseEntity<Void> deleteLiga(@PathVariable Long leagueId){
+    public ResponseEntity<Void> deleteLiga(@PathVariable Long leagueId) {
 
         ligaService.deleteLiga(leagueId);
 
@@ -96,6 +98,21 @@ public class LigaController {
             return ResponseEntity.status(HttpStatus.CREATED).body("Enfrentamientos generados correctamente");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al generar enfrentamientos" + e.getMessage());
+        }
+    }
+
+    @PostMapping("/{leagueId}/bot")
+    public ResponseEntity<String> registrarBotEnLiga(@PathVariable Long leagueId,
+                                                     @RequestBody BotRequestDTO body) {
+
+
+        Long botId = body.getBotId();
+        try {
+            ligaService.registerBotToLeague(botId, leagueId);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Bot registrado correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+
         }
     }
 }
