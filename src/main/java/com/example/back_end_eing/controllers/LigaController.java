@@ -40,13 +40,9 @@ public class LigaController {
                                                 @RequestParam long matchTime,
                                                 @RequestParam Integer numBots,
                                                 @RequestParam int id) {
-        try {
-            LeagueDTO ligadto = new LeagueDTO(nombreLiga, urlImagen, numJornadas, matchTime, numBots, id);
-            ligaService.LigaRegistro(ligadto);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Liga registrada correctamente");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
-        }
+        LeagueDTO ligadto = new LeagueDTO(nombreLiga, urlImagen, numJornadas, matchTime, numBots, id);
+        ligaService.LigaRegistro(ligadto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Liga registrada correctamente");
     }
 
 

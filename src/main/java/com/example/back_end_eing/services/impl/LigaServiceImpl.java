@@ -4,8 +4,6 @@ import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
 import com.example.back_end_eing.services.LigaService;
 
-import jakarta.transaction.Transactional;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -13,13 +11,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.back_end_eing.repositories.BotRepository;
+//import com.example.back_end_eing.repositories.BotRepository;
 import com.example.back_end_eing.repositories.ClasificacionRepository;
 import com.example.back_end_eing.repositories.LigaRepository;
 import com.example.back_end_eing.models.Clasificacion;
-import com.example.back_end_eing.exceptions.BotNotFoundException;
+/* import com.example.back_end_eing.exceptions.BotNotFoundException;
 import com.example.back_end_eing.exceptions.ClasificacionLigaNotFoundException;
-import com.example.back_end_eing.exceptions.ClasificacionNotFoundException;
+import com.example.back_end_eing.exceptions.ClasificacionNotFoundException; */
 import com.example.back_end_eing.exceptions.LigaNotFoundException;
 import com.example.back_end_eing.constants.EstadoLigaConstants;
 import com.example.back_end_eing.dto.LeagueDTO;
@@ -32,8 +30,8 @@ import com.example.back_end_eing.repositories.UsuarioRepository;
 @Service
 public class LigaServiceImpl implements LigaService{
 
-    @Autowired
-    private BotRepository botRepository;
+    //@Autowired
+    //private BotRepository botRepository;
     @Autowired
     private LigaRepository ligaRepository;
     @Autowired
@@ -94,7 +92,7 @@ public class LigaServiceImpl implements LigaService{
         return new LeagueResponseDTO(league, bots);
 
     }
-    private void actualizarPuntos(Clasificacion clasificacion, String resultado, boolean local){
+    /* private void actualizarPuntos(Clasificacion clasificacion, String resultado, boolean local){
         switch (resultado) {
             case "local":
                 if(local){
@@ -124,7 +122,7 @@ public class LigaServiceImpl implements LigaService{
         }
         clasificacionRepository.save(clasificacion);
     }
-
+ */
     @Override
     public void deleteLiga(Long id) {
         Liga league = ligaRepository.findById(id)
