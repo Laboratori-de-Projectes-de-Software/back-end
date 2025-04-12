@@ -10,6 +10,7 @@ import uib.lab.api.application.mapper.interfaces.RoundMapper;
 import uib.lab.api.application.port.MatchPort;
 import uib.lab.api.domain.LeagueDomain;
 import uib.lab.api.domain.MatchDomain;
+import uib.lab.api.infraestructure.jpaEntity.Match;
 import uib.lab.api.infraestructure.jpaEntity.Round;
 import uib.lab.api.infraestructure.jpaRepositories.MatchJpaRepository;
 import uib.lab.api.infraestructure.jpaRepositories.RoundJpaRepository;
@@ -44,6 +45,15 @@ public class MatchJpaAdapter implements MatchPort {
         .stream()
         .map(matchMapper::toDomain)
         .collect(Collectors.toList());
-
     }
+
+    @Override
+    public void saveAll(List<MatchDomain> matches) {
+        List<Match> matchEntities = matches.stream()
+                .map(matchMapper::toEntity)
+                .collect(Collectors.toList());
+
+        matchJpaRepository.saveAll(matchEntities);
+    }
+
 }

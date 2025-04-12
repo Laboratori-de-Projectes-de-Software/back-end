@@ -48,10 +48,9 @@ public class LeagueController {
     public ApiResponse getMatchesByLeague(@PathVariable int leagueId){
         return matchService.getMatchesByLeague(leagueId);
     }
-}
 
     @PostMapping("/{leagueId}/start")
-    public ApiResponse<List<Match>> startLeague(@PathVariable int leagueId) {
-        return matchService.startLeague(leagueId);
+    public ApiResponse startLeague(@PathVariable int leagueId) {
+        return leagueService.startLeague(leagueId);
     }
 }

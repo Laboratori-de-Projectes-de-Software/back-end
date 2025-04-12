@@ -28,6 +28,7 @@ public class LeagueService {
     private final LeaguePort leaguePort;
     private final UserPort userPort;
     private final LeagueMapperImpl leagueMapper;
+    private final MatchService matchService;
 
 
     public ApiResponse<LeagueResponseDTO> createLeague(LeagueDTO leagueDTO) {
@@ -166,4 +167,33 @@ public class LeagueService {
             return new ApiResponse<>(500, "Internal Server Error");
         }
     }
+
+    public ApiResponse<LeagueResponseDTO> startLeague(int leagueId) {
+        LeagueDomain league = leaguePort.findById(leagueId)
+                .orElseThrow(() -> new RuntimeException("League not found"));
+
+        if (league.getState() == League.LeagueState.IN_PROGRESS) {
+            return new ApiResponse<>(400, "League already started", null);
+        }
+
+        league.setState(League.LeagueState.IN_PROGRESS);
+        leaguePort.save(league);
+
+        //roundService.createRounds(league);
+        matchService.createMatches(league);
+
+        LeagueResponseDTO responseDTO = new LeagueResponseDTO(
+                league.getId(),
+                league.getState().name(),
+                league.getName(),
+                league.getUrlImagen(),
+                league.getPlayTime(),
+                league.getNumRounds(),
+                league.getUserId(),
+                league.getBotIds()
+        );
+
+        return new ApiResponse<>(200, "League started", responseDTO);
+    }
+
 }
