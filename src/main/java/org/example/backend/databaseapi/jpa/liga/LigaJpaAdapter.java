@@ -101,6 +101,13 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
     @Override
     @Transactional
     public Liga updateLiga(Liga liga,Integer id) {
+        Integer currentOwner=ligaJpaRepository.findById(id)
+                .orElseThrow()
+                .getUsuario()
+                .getUserId();
+        if(!currentOwner.equals(liga.getUsuario().value())){
+            throw new MetodoNoPermitido("No puedes actualizar una liga de otro usuarip");
+        }
         LigaJpaEntity ligaJpa = LigaJpaEntity.builder()
                 .ligaId(id)
                 .nombre(liga.getNombre())

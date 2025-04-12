@@ -2,6 +2,7 @@ package org.example.backend.databaseapi.jpa.bot;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.backend.databaseapi.application.exception.MetodoNoPermitido;
 import org.example.backend.databaseapi.application.port.out.bot.*;
 import org.example.backend.databaseapi.domain.bot.Bot;
 import org.example.backend.databaseapi.domain.bot.BotsFilterRequest;
@@ -63,6 +64,13 @@ public class BotJpaAdapter implements CreateBotPort, FindBotPort, UpdateBotPort,
     public Bot updateBot(Bot changedBot, Integer id) {
         //Tal vez se tenga que comprobar si la url(IA API ENDPOINT) ya existe, eso depende de los requisitos,
         //actualmente podria estar en 2 bots diferentes al no estar especificado
+        Integer botOwner=botJpaRepository.findById(id)
+                .orElseThrow()
+                .getUsuario()
+                .getUserId();
+        if(!botOwner.equals(changedBot.getUsuario().value())){
+            throw new MetodoNoPermitido("No puedes editar un bot del que no eres dueño");
+        }
         BotJpaEntity newbot=BotJpaEntity.builder()
                 .url(changedBot.getUrl())
                 .prompt(changedBot.getPrompt())
