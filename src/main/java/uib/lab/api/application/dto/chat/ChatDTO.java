@@ -17,9 +17,9 @@ public class ChatDTO {
     @NotBlank
     private String time;
 
-    /*@NotNull
+    @NotNull
     @Min(1)
-    private int botId;*/
+    private int botId;
 
     @NotNull
     @Min(1)

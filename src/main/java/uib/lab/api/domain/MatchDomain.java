@@ -1,7 +1,5 @@
 package uib.lab.api.domain;
 
-import javax.persistence.*;
-import lombok.*;
 import uib.lab.api.infraestructure.jpaEntity.Match;
 
 public class MatchDomain {

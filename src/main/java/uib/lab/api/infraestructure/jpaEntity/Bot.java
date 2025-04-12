@@ -39,6 +39,9 @@ public class Bot {
     @ManyToMany(mappedBy = "bots")
     private Set<League> leagues;
 
+    @OneToMany(mappedBy = "bot")
+    private Set<Chat> chats;
+
     public Bot(){
 
     }

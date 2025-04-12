@@ -19,6 +19,7 @@ public class Chat {
     @JoinColumn(name = "match_id")
     private Match match;
 
-    //Me falta id del bot...
-    //private int bot_id;
+    @ManyToOne
+    @JoinColumn(name = "bot_id")
+    private Bot bot;
 }

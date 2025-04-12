@@ -5,18 +5,18 @@ public class ChatDomain {
     private int id;
     private String text;
     private String time;
-    //private int botId;
+    private int botId;
     private int matchId;
 
     public ChatDomain(){
 
     }
 
-    public ChatDomain(int id, String text, String time, int matchId){
+    public ChatDomain(int id, String text, String time, int matchId, int botId){
         this.id = id;
         this.text = text;
         this.time = time;
-        //this.botId = botId;
+        this.botId = botId;
         this.matchId = matchId;
     }
 
@@ -44,13 +44,13 @@ public class ChatDomain {
         this.time = time;
     }
 
-    /*public int getBotId() {
+    public int getBotId() {
         return this.botId;
     }
 
     public void setBotId(int botId) {
         this.botId = botId;
-    }*/
+    }
 
     public int getMatchId() {
         return this.matchId;

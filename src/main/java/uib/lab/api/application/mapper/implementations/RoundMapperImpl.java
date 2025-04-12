@@ -1,24 +1,15 @@
 package uib.lab.api.application.mapper.implementations;
 
 import lombok.RequiredArgsConstructor;
-import uib.lab.api.application.dto.league.LeagueDTO;
-import uib.lab.api.application.mapper.interfaces.BotMapper;
 import uib.lab.api.application.mapper.interfaces.LeagueMapper;
 import uib.lab.api.application.mapper.interfaces.RoundMapper;
 
 import org.springframework.stereotype.Component;
-import uib.lab.api.application.mapper.interfaces.UserMapper;
-import uib.lab.api.application.port.BotPort;
 import uib.lab.api.application.port.LeaguePort;
-import uib.lab.api.application.port.UserPort;
 import uib.lab.api.domain.LeagueDomain;
 import uib.lab.api.domain.RoundDomain;
-import uib.lab.api.domain.UserDomain;
-import uib.lab.api.infraestructure.jpaEntity.Bot;
-import uib.lab.api.infraestructure.jpaEntity.League;
 import uib.lab.api.infraestructure.jpaEntity.Match;
 import uib.lab.api.infraestructure.jpaEntity.Round;
-import uib.lab.api.infraestructure.jpaRepositories.BotJpaRepository;
 import uib.lab.api.infraestructure.jpaRepositories.MatchJpaRepository;
 
 import java.time.LocalDateTime;

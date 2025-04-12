@@ -19,6 +19,7 @@ public class BotDomain {
     private int userId;
     private int[] matchId1;
     private int[] matchId2;
+    private int[] chats;
 
     public BotDomain() {
 

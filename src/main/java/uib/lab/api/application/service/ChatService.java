@@ -43,11 +43,9 @@ public class ChatService {
             .map(chat -> new ChatResponseDTO(  
             chat.getText(),
             chat.getTime(),
-            -1))
+            chat.getBotId()))
             .collect(Collectors.toList());
             
-
-
             if(!chatList.isEmpty()){
                 return new ApiResponse(200, "Chats found", chatList);
             } else {
