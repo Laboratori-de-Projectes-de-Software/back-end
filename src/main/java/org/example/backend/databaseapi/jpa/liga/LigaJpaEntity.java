@@ -42,6 +42,7 @@ public class LigaJpaEntity {
     private String nombre;
 
     @Column(name="match_time")
+    @Lob
     private Long matchTime;
 
     @Column(name="url_imagen")
