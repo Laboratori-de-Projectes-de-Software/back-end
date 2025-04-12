@@ -2,6 +2,7 @@ package com.example.back_end_eing.services.impl;
 
 import com.example.back_end_eing.dto.BotResponseDTO;
 import com.example.back_end_eing.dto.BotSummaryResponseDTO;
+import com.example.back_end_eing.exceptions.BotNotFoundException;
 import com.example.back_end_eing.exceptions.RepeatedBotException;
 import com.example.back_end_eing.exceptions.UserNotFoundException;
 import com.example.back_end_eing.models.Bot;
@@ -49,7 +50,13 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public List<BotSummaryResponseDTO> listarBots(Long userId) {
-        Optional<List<Bot>> listaBots = botRepository.findByUsuarioId(userId);
+        Optional<List<Bot>> listaBots = null;
+        try{
+            listaBots = botRepository.findByUsuarioId(userId);
+        }catch (Exception e){
+            throw(new UserNotFoundException(0));
+        }
+        
         return listaBots
                 .map(listaBot ->
                         listaBot
@@ -63,12 +70,20 @@ public class BotServiceImpl implements BotService {
                                 ).toList()
                 )
                 .orElseGet(() -> Collections.emptyList());
-
     }
 
+    /*
+     * Posibles errores:
+     * Bot no encontrado
+     */
     @Override
     public BotResponseDTO obtenerBot(Long botId) {
-        Optional<Bot> bot = botRepository.findById(botId);
+        Optional<Bot> bot = null;
+        try{
+            bot = botRepository.findById(botId);
+        }catch(Exception e){
+            throw(new BotNotFoundException(botId));
+        }
         return bot.map(detallesBot -> BotResponseDTO
                         .builder()
                         .urlImage(detallesBot.getFotoBot())
@@ -81,8 +96,6 @@ public class BotServiceImpl implements BotService {
                         .build()
                 )
                 .orElseGet(() -> BotResponseDTO.builder().build());
-
-
     }
 
 }

@@ -1,18 +1,16 @@
 package com.example.back_end_eing.dto;
 
-import com.example.back_end_eing.models.Bot;
-import com.example.back_end_eing.models.Liga;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.util.ArrayList;
+import com.example.back_end_eing.models.Liga;
+import lombok.*;
+
+
 import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class LeagueResponseDTO {
     private Integer leagueId;
     private String status;

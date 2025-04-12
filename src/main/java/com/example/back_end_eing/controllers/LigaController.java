@@ -1,11 +1,13 @@
 package com.example.back_end_eing.controllers;
 
 
-import com.example.back_end_eing.constants.EstadoLigaConstants;
+import com.example.back_end_eing.services.EnfrentamientoService;
+
 import com.example.back_end_eing.dto.LeagueDTO;
 import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
 import com.example.back_end_eing.services.CloudinaryService;
+
 import com.example.back_end_eing.services.LigaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
 import java.util.List;
 
 @RestController
@@ -22,6 +25,7 @@ public class LigaController {
 
     @Autowired
     private LigaService ligaService;
+    private EnfrentamientoService enfrentamientoService;
 
     @Autowired
     private CloudinaryService cloudinaryService;
@@ -64,6 +68,11 @@ public class LigaController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
         }
+            }
+
+    @GetMapping("/all")
+    public List<LeagueResponseDTO> obtenerLigas() {
+        return ligaService.obtenerLigas();
     }
 
 
@@ -91,5 +100,15 @@ public class LigaController {
         List<ParticipationResponseDTO> clasificacion = ligaService.getClasificacion(leagueId);
 
         return new ResponseEntity<>(clasificacion, HttpStatus.OK);
+    }
+
+    @PostMapping("/{leagueId}/start")
+    public ResponseEntity<String> generarEnfrentamientos(@RequestParam Long id) {
+        try {
+            enfrentamientoService.generarEnfrentamientos(id);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Enfrentamientos generados correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al generar enfrentamientos" + e.getMessage());
+        }
     }
 }
