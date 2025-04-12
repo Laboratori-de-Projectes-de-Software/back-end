@@ -10,6 +10,8 @@ import lombok.Setter;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.example.back_end_eing.dto.BotDTO;
+
 @Getter
 @Setter
 @Builder
@@ -43,13 +45,13 @@ public class Bot {
 
     //******* CONSTRUCTORES *******
     public Bot() {}
-    public Bot(String nombre, String descripcion, String foto, Integer victorias, Integer numJornadas, String API, Usuario user) {
-        nombreBot = nombre;
-        descripcionBot = descripcion;
-        fotoBot = foto;
-        numJornadas = victorias;
-        this.numJornadas = numJornadas;
-        apiKey = API;
+    public Bot(BotDTO botdto, Usuario user) {
+        nombreBot = botdto.getName();
+        descripcionBot = botdto.getDescription();
+        fotoBot = botdto.getUrlImagen();
+        numVictorias = 0;
+        numJornadas = 0;
+        apiKey = botdto.getEndpoint();
         usuario = user;
     }
 

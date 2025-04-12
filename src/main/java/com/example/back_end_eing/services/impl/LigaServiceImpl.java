@@ -22,14 +22,12 @@ import com.example.back_end_eing.exceptions.ClasificacionLigaNotFoundException;
 import com.example.back_end_eing.exceptions.ClasificacionNotFoundException;
 import com.example.back_end_eing.exceptions.LigaNotFoundException;
 import com.example.back_end_eing.constants.EstadoLigaConstants;
+import com.example.back_end_eing.dto.LeagueDTO;
 import com.example.back_end_eing.exceptions.IncorrectNumBotsException;
-import org.springframework.stereotype.Service;
 import com.example.back_end_eing.exceptions.UserNotFoundException;
 import com.example.back_end_eing.models.Liga;
 import com.example.back_end_eing.models.Usuario;
-import com.example.back_end_eing.repositories.LigaRepository;
 import com.example.back_end_eing.repositories.UsuarioRepository;
-import com.example.back_end_eing.services.LigaService;
 
 @Service
 public class LigaServiceImpl implements LigaService{
@@ -63,7 +61,7 @@ public class LigaServiceImpl implements LigaService{
     @Override
     public List<ParticipationResponseDTO> getClasificacion(Long id) {
 
-        Liga liga = ligaRepository.findById(id)
+        ligaRepository.findById(id)
                     .orElseThrow(() -> new LigaNotFoundException(id));
 
         List<Clasificacion> clasificaciones = clasificacionRepository.findByLigaId(id) != null
@@ -94,6 +92,37 @@ public class LigaServiceImpl implements LigaService{
         List<Integer> bots = clasificacionRepository.findBotIdsByLigaId(id);
 
         return new LeagueResponseDTO(league, bots);
+
+    }
+    private void actualizarPuntos(Clasificacion clasificacion, String resultado, boolean local){
+        switch (resultado) {
+            case "local":
+                if(local){
+                    clasificacion.setVictorias(clasificacion.getVictorias()+1);
+                    clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+3);
+                }else{
+                    clasificacion.setVictorias(clasificacion.getDerrotas()+1);
+                }
+                break;
+
+            case "visitante":
+                if(local){
+                    clasificacion.setVictorias(clasificacion.getDerrotas()+1);
+                }else{
+                    clasificacion.setVictorias(clasificacion.getVictorias()+1);
+                    clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+3);
+                }
+                break;
+
+            case "empate":
+                clasificacion.setEmpates(clasificacion.getEmpates()+1);
+                clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+1);
+                break;
+        
+            default:
+                break;
+        }
+        clasificacionRepository.save(clasificacion);
     }
 
     @Override
@@ -165,22 +194,23 @@ public class LigaServiceImpl implements LigaService{
 
     
 
-    public void LigaRegistro(String nombreLiga, Integer numJornadas, Integer numBots, String estado, Integer jornadaActual, Long id){
+    public void LigaRegistro(LeagueDTO ligaDto){
         // solo un número de bots par, controlar en el front-end números > 0
-        if (numBots % 2 != 0) {
-            throw new IncorrectNumBotsException(numBots);
+        if (ligaDto.getBots().length % 2 != 0) {
+            throw new IncorrectNumBotsException(ligaDto.getBots().length);
         }
-        usuario = getUsuario(id);
+        usuario = getUsuario(ligaDto.getCreador());
         // establecer estado = ABIERTA por defecto si el usuario no lo especifica
+        String estado = null;
         if (estado == null || estado.isEmpty()) {
             estado = EstadoLigaConstants.ABIERTA;
         }
-        liga = new Liga(nombreLiga, numJornadas, numBots, estado, jornadaActual, usuario);
+        liga = new Liga(ligaDto.getName(), ligaDto.getRounds(), ligaDto.getBots().length, estado, ligaDto.getUrlImagen(), 1, usuario);
         ligaRepository.save(liga);
     }
 
-    private Usuario getUsuario(Long id){
-        return usuarioRepository.findById(id)
+    private Usuario getUsuario(int id){
+        return usuarioRepository.findById((long) id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 }
