@@ -1,21 +1,13 @@
 package uib.lab.api.infraestructure.adapter;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
-import uib.lab.api.application.mapper.interfaces.LeagueMapper;
 import uib.lab.api.application.mapper.interfaces.MatchMapper;
-import uib.lab.api.application.mapper.interfaces.UserMapper;
-import uib.lab.api.application.port.LeaguePort;
 import uib.lab.api.application.port.MatchPort;
-import uib.lab.api.domain.BotDomain;
-import uib.lab.api.domain.LeagueDomain;
-import uib.lab.api.domain.MatchDomain;
-import uib.lab.api.domain.UserDomain;
-import uib.lab.api.infraestructure.jpaEntity.League;
-import uib.lab.api.infraestructure.jpaEntity.User;
-import uib.lab.api.infraestructure.jpaRepositories.LeagueJpaRepository;
-import uib.lab.api.infraestructure.jpaRepositories.MatchJpaRepository;
+import uib.lab.api.domain.MatchDomain;import uib.lab.api.infraestructure.jpaRepositories.MatchJpaRepository;
 
 
 @Component
@@ -31,5 +23,13 @@ public class MatchJpaAdapter implements MatchPort {
     @Override
     public Optional<MatchDomain> findById(int id) {
         return matchJpaRepository.findMatchById(id).map(matchMapper::toDomain);
+    }
+
+    @Override
+    public List<MatchDomain> findAll(){
+         return matchJpaRepository.findAll()
+                .stream()
+                .map(matchMapper::toDomain)
+                .collect(Collectors.toList());
     }
 }

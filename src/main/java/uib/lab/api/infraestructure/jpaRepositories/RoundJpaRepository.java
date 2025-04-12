@@ -2,10 +2,7 @@ package uib.lab.api.infraestructure.jpaRepositories;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import uib.lab.api.infraestructure.jpaEntity.League;
 import uib.lab.api.infraestructure.jpaEntity.Round;
-import uib.lab.api.infraestructure.jpaEntity.User;
-import java.util.List;
 import java.util.Optional;
 
 public interface RoundJpaRepository extends JpaRepository<Round, Integer>{

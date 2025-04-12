@@ -30,30 +30,22 @@ import java.util.stream.Collectors;
 public class ChatService {
     private final ChatPort chatPort;
     private final MatchPort matchPort;
-    private final ChatMapperImpl chatMapper;
 
-    public ApiResponse<List<ChatResponseDTO>> getAllMessages(Integer id){
+    public ApiResponse<List<ChatResponseDTO>> getAllMessages(Integer matchId){
         try{
             List<ChatResponseDTO> chatList;
-            if(id != null){
-                MatchDomain match = matchPort.findById(id).orElseThrow(() -> new IllegalArgumentException("Match not found with ID: " + id));
-                
-                chatList = chatPort.findAllByMatch(match)
-                .stream()
-                .map(chat -> new ChatResponseDTO(  
-                chat.getText(),
-                chat.getTime(),
-                -1))
-                .collect(Collectors.toList());
-            }else{
-                chatList = chatPort.findAllChats()
-                .stream()
-                .map(chat -> new ChatResponseDTO(  
-                chat.getText(),
-                chat.getTime(),
-                -1))
-                .collect(Collectors.toList());
-            }
+            
+            MatchDomain match = matchPort.findById(matchId)
+            .orElseThrow(() -> new IllegalArgumentException("Match not found with ID: " + matchId));
+            
+            chatList = chatPort.findAllByMatch(match)
+            .stream()
+            .map(chat -> new ChatResponseDTO(  
+            chat.getText(),
+            chat.getTime(),
+            -1))
+            .collect(Collectors.toList());
+            
 
 
             if(!chatList.isEmpty()){
@@ -63,7 +55,7 @@ public class ChatService {
             }
 
         } catch (IllegalArgumentException e) {
-            return new ApiResponse(404, "Chats not found");
+            return new ApiResponse(404, "Chats not found error");
         } catch (Exception e) {
             return new ApiResponse(500, "Internal Server Error: " + e.getMessage());
         }
