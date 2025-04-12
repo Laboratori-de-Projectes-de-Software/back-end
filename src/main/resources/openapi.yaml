@@ -722,7 +722,7 @@ components:
           type: integer
           format: int64
         state:
-          $ref: '#/components/schemas/Estado'
+          $ref: '#/components/schemas/Status'
         name:
           type: string
           example: LaLiga EA Sports
@@ -746,12 +746,9 @@ components:
           type: integer
           format: int64
         state:
-          $ref: '#/components/schemas/Estado'
+          $ref: '#/components/schemas/Status'
         result:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 2
+          $ref: '#/components/schemas/Result'
         fighters:
           type: array
           items:
