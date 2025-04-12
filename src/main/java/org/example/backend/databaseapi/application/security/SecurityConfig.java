@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.databaseapi.application.service.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -28,11 +27,15 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // si se quisiera que toda la web fuera inaccesible si no has iniciado sesión se tendría que hacer lo siguiente
-                        // .requestMatchers("/login", "/register", "/usuario/password/**").permitAll()
-                        // .anyRequest().authenticated()
-                        // pero voy a suponer que todos los endpoints pueden ser accedidos independientemente de si se ha inciado sesión
-                        // (quizá esto cambie en un futuro que se añada el endpoint del perfil de usuario por ejemplo)
+                        // Endpoints que necesitan sesión iniciada para acceder
+                        .requestMatchers(HttpMethod.POST, "/bot").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/bot/{botId}").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/league").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/league/{leagueId}").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/league/{leagueId}/bot").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/league/{leagueId}").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/league/{leagueId}/start").authenticated()
+                        // El resto no necesitan autenticación
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -43,11 +46,6 @@ public class SecurityConfig {
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(jwtService, userDetailsService);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean
