@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import uib.lab.api.application.mapper.interfaces.LeagueMapper;
 import uib.lab.api.application.mapper.interfaces.UserMapper;
 import uib.lab.api.application.port.LeaguePort;
-import uib.lab.api.domain.BotDomain;
 import uib.lab.api.domain.LeagueDomain;
 import uib.lab.api.domain.UserDomain;
 import uib.lab.api.infraestructure.jpaEntity.League;
@@ -21,7 +20,7 @@ public class LeagueJpaAdapter implements LeaguePort {
 
     private final LeagueJpaRepository leagueJpaRepository;
     private final LeagueMapper leagueMapper;
-     private final UserMapper userMapper;
+    private final UserMapper userMapper;
 
     public LeagueJpaAdapter(final LeagueJpaRepository leagueJpaRepository, final LeagueMapper leagueMapper, final UserMapper userMapper){
         this.leagueJpaRepository = leagueJpaRepository;

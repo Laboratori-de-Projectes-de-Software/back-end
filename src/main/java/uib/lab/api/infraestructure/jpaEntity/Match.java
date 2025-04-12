@@ -1,6 +1,9 @@
 package uib.lab.api.infraestructure.jpaEntity;
 
 import lombok.*;
+
+import java.util.Set;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,11 +11,10 @@ import javax.persistence.*;
 @Setter
 @Table(name = "matches")
 public class Match {
-
     public enum MatchState {
         PENDING, IN_PROGRESS, COMPLETED;
     }
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -31,4 +33,9 @@ public class Match {
     @ManyToOne
     @JoinColumn(name = "round_id")
     private Round round;
+
+    @OneToMany(mappedBy = "match")
+    private Set<Chat> chat;
 }
+
+

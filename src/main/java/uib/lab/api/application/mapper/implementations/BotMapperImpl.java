@@ -8,6 +8,7 @@ import uib.lab.api.application.port.UserPort;
 import uib.lab.api.domain.BotDomain;
 import uib.lab.api.domain.UserDomain;
 import uib.lab.api.infraestructure.jpaEntity.Bot;
+import uib.lab.api.infraestructure.jpaEntity.Chat;
 import uib.lab.api.infraestructure.jpaEntity.Match;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,7 +40,8 @@ public class BotMapperImpl implements BotMapper {
                 entity.getNDraws(),
                 entity.getUser().getId(),
                 extractMatchIds(entity.getMatchAsBot1()),
-                extractMatchIds(entity.getMatchAsBot2()));
+                extractMatchIds(entity.getMatchAsBot2()),
+                extractChatsIds(entity.getChats()));
     }
 
     @Override
@@ -70,6 +72,7 @@ public class BotMapperImpl implements BotMapper {
 
         entity.setMatchAsBot1(new HashSet<>());
         entity.setMatchAsBot2(new HashSet<>());
+        entity.setChats(new HashSet<>());
 
         return entity;
     }
@@ -78,6 +81,13 @@ public class BotMapperImpl implements BotMapper {
         if (matches == null) return new int[0];
         return matches.stream()
                 .mapToInt(Match::getId)
+                .toArray();
+    }
+
+    private int[] extractChatsIds(Set<Chat> chats){
+        if (chats == null) return new int[0];
+        return chats.stream()
+                .mapToInt(Chat::getId)
                 .toArray();
     }
 }

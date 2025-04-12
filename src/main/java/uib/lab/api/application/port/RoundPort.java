@@ -1,7 +1,11 @@
 package uib.lab.api.application.port;
 
-import uib.lab.api.infraestructure.jpaEntity.Round;
+
+import java.util.List;
+import uib.lab.api.domain.RoundDomain;
+import java.util.Optional;
 
 public interface RoundPort {
-    Round save(Round round);
+    Optional<RoundDomain> findById(int id);
+    
 }
