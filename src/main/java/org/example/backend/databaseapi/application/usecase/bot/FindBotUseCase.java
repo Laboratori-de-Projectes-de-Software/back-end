@@ -26,17 +26,17 @@ public class FindBotUseCase implements BuscarBotPort {
                 .orElseThrow(()->new ResourceNotFoundException("El bot no existe!"));
         int wins=0;
         int draws=0;
-        int loses=0;
+        int losses=0;
         List<Resultado> resultados=findBotResultadoPort.findBotResultados(botId);
         for (Resultado resultado:resultados){
             if(resultado.getPuntuacion()==3){
                 wins++;
             }else if(resultado.getPuntuacion()==0){
-                loses++;
+                losses++;
             }else{
                 draws++;
             }
         }
-        return new BotDTOResponse(botId, bot.getNombre(), bot.getPrompt(), bot.getImagen(), wins,draws,loses);
+        return new BotDTOResponse(botId, bot.getNombre(), bot.getPrompt(), bot.getImagen(), wins,draws,losses);
     }
 }
