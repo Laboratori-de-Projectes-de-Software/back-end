@@ -39,6 +39,14 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
             return Optional.empty();
         }
 
+        List<BotJpaEntity> bots=null;
+
+        if(liga.getBotsLiga()!=null){
+            bots=liga.getBotsLiga()
+                    .stream()
+                    .map(id->botJpaAdapter.getJpaBot(id.value()).orElseThrow())
+                    .toList();
+        }
         LigaJpaEntity ligaJpa = LigaJpaEntity.builder()
                 .nombre(liga.getNombre())
                 .usuario(
@@ -48,11 +56,7 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
                 .estado(Estado.PENDANT)
                 .rondas(liga.getRondas())
                 .matchTime(liga.getMatchTime())
-                .botsLiga(liga.getBotsLiga()
-                        .stream()
-                        .map(id->botJpaAdapter.getJpaBot(id.value()).orElseThrow())
-                        .toList()
-                )
+                .botsLiga(bots)
                 .urlImagen(liga.getUrlImagen())
                 .build();
         return Optional.of(ligaJpaMapper.toDomain(ligaJpaRepository.save(ligaJpa)));
