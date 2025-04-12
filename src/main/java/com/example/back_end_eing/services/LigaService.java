@@ -5,7 +5,7 @@ import java.util.List;
 import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.dto.LeagueDTO;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
-import com.example.back_end_eing.models.Liga;
+
 
 public interface LigaService {
 
@@ -17,9 +17,9 @@ public interface LigaService {
 
     List<LeagueResponseDTO> obtenerLigas();
 
-    List<Liga> obtenerLigasUser(Long id);
-
     LeagueResponseDTO getLiga(Long id);
 
     void deleteLiga(Long id);
+
+    void registerBotToLeague(Long botId, Long leagueId);
 }

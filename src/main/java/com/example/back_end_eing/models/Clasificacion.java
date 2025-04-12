@@ -5,10 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.tomcat.util.json.JSONFilter;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -39,6 +35,11 @@ public class Clasificacion {
 
     //******* CONSTRUCTORES *******
     public Clasificacion() {}
+
+    public Clasificacion(Bot bot, Liga league){
+        this.bot = bot;
+        this.liga = league;
+    }
 
     //******* RELACIONES CON OTRAS CLASES *******
     @ManyToOne
