@@ -24,4 +24,5 @@ public class BotDTO {
 
     @NotNull
     private int userId;
+
 }

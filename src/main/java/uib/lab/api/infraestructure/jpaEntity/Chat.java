@@ -18,4 +18,8 @@ public class Chat {
     @ManyToOne
     @JoinColumn(name = "match_id")
     private Match match;
+
+    @ManyToOne
+    @JoinColumn(name = "bot_id")
+    private Bot bot;
 }
