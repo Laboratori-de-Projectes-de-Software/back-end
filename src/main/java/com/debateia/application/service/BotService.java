@@ -22,6 +22,10 @@ public class BotService {
 
     public List<BotEntity> getBots(Optional<Integer> ownerId) {
         if (ownerId.isPresent()) {
+            Optional<UserEntity> user = userRepository.findById(ownerId.get());
+            if (user.isEmpty()) { // solicitud de usuario inexistente
+                throw new EntityNotFoundException("Usuario con ID " + ownerId.get() + " no encontrado");
+            }
             return botRepository.findByUserId(ownerId.get());
         } else {
             return botRepository.findAll();

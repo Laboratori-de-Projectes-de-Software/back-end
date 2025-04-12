@@ -4,13 +4,11 @@ import com.debateia.adapter.in.web.dto.request.BotDTO;
 import com.debateia.adapter.in.web.dto.response.BotResponseDTO;
 import com.debateia.adapter.in.web.dto.response.BotSummaryResponseDTO;
 import com.debateia.adapter.out.persistence.entities.BotEntity;
-import com.debateia.application.jwt.JwtService;
 import com.debateia.application.service.BotService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,19 +21,20 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BotController {
     private final BotService botService;
-    private final JwtService jwtService;
 
     @GetMapping
     public ResponseEntity<List<BotSummaryResponseDTO>> getAllBots(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authenticate,
             @RequestParam(name = "owner", required = false) Integer ownerId) {
-        if (!jwtService.isTokenValid(authenticate)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        } // @TODO actualizar gestion errores etc, revisar
-        List<BotEntity> bots = botService.getBots(Optional.ofNullable(ownerId));
+        List<BotEntity> bots;
+        try {
+            bots = botService.getBots(Optional.ofNullable(ownerId));
+        } catch (EntityNotFoundException e) { // usuario inexistente (del que se pide obtener bots)
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         List<BotSummaryResponseDTO> response = bots.stream()
                 .map(this::convertToSummaryDTO)
-                .toList();
+                .toList(); // conversion a DTO muy prog funcional :3
         return ResponseEntity.ok(response);
     }
 
