@@ -53,8 +53,7 @@ public class LigaController {
     }
 
     @GetMapping("/all")
-    public Iterable<Liga> obtenerLigas() {
-        System.out.println("ey");
+    public List<LeagueResponseDTO> obtenerLigas() {
         return ligaService.obtenerLigas();
     }
 

@@ -1,14 +1,18 @@
 package com.example.back_end_eing.services.impl;
 
+import com.example.back_end_eing.dto.LeagueResponseDTO;
+import com.example.back_end_eing.models.Bot;
 import com.example.back_end_eing.services.LigaService;
 
 import jakarta.transaction.Transactional;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.example.back_end_eing.repositories.BotRepository;
@@ -21,22 +25,18 @@ import com.example.back_end_eing.exceptions.ClasificacionNotFoundException;
 import com.example.back_end_eing.exceptions.LigaNotFoundException;
 import com.example.back_end_eing.constants.EstadoLigaConstants;
 import com.example.back_end_eing.exceptions.IncorrectNumBotsException;
-import org.springframework.stereotype.Service;
 import com.example.back_end_eing.exceptions.UserNotFoundException;
 import com.example.back_end_eing.models.Liga;
 import com.example.back_end_eing.models.Usuario;
-import com.example.back_end_eing.repositories.LigaRepository;
 import com.example.back_end_eing.repositories.UsuarioRepository;
-import com.example.back_end_eing.services.LigaService;
 
+@AllArgsConstructor
 @Service
 public class LigaServiceImpl implements LigaService{
     private BotRepository botRepository;
     private LigaRepository ligaRepository;
-    private ClasificacionRepository clasificacionRepository;  
+    private ClasificacionRepository clasificacionRepository;
     private UsuarioRepository usuarioRepository;
-    private Liga liga;
-    private Usuario usuario;
 
     @Override
     public void LigaActualización(Long liga, Long local, Long visitante, String resultado) {      
@@ -125,8 +125,29 @@ public class LigaServiceImpl implements LigaService{
     }
 
 
-    public Iterable<Liga> obtenerLigas() {
-        return ligaRepository.findAll();
+    public List<LeagueResponseDTO> obtenerLigas() {
+        List<Liga> ligas = ligaRepository.findAll();
+
+        List<LeagueResponseDTO> leagueResponseDTOS = new ArrayList<>();
+        for(Liga liga : ligas){
+
+            List<Bot> bots = botRepository.findByLeague(liga.getId());
+
+            leagueResponseDTOS.add(
+                    LeagueResponseDTO.builder()
+                            .leagueId(liga.getId().intValue())
+                            .state(liga.getEstado())
+                            .name(liga.getNombreLiga())
+                            .user(liga.getUsuario().getNombreUsuario())
+                            .urlImagen(null)
+                            .rounds(liga.getNumJornadas())
+                            .matchTime(null)
+                            .bots(bots.stream().map((bot -> bot.getId().intValue())).toList())
+                            .build()
+            );
+        }
+
+        return leagueResponseDTOS;
     }
 
     public List<Liga> obtenerLigasUser(Long id) {
@@ -154,12 +175,12 @@ public class LigaServiceImpl implements LigaService{
         if (numBots % 2 != 0) {
             throw new IncorrectNumBotsException(numBots);
         }
-        usuario = getUsuario(id);
+        Usuario usuario = getUsuario(id);
         // establecer estado = ABIERTA por defecto si el usuario no lo especifica
         if (estado == null || estado.isEmpty()) {
             estado = EstadoLigaConstants.ABIERTA;
         }
-        liga = new Liga(nombreLiga, numJornadas, numBots, estado, jornadaActual, usuario);
+        Liga liga = new Liga(nombreLiga, numJornadas, numBots, estado, jornadaActual, usuario);
         ligaRepository.save(liga);
     }
 

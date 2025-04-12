@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public enum ErrorCodes {
     USER_ALREADY_EXISTS(11000, "USER_ALREADY_EXISTS", "El usuario ya existe"),
-    EMAIL_ALREADY_EXISTS(11001, "EMAIL_ALREADY_EXISTS", "Este correo ya está registrado");;
+    EMAIL_ALREADY_EXISTS(11001, "EMAIL_ALREADY_EXISTS", "Este correo ya está registrado");
 
     private final int code;
     private final String type;

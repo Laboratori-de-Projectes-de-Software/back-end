@@ -1,19 +1,16 @@
 package com.example.back_end_eing.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 public class LeagueResponseDTO {
     private Integer leagueId;
-    private String status;
+    private String state;
     private String name;
     private String user; //owner
     private String urlImagen;
