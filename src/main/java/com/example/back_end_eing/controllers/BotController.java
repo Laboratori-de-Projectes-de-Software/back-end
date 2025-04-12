@@ -33,7 +33,7 @@ public class BotController {
 
         String urlFoto;
         if (foto == null || foto.isEmpty()) {
-            urlFoto = "";
+            urlFoto = "https://res.cloudinary.com/dtzvhifv3/image/upload/v1744457199/yce7xmom6wwensb50kvu.png";
         }else {
             try {
                 urlFoto = cloudinaryService.uploadBase64(foto);

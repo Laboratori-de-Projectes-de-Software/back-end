@@ -66,6 +66,7 @@ public class BotServiceImpl implements BotService {
                                         .name(bot.getNombreBot())
                                         .description(bot.getDescripcionBot())
                                         .id(bot.getId())
+                                        .urlImage(bot.getFotoBot())
                                         .build()
                                 ).toList()
                 )

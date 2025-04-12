@@ -30,19 +30,6 @@ public class LigaController {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-
-    @PutMapping("/league/actualizar")
-    public ResponseEntity<Void> actualizarClasificacion(@RequestParam Long liga, @RequestParam Long local, @RequestParam Long visitante, @RequestParam String resultado) {
-        ligaService.LigaActualizacion(liga, local, visitante, resultado);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-//    @GetMapping("/clasificacion")
-//    public ResponseEntity<List<Clasificacion>> obtenerClasificacion(@RequestParam Long liga) {
-//        List<Clasificacion> clasificacion = ligaService.LigaClasificacion(liga);
-//        return new ResponseEntity<>(clasificacion, HttpStatus.OK);
-//    }
-
     @PostMapping
     public ResponseEntity<String> registrarLiga(@RequestParam String nombreLiga,
                                                 @RequestParam String urlImagen,
@@ -52,7 +39,7 @@ public class LigaController {
                                                 @RequestParam int id) {
         String urlImagenCloudinary;
         if (urlImagen == null || urlImagen.isEmpty()) {
-            urlImagenCloudinary = "";
+            urlImagenCloudinary = "https://res.cloudinary.com/dtzvhifv3/image/upload/v1744457121/jrszyhh9ogmedybfvve8.webp";
         }else {
             try {
                 urlImagenCloudinary = cloudinaryService.uploadBase64(urlImagen);
