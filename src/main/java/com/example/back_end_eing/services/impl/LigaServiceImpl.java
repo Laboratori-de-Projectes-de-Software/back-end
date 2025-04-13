@@ -98,7 +98,7 @@ public class LigaServiceImpl implements LigaService{
                             .user(liga.getUsuario().getNombreUsuario())
                             .urlImagen(liga.getImagen())
                             .rounds(liga.getNumJornadas())
-                            .matchTime(null)
+                            .matchTime(liga.getMatchTime())
                             .bots(bots.stream().map((bot -> bot.getId().intValue())).toList())
                             .build()
             );
@@ -126,7 +126,7 @@ public class LigaServiceImpl implements LigaService{
         // establecer estado = ABIERTA por defecto si el usuario no lo especifica
 
         String estado = EstadoLigaConstants.ABIERTA;
-        Liga liga = new Liga(ligaDto.getName(), ligaDto.getRounds(), ligaDto.getBots().length, estado, ligaDto.getUrlImagen(), 1, usuario);
+        Liga liga = new Liga(ligaDto.getName(), ligaDto.getRounds(), ligaDto.getBots().length, estado, ligaDto.getUrlImagen(), 1, usuario, ligaDto.getMatchTime());
         ligaRepository.save(liga);
     }
 
