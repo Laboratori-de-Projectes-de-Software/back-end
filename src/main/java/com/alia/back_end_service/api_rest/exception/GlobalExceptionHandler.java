@@ -2,6 +2,7 @@ package com.alia.back_end_service.api_rest.exception;
 
 import com.alia.back_end_service.domain.bot.exceptions.BotAlreadyExistsException;
 import com.alia.back_end_service.domain.league.exceptions.BotAlreadyRegisteredInALeague;
+import com.alia.back_end_service.domain.league.exceptions.Low_Number_Of_Bots;
 import com.alia.back_end_service.domain.user.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,5 +52,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BotAlreadyRegisteredInALeague.class)
     public ResponseEntity<Map<String, String>> handleBotAlreadyRegisteredInLeague(BotAlreadyRegisteredInALeague ex) {
         return buildErrorResponse("BOT_ALREADY_REGISTERED_IN_A_LEAGUE", ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(Low_Number_Of_Bots.class)
+    public ResponseEntity<Map<String, String>> handleLowNumberOfBots(Low_Number_Of_Bots ex) {
+        return buildErrorResponse("LOW_NUMBER_OF_BOTS", ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

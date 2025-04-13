@@ -5,6 +5,7 @@ import com.alia.back_end_service.domain.classification.ports.ClassificationPortD
 import com.alia.back_end_service.domain.game.Game;
 import com.alia.back_end_service.domain.game.ports.GamePortDB;
 import com.alia.back_end_service.domain.league.League;
+import com.alia.back_end_service.domain.league.exceptions.Low_Number_Of_Bots;
 import com.alia.back_end_service.domain.league.ports.LeaguePortDB;
 import com.alia.back_end_service.domain.league.ports.LeagueStartPortAPI;
 import com.alia.back_end_service.domain.round.Round;
@@ -54,27 +55,11 @@ public class StartLeagueUseCase implements LeagueStartPortAPI {
         int rounds = league.getNumber_match();
         List<Integer> bots = new ArrayList<>(league.getBotIds());
 
-        List<MatchPair> possibleMatches = new ArrayList<>();
-
-        // Generar todas las combinaciones únicas
-        for (int i = 0; i < bots.size(); i++) {
-            for (int j = i + 1; j < bots.size(); j++) {
-                possibleMatches.add(new MatchPair(bots.get(i), bots.get(j)));
-            }
+        if (bots.size() < 2) {
+            throw new Low_Number_Of_Bots("Se necesitan al menos 2 bots para iniciar una liga");
         }
 
-        Collections.shuffle(possibleMatches); // Para que los enfrentamientos sean aleatorios
-
-        int matchesPerRound = bots.size() / 2;
-        Stack<MatchPair> pos = new Stack<>();
-        Stack<MatchPair> aux;
-        pos.addAll(possibleMatches);
-
-
-        MatchPair matchPair;
-        Round round;
-        Game game;
-
+        // Crear clasificaciones iniciales
         bots.forEach(botId -> {
             Classification classification = new Classification();
             classification.setBotId(botId);
@@ -86,42 +71,42 @@ public class StartLeagueUseCase implements LeagueStartPortAPI {
             classification.setNumber_matchs(0);
             classificationPortDB.save(classification);
         });
-        for (int i = 0; i < rounds; i++) {
-            round = new Round();
-            round.setNumber_round(i+1);
+
+        // Generar los emparejamientos posibles (una vez)
+        List<MatchPair> matchPairs = new ArrayList<>();
+        for (int i = 0; i < bots.size(); i++) {
+            for (int j = i + 1; j < bots.size(); j++) {
+                matchPairs.add(new MatchPair(bots.get(i), bots.get(j)));
+            }
+        }
+
+        // Para cada "vuelta", crear una jornada con todos los emparejamientos
+        for (int r = 0; r < rounds; r++) {
+            List<MatchPair> shuffled = new ArrayList<>(matchPairs);
+            Collections.shuffle(shuffled); // Mezclar los partidos por variedad
+
+            Round round = new Round();
+            round.setNumber_round(r + 1);
             round.setState("En espera");
             round.setLeagueId(leagueId);
+            round.setGameIds(new ArrayList<>());
             round = roundPortDB.saveRound(round);
 
-            //Falta revisar si el mismo bot juega otra vez en la misma ronda
-            boolean [] used = new boolean[bots.size()];
-            int j = 0;
-            aux = new Stack<>();
-            while (j < matchesPerRound) {
-                matchPair = pos.pop();
-                game = new Game();
-                if (used[matchPair.bot1-1] || used[matchPair.bot2-1]) {
-                   aux.push(matchPair);
-                    continue;
-                }
-                used[matchPair.bot1-1] = true;
-                used[matchPair.bot2-1] = true;
-                game.setBot_local_id(matchPair.bot1);
-                game.setBot_visit_id(matchPair.bot2);
-
+            for (MatchPair pair : shuffled) {
+                Game game = new Game();
+                game.setBot_local_id(pair.bot1);
+                game.setBot_visit_id(pair.bot2);
                 game.setState("En espera");
                 game.setRoundId(round.getId());
 
                 game = gamePortDB.saveGame(game);
                 round.getGameIds().add(game.getId());
-                j++;
             }
-            pos.addAll(aux);
+
             roundPortDB.saveRound(round);
         }
 
         league.setState("Iniciado");
         leaguePortDB.saveLeague(league);
     }
-
 }
