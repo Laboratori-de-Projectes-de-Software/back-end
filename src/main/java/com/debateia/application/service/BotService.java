@@ -36,7 +36,6 @@ public class BotService {
 
     @Transactional
     public Bot createBot(Bot bot, Integer userId) {
-        // @TODO esto esta mal, se ha montado el UserRepository mal... funciona pero no hexagonal. Deberia devolver User
         Optional<User> owner = userRepository.findById(userId);
         if (owner.isPresent()) { // usuario existe
             if (botRepository.exists(bot.getName())) { //
@@ -61,7 +60,6 @@ public class BotService {
         if (currentBot.isEmpty()) {
             throw new EntityNotFoundException("El bot con ID \""+botId+"\" a actualizar no existe");
         }
-        // @TODO esto esta mal, se ha montado el UserRepository mal... funciona pero no hexagonal. Deberia devolver User
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
             throw new EntityNotFoundException("El user con ID \""+userId+"\" propietario del bot no existe");

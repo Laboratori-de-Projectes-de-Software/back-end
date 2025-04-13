@@ -22,7 +22,6 @@ public class BotMapper {
         bot.setDescription(dto.getDescription());
         bot.setName(dto.getName());
         bot.setEndpoint(dto.getEndpoint());
-        bot.setUserId(dto.getUserId());
         bot.setUrlImage(dto.getUrlImagen());
         return bot;
     }

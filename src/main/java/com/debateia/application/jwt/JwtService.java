@@ -13,6 +13,7 @@ import com.debateia.domain.User;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -34,6 +35,15 @@ public class JwtService {
                 .getPayload()
                 .get("username", String.class); // ← Accedemos al claim personalizado "username"
     }
+
+    public Integer extractUserId(String token) {
+        return Jwts.parser()
+                .verifyWith(getSignInKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("userId", Integer.class);
+    }
     
 
     public String generateToken(User user) {
@@ -45,10 +55,12 @@ public class JwtService {
     }
 
     private String buildToken(User user, final long expiration) {
-
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", user.getUsername());
+        claims.put("userId", user.getUserId()); // 👈 Añadimos el ID del usuario
         return Jwts
                 .builder()
-                .claims(Map.of("username", user.getUsername()))
+                .claims(claims)
                 .subject(user.getMail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))

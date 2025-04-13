@@ -13,5 +13,4 @@ public class BotDTO implements Serializable {
     private String description;
     private String urlImagen;
     private String endpoint;
-    private int userId;
 }
