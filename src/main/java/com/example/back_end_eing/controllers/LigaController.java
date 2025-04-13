@@ -115,4 +115,32 @@ public class LigaController {
 
         }
     }
+
+    @PutMapping("/{leagueId}")
+    public ResponseEntity<String> actualizarLiga(@RequestParam String nombreLiga,
+                                                @RequestParam String urlImagen,
+                                                @RequestParam Integer numJornadas,
+                                                @RequestParam long matchTime,
+                                                @RequestParam Integer numBots,
+                                                @RequestParam int id,
+                                                @PathVariable Long leagueId) {
+        String urlImagenCloudinary;
+        if (urlImagen == null || urlImagen.isEmpty()) {
+            urlImagenCloudinary = null;
+        } else {
+            try {
+                urlImagenCloudinary = cloudinaryService.uploadBase64(urlImagen);
+            } catch (IOException e) {
+                return ResponseEntity.status(500).body("Error al subir la imagen a Cloudinary: " + e.getMessage());
+            }
+        }
+
+        try {
+            LeagueDTO ligadto = new LeagueDTO(nombreLiga, urlImagenCloudinary, numJornadas, matchTime, numBots, id);
+            ligaService.actualizarLiga(ligadto, leagueId);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Liga registrada correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
+        }
+    }
 }

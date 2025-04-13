@@ -21,4 +21,6 @@ public interface BotRepository extends JpaRepository<Bot, Long> {
     List<Bot> findByLeague(@Param("leagueId") Long leagueId);
 
     Optional <List<Bot>>findByUsuarioId(Long userId);
+
+    Optional <Bot>findByNombreBot(String nombre);
 }

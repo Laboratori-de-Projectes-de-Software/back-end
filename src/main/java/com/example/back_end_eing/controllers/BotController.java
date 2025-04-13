@@ -42,13 +42,9 @@ public class BotController {
             }
         }
 
-        try {
-            BotDTO botdto = new BotDTO(nombre, descripcion, urlFoto, API, id);
-            botService.BotRegistro(botdto);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Bot registrado correctamente");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar el bot: " + e.getMessage());
-        }
+        BotDTO botdto = new BotDTO(nombre, descripcion, urlFoto, API, id);
+        botService.BotRegistro(botdto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Bot registrado correctamente");
     }
 
     @GetMapping()
@@ -65,5 +61,29 @@ public class BotController {
 
     }
 
+    @PutMapping("/{botId}")
+    public ResponseEntity<String> uptadeBot(@RequestParam String nombre,
+                                            @RequestParam String descripcion,
+                                            @RequestParam String foto,
+                                            @RequestParam String API,
+                                            @RequestParam int id,
+                                            @PathVariable("botId") Long botId){
+
+                                                String urlFoto;
+        if (foto == null || foto.isEmpty()) {
+            urlFoto = null;
+        }else {
+            try {
+                urlFoto = cloudinaryService.uploadBase64(foto);
+            } catch (IOException e) {
+                return ResponseEntity.status(500).body("Error al subir la imagen a Cloudinary: " + e.getMessage());
+            }
+        }
+
+        BotDTO botdto = new BotDTO(nombre, descripcion, urlFoto, API, id);
+        botService.actualizarBot(botdto, botId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Bot actualizado correctamente");
+    }
 
 }
