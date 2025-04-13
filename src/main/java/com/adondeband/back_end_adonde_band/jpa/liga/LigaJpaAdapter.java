@@ -1,5 +1,6 @@
 package com.adondeband.back_end_adonde_band.jpa.liga;
 
+import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaPort;
@@ -55,5 +56,30 @@ public class LigaJpaAdapter implements LigaPort {
     public List<Liga> findLigasUsuario(UsuarioId userId) {
         //TODO
         return List.of();
+    }
+
+    @Override
+    public Liga actualizarUrlImagen(LigaId ligaId, String url) {
+        return null;
+    }
+
+    @Override
+    public Liga actualizarnrondas(LigaId ligaId, int nrondas) {
+        return null;
+    }
+
+    @Override
+    public Liga actualizarTiempoRonda(LigaId ligaId, int tiempoRonda) {
+        return null;
+    }
+
+    @Override
+    public Liga actualizarBots(LigaId ligaId, List<BotId> bots) {
+        return null;
+    }
+
+    @Override
+    public Liga addBotToLiga(LigaId ligaId, BotId botId) {
+        return null;
     }
 }

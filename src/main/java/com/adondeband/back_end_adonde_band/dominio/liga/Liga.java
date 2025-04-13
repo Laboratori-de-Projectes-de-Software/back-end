@@ -34,9 +34,9 @@ public class Liga {
 
     private UsuarioId usuario;
 
-    private long matchTime;
+    private Long tiempoRonda;
 
-    private int rondas;
+    private Long rondas;
 
     // private List<Jornada> jornadas;
 }

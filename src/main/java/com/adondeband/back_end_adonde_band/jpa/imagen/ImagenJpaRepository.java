@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface ImagenJpaRepository extends JpaRepository<ImagenEntity, Long> {
     List<ImagenEntity> findByRuta(String ruta);
+
+    ImagenEntity getImagenEntityByRuta(String ruta);
 }
