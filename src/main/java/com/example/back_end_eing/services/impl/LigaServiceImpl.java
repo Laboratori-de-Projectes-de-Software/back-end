@@ -166,7 +166,7 @@ public class LigaServiceImpl implements LigaService{
     public void registerBotToLeague(Long botId, Long leagueId) {
 
         Bot bot = botRepository.findById(botId)
-                .orElseThrow(() -> new BotNotFoundException());
+                .orElseThrow(BotNotFoundException::new);
 
         Liga league = ligaRepository.findById(leagueId)
                 .orElseThrow(() -> new LigaNotFoundException(leagueId));

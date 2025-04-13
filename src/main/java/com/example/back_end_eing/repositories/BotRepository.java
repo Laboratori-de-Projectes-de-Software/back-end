@@ -20,7 +20,8 @@ public interface BotRepository extends JpaRepository<Bot, Long> {
                     "WHERE liga.id = :leagueId", nativeQuery = true)
     List<Bot> findByLeague(@Param("leagueId") Long leagueId);
 
-    Optional <List<Bot>>findByUsuarioId(Long userId);
+    @Query(value = "SELECT * FROM bot WHERE usuario_id = :userId", nativeQuery = true)
+    List<Bot> findByUsuarioId(@Param("userId") Long userId);
 
     Optional <Bot>findByNombreBot(String nombre);
 }

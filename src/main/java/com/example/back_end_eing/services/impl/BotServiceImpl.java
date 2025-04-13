@@ -49,14 +49,14 @@ public class BotServiceImpl implements BotService {
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    @Override
     public List<BotSummaryResponseDTO> listarBots(Long userId) {
         Optional<List<Bot>> listaBots = null;
-        listaBots = botRepository.findByUsuarioId(userId);
-        if (listaBots.isPresent()){
+        try{
+            listaBots = Optional.ofNullable(botRepository.findByUsuarioId(userId));
+        }catch (Exception e){
             throw(new UserNotFoundException(0));
         }
-        
+
         return listaBots
                 .map(listaBot ->
                         listaBot
@@ -72,6 +72,7 @@ public class BotServiceImpl implements BotService {
                 )
                 .orElseGet(() -> Collections.emptyList());
     }
+
 
     @Override
     public BotResponseDTO obtenerBot(Long botId) {
