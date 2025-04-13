@@ -149,7 +149,7 @@ public class LeagueService {
 
             for (int i = 0; i < botIds.length; ++i) {
                 if (botIds[i] == botId) {
-                    return new ApiResponse(201, "League added");
+                    return new ApiResponse(201, "Bot already in league");
                 }
             }
             int[] newBotIds = new int[botIds.length + 1];
@@ -163,7 +163,7 @@ public class LeagueService {
 
             leagueDomain = leaguePort.save(leagueDomain);
 
-            return new ApiResponse(201, "League added");
+            return new ApiResponse(201, "Bot added");
         } catch (IllegalArgumentException e) {
             return new ApiResponse(404, "League not found");
         } catch (Exception e) {
