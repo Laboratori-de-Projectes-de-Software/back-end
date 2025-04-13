@@ -6,6 +6,7 @@ import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
 import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionService;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotService;
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import jakarta.transaction.Transactional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,6 +42,9 @@ public class TestLigaService {
         liga.setFechaFin(LocalDateTime.now());
         liga.setImagen(null);
         liga.setParticipaciones(new ArrayList<>());
+        liga.setUsuario(null);
+        liga.setMatchTime(13);
+        liga.setRondas(5);
 
         // Act
         Liga ligaSaved = ligaService.crearLiga(liga);
@@ -49,6 +53,12 @@ public class TestLigaService {
         assertNull(liga.getId());
         assertNotNull("El id de la liga no debe ser null", ligaSaved.getId());
         assertEquals(liga.getNombre(), ligaSaved.getNombre());
+        assertEquals(liga.getEstado(), ligaSaved.getEstado());
+        assertEquals(liga.getFechaInicio(), ligaSaved.getFechaInicio());
+        assertEquals(liga.getFechaFin(), ligaSaved.getFechaFin());
+        assertEquals(liga.getMatchTime(), ligaSaved.getMatchTime());
+        assertEquals(liga.getRondas(), ligaSaved.getRondas());
+
     }
 
     @Test

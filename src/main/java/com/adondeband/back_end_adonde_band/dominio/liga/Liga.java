@@ -3,6 +3,7 @@ package com.adondeband.back_end_adonde_band.dominio.liga;
 import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionId;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,12 @@ public class Liga {
     private Imagen imagen;
 
     private List<ParticipacionId> participaciones;
+
+    private UsuarioId usuario;
+
+    private long matchTime;
+
+    private int rondas;
 
     // private List<Jornada> jornadas;
 }
