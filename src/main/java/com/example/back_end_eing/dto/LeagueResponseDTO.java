@@ -28,10 +28,10 @@ public class LeagueResponseDTO {
         this.status = liga.getEstado();
         this.name = liga.getNombreLiga();
         this.user = liga.getUsuario().getNombreUsuario();
-        this.urlImagen = null;
+        this.urlImagen = liga.getImagen();
         this.bots = bots;
         this.rounds = liga.getNumJornadas();
-        this.matchTime = 120L;
+        this.matchTime = liga.getMatchTime() * 60;
 
     }
 }

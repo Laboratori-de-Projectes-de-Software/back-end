@@ -14,6 +14,7 @@ public interface BotService {
 
     List<BotSummaryResponseDTO> listarBots(Long userId);
 
+    public void actualizarBot(BotDTO botdto, Long id);
 
     BotResponseDTO obtenerBot(Long botId);
 }

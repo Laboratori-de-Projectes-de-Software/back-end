@@ -40,9 +40,12 @@ public class Liga {
     @Column
     private Integer jornadaActual;
 
+    @Column
+    private Long matchTime;
+
     //******* CONSTRUCTOR *******
     public Liga() {}
-    public Liga(String nombreLiga, Integer numJornadas, Integer numBots, String estado, String imagen, Integer jornadaActual, Usuario usuario) {
+    public Liga(String nombreLiga, Integer numJornadas, Integer numBots, String estado, String imagen, Integer jornadaActual, Usuario usuario, Long matchTime) {
         this.nombreLiga = nombreLiga;
         this.numJornadas = numJornadas;
         this.numBots = numBots;
@@ -50,6 +53,7 @@ public class Liga {
         this.imagen = imagen;
         this.jornadaActual = jornadaActual;
         this.usuario = usuario;
+        this.matchTime = matchTime;
     }
 
     //******* RELACIONES CON OTRAS CLASES *******

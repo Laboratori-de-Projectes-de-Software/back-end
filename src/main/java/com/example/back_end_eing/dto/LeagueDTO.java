@@ -13,7 +13,7 @@ public class LeagueDTO {
     private String urlImagen;
     private Integer rounds;
     private long matchTime;
-    private int[] bots; //ahora mismo no se usa
+    private int[] bots;
     private int creador;
 
 

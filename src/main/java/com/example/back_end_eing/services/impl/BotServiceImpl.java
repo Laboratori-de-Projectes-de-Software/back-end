@@ -11,7 +11,6 @@ import com.example.back_end_eing.repositories.BotRepository;
 import com.example.back_end_eing.repositories.UsuarioRepository;
 import com.example.back_end_eing.services.BotService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.back_end_eing.dto.BotDTO;
@@ -31,13 +30,15 @@ public class BotServiceImpl implements BotService {
     private UsuarioRepository userRepository;
 
     public void BotRegistro(BotDTO botdto){
-        //mirar si existe un bot con esa api
+        //mirar si existe un bot con esa api y nombre
         if(botRepository.findByApiKey(botdto.getEndpoint()).isEmpty()){
-            //crear objeto usuario segun el id
-            Usuario user = getUser(botdto.getUserId());
-            Bot bot = new Bot(botdto, user);
-            //registrar bot a la base de datos
-            botRepository.save(bot);
+            if(botRepository.findByNombreBot(botdto.getName()).isEmpty()){
+                //crear objeto usuario segun el id
+                Usuario user = getUser(botdto.getUserId());
+                Bot bot = new Bot(botdto, user);
+                //registrar bot a la base de datos
+                botRepository.save(bot);
+            }
         }else{
             throw(new RepeatedBotException(botdto.getEndpoint()));
         }
@@ -51,9 +52,8 @@ public class BotServiceImpl implements BotService {
     @Override
     public List<BotSummaryResponseDTO> listarBots(Long userId) {
         Optional<List<Bot>> listaBots = null;
-        try{
-            listaBots = botRepository.findByUsuarioId(userId);
-        }catch (Exception e){
+        listaBots = botRepository.findByUsuarioId(userId);
+        if (listaBots.isPresent()){
             throw(new UserNotFoundException(0));
         }
         
@@ -73,17 +73,12 @@ public class BotServiceImpl implements BotService {
                 .orElseGet(() -> Collections.emptyList());
     }
 
-    /*
-     * Posibles errores:
-     * Bot no encontrado
-     */
     @Override
     public BotResponseDTO obtenerBot(Long botId) {
         Optional<Bot> bot = null;
-        try{
-            bot = botRepository.findById(botId);
-        }catch(Exception e){
-            throw(new BotNotFoundException(botId));
+        bot = botRepository.findById(botId);
+        if(bot.isPresent()){
+            throw(new BotNotFoundException());
         }
         return bot.map(detallesBot -> BotResponseDTO
                         .builder()
@@ -97,6 +92,43 @@ public class BotServiceImpl implements BotService {
                         .build()
                 )
                 .orElseGet(() -> BotResponseDTO.builder().build());
+    }
+
+    public void actualizarBot(BotDTO botDTO, Long id){
+        Optional<Bot> consulta = null;
+        consulta = botRepository.findById(id);
+        if(!consulta.isPresent()){
+            throw(new BotNotFoundException());
+        }
+        Bot bot = consulta.get();
+
+        //controlamos que no repita el nombre y el apikey
+        consulta = botRepository.findByNombreBot(botDTO.getName());
+        if(consulta.isPresent()){
+            if(consulta.get().getId() == bot.getId()){
+                throw(new RepeatedBotException(null));
+            }
+        }
+
+        consulta = botRepository.findByApiKey(botDTO.getEndpoint());
+        if(consulta.isPresent()){
+            if(consulta.get().getId() == bot.getId()){
+                throw(new RepeatedBotException(null));
+            }
+        }
+
+        Optional<Usuario> user = userRepository.findById((long)botDTO.getUserId());
+        if(!user.isPresent()){
+            throw(new UserNotFoundException(0));
+        }
+        //actualizamos los datos
+        bot.setUsuario(user.get());
+        bot.setNombreBot(botDTO.getName());
+        bot.setDescripcionBot(botDTO.getDescription());
+        bot.setFotoBot(botDTO.getUrlImagen());
+        bot.setApiKey(botDTO.getEndpoint());
+
+        botRepository.save(bot);
     }
 
 }

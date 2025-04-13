@@ -22,4 +22,6 @@ public interface LigaService {
     void deleteLiga(Long id);
 
     void registerBotToLeague(Long botId, Long leagueId);
+
+    void actualizarLiga(LeagueDTO ligadto, Long leagueId);
 }

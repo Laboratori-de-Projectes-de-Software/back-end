@@ -12,7 +12,7 @@ import com.example.back_end_eing.services.LigaService;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
+import java.util.Optional;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ import com.example.back_end_eing.repositories.UsuarioRepository;
 @Service
 public class LigaServiceImpl implements LigaService{
 
-    //@Autowired
+    @Autowired
     private BotRepository botRepository;
     @Autowired
     private LigaRepository ligaRepository;
@@ -98,7 +98,7 @@ public class LigaServiceImpl implements LigaService{
                             .user(liga.getUsuario().getNombreUsuario())
                             .urlImagen(liga.getImagen())
                             .rounds(liga.getNumJornadas())
-                            .matchTime(null)
+                            .matchTime(liga.getMatchTime())
                             .bots(bots.stream().map((bot -> bot.getId().intValue())).toList())
                             .build()
             );
@@ -116,6 +116,7 @@ public class LigaServiceImpl implements LigaService{
         ligaRepository.delete(league);
     }
 
+    // TODO Añadir error por liga repetida -> por lo que parece no hay atributos unicos, por lo que no hay repetición de ligas??
     public void LigaRegistro(LeagueDTO ligaDto){
         // solo un número de bots par, controlar en el front-end números > 0
         if (ligaDto.getBots().length % 2 != 0) {
@@ -125,7 +126,38 @@ public class LigaServiceImpl implements LigaService{
         // establecer estado = ABIERTA por defecto si el usuario no lo especifica
 
         String estado = EstadoLigaConstants.ABIERTA;
-        Liga liga = new Liga(ligaDto.getName(), ligaDto.getRounds(), ligaDto.getBots().length, estado, ligaDto.getUrlImagen(), 1, usuario);
+        Liga liga = new Liga(ligaDto.getName(), ligaDto.getRounds(), ligaDto.getBots().length, estado, ligaDto.getUrlImagen(), 1, usuario, ligaDto.getMatchTime());
+        ligaRepository.save(liga);
+    }
+
+    public void actualizarLiga(LeagueDTO ligaDto, Long id){
+        Optional<Liga> consulta = null;
+        consulta = ligaRepository.findById(id);
+        if(!consulta.isPresent()){
+            throw(new LigaNotFoundException(id));
+        }
+        Liga liga = consulta.get();
+
+        Optional<Usuario> user = usuarioRepository.findById((long)ligaDto.getCreador());
+        if(!user.isPresent()){
+            throw(new UserNotFoundException(0));
+        }
+
+        //el nuevo numero de bots no puede ser menor a los bots inscritos actualmente a la liga, además, ha de ser par
+        if (ligaDto.getBots().length % 2 != 0) {
+            throw new IncorrectNumBotsException(ligaDto.getBots().length);
+        }
+        List<Clasificacion> bots = clasificacionRepository.findByLigaId(id);
+        if(ligaDto.getBots().length < bots.size()){
+            throw new IncorrectNumBotsException(ligaDto.getBots().length);
+        }
+
+        liga.setNombreLiga(ligaDto.getName());
+        liga.setImagen(ligaDto.getUrlImagen());
+        liga.setNumJornadas(ligaDto.getRounds());
+        liga.setNumBots(ligaDto.getBots().length);
+        liga.setUsuario(user.get());
+
         ligaRepository.save(liga);
     }
 
@@ -134,7 +166,7 @@ public class LigaServiceImpl implements LigaService{
     public void registerBotToLeague(Long botId, Long leagueId) {
 
         Bot bot = botRepository.findById(botId)
-                .orElseThrow(() -> new BotNotFoundException(botId));
+                .orElseThrow(() -> new BotNotFoundException());
 
         Liga league = ligaRepository.findById(leagueId)
                 .orElseThrow(() -> new LigaNotFoundException(leagueId));
