@@ -3,6 +3,7 @@ package com.adondeband.back_end_adonde_band.jpa.liga;
 import com.adondeband.back_end_adonde_band.jpa.entities.ESTADO_Entity;
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenEntity;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionEntity;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,9 +27,15 @@ public class LigaEntity {
 
     private LocalDateTime fechaFin;
 
+    private int rondas;
+    private long matchTime;
+
     @ManyToOne
     private ImagenEntity imagen;
 
     @OneToMany(mappedBy = "liga")
     private List<ParticipacionEntity> participaciones;
+
+    @ManyToOne
+    private UsuarioEntity usuario;
 }

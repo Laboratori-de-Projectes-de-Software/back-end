@@ -25,9 +25,11 @@ public class LigaJpaAdapter implements LigaPort {
     @Override
     @Transactional
     public Liga save(Liga liga) {
-        return  ligaJpaMapper.toDomain(
-                ligaJpaRepository.save(
-                        ligaJpaMapper.toEntity(liga)));
+        LigaEntity l3 = ligaJpaMapper.toEntity(liga);
+        LigaEntity l2 = ligaJpaRepository.save(l3);
+        Liga l =  ligaJpaMapper.toDomain(
+                l2);
+        return l;
     }
 
     @Override

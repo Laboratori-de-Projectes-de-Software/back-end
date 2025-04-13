@@ -1,5 +1,7 @@
 package com.adondeband.back_end_adonde_band.jpa.liga;
 
+import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import com.adondeband.back_end_adonde_band.jpa.entities.ESTADO_Entity;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionEntity;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
@@ -8,6 +10,7 @@ import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -51,5 +54,15 @@ public interface LigaJpaMapper {
         }
 
         return ESTADO.valueOf(estado_entity.name());
+    }
+
+    default UsuarioEntity map(UsuarioId usuarioId){
+        UsuarioEntity usuario = new UsuarioEntity();
+        usuario.setId(usuarioId.value());
+        return usuario;
+    }
+
+    default UsuarioId map(UsuarioEntity usuarioEntity){
+        return new UsuarioId(usuarioEntity.getId());
     }
 }

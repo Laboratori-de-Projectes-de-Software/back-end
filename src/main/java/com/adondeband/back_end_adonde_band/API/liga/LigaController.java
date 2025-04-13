@@ -2,16 +2,22 @@ package com.adondeband.back_end_adonde_band.API.liga;
 
 import com.adondeband.back_end_adonde_band.API.enfrentamiento.EnfrentamientoDTO;
 import com.adondeband.back_end_adonde_band.API.participacion.ParticipacionDTO;
+import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
+import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenService;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaImpl;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaService;
 import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
 import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionService;
+import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -26,16 +32,21 @@ public class LigaController {
     private final LigaService ligaService;
     private final LigaDtoMapper ligaDtoMapper;
     private final ParticipacionService participacionService;
+    private final UsuarioService usuarioService;
+    private final ImagenService imagenService;
 
     @Autowired
-    public LigaController(LigaImpl ligaService, LigaDtoMapper ligaDtoMapper, ParticipacionService participacionService) {
+    public LigaController(LigaImpl ligaService, LigaDtoMapper ligaDtoMapper, ParticipacionService participacionService, UsuarioService usuarioService, ImagenService imagenService) {
         this.ligaService = ligaService;
         this.ligaDtoMapper = ligaDtoMapper;
         this.participacionService = participacionService;
+        this.usuarioService = usuarioService;
+        this.imagenService = imagenService;
+
     }
 
     @GetMapping
-    public ResponseEntity<List<LigaDTO>> listarLigas(@RequestParam(value = "owner", required = false) Long userId) {
+    public ResponseEntity<List<LigaResponseDTO>> listarLigas(@RequestParam(value = "owner", required = false) Long userId) {
         // TODO
         List<Liga> ligas = (userId != null) ? ligaService.obtenerLigasPorUsuario(new UsuarioId(userId)) : ligaService.obtenerTodasLasLigas();
 
@@ -44,30 +55,38 @@ public class LigaController {
         }
 
         // Pasar de Liga a LigaDTO
-        List<LigaDTO> ligasDTO = ligas.stream().map(ligaDtoMapper::toDTO).toList();
+        List<LigaResponseDTO> ligasDTO = ligas.stream().map(ligaDtoMapper::toDTO).toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(ligasDTO);
     }
 
     @PostMapping
-    public ResponseEntity<?> insertarLiga(@RequestParam String nombre,
-                                          @RequestParam String fechaInicio, @RequestParam String fechaFin) {
-        //TODO
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME; // yyyy-MM-dd'T'HH:mm:ss
-            LocalDateTime inicio = LocalDateTime.parse(fechaInicio.trim(), formatter);
-            LocalDateTime fin = LocalDateTime.parse(fechaFin.trim(), formatter);
+    public ResponseEntity<LigaResponseDTO> insertarLiga(@RequestBody LigaDTO ligaDTO) {
+        // Convertir LigaDTO a Liga
+        LigaResponseDTO ligaResponseDTO = new LigaResponseDTO(ligaDTO);
+        Liga liga = ligaDtoMapper.toDomain(ligaResponseDTO);
 
-            LigaDTO ligaDTO = new LigaDTO(nombre, inicio, fin);
-            LigaDTO createdLiga = ligaDtoMapper.toDTO(ligaService.crearLiga(ligaDtoMapper.toDomain(ligaDTO)));
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdLiga);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Nombre ya elegido");
-        }
+        // Obtiene el usuario autenticado desde SecurityContextHolder
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        //Obtener el id de usuario autenticado
+        Usuario user = usuarioService.obtenerUsuarioPorNombre(authentication.getName());
+        // Set UserId en el bot
+        liga.setUsuario(user.getId());
+
+        // Guardar imagen del bot (por si no existe)
+        Imagen imagenSaved = imagenService.guardarImagen(liga.getImagen());
+        liga.setImagen(imagenSaved);
+
+        // Guardar la liga
+        Liga nuevaLiga = ligaService.crearLiga(liga);
+
+        // Devolver la respuesta
+        return ResponseEntity.status(HttpStatus.CREATED).body(ligaDtoMapper.toDTO(nuevaLiga));
     }
 
     @GetMapping("/{leagueId}")
-    public ResponseEntity<List<LigaDTO>> obtenerLiga(@PathVariable Long leagueId) {
+    public ResponseEntity<List<LigaResponseDTO>> obtenerLiga(@PathVariable Long leagueId) {
         List<Liga> ligas = ligaService.obtenerLigaPorId(new LigaId(leagueId));
 
         if (ligas.isEmpty()) {
@@ -75,7 +94,7 @@ public class LigaController {
         }
 
         // Convertir a LigaDTO
-        List<LigaDTO> ligaDTO = new ArrayList<>();
+        List<LigaResponseDTO> ligaDTO = new ArrayList<>();
         ligaDTO.add(ligaDtoMapper.toDTO(ligas.getFirst()));
 
         // Devolver la lista de LigaDTO en la respuesta HTTP
