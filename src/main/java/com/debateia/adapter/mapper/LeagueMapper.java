@@ -49,7 +49,7 @@ public interface LeagueMapper {
             return State.valueOf(state);
         } catch (IllegalArgumentException e) {
             // Default value if state string doesn't match any enum value
-            return State.PENDIENTE;
+            return State.PENDING;
         }
     }
 

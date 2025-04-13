@@ -18,7 +18,7 @@ public interface MatchMapper {
     
     // Convert from MatchEntity to Match domain
     @Mapping(target = "matchId", source = "id")
-    @Mapping(target = "messages", ignore = true)  // Messages mapping might need a separate mapper
+    @Mapping(target = "messageIds", ignore = true)  // Messages mapping might need a separate mapper
     Match toMatchDomain(MatchEntity matchEntity);
 
     // Convert from Match domain to MatchEntity
@@ -46,7 +46,7 @@ public interface MatchMapper {
 
     // Update existing Match domain from MatchEntity
     @Mapping(target = "matchId", source = "id")
-    @Mapping(target = "messages", ignore = true)
+    @Mapping(target = "messageIds", ignore = true)
     void updateMatchDomainFromEntity(MatchEntity source, @MappingTarget Match target);
 
     // Helper method to map string state to enum State
@@ -58,7 +58,7 @@ public interface MatchMapper {
             return State.valueOf(state);
         } catch (IllegalArgumentException e) {
             // Default value if state string doesn't match any enum value
-            return State.PENDIENTE;
+            return State.PENDING;
         }
     }
 

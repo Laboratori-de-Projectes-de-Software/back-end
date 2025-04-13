@@ -2,6 +2,7 @@ package com.debateia.application.service;
 
 import com.debateia.application.ports.in.rest.LeagueUseCase;
 import com.debateia.application.ports.out.persistence.LeagueRepository;
+import com.debateia.application.ports.out.persistence.MatchRepository;
 import com.debateia.domain.League;
 import com.debateia.domain.Participation;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LeagueService implements LeagueUseCase {
     private final LeagueRepository leagueRepository;
+    private final MatchService matchService;
     
     @Override
     public League getLeague(int leagueId) {
@@ -50,7 +52,8 @@ public class LeagueService implements LeagueUseCase {
 
     @Override
     public void startLeague(int leagueId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        League league = leagueRepository.findByLeagueId(leagueId);
+        matchService.createLeagueMatches(league);
     }
 
     @Override
