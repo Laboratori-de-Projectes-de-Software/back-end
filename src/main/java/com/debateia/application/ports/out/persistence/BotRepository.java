@@ -2,14 +2,15 @@ package com.debateia.application.ports.out.persistence;
 
 
 import com.debateia.adapter.out.persistence.entities.BotEntity;
+import com.debateia.domain.Bot;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface BotRepository {
-    List<BotEntity> findAll();
-    List<BotEntity> findByUserId(Integer userId);
-    BotEntity save(BotEntity entity);
+    List<Bot> findAll();
+    List<Bot> findByUserId(Integer userId);
+    Bot save(Bot bot);
     boolean exists(String name);
-    Optional<BotEntity> findById(Integer botId);
+    Optional<Bot> findById(Integer botId);
 }

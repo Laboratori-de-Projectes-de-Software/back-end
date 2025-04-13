@@ -69,9 +69,9 @@ public interface MatchMapper {
     // After mapping method to handle fighters list if needed
     @AfterMapping
     default void setFightersList(@MappingTarget Match match) {
-        ArrayList<String> fighters = new ArrayList<>();
-        fighters.add(match.getBot1().getTrait());
-        fighters.add(match.getBot2().getTrait());
-        match.setFighters(fighters);
+        //ArrayList<String> fighters = new ArrayList<>();
+        //fighters.add(match.getBot1().getTrait());
+        //fighters.add(match.getBot2().getTrait());
+        //match.setFighters(fighters);
     }
 }

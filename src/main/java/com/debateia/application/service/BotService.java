@@ -4,6 +4,7 @@ import com.debateia.adapter.out.persistence.entities.BotEntity;
 import com.debateia.adapter.out.persistence.entities.UserEntity;
 import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.UserRepository;
+import com.debateia.domain.Bot;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -20,7 +21,7 @@ public class BotService {
     private final BotRepository botRepository;
     private final UserRepository userRepository;
 
-    public List<BotEntity> getBots(Optional<Integer> ownerId) {
+    public List<Bot> getBots(Optional<Integer> ownerId) {
         if (ownerId.isPresent()) {
             Optional<UserEntity> user = userRepository.findById(ownerId.get());
             if (user.isEmpty()) { // solicitud de usuario inexistente
@@ -33,40 +34,40 @@ public class BotService {
     }
 
     @Transactional
-    public BotEntity createBot(BotEntity botEntity, Integer userId) {
-        Optional<UserEntity> owner = userRepository.findById(userId);
+    public Bot createBot(Bot bot, Integer userId) {
+        Optional<UserEntity> owner = userRepository.findById(userId); // @TODO cambiar UserEntity a User para hexagonalizar
 
         if (owner.isPresent()) { // usuario existe
-            if (botRepository.exists(botEntity.getName())) { //
+            if (botRepository.exists(bot.getName())) { //
                 throw new DataIntegrityViolationException("Ya existe un bot con ese nombre");
             }
-            botEntity.setUser(owner.get()); // anadir relacion del bot al usuario
-            return botRepository.save(botEntity);
+            bot.setUserId(userId); // anadir relacion del bot al usuario
+            return botRepository.save(bot);
         }
         throw new EntityNotFoundException("El usuario con ID "+userId+" no existe");
     }
 
-    public BotEntity getBotById(Integer botId) {
-        Optional<BotEntity> botEntity = botRepository.findById(botId);
-        if (botEntity.isEmpty()) {
+    public Bot getBotById(Integer botId) {
+        Optional<Bot> bot = botRepository.findById(botId);
+        if (bot.isEmpty()) {
             throw new EntityNotFoundException("El bot con ID "+botId+" no existe");
         }
-        return botEntity.get();
+        return bot.get();
     }
 
-    public BotEntity updateBot(Integer botId, Integer userId, BotEntity newBot) {
-        Optional<BotEntity> currentBot = botRepository.findById(botId);
+    public Bot updateBot(Integer botId, Integer userId, Bot newBot) {
+        Optional<Bot> currentBot = botRepository.findById(botId);
         if (currentBot.isEmpty()) {
             throw new EntityNotFoundException("El bot con ID \""+botId+"\" a actualizar no existe");
         }
-        Optional<UserEntity> user = userRepository.findById(userId);
+        Optional<UserEntity> user = userRepository.findById(userId); // @TODO hexagonalizar user
         if (user.isEmpty()) {
             throw new EntityNotFoundException("El user con ID \""+userId+"\" propietario del bot no existe");
         }
         newBot.setWins(currentBot.get().getWins());
         newBot.setDraws(currentBot.get().getDraws());
         newBot.setLosses(currentBot.get().getLosses());
-        newBot.setUser(user.get());
+        newBot.setUserId(user.get().getId());
         newBot.setId(botId); // IMPORTANTE!!! Para que save haga UPDATE en vez de INSERT
         try {
             return botRepository.save(newBot);

@@ -4,7 +4,9 @@ import com.debateia.adapter.in.web.dto.request.BotDTO;
 import com.debateia.adapter.in.web.dto.response.BotResponseDTO;
 import com.debateia.adapter.in.web.dto.response.BotSummaryResponseDTO;
 import com.debateia.adapter.out.persistence.entities.BotEntity;
+import com.debateia.application.mapper.BotMapper;
 import com.debateia.application.service.BotService;
+import com.debateia.domain.Bot;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toList;
+
 @RestController
 @RequestMapping("/bot")
 @RequiredArgsConstructor
@@ -25,7 +29,7 @@ public class BotController {
     @GetMapping
     public ResponseEntity<List<BotSummaryResponseDTO>> getAllBots(
             @RequestParam(name = "owner", required = false) Integer ownerId) {
-        List<BotEntity> bots;
+        List<Bot> bots;
         try {
             bots = botService.getBots(Optional.ofNullable(ownerId));
         } catch (EntityNotFoundException e) { // usuario inexistente (del que se pide obtener bots)
@@ -33,7 +37,7 @@ public class BotController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         List<BotSummaryResponseDTO> response = bots.stream()
-                .map(this::convertToSummaryDTO)
+                .map(BotMapper::toSummaryDTO)
                 .toList(); // conversion a DTO muy prog funcional :3
         return ResponseEntity.ok(response);
     }
@@ -41,9 +45,10 @@ public class BotController {
     @PostMapping
     public ResponseEntity<BotResponseDTO> createBot(
             @RequestBody BotDTO botDto) {
-        BotEntity botEntity = toEntity(botDto);
+        Bot botIn = BotMapper.DTOtoDomain(botDto);
+        Bot bot;
         try {
-            botEntity = botService.createBot(botEntity, botDto.getUserId()); // meter en BD si el usuario existe
+            bot = botService.createBot(botIn, botDto.getUserId()); // meter en BD si el usuario existe
         } catch (DataIntegrityViolationException e) { // bot ya existia
             System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -51,15 +56,16 @@ public class BotController {
             System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(convertToResponseDto(botEntity));
+        BotResponseDTO botResponse = BotMapper.toResponseDto(bot);
+        return ResponseEntity.status(HttpStatus.CREATED).body(botResponse);
     }
 
     @GetMapping("/{botId}")
     public ResponseEntity<BotResponseDTO> getBotById(
             @PathVariable Integer botId) {
         try {
-            BotEntity botEntity = botService.getBotById(botId);
-            return ResponseEntity.ok(convertToResponseDto(botEntity));
+            Bot bot = botService.getBotById(botId);
+            return ResponseEntity.ok(BotMapper.toResponseDto(bot));
         } catch (EntityNotFoundException e) { // bot no encontrado
             System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -70,10 +76,10 @@ public class BotController {
     public ResponseEntity<BotResponseDTO> updateBot(
             @PathVariable Integer botId,
             @RequestBody BotDTO botDto) {
-        BotEntity botEntity = toEntity(botDto);
+        Bot botIn = BotMapper.DTOtoDomain(botDto);
         try {
-            BotEntity entityUpdate = botService.updateBot(botId, botDto.getUserId(), botEntity);
-            BotResponseDTO response = convertToResponseDto(entityUpdate);
+            Bot botUpdate = botService.updateBot(botId, botDto.getUserId(), botIn);
+            BotResponseDTO response = BotMapper.toResponseDto(botUpdate);
             return ResponseEntity.ok(response);
         } catch (EntityNotFoundException e) { // bot/usuario asociado no existe
             System.err.println(e.getMessage());
@@ -84,36 +90,4 @@ public class BotController {
         }
     }
 
-    private BotSummaryResponseDTO convertToSummaryDTO(BotEntity bot) {
-        BotSummaryResponseDTO dto = new BotSummaryResponseDTO();
-        dto.setName(bot.getName());
-        dto.setId(bot.getId());
-        dto.setDescription(bot.getDescription());
-        return dto;
-    }
-
-    private BotEntity toEntity(BotDTO dto) {
-        BotEntity entity = new BotEntity();
-        entity.setDescription(dto.getDescription());
-        entity.setName(dto.getName());
-        entity.setId(null); // id = auto increment
-        entity.setUrl_imagen(dto.getUrlImagen());
-        entity.setEndpoint(dto.getEndpoint());
-        entity.setLosses(0);
-        entity.setWins(0);
-        entity.setDraws(0);
-        return entity;
-    }
-
-    private BotResponseDTO convertToResponseDto(BotEntity bot) {
-        BotResponseDTO dto = new BotResponseDTO();
-        dto.setBotId(bot.getId());
-        dto.setName(bot.getName());
-        dto.setDescription(bot.getDescription());
-        dto.setUrlImage(bot.getUrl_imagen());
-        dto.setNLosses(bot.getLosses());
-        dto.setNWins(bot.getWins());
-        dto.setNDraws(bot.getDraws());
-        return dto;
-    }
 }
