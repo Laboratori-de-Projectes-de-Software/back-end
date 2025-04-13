@@ -13,4 +13,5 @@ public class UserResponseDTO {
     private String token;
     private Date expiresIn;
     private String user;
+    private Integer userId;
 }

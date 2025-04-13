@@ -27,18 +27,9 @@ public class BotController {
 
     @PostMapping
     public ResponseEntity<BotResponseDTO> createBot(@RequestBody BotDTO leagueDTO) {
-        BotDTO created = botUseCase.createBot(leagueDTO);
+        BotResponseDTO created = botUseCase.createBot(leagueDTO);
 
-        BotResponseDTO resp = new BotResponseDTO();
-        resp.setBotId(created.getId());
-        resp.setName(created.getName());
-        resp.setDescription(created.getDescription());
-        resp.setUrlImagen(created.getUrlImagen());
-        resp.setNWins(0);
-        resp.setNLosses(0);
-        resp.setNDraws(0);
-
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(created);
     }
 
 
@@ -59,6 +50,12 @@ public class BotController {
                 : botUseCase.listBots();
 
         return ResponseEntity.ok(bots);
+    }
+
+    @GetMapping("/{botId}")
+    public ResponseEntity<BotResponseDTO> getBot(@PathVariable Integer botId) {
+        BotResponseDTO bot = botUseCase.getBot(botId);
+        return ResponseEntity.ok(bot);
     }
 
     @PutMapping("/{botId}")

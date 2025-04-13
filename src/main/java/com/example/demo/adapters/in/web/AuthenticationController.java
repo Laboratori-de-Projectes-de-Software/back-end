@@ -2,10 +2,13 @@ package com.example.demo.adapters.in.web;
 
 import com.example.demo.application.port.in.UserUseCase;
 import com.example.demo.application.service.JwtService;
+import com.example.demo.domain.model.User;
 import com.example.demo.dtos.UserDTOLogin;
 import com.example.demo.dtos.UserDTORegister;
 import com.example.demo.dtos.UserResponseDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,10 +49,15 @@ public class AuthenticationController {
         ZonedDateTime expirationTime = currentTime.plusNanos(jwtService.getExpirationTime());
         Date expiresInDate = Date.from(expirationTime.toInstant());
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userDetails = (User) authentication.getPrincipal();
+        Integer userId = userDetails.getId();
+
         UserResponseDTO userResponseDTO = new UserResponseDTO();
         userResponseDTO.setToken(jwtToken);
         userResponseDTO.setExpiresIn(new Date((new Date()).getTime() + jwtService.getExpirationTime()*3));  // Fecha actual
         userResponseDTO.setUser(userDTOLogin.getUsername());
+        userResponseDTO.setUserId(userId);
 
         return ResponseEntity.ok(userResponseDTO);
     }

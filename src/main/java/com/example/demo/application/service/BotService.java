@@ -28,7 +28,7 @@ public class BotService implements BotUseCase {
     }
 
     @Override
-    public BotDTO createBot(BotDTO botDTO) {
+    public BotResponseDTO createBot(BotDTO botDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetails = (User) authentication.getPrincipal();
         Integer userId = userDetails.getId();
@@ -38,13 +38,13 @@ public class BotService implements BotUseCase {
         bot.setnLosses(0);
         bot.setnDraws(0);
         Bot savedBot = botRepository.save(bot);
-        return toDTO(savedBot);
+        return toDTOResp(savedBot);
     }
 
     @Override
-    public BotDTO getBot(Integer botId) {
+    public BotResponseDTO getBot(Integer botId) {
         Bot bot = botRepository.findById(botId);
-        return toDTO(bot);
+        return toDTOResp(bot);
     }
 
     @Override
@@ -72,16 +72,6 @@ public class BotService implements BotUseCase {
         return botRepository.findByOwnerId(ownerId).stream()
                 .map(this::toDTOSum)
                 .collect(Collectors.toList());
-    }
-
-    private BotDTO toDTO(Bot bot) {
-        BotDTO dto = new BotDTO();
-        dto.setId(bot.getId());
-        dto.setName(bot.getName());
-        dto.setDescription(bot.getDescription());
-        dto.setUrlImagen(bot.getUrlImagen());
-        dto.setEndpoint(bot.getEndpoint());
-        return dto;
     }
 
     private BotSummaryResponseDTO toDTOSum(Bot bot) {
