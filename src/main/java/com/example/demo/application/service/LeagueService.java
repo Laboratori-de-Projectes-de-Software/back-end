@@ -4,7 +4,10 @@ import com.example.demo.application.port.in.LeagueUseCase;
 import com.example.demo.application.port.out.LeagueRepository;
 import com.example.demo.domain.model.League;
 import com.example.demo.dtos.LeagueDTO;
+import com.example.demo.dtos.LeagueResponseDTO;
 import org.springframework.stereotype.Service;
+import com.example.demo.dtos.LeagueSummaryDTO;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +43,14 @@ public class LeagueService implements LeagueUseCase {
     }
 
 
+    @Override
+    public List<LeagueSummaryDTO> listLeagueSummaries() {
+        return leagueRepository.findAll().stream()
+                .map(league -> new LeagueSummaryDTO(league.getName(), league.getUrlImagen()))
+                .collect(Collectors.toList());
+    }
+
+
 
 //    @Override
 //    public LeagueDTO updateLeague(Long leagueId, LeagueDTO leagueDTO) {
@@ -62,6 +73,20 @@ public class LeagueService implements LeagueUseCase {
                 .collect(Collectors.toList());
     }
 
+    public LeagueResponseDTO updateLeague(Long leagueId, LeagueDTO leagueDTO) {
+
+        League league = leagueRepository.findById(leagueId);
+        league.setName(leagueDTO.getName());
+        league.setUrlImagen(leagueDTO.getUrlImagen());
+        league.setRounds(leagueDTO.getRounds());
+        league.setMatchTime(leagueDTO.getMatchTime());
+        league.setBots(leagueDTO.getBots());
+
+        League updated = leagueRepository.save(league);
+
+        return toDTOresponse(updated);
+    }
+
     private LeagueDTO toDTO(League league) {
         LeagueDTO dto = new LeagueDTO();
         dto.setId(league.getId());
@@ -73,4 +98,15 @@ public class LeagueService implements LeagueUseCase {
         return dto;
     }
 
+
+    private LeagueResponseDTO toDTOresponse (League league) {
+        LeagueResponseDTO dto = new LeagueResponseDTO();
+        dto.setLeagueId(league.getId());
+        dto.setName(league.getName());
+        dto.setUrlImagen(league.getUrlImagen());
+        dto.setRounds(league.getRounds());
+        dto.setMatchTime(league.getMatchTime());
+        dto.setBots(league.getBots());
+        return dto;
+    }
 }

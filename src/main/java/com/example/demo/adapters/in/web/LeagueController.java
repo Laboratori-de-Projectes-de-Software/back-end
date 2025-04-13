@@ -4,6 +4,7 @@ import com.example.demo.application.port.in.LeagueUseCase;
 import com.example.demo.domain.model.User;
 import com.example.demo.dtos.LeagueDTO;
 import com.example.demo.dtos.LeagueResponseDTO;
+import com.example.demo.dtos.LeagueSummaryDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Controlador REST que expone los endpoints para gestionar ligas.
- */
 @RestController
 @RequestMapping("/league")
 public class LeagueController {
@@ -45,22 +43,38 @@ public class LeagueController {
         return ResponseEntity.ok(resp);
     }
 
-//    @PutMapping("/{leagueId}")
-//    public ResponseEntity<LeagueDTO> updateLeague(@PathVariable Long leagueId,
-//                                                    @RequestBody LeagueDTO leagueDTO) {
-//        LeagueDTO updated = leagueUseCase.updateLeague(leagueId, leagueDTO);
-//        return ResponseEntity.ok(updated);
-//    }
-
+    // GET /league/{id} → devuelve la info completa de una liga
     @GetMapping("/{leagueId}")
-    public ResponseEntity<LeagueDTO> getLeague(@PathVariable Long leagueId) {
-        LeagueDTO league = leagueUseCase.getLeague(leagueId);
-        return ResponseEntity.ok(league);
+    public ResponseEntity<LeagueResponseDTO> getLeague(@PathVariable Long leagueId) {
+        LeagueDTO leagueDTO = leagueUseCase.getLeague(leagueId);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userDetails = (User) authentication.getPrincipal();
+        Integer userId = userDetails.getId();
+
+        LeagueResponseDTO resp = new LeagueResponseDTO();
+        resp.setLeagueId(leagueDTO.getId());
+        resp.setState("Active"); // o lógica real si cambia
+        resp.setName(leagueDTO.getName());
+        resp.setUrlImagen(leagueDTO.getUrlImagen());
+        resp.setUser(userId);
+        resp.setRounds(leagueDTO.getRounds());
+        resp.setMatchTime(leagueDTO.getMatchTime());
+        resp.setBots(leagueDTO.getBots());
+
+        return ResponseEntity.ok(resp);
     }
 
+    // GET /league → devuelve solo nombre e imagen
     @GetMapping
-    public ResponseEntity<List<LeagueDTO>> listLeagues() {
-        List<LeagueDTO> leagues = leagueUseCase.listLeagues();
-        return ResponseEntity.ok(leagues);
+    public ResponseEntity<List<LeagueSummaryDTO>> listLeagueSummaries() {
+        List<LeagueSummaryDTO> summaries = leagueUseCase.listLeagueSummaries();
+        return ResponseEntity.ok(summaries);
+    }
+
+    @PutMapping("/{leagueId}")
+    public ResponseEntity<LeagueResponseDTO> updateLeague(@PathVariable Long leagueId, @RequestBody LeagueDTO leagueDTO) {
+        LeagueResponseDTO updated = leagueUseCase.updateLeague(leagueId, leagueDTO);
+        return ResponseEntity.ok(updated);
     }
 }
