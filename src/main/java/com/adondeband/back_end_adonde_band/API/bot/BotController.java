@@ -98,6 +98,10 @@ public class BotController {
         // Obtener la lista de Bots desde el servicio
         List<Bot> bots = botService.obtenerBotPorNombre(botId);
 
+        if (bots.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
         // Convertir manualmente de Bot a BotDTO
         List<BotDTOResponse> botDTO = new ArrayList<>();
         botDTO.add(botMapper.toDTO(bots.getFirst()));
