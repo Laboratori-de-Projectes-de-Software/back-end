@@ -7,19 +7,20 @@ import com.debateia.adapter.in.web.dto.request.UpdateCredRequest;
 import com.debateia.adapter.in.web.dto.request.UserDTOLogin;
 import com.debateia.adapter.in.web.dto.request.UserDTORegister;
 import com.debateia.adapter.out.persistence.UserResponseDTO;
+import com.debateia.application.jwt.TokenData;
 import com.debateia.application.ports.out.persistence.UserRepository;
 import com.debateia.domain.User;
 import com.debateia.application.ports.out.persistence.TokenRepository;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -27,8 +28,6 @@ import java.time.ZoneId;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 @Service
 @RequiredArgsConstructor
@@ -44,156 +43,73 @@ public class AuthService implements AuthUseCase {
     private int expiration; // Elimina "final"
 
     @Override
-public ResponseEntity<?> register(final UserDTORegister request) {
-    if (repository.existsByMail(request.mail())) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body("Email already exists.");
-    }
-
-    // Verifica si el nombre de usuario ya está registrado
-    if (repository.existsByUsername(request.user())) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body("Username already exists.");
-    }
-
-    User user = User.builder()
-            .username(request.user())
-            .mail(request.mail())
-            .password(passwordEncoder.encode(request.password()))
-            .build();
-    // final UserEntity userEntity = authMapper.usuarioToEntity(user); // Corregido angel (hexagonalizado)
-
-    try {
-        System.out.println("AIAEEEEY AIAEEEY AIA AAAA AAAA PLUMA PLUMA GAAAAY XDD \nuser:"+user);
-        System.out.flush();
-
+    public User register(final UserDTORegister request) {
+        if (repository.existsByMail(request.mail())) { // mail existe?
+            throw new DataIntegrityViolationException("Email \""+request.mail()+"\" ya existe");
+        }
+        if (repository.existsByUsername(request.user())) { // username existe?
+            throw new DataIntegrityViolationException("Username \""+request.user()+"\" ya existe");
+        }
+        User user = User.builder()
+                .username(request.user())
+                .mail(request.mail())
+                .password(passwordEncoder.encode(request.password()))
+                .build();
         final User savedUser = repository.save(user);
-        //user = authMapper.entityToUsuario(savedUser); // Corregido angel (hexagonalizado)
-
-
-        final String jwtToken = jwtService.generateToken(user);
+        final String jwtToken = jwtService.generateToken(savedUser);
         final String refreshToken = jwtService.generateRefreshToken(user); // @TODO ??????????????
-
-        // Obtener la fecha actual (Instant)
         Instant now = Instant.now();
         Instant expirationInstant = now.plusMillis(expiration);
         LocalDate expirationDate = expirationInstant.atZone(ZoneId.systemDefault()).toLocalDate();
-
-        // Aquí se crea el DTO de respuesta y se pasa como cuerpo
-        UserResponseDTO response = new UserResponseDTO(jwtToken, expirationDate, user.getUsername());
-        return ResponseEntity.ok(response); // Devolver la respuesta correcta con la información del usuario
-    } catch (Exception e) {
-        // Loggea el error para obtener detalles
-        e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Registration failed due to an internal error: " + e.getMessage());
+        savedUser.setToken(jwtToken);
+        savedUser.setExpiresIn(expirationDate);
+        return savedUser;
     }
-}
 
 
     @Override
-    public ResponseEntity<?> authenticate(final UserDTOLogin request) {
-        
+    public User authenticate(final UserDTOLogin request) {
         try {
-            // Intentar autenticar al usuario
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.user(),
-                            request.password()));
-                            
-            User user = User.builder().username(request.user())
-                    .password(passwordEncoder.encode(request.password())).build();
-            //UserEntity userEntity = authMapper.usuarioToEntity(user); // // Corregido angel (hexagonalizado)
-            // Buscar al usuario en la base de datos
-            user = repository.findByUsername(user.getUsername())
-                    .orElseThrow(() -> null);
-            //user = authMapper.entityToUsuario(user); // Corregido angel (hexagonalizado)
-            
-            // Generar tokens
-            final String accessToken = jwtService.generateToken(user);
-            final String refreshToken = jwtService.generateRefreshToken(user);
-
-            // Revocar tokens anteriores y guardar el nuevo
-            // revokeAllUserTokens(user);
-            // saveUserToken(user, accessToken);
-
-            // Devolver la respuesta con los tokens
-            // Obtener la fecha actual (Instant)
-        Instant now = Instant.now();
-
-        // Sumar los milisegundos de expiración al tiempo actual
-        Instant expirationInstant = now.plusMillis(expiration);
-
-        // Convertir el Instant a LocalDate
-        LocalDate expirationDate = expirationInstant.atZone(ZoneId.systemDefault()).toLocalDate();
-        return ResponseEntity.ok(new UserResponseDTO(accessToken, expirationDate, user.getUsername()));
-
-        }  catch (BadCredentialsException e) {
-        // Si las credenciales son incorrectas, devolver 401 Unauthorized
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)  // 401 Unauthorized
-                .body("Credenciales incorrectas");  // Respuesta vacía
-    } catch (UsernameNotFoundException e) {
-        // Si el usuario no existe, devolver 404 Not Found
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)  // 404 Not Found
-                .body("Usuario no existente");  // Usuario no encontrado
-    } catch (Exception e) {
-        // Para otros errores generales
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)  // 501 Not Implemented
-                .body("Error intenro");  // Respuesta vacía
-    }
+                            request.password()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Credenciales incorrectas");
+        }
+        // Buscar el usuario autenticado en la base de datos
+        return repository.findByUsername(request.user())
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no existente"));
     }
 
-    @Override
-    public UserResponseDTO updateCred(@NotNull final String authentication, UpdateCredRequest request) {
-        // Obtener el usuario autenticado
-        if (authentication == null || !authentication.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Invalid auth header");
-        }
-        final String authToken = authentication.substring(7);
-        System.out.println("USERNAME: ");
-        final String currentUsername = jwtService.extractUsername(authToken);
-        if (currentUsername == null) {
-            return null;
-        }
-        /*
-         * User user = User.builder().email(request.newEmail())
-         * .password(passwordEncoder.encode(request.newPassword())).build();
-         * System.out.println("HOALAAALALAMALA: " + user.getEmail());
-         * UserEntity userEntity = authMapper.usuarioToEntity(user);
-         * System.out.println("USER ENTITY: " + userEntity.getEmail());
-         */
-        
-        User user = this.repository.findByUsername(currentUsername).orElseThrow();
-        final boolean isTokenValid = jwtService.isTokenValid(authentication);
 
-        if (!isTokenValid) {
-            return null;
-        }
-
-        // Verificar si el nuevo email ya está en uso
-        if (repository.existsByUsername(request.newUsername()) && !currentUsername.equals(request.newUsername())) {
-            return null;
-        }
-
-        // Actualizar las credenciales
-        user.setUsername(request.newUsername());
-        user.setPassword(passwordEncoder.encode(request.newPassword()));
-
-        repository.save(user);
-        //User user = authMapper.entityToUsuario(user); // Corregido angel (hexagonalizado)
-        // Generar tokens
-        final String accessToken = jwtService.generateToken(user);
-        final String refreshToken = jwtService.generateRefreshToken(user); // @TODO ?????????????????????
-        // Obtener la fecha actual (Instant)
-        Instant now = Instant.now();
-
-        // Sumar los milisegundos de expiración al tiempo actual
-        Instant expirationInstant = now.plusMillis(expiration);
-
-        // Convertir el Instant a LocalDate
-        LocalDate expirationDate = expirationInstant.atZone(ZoneId.systemDefault()).toLocalDate();
-        return new UserResponseDTO(accessToken, expirationDate, user.getUsername());
+@Override
+public User updateCred(@NotNull final String authentication, UpdateCredRequest request) {
+    // Obtener el usuario autenticado
+    if (authentication == null || !authentication.startsWith("Bearer ")) {
+        throw new IllegalArgumentException("Header de autenticacion invalido");
     }
+    final String authToken = authentication.substring(7);
+    System.out.println("USERNAME: ");
+    final String currentUsername = jwtService.extractUsername(authToken);
+    if (currentUsername == null) {
+        throw new IllegalArgumentException("Token invalido");
+    }
+    User user = this.repository.findByUsername(currentUsername).orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+    // email ya en uso?
+    if (repository.existsByUsername(request.newUsername()) && !currentUsername.equals(request.newUsername())) {
+        throw new IllegalArgumentException("Username ya en uso");
+    }
+    // actualizar las credenciales
+    user.setUsername(request.newUsername());
+    user.setPassword(passwordEncoder.encode(request.newPassword()));
+
+    // guardar el usuario actualizado
+    return repository.save(user);
+}
+
 
     /*
      * private void saveUserToken(UserEntity userEntity, String jwtToken) {
@@ -221,35 +137,46 @@ public ResponseEntity<?> register(final UserDTORegister request) {
      */
 
     @Override
-    public UserResponseDTO refreshToken(@NotNull final String authentication) {
-
+    public User refreshToken(@NotNull final String authentication) {
         if (authentication == null || !authentication.startsWith("Bearer ")) {
             throw new IllegalArgumentException("Invalid auth header");
         }
+
+        // Extraer el refreshToken del header
         final String refreshToken = authentication.substring(7);
+
+        // Obtener el username del refreshToken
         final String userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail == null) {
-            return null;
+            throw new IllegalArgumentException("Invalid refresh token: username extraction failed");
         }
 
-        final User user = this.repository.findByMail(userEmail).orElseThrow();
-        final boolean isTokenValid = jwtService.isTokenValid(authentication);
+        // Buscar el usuario con ese email
+        final User user = this.repository.findByMail(userEmail).orElseThrow(() ->
+                new IllegalArgumentException("User not found with email: " + userEmail)
+        );
+
+        // Verificar si el token es válido
+        final boolean isTokenValid = jwtService.isTokenValid(refreshToken);
         if (!isTokenValid) {
-            return null;
+            throw new IllegalArgumentException("Invalid refresh token");
         }
-        //User user = authMapper.entityToUsuario(user); // Corregido angel (hexagonalizado)
-        final String accessToken = jwtService.generateRefreshToken(user);
-        // revokeAllUserTokens(user);
-        // saveUserToken(user, accessToken);
-        // Obtener la fecha actual (Instant)
-        Instant now = Instant.now();
 
-        // Sumar los milisegundos de expiración al tiempo actual
-        Instant expirationInstant = now.plusMillis(expiration);
-
-        // Convertir el Instant a LocalDate
-        LocalDate expirationDate = expirationInstant.atZone(ZoneId.systemDefault()).toLocalDate();
-        return new UserResponseDTO(accessToken, expirationDate, user.getUsername());
+        // Generar un nuevo accessToken
+        return user;
     }
+
+
+    public TokenData generateTokens(User user) {
+        final String accessToken = jwtService.generateToken(user);
+        final String refreshToken = jwtService.generateRefreshToken(user);
+
+        Instant now = Instant.now();
+        Instant expirationInstant = now.plusMillis(expiration);
+        LocalDate expirationDate = expirationInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+
+        return new TokenData(accessToken, expirationDate);
+    }
+
 
 }
