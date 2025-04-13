@@ -39,6 +39,11 @@ public class LeagueController {
         return leagueService.getLeagueById(leagueId);
     }
 
+    @PostMapping("/{leagueId}/bot")
+    public ApiResponse addBotById(@PathVariable Integer leagueId, @RequestBody Integer botId) {
+        return leagueService.addBotById(leagueId, botId);
+    }
+
     @PutMapping("/{leagueId}")
     public ApiResponse updateLeague(@PathVariable int leagueId, @Valid @RequestBody LeagueDTO leagueDTO) {
         return leagueService.updateLeague(leagueId, leagueDTO);

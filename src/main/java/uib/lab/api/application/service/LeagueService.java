@@ -18,6 +18,8 @@ import uib.lab.api.application.port.UserPort;
 import uib.lab.api.domain.*;
 import uib.lab.api.infraestructure.jpaEntity.League;
 import uib.lab.api.infraestructure.util.ApiResponse;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -138,6 +140,37 @@ public class LeagueService {
         }
     }
 
+    public ApiResponse addBotById(Integer leagueId, Integer botId) {
+        try {
+            LeagueDomain leagueDomain = leaguePort.findById(leagueId)
+                    .orElseThrow(() -> new IllegalArgumentException("League not found with ID: " + leagueId));
+
+            int[] botIds = leagueDomain.getBotIds();
+
+            for (int i = 0; i < botIds.length; ++i) {
+                if (botIds[i] == botId) {
+                    return new ApiResponse(201, "League added");
+                }
+            }
+            int[] newBotIds = new int[botIds.length + 1];
+
+            for (int i = 0; i < botIds.length; ++i) {
+                newBotIds[i] = botIds[i];
+            }
+            newBotIds[newBotIds.length - 1] = botId;
+
+            leagueDomain.setBotIds(newBotIds);
+
+            leagueDomain = leaguePort.save(leagueDomain);
+
+            return new ApiResponse(201, "League added");
+        } catch (IllegalArgumentException e) {
+            return new ApiResponse(404, "League not found");
+        } catch (Exception e) {
+            return new ApiResponse(500, "Internal Server Error");
+        }
+    }
+  
     public ApiResponse<LeagueResponseDTO> updateLeague(int leagueId, LeagueDTO dto) {
         try {
             LeagueDomain league = leaguePort.findById(leagueId)
