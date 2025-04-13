@@ -36,7 +36,7 @@ public class TestParticipacionService {
     public void testSaveLiga() {
         // Arrange
         Liga liga = new Liga();
-        liga.setId(new LigaId(1L));
+//        liga.setId(new LigaId(1L));
         liga.setNombre("La liga EA Sports");
         liga.setEstado(ESTADO.PENDIENTE);
         liga.setFechaInicio(LocalDateTime.now());
@@ -56,6 +56,8 @@ public class TestParticipacionService {
         // participacion2.setBot(bot1.getNombre());
 
         // Act
+        Bot botSaved = botService.crearBot(bot1);
+        Liga ligaSaved = ligaService.crearLiga(liga);
         Participacion participacionSaved = participacionService.insertarParticipacion(participacion);
 
         // Assert

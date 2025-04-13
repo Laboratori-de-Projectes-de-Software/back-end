@@ -20,7 +20,6 @@ public class ParticipacionJpaAdapter implements ParticipacionPort {
     @Transactional
     public Participacion save(Participacion participacion) {
         ParticipacionEntity participacionEntity = participacionMapper.toEntity(participacion);
-        System.out.println("ParticipacionEntity: " + participacionEntity.getId() + "\n\n\n\n\n\n");
         ParticipacionEntity p = participacionJpaRepository.save(participacionEntity);
         Participacion p2 = participacionMapper.toDomain(p);
 
