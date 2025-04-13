@@ -2,6 +2,7 @@ package uib.lab.api.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,6 +28,8 @@ public class LeagueService {
     private final LeaguePort leaguePort;
     private final UserPort userPort;
     private final LeagueMapperImpl leagueMapper;
+    private final MatchService matchService;
+    private RoundService roundService;
 
 
     public ApiResponse<LeagueResponseDTO> createLeague(LeagueDTO leagueDTO) {
@@ -132,4 +135,73 @@ public class LeagueService {
             return new ApiResponse<>(500, "Internal Server Error");
         }
     }
+
+    public ApiResponse<LeagueResponseDTO> updateLeague(int leagueId, LeagueDTO dto) {
+        try {
+            LeagueDomain league = leaguePort.findById(leagueId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "League not found"));
+
+            league.setName(dto.getName());
+            league.setUrlImagen(dto.getUrlImagen());
+            league.setPlayTime(dto.getMatchTime());
+            league.setNumRounds(dto.getRounds());
+            league.setUserId(dto.getUserId());
+            league.setBotIds(dto.getBots());
+
+            LeagueDomain updatedLeague = leaguePort.save(league);
+
+            LeagueResponseDTO responseDTO = new LeagueResponseDTO(
+                    updatedLeague.getId(),
+                    updatedLeague.getState().name(),
+                    updatedLeague.getName(),
+                    updatedLeague.getUrlImagen(),
+                    updatedLeague.getPlayTime(),
+                    updatedLeague.getNumRounds(),
+                    updatedLeague.getUserId(),
+                    updatedLeague.getBotIds()
+            );
+
+            return new ApiResponse<>(200, "League updated", responseDTO);
+        }catch (ResponseStatusException e) {
+            return new ApiResponse<>(404, "League not found");
+        } catch (Exception e) {
+            return new ApiResponse<>(500, "Internal Server Error");
+        }
+    }
+
+    public ApiResponse<LeagueResponseDTO> startLeague(int leagueId) {
+        try{
+        LeagueDomain league = leaguePort.findById(leagueId)
+                .orElseThrow(() -> new RuntimeException("League not found"));
+
+        if (league.getState() == League.LeagueState.IN_PROGRESS) {
+            return new ApiResponse<>(400, "League already started", null);
+        }
+
+        league.setState(League.LeagueState.IN_PROGRESS);
+        leaguePort.save(league);
+
+        matchService.createMatches(league);
+
+        LeagueResponseDTO responseDTO = new LeagueResponseDTO(
+                league.getId(),
+                league.getState().name(),
+                league.getName(),
+                league.getUrlImagen(),
+                league.getPlayTime(),
+                league.getNumRounds(),
+                league.getUserId(),
+                league.getBotIds()
+        );
+
+        return new ApiResponse<>(201, "League started", responseDTO);
+        } catch (IllegalArgumentException e) {
+            return new ApiResponse<>(404, "League not found");
+        } catch (SecurityException e) {
+            return new ApiResponse<>(403, "Forbidden");
+        } catch (Exception e) {
+            return new ApiResponse<>(500, "Internal Server Error");
+        }
+    }
+
 }

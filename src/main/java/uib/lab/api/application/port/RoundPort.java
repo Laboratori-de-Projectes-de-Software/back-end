@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface RoundPort {
     Optional<RoundDomain> findById(int id);
-    
+    List<RoundDomain> saveAll(List<RoundDomain> rounds);
 }

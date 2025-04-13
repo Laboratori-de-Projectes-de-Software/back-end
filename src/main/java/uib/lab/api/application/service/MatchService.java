@@ -12,19 +12,15 @@ import uib.lab.api.application.dto.league.LeagueResponseDTO;
 import uib.lab.api.application.dto.match.MatchResponseDTO;
 import uib.lab.api.application.mapper.implementations.LeagueMapperImpl;
 import uib.lab.api.application.mapper.interfaces.LeagueMapper;
-import uib.lab.api.application.port.BotPort;
-import uib.lab.api.application.port.LeaguePort;
-import uib.lab.api.application.port.MatchPort;
-import uib.lab.api.application.port.UserPort;
-import uib.lab.api.domain.BotDomain;
-import uib.lab.api.domain.LeagueDomain;
-import uib.lab.api.domain.MatchDomain;
-import uib.lab.api.domain.UserDomain;
+import uib.lab.api.application.mapper.interfaces.MatchMapper;
+import uib.lab.api.application.port.*;
+import uib.lab.api.domain.*;
 import uib.lab.api.infraestructure.jpaEntity.Bot;
 import uib.lab.api.infraestructure.jpaEntity.League;
+import uib.lab.api.infraestructure.jpaEntity.Match;
 import uib.lab.api.infraestructure.util.ApiResponse;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,6 +30,9 @@ public class MatchService {
     private final LeaguePort leaguePort;
     private final BotPort botPort;
     private final MatchPort matchPort;
+    private final MatchMapper matchMapper;
+    private final RoundPort roundPort;
+    private RoundService roundService;
 
     public ApiResponse<MatchResponseDTO> getMatchesByLeague(int id) {
         try {
@@ -82,5 +81,45 @@ public class MatchService {
         } catch (Exception e) {
             return new ApiResponse<>(500, "Internal Server Error");
         }
+    }
+
+    public void createMatches(LeagueDomain league) {
+        int[] botIds = league.getBotIds();
+
+        if (botIds == null || botIds.length < 2) {
+            throw new IllegalArgumentException("Not enough bots to create matches");
+        }
+
+        List<Integer> botList = new ArrayList<>();
+        for (int botId : botIds) {
+            botList.add(botId);
+        }
+
+        Collections.shuffle(botList, new Random());
+
+        List<MatchDomain> matches = new ArrayList<>();
+
+        for (int i = 0; i < botList.size(); i++) {
+            for (int j = i + 1; j < botList.size(); j++) {
+                MatchDomain match = new MatchDomain();
+                match.setBotId1(botList.get(i));
+                match.setBotId2(botList.get(j));
+                match.setState(Match.MatchState.PENDING);
+                match.setResult(null);
+                match.setRounds(league.getNumRounds());
+                matches.add(match);
+            }
+        }
+
+        List<RoundDomain> rounds = roundService.createRounds(league);
+
+        int roundIndex = 0;
+        for (MatchDomain match : matches) {
+            RoundDomain assignedRound = rounds.get(roundIndex);
+            match.setRoundId(assignedRound.getId());
+            roundIndex = (roundIndex + 1) % rounds.size();
+        }
+
+        matchPort.saveAll(matches);
     }
 }
