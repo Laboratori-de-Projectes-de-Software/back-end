@@ -16,9 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.debateia.adapter.out.persistence.Token;
 import com.debateia.application.jwt.JwtAuthenticationFilter;
-import com.debateia.application.ports.out.persistence.TokenRepository;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -30,7 +28,6 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-    private final TokenRepository tokenRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {

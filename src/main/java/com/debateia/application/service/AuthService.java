@@ -1,16 +1,13 @@
 package com.debateia.application.service;
 
 import com.debateia.adapter.out.persistence.AuthMapper;
-import com.debateia.adapter.out.persistence.entities.UserEntity;
 import com.debateia.application.jwt.JwtService;
 import com.debateia.adapter.in.web.dto.request.UpdateCredRequest;
 import com.debateia.adapter.in.web.dto.request.UserDTOLogin;
 import com.debateia.adapter.in.web.dto.request.UserDTORegister;
-import com.debateia.adapter.out.persistence.UserResponseDTO;
 import com.debateia.application.jwt.TokenData;
 import com.debateia.application.ports.out.persistence.UserRepository;
 import com.debateia.domain.User;
-import com.debateia.application.ports.out.persistence.TokenRepository;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +30,6 @@ import org.springframework.beans.factory.annotation.Value;
 @RequiredArgsConstructor
 public class AuthService implements AuthUseCase {
     private final UserRepository repository;
-    private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
