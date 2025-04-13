@@ -43,7 +43,7 @@ public class TestLigaService {
         liga.setImagen(null);
         liga.setParticipaciones(new ArrayList<>());
         liga.setUsuario(null);
-        liga.setMatchTime(13);
+        liga.setMatchTime(13L);
         liga.setRondas(5);
 
         // Act
@@ -58,7 +58,6 @@ public class TestLigaService {
         assertEquals(liga.getFechaFin(), ligaSaved.getFechaFin());
         assertEquals(liga.getMatchTime(), ligaSaved.getMatchTime());
         assertEquals(liga.getRondas(), ligaSaved.getRondas());
-
     }
 
     @Test

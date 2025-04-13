@@ -98,9 +98,13 @@ public class BotJpaAdapter implements BotPort {
     @Transactional
     public List<Bot> findBotsUsuario(UsuarioId userId) {
         // Buscar UsuarioEntity en la base de datos usando el repositorio
-        UsuarioEntity usuarioEntity = botJpaRepository.findByUsuario(
+        List<BotEntity> botsFound =  botJpaRepository.findByUsuario(
                 usuarioJpaMapper.toEntity(userId)
-        ).getFirst().getUsuario();
+        );
+
+        if (botsFound.isEmpty()) throw new NotFoundException("Este usuario no existe");
+
+        UsuarioEntity usuarioEntity = botsFound.getFirst().getUsuario();
 
         // Mapear los bots asociados al usuario
         return botJpaRepository.findByUsuario(usuarioEntity)

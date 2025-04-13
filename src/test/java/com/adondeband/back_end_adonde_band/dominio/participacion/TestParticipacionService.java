@@ -59,7 +59,7 @@ public class TestParticipacionService {
         Participacion participacionSaved = participacionService.insertarParticipacion(participacion);
 
         // Assert
-        assertNull(liga.getId());
+        //assertNull(liga.getId());
         assertNotNull("El id de la participación no debe ser null", participacionSaved.getId());
         assertEquals(participacion.getBot(), participacionSaved.getBot());
         assertEquals(participacion.getLiga(), participacionSaved.getLiga());

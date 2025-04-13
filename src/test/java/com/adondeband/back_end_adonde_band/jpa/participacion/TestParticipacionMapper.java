@@ -40,6 +40,7 @@ public class TestParticipacionMapper {
         Participacion p_void = participacionJpaMapper.toDomain(p_e_void);
 
         // Assert
+        assert p_void != null;
     }
 
     @Test
@@ -60,6 +61,9 @@ public class TestParticipacionMapper {
         ligaEntity.setFechaFin(LocalDateTime.now());
 
         ParticipacionEntity p_e = new ParticipacionEntity();
+        p_e.setId(1L);
+        p_e.setPosicion(2);
+        p_e.setPuntuacion(9);
         p_e.setBot(botEntity);
         p_e.setLiga(ligaEntity);
 
@@ -68,7 +72,7 @@ public class TestParticipacionMapper {
 
         // Assert
         // Assert Participacion
-        assertEquals(p_e.getId(), p.getId());
+        assertEquals(p_e.getId().longValue(), p.getId().value());
         assertEquals(p_e.getPosicion(), p.getPosicion());
         assertEquals(p_e.getPuntuacion(), p.getPuntuacion());
         // Assert Bot
