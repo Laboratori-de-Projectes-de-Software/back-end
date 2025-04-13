@@ -10,11 +10,11 @@ import jakarta.persistence.*;
 @Getter
 @Setter
 @Entity
-public class  ParticipacionEntity {
+public class ParticipacionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "bot_id")
@@ -27,7 +27,7 @@ public class  ParticipacionEntity {
     private int posicion;
     private int puntuacion;
 
-    public ParticipacionEntity(long id) {
+    public ParticipacionEntity(Long id) {
         this.id = id;
     }
 

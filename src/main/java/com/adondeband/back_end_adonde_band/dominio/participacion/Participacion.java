@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Participacion {
 
-    private long id;
+    private ParticipacionId id;
 
     private BotId bot;
 
