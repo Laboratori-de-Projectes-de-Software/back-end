@@ -12,4 +12,6 @@ public interface MatchPort {
     List<MatchDomain> findAllByLeague(LeagueDomain league);
 
     void saveAll(List<MatchDomain> matches);
+
+    void deleteAll(List<MatchDomain> matches);
 }

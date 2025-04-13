@@ -67,6 +67,7 @@ public class LeagueMapperImpl implements LeagueMapper {
     @Override
     public League toEntity(LeagueDomain domain) {
         League entity = new League();
+        entity.setId(domain.getId());
         entity.setName(domain.getName());
         entity.setPlayTime(domain.getPlayTime());
         entity.setNumRounds(domain.getNumRounds());

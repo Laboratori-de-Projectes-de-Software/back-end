@@ -56,4 +56,11 @@ public class MatchJpaAdapter implements MatchPort {
         matchJpaRepository.saveAll(matchEntities);
     }
 
+    @Override
+    public void deleteAll(List<MatchDomain> matches) {
+        List<Match> entities = matches.stream()
+                .map(matchMapper::toEntity)
+                .collect(Collectors.toList());
+        matchJpaRepository.deleteAll(entities);
+    }
 }

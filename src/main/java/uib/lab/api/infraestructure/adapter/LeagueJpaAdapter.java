@@ -60,4 +60,10 @@ public class LeagueJpaAdapter implements LeaguePort {
                 .map(leagueMapper::toDomain)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void delete(LeagueDomain league) {
+        League entity = leagueMapper.toEntity(league);
+        leagueJpaRepository.delete(entity);
+    }
 }
