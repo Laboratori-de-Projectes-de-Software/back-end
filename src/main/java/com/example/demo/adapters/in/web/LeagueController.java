@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/league")
+@RequestMapping("/api/v0/league")
 public class LeagueController {
 
     private final LeagueUseCase leagueUseCase;

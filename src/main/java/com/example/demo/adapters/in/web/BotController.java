@@ -16,7 +16,7 @@ import java.util.List;
  * Controlador REST que expone los endpoints para gestionar ligas.
  */
 @RestController
-@RequestMapping("/bot")
+@RequestMapping("/api/v0/bot")
 public class BotController {
 
     private final BotUseCase botUseCase;

@@ -18,7 +18,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-@RequestMapping("/auth")
+@RequestMapping("/api/v0/auth")
 @RestController
 public class AuthenticationController {
     private final JwtService jwtService;
