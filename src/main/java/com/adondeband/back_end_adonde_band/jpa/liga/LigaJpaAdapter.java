@@ -38,11 +38,9 @@ public class LigaJpaAdapter implements LigaPort {
     @Override
     @Transactional
     public Liga save(Liga liga) {
-        LigaEntity l3 = ligaJpaMapper.toEntity(liga);
-        LigaEntity l2 = ligaJpaRepository.save(l3);
-        Liga l =  ligaJpaMapper.toDomain(
-                l2);
-        return l;
+        LigaEntity ligaEntity = ligaJpaMapper.toEntity(liga);
+        LigaEntity savedLigaEntity = ligaJpaRepository.save(ligaEntity);
+        return ligaJpaMapper.toDomain(savedLigaEntity);
     }
 
     @Override
@@ -66,8 +64,10 @@ public class LigaJpaAdapter implements LigaPort {
     @Override
     @Transactional
     public List<Liga> findLigasUsuario(UsuarioId userId) {
-        //TODO
-        return List.of();
+        return  ligaJpaRepository.findLigaEntitiesByUsuarioId(userId.value())
+                .stream()
+                .map(ligaJpaMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -137,6 +137,7 @@ public class LigaJpaAdapter implements LigaPort {
     }
 
     @Override
+    @Transactional
     public Liga addBotToLiga(LigaId ligaId, BotId botId) {
         LigaEntity ligaEntity = ligaJpaRepository.getLigaEntityById(ligaId.value());
         if (ligaEntity == null) throw new NotFoundException("Esta liga no existe");

@@ -56,12 +56,6 @@ public interface LigaJpaMapper {
         return ESTADO.valueOf(estado_entity.name());
     }
 
-    default UsuarioEntity map(UsuarioId usuarioId){
-        UsuarioEntity usuario = new UsuarioEntity();
-        usuario.setId(usuarioId.value());
-        return usuario;
-    }
-
     default UsuarioId map(UsuarioEntity usuarioEntity){
         return new UsuarioId(usuarioEntity.getId());
     }
