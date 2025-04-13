@@ -32,7 +32,7 @@ public class MatchService {
     private final MatchPort matchPort;
     private final MatchMapper matchMapper;
     private final RoundPort roundPort;
-    private RoundService roundService;
+    private final RoundService roundService;
 
     public ApiResponse<MatchResponseDTO> getMatchesByLeague(int id) {
         try {

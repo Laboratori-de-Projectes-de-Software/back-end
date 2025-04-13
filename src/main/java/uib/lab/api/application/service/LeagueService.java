@@ -29,7 +29,7 @@ public class LeagueService {
     private final UserPort userPort;
     private final LeagueMapperImpl leagueMapper;
     private final MatchService matchService;
-    private RoundService roundService;
+    private final RoundService roundService;
 
 
     public ApiResponse<LeagueResponseDTO> createLeague(LeagueDTO leagueDTO) {
@@ -200,7 +200,7 @@ public class LeagueService {
         } catch (SecurityException e) {
             return new ApiResponse<>(403, "Forbidden");
         } catch (Exception e) {
-            return new ApiResponse<>(500, "Internal Server Error");
+            return new ApiResponse<>(500, e.getMessage());
         }
     }
 

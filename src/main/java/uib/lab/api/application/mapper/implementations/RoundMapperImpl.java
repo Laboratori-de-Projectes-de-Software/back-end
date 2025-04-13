@@ -8,8 +8,10 @@ import org.springframework.stereotype.Component;
 import uib.lab.api.application.port.LeaguePort;
 import uib.lab.api.domain.LeagueDomain;
 import uib.lab.api.domain.RoundDomain;
+import uib.lab.api.infraestructure.jpaEntity.League;
 import uib.lab.api.infraestructure.jpaEntity.Match;
 import uib.lab.api.infraestructure.jpaEntity.Round;
+import uib.lab.api.infraestructure.jpaRepositories.LeagueJpaRepository;
 import uib.lab.api.infraestructure.jpaRepositories.MatchJpaRepository;
 
 import java.time.LocalDateTime;
@@ -25,7 +27,9 @@ public class RoundMapperImpl implements RoundMapper{
     private final LeaguePort leaguePort;
     private final LeagueMapper leagueMapper;
     private final MatchJpaRepository matchJpaRepository;
-    
+    private final LeagueJpaRepository leagueRepository;
+
+
     @Override
     public RoundDomain toDomain(Round entity){
         if(entity == null){
@@ -50,10 +54,11 @@ public class RoundMapperImpl implements RoundMapper{
         Round entity = new Round();
         entity.setId(domain.getId());
         entity.setInitialDate(LocalDateTime.parse(domain.getInitialDate()));
-        
-        LeagueDomain league = leaguePort.findById(domain.getLeagueId())
-        .orElseThrow(() -> new IllegalArgumentException("League not found with ID: " + domain.getLeagueId()));
-        entity.setLeague(leagueMapper.toEntity(league));
+
+        League league = leagueRepository.findById(domain.getLeagueId())
+                .orElseThrow(() -> new IllegalArgumentException("League not found with ID: " + domain.getLeagueId()));
+        entity.setLeague(league);
+
 
         if (domain.getMatchesId() != null) {
             Set<Match> matchs = Arrays.stream(domain.getMatchesId())
