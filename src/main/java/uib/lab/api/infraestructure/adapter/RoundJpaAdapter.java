@@ -39,4 +39,17 @@ public class RoundJpaAdapter implements RoundPort{
                 .map(roundMapper::toDomain)
                 .collect(Collectors.toList());
     }
+
+    public void deleteAll(List<RoundDomain> rounds) {
+        roundJpaRepository.deleteAll(
+                rounds.stream().map(roundMapper::toEntity).collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public List<RoundDomain> findAllByLeagueId(int leagueId) {
+        return roundJpaRepository.findAllByLeagueId(leagueId)
+                .stream().map(roundMapper::toDomain)
+                .collect(Collectors.toList());
+    }
 }

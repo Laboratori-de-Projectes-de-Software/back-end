@@ -13,4 +13,5 @@ public interface LeaguePort {
     List<LeagueDomain> findAllByUser(UserDomain user);
     List<LeagueDomain> findAllLeagues();
 
+    void delete(LeagueDomain league);
 }
