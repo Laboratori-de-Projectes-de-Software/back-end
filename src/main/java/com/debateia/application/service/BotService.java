@@ -5,6 +5,7 @@ import com.debateia.adapter.out.persistence.entities.UserEntity;
 import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.UserRepository;
 import com.debateia.domain.Bot;
+import com.debateia.domain.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -23,7 +24,7 @@ public class BotService {
 
     public List<Bot> getBots(Optional<Integer> ownerId) {
         if (ownerId.isPresent()) {
-            Optional<UserEntity> user = userRepository.findById(ownerId.get());
+            Optional<User> user = userRepository.findById(ownerId.get());
             if (user.isEmpty()) { // solicitud de usuario inexistente
                 throw new EntityNotFoundException("Usuario con ID " + ownerId.get() + " no encontrado");
             }
@@ -35,8 +36,8 @@ public class BotService {
 
     @Transactional
     public Bot createBot(Bot bot, Integer userId) {
-        Optional<UserEntity> owner = userRepository.findById(userId); // @TODO cambiar UserEntity a User para hexagonalizar
-
+        // @TODO esto esta mal, se ha montado el UserRepository mal... funciona pero no hexagonal. Deberia devolver User
+        Optional<User> owner = userRepository.findById(userId);
         if (owner.isPresent()) { // usuario existe
             if (botRepository.exists(bot.getName())) { //
                 throw new DataIntegrityViolationException("Ya existe un bot con ese nombre");
@@ -60,14 +61,15 @@ public class BotService {
         if (currentBot.isEmpty()) {
             throw new EntityNotFoundException("El bot con ID \""+botId+"\" a actualizar no existe");
         }
-        Optional<UserEntity> user = userRepository.findById(userId); // @TODO hexagonalizar user
+        // @TODO esto esta mal, se ha montado el UserRepository mal... funciona pero no hexagonal. Deberia devolver User
+        Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
             throw new EntityNotFoundException("El user con ID \""+userId+"\" propietario del bot no existe");
         }
         newBot.setWins(currentBot.get().getWins());
         newBot.setDraws(currentBot.get().getDraws());
         newBot.setLosses(currentBot.get().getLosses());
-        newBot.setUserId(user.get().getId());
+        newBot.setUserId(user.get().getUserId());
         newBot.setId(botId); // IMPORTANTE!!! Para que save haga UPDATE en vez de INSERT
         try {
             return botRepository.save(newBot);

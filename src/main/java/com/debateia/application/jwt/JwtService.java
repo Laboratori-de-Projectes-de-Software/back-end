@@ -66,8 +66,8 @@ public class JwtService {
         if (currentEmail == null) {
             return false;
         }
-        UserEntity userEntity = this.repository.findByUsername(currentEmail).orElseThrow();
-        return (currentEmail.equals(userEntity.getUsername())) && !isTokenExpired(authToken);
+        User user = this.repository.findByUsername(currentEmail).orElseThrow();
+        return (currentEmail.equals(user.getUsername())) && !isTokenExpired(authToken);
     }
 
     private boolean isTokenExpired(String token) {

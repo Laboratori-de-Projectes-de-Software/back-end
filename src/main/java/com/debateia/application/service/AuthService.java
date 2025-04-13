@@ -61,14 +61,18 @@ public ResponseEntity<?> register(final UserDTORegister request) {
             .mail(request.mail())
             .password(passwordEncoder.encode(request.password()))
             .build();
-    final UserEntity userEntity = authMapper.usuarioToEntity(user);
+    // final UserEntity userEntity = authMapper.usuarioToEntity(user); // Corregido angel (hexagonalizado)
 
     try {
-        final UserEntity savedUserEntity = repository.save(userEntity);
-        user = authMapper.entityToUsuario(savedUserEntity);
+        System.out.println("AIAEEEEY AIAEEEY AIA AAAA AAAA PLUMA PLUMA GAAAAY XDD \nuser:"+user);
+        System.out.flush();
+
+        final User savedUser = repository.save(user);
+        //user = authMapper.entityToUsuario(savedUser); // Corregido angel (hexagonalizado)
+
 
         final String jwtToken = jwtService.generateToken(user);
-        final String refreshToken = jwtService.generateRefreshToken(user);
+        final String refreshToken = jwtService.generateRefreshToken(user); // @TODO ??????????????
 
         // Obtener la fecha actual (Instant)
         Instant now = Instant.now();
@@ -99,11 +103,11 @@ public ResponseEntity<?> register(final UserDTORegister request) {
                             
             User user = User.builder().username(request.user())
                     .password(passwordEncoder.encode(request.password())).build();
-            UserEntity userEntity = authMapper.usuarioToEntity(user);
+            //UserEntity userEntity = authMapper.usuarioToEntity(user); // // Corregido angel (hexagonalizado)
             // Buscar al usuario en la base de datos
-            userEntity = repository.findByUsername(userEntity.getUsername())
+            user = repository.findByUsername(user.getUsername())
                     .orElseThrow(() -> null);
-            user = authMapper.entityToUsuario(userEntity);
+            //user = authMapper.entityToUsuario(user); // Corregido angel (hexagonalizado)
             
             // Generar tokens
             final String accessToken = jwtService.generateToken(user);
@@ -159,7 +163,7 @@ public ResponseEntity<?> register(final UserDTORegister request) {
          * System.out.println("USER ENTITY: " + userEntity.getEmail());
          */
         
-        UserEntity userEntity = this.repository.findByUsername(currentUsername).orElseThrow();
+        User user = this.repository.findByUsername(currentUsername).orElseThrow();
         final boolean isTokenValid = jwtService.isTokenValid(authentication);
 
         if (!isTokenValid) {
@@ -172,14 +176,14 @@ public ResponseEntity<?> register(final UserDTORegister request) {
         }
 
         // Actualizar las credenciales
-        userEntity.setUsername(request.newUsername());
-        userEntity.setPassword(passwordEncoder.encode(request.newPassword())); // Asegúrate de codificar la nueva
-                                                                               // contraseña
-        repository.save(userEntity);
-        User user = authMapper.entityToUsuario(userEntity);
+        user.setUsername(request.newUsername());
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
+
+        repository.save(user);
+        //User user = authMapper.entityToUsuario(user); // Corregido angel (hexagonalizado)
         // Generar tokens
         final String accessToken = jwtService.generateToken(user);
-        final String refreshToken = jwtService.generateRefreshToken(user);
+        final String refreshToken = jwtService.generateRefreshToken(user); // @TODO ?????????????????????
         // Obtener la fecha actual (Instant)
         Instant now = Instant.now();
 
@@ -228,12 +232,12 @@ public ResponseEntity<?> register(final UserDTORegister request) {
             return null;
         }
 
-        final UserEntity userEntity = this.repository.findByMail(userEmail).orElseThrow();
+        final User user = this.repository.findByMail(userEmail).orElseThrow();
         final boolean isTokenValid = jwtService.isTokenValid(authentication);
         if (!isTokenValid) {
             return null;
         }
-        User user = authMapper.entityToUsuario(userEntity);
+        //User user = authMapper.entityToUsuario(user); // Corregido angel (hexagonalizado)
         final String accessToken = jwtService.generateRefreshToken(user);
         // revokeAllUserTokens(user);
         // saveUserToken(user, accessToken);
