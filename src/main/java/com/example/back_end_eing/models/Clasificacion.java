@@ -39,6 +39,7 @@ public class Clasificacion {
     public Clasificacion(Bot bot, Liga league){
         this.bot = bot;
         this.liga = league;
+        this.puntuacionBot = 0;
     }
 
     //******* RELACIONES CON OTRAS CLASES *******
