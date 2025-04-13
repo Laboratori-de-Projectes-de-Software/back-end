@@ -1,11 +1,14 @@
 package uib.lab.api.infraestructure.adapter;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import uib.lab.api.application.mapper.interfaces.RoundMapper;
 import uib.lab.api.application.port.RoundPort;
 import uib.lab.api.domain.RoundDomain;
+import uib.lab.api.infraestructure.jpaEntity.Round;
 import uib.lab.api.infraestructure.jpaRepositories.RoundJpaRepository;
 
 
@@ -24,5 +27,16 @@ public class RoundJpaAdapter implements RoundPort{
     public Optional<RoundDomain> findById(int id){
         return roundJpaRepository.findRoundById(id).map(roundMapper::toDomain);
    
+    }
+
+    @Override
+    public List<RoundDomain> saveAll(List<RoundDomain> rounds) {
+        return roundJpaRepository.saveAll(
+                        rounds.stream()
+                                .map(roundMapper::toEntity)
+                                .collect(Collectors.toList())
+                ).stream()
+                .map(roundMapper::toDomain)
+                .collect(Collectors.toList());
     }
 }

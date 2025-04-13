@@ -14,10 +14,7 @@ import uib.lab.api.application.mapper.implementations.LeagueMapperImpl;
 import uib.lab.api.application.mapper.interfaces.LeagueMapper;
 import uib.lab.api.application.mapper.interfaces.MatchMapper;
 import uib.lab.api.application.port.*;
-import uib.lab.api.domain.BotDomain;
-import uib.lab.api.domain.LeagueDomain;
-import uib.lab.api.domain.MatchDomain;
-import uib.lab.api.domain.UserDomain;
+import uib.lab.api.domain.*;
 import uib.lab.api.infraestructure.jpaEntity.Bot;
 import uib.lab.api.infraestructure.jpaEntity.League;
 import uib.lab.api.infraestructure.jpaEntity.Match;
@@ -35,6 +32,7 @@ public class MatchService {
     private final MatchPort matchPort;
     private final MatchMapper matchMapper;
     private final RoundPort roundPort;
+    private RoundService roundService;
 
     public ApiResponse<MatchResponseDTO> getMatchesByLeague(int id) {
         try {
@@ -86,46 +84,42 @@ public class MatchService {
     }
 
     public void createMatches(LeagueDomain league) {
-        // Obtener los IDs de los bots de la liga
         int[] botIds = league.getBotIds();
 
-        // Verificar que la lista de bots no esté vacía
         if (botIds == null || botIds.length < 2) {
             throw new IllegalArgumentException("Not enough bots to create matches");
         }
 
-        // Convertir los botIds en una lista para poder hacer shuffle
         List<Integer> botList = new ArrayList<>();
         for (int botId : botIds) {
             botList.add(botId);
         }
 
-        // Barajar la lista de bots aleatoriamente
-        Random random = new Random();
-        Collections.shuffle(botList, random);
+        Collections.shuffle(botList, new Random());
 
-        // Crear una lista para almacenar los partidos (matches)
         List<MatchDomain> matches = new ArrayList<>();
 
-        // Generar enfrentamientos aleatorios entre los bots
         for (int i = 0; i < botList.size(); i++) {
             for (int j = i + 1; j < botList.size(); j++) {
-                // Crear un partido entre los bots i y j
                 MatchDomain match = new MatchDomain();
                 match.setBotId1(botList.get(i));
                 match.setBotId2(botList.get(j));
-                match.setState(Match.MatchState.PENDING); // Estado inicial de cada partido
-                match.setResult(null); // No hay resultado aún
-                match.setRounds(league.getNumRounds()); // Asumimos que el número de rondas de la liga es el mismo para todos los partidos
-
-                // Añadir el partido a la lista
+                match.setState(Match.MatchState.PENDING);
+                match.setResult(null);
+                match.setRounds(league.getNumRounds());
                 matches.add(match);
             }
         }
 
-        // Guardar los partidos en la base de datos
+        List<RoundDomain> rounds = roundService.createRounds(league);
+
+        int roundIndex = 0;
+        for (MatchDomain match : matches) {
+            RoundDomain assignedRound = rounds.get(roundIndex);
+            match.setRoundId(assignedRound.getId());
+            roundIndex = (roundIndex + 1) % rounds.size();
+        }
+
         matchPort.saveAll(matches);
-
     }
-
 }
