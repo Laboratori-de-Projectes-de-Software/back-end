@@ -6,6 +6,7 @@ import com.example.demo.application.port.out.BotRepository;
 import com.example.demo.domain.model.Bot;
 import com.example.demo.domain.model.User;
 import com.example.demo.dtos.BotDTO;
+import com.example.demo.dtos.BotResponseDTO;
 import com.example.demo.dtos.BotSummaryResponseDTO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,6 +34,9 @@ public class BotService implements BotUseCase {
         Integer userId = userDetails.getId();
 
         Bot bot = new Bot(botDTO.getId(), botDTO.getName(), botDTO.getDescription(), botDTO.getUrlImagen(), botDTO.getEndpoint(), userId);
+        bot.setnWins(0);
+        bot.setnLosses(0);
+        bot.setnDraws(0);
         Bot savedBot = botRepository.save(bot);
         return toDTO(savedBot);
     }
@@ -41,6 +45,19 @@ public class BotService implements BotUseCase {
     public BotDTO getBot(Integer botId) {
         Bot bot = botRepository.findById(botId);
         return toDTO(bot);
+    }
+
+    @Override
+    public BotResponseDTO updateBot(Integer botId, BotDTO botDTO) {
+        Bot existing = botRepository.findById(botId);
+
+        existing.setName(botDTO.getName());
+        existing.setDescription(botDTO.getDescription());
+        existing.setUrlImagen(botDTO.getUrlImagen());
+        existing.setEndpoint(botDTO.getEndpoint());
+
+        Bot updated = botRepository.save(existing);
+        return toDTOResp(updated);
     }
 
     @Override
@@ -72,6 +89,18 @@ public class BotService implements BotUseCase {
         dto.setId(bot.getId());
         dto.setName(bot.getName());
         dto.setDescription(bot.getDescription());
+        return dto;
+    }
+
+    private BotResponseDTO toDTOResp(Bot bot) {
+        BotResponseDTO dto = new BotResponseDTO();
+        dto.setBotId(bot.getId());
+        dto.setName(bot.getName());
+        dto.setDescription(bot.getDescription());
+        dto.setUrlImagen(bot.getUrlImagen());
+        dto.setNWins(bot.getnWins());
+        dto.setNLosses(bot.getnLosses());
+        dto.setNDraws(bot.getnDraws());
         return dto;
     }
 }

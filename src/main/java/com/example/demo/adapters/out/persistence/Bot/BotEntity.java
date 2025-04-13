@@ -35,6 +35,15 @@ public class BotEntity {
     @Column(nullable = false)
     private String endpoint;
 
+    @Column(nullable = false)
+    private Integer nWins;
+
+    @Column(nullable = false)
+    private Integer nLosses;
+
+    @Column(nullable = false)
+    private Integer nDraws;
+
     @Column(nullable = true)
     private Integer userId;
 

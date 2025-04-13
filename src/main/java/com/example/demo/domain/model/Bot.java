@@ -12,6 +12,9 @@ public class Bot {
     private String description;
     private String urlImagen;
     private String endpoint;
+    private Integer nWins;
+    private Integer nLosses;
+    private Integer nDraws;
     private Integer userId;
     private LocalDateTime createdAt;
 
@@ -63,6 +66,30 @@ public class Bot {
 
     public void setEndpoint(String endpoint) {
         this.endpoint = endpoint;
+    }
+
+    public Integer getnWins() {
+        return nWins;
+    }
+
+    public void setnWins(Integer nWins) {
+        this.nWins = nWins;
+    }
+
+    public Integer getnLosses() {
+        return nLosses;
+    }
+
+    public void setnLosses(Integer nLosses) {
+        this.nLosses = nLosses;
+    }
+
+    public Integer getnDraws() {
+        return nDraws;
+    }
+
+    public void setnDraws(Integer nDraws) {
+        this.nDraws = nDraws;
     }
 
     public Integer getUserId() {

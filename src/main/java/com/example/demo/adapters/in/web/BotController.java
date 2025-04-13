@@ -61,4 +61,10 @@ public class BotController {
         return ResponseEntity.ok(bots);
     }
 
+    @PutMapping("/{botId}")
+    public ResponseEntity<BotResponseDTO> updateBot(@PathVariable Integer botId, @RequestBody BotDTO botDTO) {
+        BotResponseDTO updated = botUseCase.updateBot(botId, botDTO);
+        return ResponseEntity.ok(updated);
+    }
+
 }

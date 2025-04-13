@@ -30,6 +30,9 @@ public class BotPersistenceAdapter implements BotRepository {
         entity.setDescription(bot.getDescription());
         entity.setUrlImagen(bot.getUrlImagen());
         entity.setEndpoint(bot.getEndpoint());
+        entity.setNWins(bot.getnWins());
+        entity.setNLosses(bot.getnLosses());
+        entity.setNDraws(bot.getnDraws());
         entity.setUserId(bot.getUserId());
         entity.setCreatedAt(bot.getCreatedAt());
         
@@ -60,6 +63,9 @@ public class BotPersistenceAdapter implements BotRepository {
 
     private Bot toDomain(BotEntity entity) {
         Bot bot = new Bot(entity.getId(), entity.getName(), entity.getDescription(), entity.getUrlImagen(), entity.getEndpoint(), entity.getUserId());
+        bot.setnWins(entity.getNWins());
+        bot.setnLosses(entity.getNLosses());
+        bot.setnDraws(entity.getNDraws());
         return bot;
     }
 }
