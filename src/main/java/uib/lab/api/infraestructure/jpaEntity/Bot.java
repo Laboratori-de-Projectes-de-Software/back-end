@@ -13,7 +13,8 @@ public class Bot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    private String name;
+    
     private String ideologia;
 
     private String description;
@@ -38,6 +39,9 @@ public class Bot {
 
     @ManyToMany(mappedBy = "bots")
     private Set<League> leagues;
+
+    @OneToMany(mappedBy = "bot")
+    private Set<Chat> chats;
 
     public Bot(){
 

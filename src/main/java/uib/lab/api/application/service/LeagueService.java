@@ -2,6 +2,7 @@ package uib.lab.api.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -11,15 +12,16 @@ import uib.lab.api.application.dto.league.LeagueDTO;
 import uib.lab.api.application.dto.league.LeagueResponseDTO;
 import uib.lab.api.application.mapper.implementations.LeagueMapperImpl;
 import uib.lab.api.application.port.LeaguePort;
+import uib.lab.api.application.port.MatchPort;
+import uib.lab.api.application.port.RoundPort;
 import uib.lab.api.application.port.UserPort;
-import uib.lab.api.domain.BotDomain;
-import uib.lab.api.domain.LeagueDomain;
-import uib.lab.api.domain.UserDomain;
+import uib.lab.api.domain.*;
 import uib.lab.api.infraestructure.jpaEntity.League;
 import uib.lab.api.infraestructure.util.ApiResponse;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +31,10 @@ public class LeagueService {
     private final LeaguePort leaguePort;
     private final UserPort userPort;
     private final LeagueMapperImpl leagueMapper;
-
+    private final MatchService matchService;
+    private final RoundService roundService;
+    private final MatchPort matchPort;
+    private final RoundPort roundPort;
 
     public ApiResponse<LeagueResponseDTO> createLeague(LeagueDTO leagueDTO) {
         try {
@@ -65,40 +70,40 @@ public class LeagueService {
 
 
     public ApiResponse<List<LeagueResponseDTO>> getAllLeagues(Integer owner) {
-        try{
+        try {
             List<LeagueResponseDTO> leagueList;
-            if (owner != null){
-                 UserDomain user = userPort.findById(owner)
+            if (owner != null) {
+                UserDomain user = userPort.findById(owner)
                         .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + owner));
-                
-                leagueList = leaguePort.findAllByUser(user)
-                .stream()
-                .map(league -> new LeagueResponseDTO(  
-                league.getId(),
-                league.getState().name(),
-                league.getName(),
-                league.getUrlImagen(),
-                league.getPlayTime(),
-                league.getNumRounds(),
-                league.getUserId(),
-                league.getBotIds()))
-                .collect(Collectors.toList());
 
-            }else{
+                leagueList = leaguePort.findAllByUser(user)
+                        .stream()
+                        .map(league -> new LeagueResponseDTO(
+                                league.getId(),
+                                league.getState().name(),
+                                league.getName(),
+                                league.getUrlImagen(),
+                                league.getPlayTime(),
+                                league.getNumRounds(),
+                                league.getUserId(),
+                                league.getBotIds()))
+                        .collect(Collectors.toList());
+
+            } else {
                 leagueList = leaguePort.findAllLeagues()
-                .stream()
-                .map(league -> new LeagueResponseDTO(  
-                league.getId(),
-                league.getState().name(),
-                league.getName(),
-                league.getUrlImagen(),
-                league.getPlayTime(),
-                league.getNumRounds(),
-                league.getUserId(),
-                league.getBotIds()))
-                .collect(Collectors.toList());
+                        .stream()
+                        .map(league -> new LeagueResponseDTO(
+                                league.getId(),
+                                league.getState().name(),
+                                league.getName(),
+                                league.getUrlImagen(),
+                                league.getPlayTime(),
+                                league.getNumRounds(),
+                                league.getUserId(),
+                                league.getBotIds()))
+                        .collect(Collectors.toList());
             }
-            
+
             if (!leagueList.isEmpty()) {
                 return new ApiResponse(200, "Leagues found", leagueList);
             } else {
@@ -112,12 +117,12 @@ public class LeagueService {
     }
 
 
-    public ApiResponse<LeagueResponseDTO> getLeagueById(Integer leagueId){
+    public ApiResponse<LeagueResponseDTO> getLeagueById(Integer leagueId) {
         try {
             LeagueDomain league = leaguePort.findById(leagueId)
                     .orElseThrow(() -> new IllegalArgumentException("League not found with ID: " + leagueId));
 
-            LeagueResponseDTO leagueResponseDTO = new LeagueResponseDTO(  
+            LeagueResponseDTO leagueResponseDTO = new LeagueResponseDTO(
                     league.getId(),
                     league.getState().name(),
                     league.getName(),
@@ -163,6 +168,118 @@ public class LeagueService {
             return new ApiResponse(404, "League not found");
         } catch (Exception e) {
             return new ApiResponse(500, "Internal Server Error");
+        }
+    }
+  
+    public ApiResponse<LeagueResponseDTO> updateLeague(int leagueId, LeagueDTO dto) {
+        try {
+            LeagueDomain league = leaguePort.findById(leagueId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "League not found"));
+
+            league.setName(dto.getName());
+            league.setUrlImagen(dto.getUrlImagen());
+            league.setPlayTime(dto.getMatchTime());
+            league.setNumRounds(dto.getRounds());
+            league.setUserId(dto.getUserId());
+            league.setBotIds(dto.getBots());
+
+            LeagueDomain updatedLeague = leaguePort.save(league);
+
+            LeagueResponseDTO responseDTO = new LeagueResponseDTO(
+                    updatedLeague.getId(),
+                    updatedLeague.getState().name(),
+                    updatedLeague.getName(),
+                    updatedLeague.getUrlImagen(),
+                    updatedLeague.getPlayTime(),
+                    updatedLeague.getNumRounds(),
+                    updatedLeague.getUserId(),
+                    updatedLeague.getBotIds()
+            );
+
+            return new ApiResponse<>(200, "League updated", responseDTO);
+        } catch (ResponseStatusException e) {
+            return new ApiResponse<>(404, "League not found");
+        } catch (Exception e) {
+            return new ApiResponse<>(500, "Internal Server Error");
+        }
+    }
+
+    public ApiResponse<LeagueResponseDTO> startLeague(int leagueId) {
+        try {
+            LeagueDomain league = leaguePort.findById(leagueId)
+                    .orElseThrow(() -> new RuntimeException("League not found"));
+
+            if (league.getState() == League.LeagueState.IN_PROGRESS) {
+                return new ApiResponse<>(400, "League already started", null);
+            }
+
+            league.setState(League.LeagueState.IN_PROGRESS);
+            leaguePort.save(league);
+
+            matchService.createMatches(league);
+
+            LeagueResponseDTO responseDTO = new LeagueResponseDTO(
+                    league.getId(),
+                    league.getState().name(),
+                    league.getName(),
+                    league.getUrlImagen(),
+                    league.getPlayTime(),
+                    league.getNumRounds(),
+                    league.getUserId(),
+                    league.getBotIds()
+            );
+
+            return new ApiResponse<>(201, "League started", responseDTO);
+        } catch (IllegalArgumentException e) {
+            return new ApiResponse<>(404, "League not found");
+        } catch (SecurityException e) {
+            return new ApiResponse<>(403, "Forbidden");
+        } catch (Exception e) {
+            return new ApiResponse<>(500, "Internal Server Error");
+        }
+    }
+
+    public ApiResponse<LeagueResponseDTO> deleteLeague(int leagueId) {
+        try {
+            Optional<LeagueDomain> optionalLeague = leaguePort.findById(leagueId);
+            if (optionalLeague.isEmpty()) {
+                return new ApiResponse<>(404, "League not found");
+            }
+
+            LeagueDomain league = optionalLeague.get();
+
+            if (league.getState() == League.LeagueState.IN_PROGRESS) {
+                return new ApiResponse<>(400, "Cannot delete a league that is in progress");
+            }
+
+            LeagueResponseDTO deletedLeagueDTO = new LeagueResponseDTO(
+                    league.getId(),
+                    league.getState().name(),
+                    league.getName(),
+                    league.getUrlImagen(),
+                    league.getPlayTime(),
+                    league.getNumRounds(),
+                    league.getUserId(),
+                    league.getBotIds()
+            );
+
+            // Eliminar matches asociados
+            List<MatchDomain> matches = matchPort.findAllByLeague(league);
+            matchPort.deleteAll(matches);
+
+            // Eliminar rounds asociados
+            List<RoundDomain> rounds = roundPort.findAllByLeagueId(leagueId);
+            roundPort.deleteAll(rounds);
+
+            // Eliminar la liga
+            leaguePort.delete(league);
+
+            return new ApiResponse<>(200, "League deleted", deletedLeagueDTO);
+
+        } catch (SecurityException e) {
+            return new ApiResponse<>(403, "You don't have permission to delete this league");
+        } catch (Exception e) {
+            return new ApiResponse<>(500, "Internal Server Error");
         }
     }
 }

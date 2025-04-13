@@ -1,11 +1,9 @@
 package uib.lab.api.application.mapper.implementations;
 import lombok.RequiredArgsConstructor;
 import uib.lab.api.application.dto.league.LeagueDTO;
-import uib.lab.api.application.mapper.interfaces.BotMapper;
 import uib.lab.api.application.mapper.interfaces.LeagueMapper;
 import org.springframework.stereotype.Component;
 import uib.lab.api.application.mapper.interfaces.UserMapper;
-import uib.lab.api.application.port.BotPort;
 import uib.lab.api.application.port.UserPort;
 import uib.lab.api.domain.LeagueDomain;
 import uib.lab.api.domain.UserDomain;
@@ -69,6 +67,7 @@ public class LeagueMapperImpl implements LeagueMapper {
     @Override
     public League toEntity(LeagueDomain domain) {
         League entity = new League();
+        entity.setId(domain.getId());
         entity.setName(domain.getName());
         entity.setPlayTime(domain.getPlayTime());
         entity.setNumRounds(domain.getNumRounds());

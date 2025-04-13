@@ -1,6 +1,9 @@
 package uib.lab.api.infraestructure.jpaEntity;
 
 import lombok.*;
+
+import java.util.Set;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,12 +12,25 @@ import javax.persistence.*;
 @Table(name = "matches")
 public class Match {
 
+    public enum MatchState {
+        PENDING, IN_PROGRESS, COMPLETED;
+    }
+
+    public enum MatchResult{
+        LOCAL, VISITING, DRAW;
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Enumerated(EnumType.STRING)
     private MatchState state;
+
+    @Enumerated(EnumType.STRING)
+    private MatchResult result;
+
+    private int rounds;
 
     @ManyToOne
     @JoinColumn(name = "bot_id1")
@@ -27,8 +43,9 @@ public class Match {
     @ManyToOne
     @JoinColumn(name = "round_id")
     private Round round;
+
+    @OneToMany(mappedBy = "match")
+    private Set<Chat> chat;
 }
 
-enum MatchState {
-    PENDING, IN_PROGRESS, COMPLETED;
-}
+

@@ -2,7 +2,6 @@ package uib.lab.api.application.dto.league;
 
 import lombok.Getter;
 import lombok.Setter;
-import uib.lab.api.infraestructure.jpaEntity.League;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
