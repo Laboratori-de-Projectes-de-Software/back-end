@@ -43,8 +43,8 @@ public class TestLigaService {
         liga.setImagen(null);
         liga.setParticipaciones(new ArrayList<>());
         liga.setUsuario(null);
-        liga.setMatchTime(13);
-        liga.setRondas(5);
+        liga.setMatchTime(13L);
+        liga.setRondas(5L);
 
         // Act
         Liga ligaSaved = ligaService.crearLiga(liga);

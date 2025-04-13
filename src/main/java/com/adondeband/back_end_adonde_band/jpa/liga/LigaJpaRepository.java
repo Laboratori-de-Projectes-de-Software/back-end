@@ -7,4 +7,6 @@ import java.util.List;
 @Repository
 public interface LigaJpaRepository extends JpaRepository<LigaEntity, Integer> {
     List<LigaEntity> findById(Long id);
+
+    LigaEntity getLigaEntityById(long value);
 }

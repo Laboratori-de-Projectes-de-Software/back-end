@@ -16,7 +16,7 @@ public interface LigaPort {
 
     Liga actualizarUrlImagen(LigaId ligaId, String url);
 
-    Liga actualizarnrondas(LigaId ligaId, int nrondas);
+    Liga actualizarNRondas(LigaId ligaId, int nrondas);
 
     Liga actualizarTiempoRonda(LigaId ligaId, int tiempoRonda);
 
