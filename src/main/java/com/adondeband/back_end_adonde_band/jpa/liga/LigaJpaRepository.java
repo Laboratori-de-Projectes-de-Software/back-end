@@ -11,6 +11,4 @@ public interface LigaJpaRepository extends JpaRepository<LigaEntity, Integer> {
     List<LigaEntity> findById(Long id);
 
     List<LigaEntity> findByUsuario(UsuarioEntity usuario);
-
-    List<ParticipacionEntity> findParticipacionesById(Long ligaId);
 }

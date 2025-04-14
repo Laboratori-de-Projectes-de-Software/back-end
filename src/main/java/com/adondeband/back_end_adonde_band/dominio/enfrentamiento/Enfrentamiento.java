@@ -32,7 +32,7 @@ public class Enfrentamiento {
 
     private JornadaId jornada;
 
-    public Enfrentamiento(Long id, BotId local, BotId visitante, Conversacion conversacion) {
+    public Enfrentamiento(EnfrentamientoId id, BotId local, BotId visitante, Conversacion conversacion) {
         this.id = id;
         this.local = local;
         this.visitante = visitante;

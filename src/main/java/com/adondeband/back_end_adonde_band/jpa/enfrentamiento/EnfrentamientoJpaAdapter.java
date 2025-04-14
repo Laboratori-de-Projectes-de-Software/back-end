@@ -19,18 +19,10 @@ public class EnfrentamientoJpaAdapter implements EnfrentamientoPort {
 
     @Override
     public Enfrentamiento save(Enfrentamiento enfrentamiento) {
-        // DEBUG
-        EnfrentamientoEntity enfrentamientoEntity = enfrentamientoMapper.toEntity(enfrentamiento);
-        EnfrentamientoEntity enfrentamientoSaved = enfrentamientoJpaRepository.save(enfrentamientoEntity);
-        Enfrentamiento enfrentamientoDomain = enfrentamientoMapper.toDomain(enfrentamientoSaved);
-
-        return enfrentamientoDomain;
-
-        /*
         return enfrentamientoMapper.toDomain(
                 enfrentamientoJpaRepository.save(
                         enfrentamientoMapper.toEntity(enfrentamiento)));
-         */
+
     }
 
     @Override

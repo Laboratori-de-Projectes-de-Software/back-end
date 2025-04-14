@@ -168,6 +168,7 @@ public class LigaController {
         if(numParticipaciones < 2) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No hay suficientes participantes");
         }
+
         // Obtener el número de jornadas, enfrentamientos y enfrentamientos por jornada
         int numJornadas = numParticipaciones - 1;
         int numEnfrentamientos = numParticipaciones * (numParticipaciones - 1);
