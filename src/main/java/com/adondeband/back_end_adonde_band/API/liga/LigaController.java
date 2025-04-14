@@ -50,17 +50,12 @@ public class LigaController {
     public ResponseEntity<List<LigaResponseDTO>> listarLigas(@RequestParam(value = "owner", required = false) Long userId) {
         // TODO
         // Obtener listado de ligas
-        List<Liga> ligas = null;
+        List<Liga> ligas;
         try {
             ligas = (userId != null)
                     ? ligaService.obtenerLigasPorUsuario(new UsuarioId(userId))
                     : ligaService.obtenerTodasLasLigas();
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-
-        // comprobar que la lista no está vacía
-        if (ligas.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 

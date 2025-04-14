@@ -8,6 +8,7 @@ import com.adondeband.back_end_adonde_band.dominio.liga.LigaPort;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
 import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaMapper;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -18,14 +19,16 @@ import java.util.stream.Collectors;
 public class LigaJpaAdapter implements LigaPort {
 
     private final LigaJpaRepository ligaJpaRepository;
+    private final UsuarioJpaRepository usuarioJpaRepository;
 
     private final LigaJpaMapper ligaJpaMapper;
     private final UsuarioJpaMapper usuarioJpaMapper;
 
-    public LigaJpaAdapter(final LigaJpaRepository ligaJpaRepository, final LigaJpaMapper ligaJpaMapper, UsuarioJpaMapper usuarioJpaMapper) {
+    public LigaJpaAdapter(final LigaJpaRepository ligaJpaRepository, final LigaJpaMapper ligaJpaMapper, UsuarioJpaMapper usuarioJpaMapper, UsuarioJpaRepository usuarioJpaRepository) {
         this.ligaJpaRepository = ligaJpaRepository;
         this.ligaJpaMapper = ligaJpaMapper;
         this.usuarioJpaMapper = usuarioJpaMapper;
+        this.usuarioJpaRepository = usuarioJpaRepository;
     }
 
     @Override
@@ -61,17 +64,12 @@ public class LigaJpaAdapter implements LigaPort {
     public List<Liga> findLigasUsuario(UsuarioId userId) {
         //TODO
         // Buscar UsuarioEntity en la base de datos usando el repositorio
-        List<LigaEntity> ligasFound = ligaJpaRepository.findByUsuario(
-                usuarioJpaMapper.toEntity(userId)
-        );
+        List<UsuarioEntity> usuariosFound = usuarioJpaRepository.findById(userId.value());
 
-        if (ligasFound.isEmpty()) throw new NotFoundException("Este usuarion no existe");
-
-        // Obtener usuario
-        UsuarioEntity usuario = ligasFound.getFirst().getUsuario();
+        if (usuariosFound.isEmpty()) throw new NotFoundException("Este usuario no existe");
 
         // Devolver todas las ligas que pertenezcan a este usuario
-        return  ligaJpaRepository.findByUsuario(usuario)
+        return  ligaJpaRepository.findByUsuario(usuariosFound.getFirst())
                 .stream()
                 .map(ligaJpaMapper::toDomain)
                 .collect(Collectors.toList());
