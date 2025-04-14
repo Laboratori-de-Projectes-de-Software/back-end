@@ -63,4 +63,9 @@ public class LeagueController {
     public ApiResponse deleteLeague(@PathVariable int leagueId) {
         return leagueService.deleteLeague(leagueId);
     }
+
+    @GetMapping("/{leagueId}/leaderboard")
+    public ApiResponse getLeaderboardById(@PathVariable int leagueId) {
+        return leagueService.getLeaderboardById(leagueId);
+    }
 }

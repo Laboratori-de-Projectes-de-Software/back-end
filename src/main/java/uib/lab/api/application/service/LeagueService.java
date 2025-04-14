@@ -1,5 +1,6 @@
 package uib.lab.api.application.service;
 
+import com.sun.source.tree.Tree;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -10,18 +11,15 @@ import uib.lab.api.application.dto.bot.BotResponseDTO;
 import uib.lab.api.application.dto.bot.BotSummaryResponseDTO;
 import uib.lab.api.application.dto.league.LeagueDTO;
 import uib.lab.api.application.dto.league.LeagueResponseDTO;
+import uib.lab.api.application.dto.league.ParticipationResponseDTO;
 import uib.lab.api.application.mapper.implementations.LeagueMapperImpl;
-import uib.lab.api.application.port.LeaguePort;
-import uib.lab.api.application.port.MatchPort;
-import uib.lab.api.application.port.RoundPort;
-import uib.lab.api.application.port.UserPort;
+import uib.lab.api.application.port.*;
 import uib.lab.api.domain.*;
 import uib.lab.api.infraestructure.jpaEntity.League;
+import uib.lab.api.infraestructure.jpaEntity.Match;
 import uib.lab.api.infraestructure.util.ApiResponse;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +33,7 @@ public class LeagueService {
     private final RoundService roundService;
     private final MatchPort matchPort;
     private final RoundPort roundPort;
+    private final BotPort botPort;
 
     public ApiResponse<LeagueResponseDTO> createLeague(LeagueDTO leagueDTO) {
         try {
@@ -278,6 +277,92 @@ public class LeagueService {
 
         } catch (SecurityException e) {
             return new ApiResponse<>(403, "You don't have permission to delete this league");
+        } catch (Exception e) {
+            return new ApiResponse<>(500, "Internal Server Error");
+        }
+    }
+
+    public ApiResponse<List<ParticipationResponseDTO>> getLeaderboardById(Integer leagueId) {
+        try {
+            LeagueDomain league = leaguePort.findById(leagueId)
+                    .orElseThrow(() -> new IllegalArgumentException("League not found with ID: " + leagueId));
+
+            List<MatchDomain> matches = matchPort.findAllByLeague(league);
+            int nMatches = matches.size();
+
+            int[] botIds = league.getBotIds();
+            int nBots = botIds.length;
+
+            HashMap<Integer, Integer> scores = new HashMap<>();
+            HashMap<Integer, Integer> wins = new HashMap<>();
+            HashMap<Integer, Integer> draws = new HashMap<>();
+            HashMap<Integer, Integer> loses = new HashMap<>();
+
+            for (int i = 0; i < nBots; ++i) {
+                scores.put(botIds[i], 0);
+                wins.put(botIds[i], 0);
+                draws.put(botIds[i], 0);
+                loses.put(botIds[i], 0);
+            }
+
+            for (int i = 0; i < nMatches; ++i) {
+                MatchDomain match = matches.get(i);
+                Match.MatchResult result = match.getResult();
+                int idLocal = match.getBotId1();
+                int idVisiting = match.getBotId2();
+
+                if (result == Match.MatchResult.LOCAL) {
+                    scores.put(idLocal, scores.get(idLocal) + 3);
+                    wins.put(idLocal, wins.get(idLocal) + 1);
+                    loses.put(idVisiting, loses.get(idVisiting) + 1);
+                } else if (result == Match.MatchResult.VISITING) {
+                    scores.put(idVisiting, scores.get(idVisiting) + 3);
+                    loses.put(idLocal, loses.get(idLocal) + 1);
+                    wins.put(idVisiting, wins.get(idVisiting) + 1);
+                } else {
+                    scores.put(idLocal, scores.get(idLocal) + 1);
+                    scores.put(idVisiting, scores.get(idVisiting) + 1);
+                    draws.put(idLocal, draws.get(idLocal) + 1);
+                    draws.put(idVisiting, draws.get(idVisiting) + 1);
+                }
+            }
+            TreeMap<Integer, Integer> botsSorted = new TreeMap<>();
+
+            for (Map.Entry<Integer, Integer> entry : scores.entrySet()) {
+                botsSorted.put(entry.getValue(), entry.getKey());
+            }
+            int lastScore = -1, lastPos = -1, position = 0;
+            List<ParticipationResponseDTO> ans = new ArrayList<>();
+
+            for (Map.Entry<Integer, Integer> entry : botsSorted.descendingMap().entrySet()) {
+                int score = entry.getKey();
+                int botId = entry.getValue();
+
+                BotDomain bot = botPort.findById(botId)
+                        .orElseThrow(() -> new RuntimeException("Bot not found"));
+
+                ParticipationResponseDTO dto = new ParticipationResponseDTO();
+                dto.setName(bot.getName());
+                dto.setBotId(botId);
+                if (score != lastScore) {
+                    dto.setPosition(position);
+                    lastPos = position;
+                }else {
+                    dto.setPosition(lastPos);
+                }
+                dto.setPoints(score);
+                dto.setNWins(wins.get(botId));
+                dto.setNDraws(draws.get(botId));
+                dto.setNLoses(loses.get(botId));
+
+                ans.add(dto);
+
+                lastScore = score;
+                ++position;
+            }
+            return new ApiResponse<>(200, "Leaderboard returned", ans);
+        } catch (IllegalArgumentException e) {
+            return new ApiResponse<>(404, "League not found");
         } catch (Exception e) {
             return new ApiResponse<>(500, "Internal Server Error");
         }
