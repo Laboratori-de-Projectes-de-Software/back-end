@@ -114,7 +114,7 @@ public class LigaJpaAdapter implements LigaPort {
 
     @Override
     @Transactional
-    public Liga actualizarBots(LigaId ligaId, List<BotId> bots) {
+    public Liga actualizarBotsLiga(LigaId ligaId, List<BotId> bots) {
         LigaEntity ligaEntity = ligaJpaRepository.getLigaEntityById(ligaId.value());
         if (ligaEntity == null) throw new NotFoundException("Esta liga no existe");
 

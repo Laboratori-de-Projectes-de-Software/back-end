@@ -1,5 +1,6 @@
 package com.adondeband.back_end_adonde_band.dominio.liga;
 
+import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +33,10 @@ public class LigaImpl implements LigaService {
     @Override
     public List<Liga> obtenerLigasPorUsuario(UsuarioId userId) {
         return ligaPort.findLigasUsuario(userId);
+    }
+
+    @Override
+    public Liga addBotToLiga(LigaId ligaId, BotId botId) {
+        return ligaPort.addBotToLiga(ligaId, botId);
     }
 }

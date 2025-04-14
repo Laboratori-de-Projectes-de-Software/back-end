@@ -2,6 +2,7 @@ package com.adondeband.back_end_adonde_band.dominio.liga;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface LigaPort {
 
     Liga actualizarTiempoRonda(LigaId ligaId, int tiempoRonda);
 
-    Liga actualizarBots(LigaId ligaId, List<BotId> bots);
+    Liga actualizarBotsLiga(LigaId ligaId, List<BotId> bots);
 
     Liga addBotToLiga(LigaId ligaId, BotId botId);
 }
