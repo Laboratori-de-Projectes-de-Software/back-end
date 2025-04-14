@@ -1,14 +1,17 @@
 package com.example.gironetaServer.infraestructure.adapters.security;
 
-import com.example.gironetaServer.domain.User;
 import com.example.gironetaServer.domain.exceptions.ConflictException;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LoginUserDto;
+import com.example.gironetaServer.domain.exceptions.ForbiddenException;
+import com.example.gironetaServer.domain.exceptions.ResourceNotFoundException;
+import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserDTOLogin;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.RegisterUserDto;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers.UserMapper;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.UserJpaRepository;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,16 +51,21 @@ public class AuthenticationService {
         }
     }
 
-    public UserEntity authenticate(LoginUserDto input) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        input.getEmail(),
-                        input.getPassword()));
+    public UserEntity authenticate(UserDTOLogin input) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            input.getEmail(),
+                            input.getPassword()));
 
-        UserEntity userEntity = userJpaRepository.findByEmail(input.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        // return UserMapper.toDomain(userEntity); Lo pasa a dominio (?
-        return userEntity;
+            return userJpaRepository.findByEmail(input.getEmail())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        } catch (BadCredentialsException e) {
+            throw new UnauthorizedException("Invalid credentials: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new ForbiddenException("Access denied: " + e.getMessage());
+        } catch (UnsupportedOperationException e) {
+            throw new RuntimeException("An unexpected error occurred: " + e.getMessage());
+        }
     }
 }

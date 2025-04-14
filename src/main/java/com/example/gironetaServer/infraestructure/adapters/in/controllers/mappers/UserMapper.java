@@ -3,8 +3,16 @@ package com.example.gironetaServer.infraestructure.adapters.in.controllers.mappe
 import com.example.gironetaServer.domain.User;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserDto;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserResponse;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserResponseDTO;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
+import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
+@Component
 public class UserMapper {
     public static User toDomain(UserEntity userEntity) {
         User user = new User();
@@ -50,5 +58,22 @@ public class UserMapper {
         userResponse.setCreatedAt(user.getCreatedAt());
         userResponse.setUpdatedAt(user.getUpdatedAt());
         return userResponse;
+    }
+
+    public UserResponseDTO toUserResponseDTO(String token, long expiresInMillis, String username, Long id) {
+        // Convertir expiresInMillis a LocalDateTime
+        // expiresIn va a contener la hora de expiración de CET
+        LocalDateTime expiresIn = Instant.ofEpochMilli(System.currentTimeMillis() + expiresInMillis)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
+        // Crear el objeto UserResponseDTO y establecer los valores
+        UserResponseDTO userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setToken(token);
+        userResponseDTO.setExpiresIn(expiresIn);
+        userResponseDTO.setUsername(username);
+        userResponseDTO.setId(id);
+
+        return userResponseDTO;
     }
 }
