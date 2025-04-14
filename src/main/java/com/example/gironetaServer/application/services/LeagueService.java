@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.gironetaServer.application.ports.LeagueRepository;
+import com.example.gironetaServer.application.ports.ParticipacionRepository;
 import com.example.gironetaServer.application.usecases.users.CreateLeague;
 import com.example.gironetaServer.domain.League;
 import com.example.gironetaServer.domain.exceptions.ConflictException;
@@ -20,18 +21,16 @@ import com.example.gironetaServer.domain.exceptions.ForbiddenException;
 import com.example.gironetaServer.domain.exceptions.ResourceNotFoundException;
 import com.example.gironetaServer.domain.exceptions.TimeoutException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
-import com.example.gironetaServer.infraestructure.adapters.out.db.entities.BotEntity;
-import com.example.gironetaServer.infraestructure.adapters.out.db.entities.EnfrentamientoEntity;
-import com.example.gironetaServer.infraestructure.adapters.out.db.entities.JornadaEntity;
-import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LeagueEntity;
-import com.example.gironetaServer.infraestructure.adapters.out.db.entities.ResultadoEntity;
-import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
-import com.example.gironetaServer.infraestructure.adapters.out.db.repository.BotJpaRepository;
-import com.example.gironetaServer.infraestructure.adapters.out.db.repository.EnfrentamientoJpaRepository;
-import com.example.gironetaServer.infraestructure.adapters.out.db.repository.JornadaJpaRepository;
-import com.example.gironetaServer.infraestructure.adapters.out.db.repository.LigaJpaRepository;
-import com.example.gironetaServer.infraestructure.adapters.out.db.repository.ResultadoJpaRepository;
-import com.example.gironetaServer.infraestructure.adapters.out.db.repository.UserJpaRepository;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.ParticipationResponseDto;
+import com.example.gironetaServer.infraestructure.adapters.out.db.entities.*;
+import com.example.gironetaServer.infraestructure.adapters.out.db.repository.*;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service
 public class LeagueService implements CreateLeague {
@@ -44,10 +43,12 @@ public class LeagueService implements CreateLeague {
     private final EnfrentamientoJpaRepository enfrentamientoJpaRepository;
     private final ResultadoJpaRepository resultadoJpaRepository;
 
+    private final ParticipacionRepository participacionRepository;
+    private final ParticipacionJpaRepository participacionJpaRepository; //Not should be here, but just in case
+
     public LeagueService(LeagueRepository leagueRepository, BotJpaRepository botJpaRepository,
-            LigaJpaRepository ligaJpaRepository, UserJpaRepository userJpaRepository,
-            JornadaJpaRepository jornadaJpaRepository, EnfrentamientoJpaRepository enfrentamientoJpaRepository,
-            ResultadoJpaRepository resultadoJpaRepository) {
+                         LigaJpaRepository ligaJpaRepository, UserJpaRepository userJpaRepository, JornadaJpaRepository jornadaJpaRepository, EnfrentamientoJpaRepository enfrentamientoJpaRepository, ResultadoJpaRepository resultadoJpaRepository,
+                         ParticipacionRepository participacionRepository, ParticipacionJpaRepository participacionJpaRepository) {
         this.leagueRepository = leagueRepository;
         this.botJpaRepository = botJpaRepository;
         this.ligaJpaRepository = ligaJpaRepository;
@@ -55,6 +56,8 @@ public class LeagueService implements CreateLeague {
         this.jornadaJpaRepository = jornadaJpaRepository;
         this.enfrentamientoJpaRepository = enfrentamientoJpaRepository;
         this.resultadoJpaRepository = resultadoJpaRepository;
+        this.participacionRepository = participacionRepository;
+        this.participacionJpaRepository = participacionJpaRepository;
     }
 
     @Override
@@ -495,5 +498,22 @@ public class LeagueService implements CreateLeague {
         } catch (Exception e) {
             throw new ConflictException("Error inesperado al iniciar la liga: " + e.getMessage());
         }
+    }
+
+    //Obtener clasificacion de liga
+    @Transactional
+    public List<ParticipationResponseDto> getLeaderboardFromLeague(Long leagueId) {
+
+        List<ParticipationResponseDto> participations = participacionRepository.findByLeagueId(leagueId);
+
+        // Ordenamos por puntos descendente
+        participations.sort(Comparator.comparingInt(ParticipationResponseDto::getPoints).reversed());
+
+        int position = 1;
+        for (ParticipationResponseDto participation : participations) {
+            participation.setPosition(position++);
+        }
+
+        return participations;
     }
 }

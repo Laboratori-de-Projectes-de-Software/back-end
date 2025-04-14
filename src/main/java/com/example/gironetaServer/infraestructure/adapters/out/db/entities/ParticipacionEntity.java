@@ -1,17 +1,18 @@
 package com.example.gironetaServer.infraestructure.adapters.out.db.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.example.gironetaServer.infraestructure.adapters.ParticipationId;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Objects;
+
 
 @Getter
 @Setter
 @Entity
+@IdClass(ParticipationId.class)
 @Table(name = "Participacion")
 public class ParticipacionEntity {
 
@@ -23,7 +24,7 @@ public class ParticipacionEntity {
     @Id
     @ManyToOne
     @JoinColumn(name = "liga_id", referencedColumnName = "id")
-    private LeagueEntity liga;
+    private LeagueEntity league;
 
     @Column(nullable = false, columnDefinition = "integer default 0")
     private int puntuacion;
@@ -37,18 +38,22 @@ public class ParticipacionEntity {
     @Column(nullable = false, columnDefinition = "integer default 0")
     private int numPerdidos;
 
-    // Constructor sin parámetros
     public ParticipacionEntity() {
     }
 
-    // Constructor con parámetros
-    public ParticipacionEntity(BotEntity bot, LeagueEntity liga, int puntuacion, int numGanados, int numEmpatados,
-            int numPerdidos) {
+    public ParticipacionEntity(BotEntity bot, LeagueEntity liga, int puntuacion, int numGanados, int numEmpatados, int numPerdidos) {
         this.bot = bot;
-        this.liga = liga;
+        this.league = liga;
         this.puntuacion = puntuacion;
         this.numGanados = numGanados;
         this.numEmpatados = numEmpatados;
         this.numPerdidos = numPerdidos;
     }
+
+
+
 }
+
+
+
+
