@@ -13,4 +13,7 @@ public class ParticipationResponseDto {
     private String name;
     private int points;
     private int position;
+    private int nWins;
+    private int nDraws;
+    private int nLosses;
 }
