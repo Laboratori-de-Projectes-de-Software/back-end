@@ -20,26 +20,26 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/league")
 @RequiredArgsConstructor
 public class LeagueController {
     private final LeagueUseCase leagueUseCase;
     private final LeagueMapper leagueMapper;
     private final MatchService matchService;
 
-    @GetMapping("/league/{id}")
+    @GetMapping("/{id}")
     public LeagueResponseDTO getLeague(@PathVariable Integer id) {
         League lg = leagueUseCase.getLeague(id);
         return leagueMapper.toLeagueResponseDTO(lg);
     }
 
-    @PostMapping("/league/{id}/start")
+    @PostMapping("/{id}/start")
     public ResponseEntity<?> startLeague(@PathVariable Integer id) {
         leagueUseCase.startLeague(id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/league/{id}/match")
+    @GetMapping("/{id}/match")
     public ResponseEntity<List<MatchResponseDTO>> getMatchesLeague(@PathVariable Integer id) {
         //@TODO esto en la API pone que es en /league pero es un findMatchesByLeagueId, igual deberia ir en MatchController?
         // ante la duda lo programo en matchService, seria super facil cambiarlo
