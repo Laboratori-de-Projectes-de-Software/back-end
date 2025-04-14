@@ -89,14 +89,16 @@ public class LigaMapper {
 
     public LeagueResponseDto toLeagueResponseDto(League league) {
         LeagueResponseDto leagueResponseDto = new LeagueResponseDto();
-        leagueResponseDto.setId(league.getId());
+        leagueResponseDto.setLeagueId(league.getId().intValue());
         leagueResponseDto.setName(league.getName());
         leagueResponseDto.setUrlImagen(league.getUrlImagen());
         leagueResponseDto.setRounds(league.getRounds());
         leagueResponseDto.setMatchTime(league.getMatchTime());
-        leagueResponseDto.setBots(league.getBots());
+        leagueResponseDto.setBots(league.getBots().stream()
+                .map(Long::intValue)
+                .collect(java.util.stream.Collectors.toList()));
         leagueResponseDto.setState(toEntityState(league.getState()));
-        leagueResponseDto.setUserId(league.getUserId());
+        leagueResponseDto.setUser(league.getUserId().intValue());
 
         return leagueResponseDto;
     }
