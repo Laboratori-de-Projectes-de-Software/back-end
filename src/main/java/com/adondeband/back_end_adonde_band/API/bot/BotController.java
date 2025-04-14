@@ -3,6 +3,7 @@ package com.adondeband.back_end_adonde_band.API.bot;
 import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotService;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotImpl;
+import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
 import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenImpl;
 import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenService;
@@ -40,15 +41,15 @@ public class BotController {
     @GetMapping
     public ResponseEntity<List<BotDTOMin>> listarBots(@RequestParam(value = "owner", required = false) Long userId) {
         // Obtiene el nombre del usuario autenticado desde SecurityContextHolder
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // Set UserId en el bot
         // Obtener listado de bots
-        List<Bot> bots = (userId == null)
-                ? botService.obtenerTodosLosBots()
-                : botService.obtenerBotsPorIdUsuario(new UsuarioId(userId));
-
-        // comprobar que la lista no está vacía
-        if (bots.isEmpty()) {
+        List<Bot> bots;
+        try {
+            bots = (userId == null)
+                    ? botService.obtenerTodosLosBots()
+                    : botService.obtenerBotsPorIdUsuario(new UsuarioId(userId));
+        } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
@@ -60,8 +61,6 @@ public class BotController {
 
     @PostMapping
     public ResponseEntity<BotDTOResponse> crearBot(@RequestBody BotDTOMin botDTOMin) {
-        System.out.println("LLAMANDO A CREARBOT");
-
         BotDTOResponse botDTO = new BotDTOResponse(botDTOMin);
         Bot bot = botMapper.toDomain(botDTO);
 
@@ -77,10 +76,14 @@ public class BotController {
         Imagen imagenSaved = imagenService.guardarImagen(bot.getImagen());
         bot.setImagen(imagenSaved);
 
+        Bot nuevoBot = null;
         // Guardar bot y obtener el nuevo bot proveniente de la BD
-        Bot nuevoBot = botService.crearBot(bot);
-
-        System.out.println("Bot creado: " + nuevoBot.getNombre());
+        try {
+            nuevoBot = botService.crearBot(bot);
+        } catch (IllegalArgumentException e) {
+            // El bot ya existe
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(botMapper.toDTO(nuevoBot));
     }
@@ -89,6 +92,10 @@ public class BotController {
     public ResponseEntity<List<BotDTOResponse>> obtenerBot(@PathVariable String botId) {
         // Obtener la lista de Bots desde el servicio
         List<Bot> bots = botService.obtenerBotPorNombre(botId);
+
+        if (bots.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
 
         // Convertir manualmente de Bot a BotDTO
         List<BotDTOResponse> botDTO = new ArrayList<>();

@@ -22,6 +22,7 @@ public class Mensajes {
     @NoArgsConstructor
     public static class Mensaje {
         private String mensaje;
+        private String idBot;
         private LocalDateTime timestamp;
     }
 }

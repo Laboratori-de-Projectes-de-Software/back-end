@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface UsuarioJpaRepository extends JpaRepository<UsuarioEntity, Integer> {
     List<UsuarioEntity> findByNombre(String nombre);
+
+    List<UsuarioEntity> findById(Long id);
 }
