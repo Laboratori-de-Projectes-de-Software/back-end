@@ -24,7 +24,7 @@ public class TestEnfrentamientoMapper {
     public void comprobarEnfrentamientoEntityToEnfrentamientoSencillo() {
         // Arrange
         EnfrentamientoEntity enfrentamientoEntity = new EnfrentamientoEntity();
-        enfrentamientoEntity.setId(1);
+        enfrentamientoEntity.setId(1L);
         enfrentamientoEntity.setEstado(null);
         enfrentamientoEntity.setResultado(null);
         enfrentamientoEntity.setLocal(null);

@@ -15,7 +15,7 @@ public class EnfrentamientoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private ESTADO_Entity estado;
     private RESULTADO_Entity resultado;

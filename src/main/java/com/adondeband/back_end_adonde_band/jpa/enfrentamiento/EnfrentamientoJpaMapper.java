@@ -2,15 +2,20 @@ package com.adondeband.back_end_adonde_band.jpa.enfrentamiento;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento;
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
+import com.adondeband.back_end_adonde_band.jpa.bot.BotEntity;
 import com.adondeband.back_end_adonde_band.jpa.bot.BotJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.jornada.JornadaJpaMapper;
+import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring",
         uses = {
         JornadaJpaMapper.class,
-        BotJpaMapper.class
+        BotJpaMapper.class,
+        //ParticipacionJpaMapper.class
 })
 public interface EnfrentamientoJpaMapper {
     EnfrentamientoJpaMapper INSTANCE = Mappers.getMapper(EnfrentamientoJpaMapper.class);
@@ -22,5 +27,17 @@ public interface EnfrentamientoJpaMapper {
     EnfrentamientoEntity toEntity(Enfrentamiento enfrentamiento);
 
 
+    default BotId toBotId(BotEntity entity) {
+        if(entity == null) return null;
+        return new BotId(entity.getNombre());
+    }
 
+    default BotEntity toBotEntity(BotId id) {
+        if (id == null) return null;
+
+        BotEntity botEntity = new BotEntity();
+        botEntity.setNombre(id.value());
+
+        return botEntity;
+    }
 }
