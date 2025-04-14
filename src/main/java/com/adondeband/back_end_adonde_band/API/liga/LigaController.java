@@ -221,7 +221,7 @@ public class LigaController {
                 // Eliminar enfrentamiento de la lista de enfrentamientos
                 enfrentamientos.remove(enfrentamiento);
                 // Asignar jornada al enfrentamiento
-                enfrentamiento.setJornadaId(jornada.getId());
+                enfrentamiento.setJornada(jornada.getId());
                 // Actualizar enfrentamiento
                 enfrentamientoService.insertarEnfrentamiento(enfrentamiento);
                 // Añadir enfrentamiento a la lista de ids de enfrentamientos de la jornada

@@ -1,7 +1,7 @@
 package com.adondeband.back_end_adonde_band.jpa.enfrentamiento;
 
-import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento;
+import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
 import com.adondeband.back_end_adonde_band.jpa.bot.BotJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.jornada.JornadaJpaMapper;
 import org.mapstruct.Mapper;
@@ -21,6 +21,7 @@ public interface EnfrentamientoJpaMapper {
     // Mapea de Bot a BotEntity
     EnfrentamientoEntity toEntity(Enfrentamiento enfrentamiento);
 
+    default long toLongId(EnfrentamientoId enfrentamientoId){return enfrentamientoId.value();}
 
-
+    default EnfrentamientoId toEnfrentamientoId(long id){return new EnfrentamientoId(id);}
 }

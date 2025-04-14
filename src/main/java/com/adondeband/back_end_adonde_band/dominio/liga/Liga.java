@@ -1,5 +1,6 @@
 package com.adondeband.back_end_adonde_band.dominio.liga;
 
+import com.adondeband.back_end_adonde_band.dominio.jornada.JornadaId;
 import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionId;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
@@ -38,5 +39,5 @@ public class Liga {
 
     private Integer rondas;
 
-    // private List<Jornada> jornadas;
+    private List<JornadaId> jornadas;
 }
