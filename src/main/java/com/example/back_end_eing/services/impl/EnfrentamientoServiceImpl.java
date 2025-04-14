@@ -20,10 +20,39 @@ public class EnfrentamientoServiceImpl implements EnfrentamientoService {
     private ParticipacionRepository participacionRepository;
     private ClasificacionRepository clasificacionRepository;
 
+    // Constructor injection for all repositories
+    public EnfrentamientoServiceImpl(LigaRepository ligaRepository,
+                                     BotRepository botRepository,
+                                     JornadaRepository jornadaRepository,
+                                     EnfrentamientoRepository enfrentamientoRepository,
+                                     ParticipacionRepository participacionRepository,
+                                     ClasificacionRepository clasificacionRepository) {
+        this.ligaRepository = ligaRepository;
+        this.botRepository = botRepository;
+        this.jornadaRepository = jornadaRepository;
+        this.enfrentamientoRepository = enfrentamientoRepository;
+        this.participacionRepository = participacionRepository;
+        this.clasificacionRepository = clasificacionRepository;
+    }
+
+    @Override
     public Enfrentamiento obtenerEnfrentamiento(Long id) {
         return enfrentamientoRepository.findById(id)
-                .orElseThrow( () -> new EnfrentamientoNotFoundException(id));
+                .orElseThrow(() -> new EnfrentamientoNotFoundException(id));
     }
+
+    @Override
+    public Enfrentamiento obtenerEnfrentamientoConParticipaciones(Long id) {
+    // Fetch enfrentamiento with eager loading of participaciones
+    Enfrentamiento enfrentamiento = enfrentamientoRepository.findById(id)
+            .orElseThrow(() -> new EnfrentamientoNotFoundException(id));
+    
+    // Explicitly load participaciones if they're lazily loaded
+    // This will force loading the participaciones and bots
+    enfrentamiento.getParticipaciones().size();
+    
+    return enfrentamiento;
+}
 
     public EnfrentamientoDTO obtenerConversacion(Long id) {
         Enfrentamiento enfrentamiento = obtenerEnfrentamiento(id);
