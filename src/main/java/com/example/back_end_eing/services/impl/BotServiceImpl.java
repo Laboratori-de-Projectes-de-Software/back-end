@@ -29,32 +29,32 @@ public class BotServiceImpl implements BotService {
 
     private UsuarioRepository userRepository;
 
-    public void BotRegistro(BotDTO botdto){
+    public void BotRegistro(BotDTO botdto) {
         //mirar si existe un bot con esa api y nombre
-        if(botRepository.findByApiKey(botdto.getEndpoint()).isEmpty()){
-            if(botRepository.findByNombreBot(botdto.getName()).isEmpty()){
+        if (botRepository.findByApiKey(botdto.getEndpoint()).isEmpty()) {
+            if (botRepository.findByNombreBot(botdto.getName()).isEmpty()) {
                 //crear objeto usuario segun el id
                 Usuario user = getUser(botdto.getUserId());
                 Bot bot = new Bot(botdto, user);
                 //registrar bot a la base de datos
                 botRepository.save(bot);
             }
-        }else{
-            throw(new RepeatedBotException(botdto.getEndpoint()));
+        } else {
+            throw (new RepeatedBotException(botdto.getEndpoint()));
         }
     }
 
-    private Usuario getUser(int id){
+    private Usuario getUser(int id) {
         return userRepository.findById((long) id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public List<BotSummaryResponseDTO> listarBots(Long userId) {
         Optional<List<Bot>> listaBots = null;
-        try{
+        try {
             listaBots = Optional.ofNullable(botRepository.findByUsuarioId(userId));
-        }catch (Exception e){
-            throw(new UserNotFoundException(0));
+        } catch (Exception e) {
+            throw (new UserNotFoundException(0));
         }
 
         return listaBots
@@ -78,8 +78,8 @@ public class BotServiceImpl implements BotService {
     public BotResponseDTO obtenerBot(Long botId) {
         Optional<Bot> bot = null;
         bot = botRepository.findById(botId);
-        if(bot.isPresent()){
-            throw(new BotNotFoundException());
+        if (bot.isEmpty()) {
+            throw (new BotNotFoundException());
         }
         return bot.map(detallesBot -> BotResponseDTO
                         .builder()
@@ -94,6 +94,33 @@ public class BotServiceImpl implements BotService {
                 )
                 .orElseGet(() -> BotResponseDTO.builder().build());
     }
+
+    @Override
+    public List<BotSummaryResponseDTO> getAllBots() {
+        Optional<List<Bot>> listaBots = null;
+        try {
+            listaBots = Optional.of(botRepository.findAll());
+        } catch (Exception e) {
+            throw (new UserNotFoundException(0));
+        }
+
+        return listaBots
+                .map(listaBot ->
+                        listaBot
+                                .stream()
+                                .map(bot -> BotSummaryResponseDTO
+                                        .builder()
+                                        .name(bot.getNombreBot())
+                                        .description(bot.getDescripcionBot())
+                                        .id(bot.getId())
+                                        .urlImage(bot.getFotoBot())
+                                        .build()
+                                ).toList()
+                )
+                .orElseGet(() -> Collections.emptyList());
+    }
+
+
 
     public void actualizarBot(BotDTO botDTO, Long id){
         Optional<Bot> consulta = null;

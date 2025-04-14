@@ -81,6 +81,14 @@ public class LigaServiceImpl implements LigaService{
 
     }
 
+    @Override
+    public Long getOwnerByLeagueId(Long id) {
+        Liga league = ligaRepository.findById(id)
+                .orElseThrow();
+
+        return league.getUsuario().getId();
+    }
+
 
     public List<LeagueResponseDTO> obtenerLigas() {
         List<Liga> ligas = ligaRepository.findAll();

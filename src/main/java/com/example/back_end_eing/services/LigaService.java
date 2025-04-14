@@ -19,6 +19,8 @@ public interface LigaService {
 
     LeagueResponseDTO getLiga(Long id);
 
+    Long getOwnerByLeagueId(Long id);
+
     void deleteLiga(Long id);
 
     void registerBotToLeague(Long botId, Long leagueId);

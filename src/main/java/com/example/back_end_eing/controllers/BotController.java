@@ -86,4 +86,11 @@ public class BotController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Bot actualizado correctamente");
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<BotSummaryResponseDTO>> getAllBots() {
+
+        return ResponseEntity.ok(botService.getAllBots());
+
+    }
+
 }

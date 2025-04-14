@@ -137,4 +137,12 @@ public class LigaController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
         }
     }
+
+    @GetMapping("/{leagueId}/owner")
+    public ResponseEntity<Long> getLigaOwner(@PathVariable Long leagueId) {
+
+        Long owner = ligaService.getOwnerByLeagueId(leagueId);
+        return new ResponseEntity<>(owner, HttpStatus.OK);
+
+    }
 }
