@@ -4,7 +4,9 @@ import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaPort;
+import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
+import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +20,13 @@ public class LigaJpaAdapter implements LigaPort {
 
     private final LigaJpaMapper ligaJpaMapper;
 
-    public LigaJpaAdapter(final LigaJpaRepository ligaJpaRepository, final LigaJpaMapper ligaJpaMapper) {
+    private final ParticipacionJpaMapper participacionJpaMapper;
+
+    public LigaJpaAdapter(final LigaJpaRepository ligaJpaRepository, final LigaJpaMapper ligaJpaMapper,
+                          final ParticipacionJpaMapper participacionJpaMapper) {
         this.ligaJpaRepository = ligaJpaRepository;
         this.ligaJpaMapper = ligaJpaMapper;
+        this.participacionJpaMapper = participacionJpaMapper;
     }
 
     @Override
@@ -81,5 +87,13 @@ public class LigaJpaAdapter implements LigaPort {
     @Override
     public Liga addBotToLiga(LigaId ligaId, BotId botId) {
         return null;
+    }
+
+    @Override
+    public List<Participacion> findParticipacionesLiga(LigaId ligaId) {
+        return ligaJpaRepository.findParticipacionesById(ligaId.value())
+                .stream()
+                .map(participacionJpaMapper::toDomain)
+                .collect(Collectors.toList());
     }
 }
