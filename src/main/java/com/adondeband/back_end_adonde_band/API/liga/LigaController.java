@@ -147,6 +147,7 @@ public class LigaController {
 
     @PostMapping("/{leagueId}/start")
     public ResponseEntity<?> comenzarLiga(@PathVariable Long leagueId) {
+        System.out.println("Comenzando liga con id: " + leagueId);
         //Obtener liga
         List<Liga> ligas = ligaService.obtenerLigaPorId(new LigaId(leagueId));
         // Comprobar si la liga existe
