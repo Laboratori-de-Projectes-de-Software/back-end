@@ -13,7 +13,10 @@ public class ParticipacionMapper {
                 participation.getBot().getId(),        // ID del bot
                 participation.getBot().getName(),      //Nombre del bot
                 participation.getPuntuacion(),             //Puntuacion del bot
-                0 // La posición la pondremos después
+                0, // La posición la pondremos después
+                participation.getNumGanados(),          // Número de victorias
+                participation.getNumEmpatados(),        // Número de empates
+                participation.getNumPerdidos()          // Número de derrotas
         );
     }
 
