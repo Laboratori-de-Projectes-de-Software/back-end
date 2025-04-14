@@ -8,6 +8,7 @@ import com.example.gironetaServer.application.services.BotService;
 import com.example.gironetaServer.domain.Bot;
 import com.example.gironetaServer.domain.User;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.BotDto;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.BotResponseDTO;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.BotSummaryDto;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserResponse;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers.BotSummaryMapper;
@@ -29,19 +30,19 @@ public class BotController {
     }
 
     @PostMapping("/bot")
-    public ResponseEntity<BotDto> createBot(@RequestBody BotDto botDto) {
+    public ResponseEntity<BotResponseDTO> createBot(@RequestBody BotDto botDto) {
         Bot bot = BotMapper.toAppObject(botDto);
         Bot savedBot = botService.createBot(bot);
-        return new ResponseEntity<>(BotMapper.toBotDto(savedBot), HttpStatus.CREATED);
+        return new ResponseEntity<>(BotMapper.toBotResponseDto(savedBot), HttpStatus.CREATED);
     }
 
     @GetMapping("/bot/{botId}")
-    public ResponseEntity<BotDto> getBot(@PathVariable Long botId) {
+    public ResponseEntity<BotResponseDTO> getBot(@PathVariable Long botId) {
         Optional<Bot> botOptional = botService.getBotById(botId);
 
         if (botOptional.isPresent()) {
             Bot bot = botOptional.get();
-            return ResponseEntity.ok(BotMapper.toBotDto(bot));
+            return ResponseEntity.ok(BotMapper.toBotResponseDto(bot));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -74,10 +75,10 @@ public class BotController {
 
 
     @PutMapping("/bot/{botId}")
-    public ResponseEntity<Void> updateBot(@PathVariable Long botId, @RequestBody BotDto botDto) {
+    public ResponseEntity<BotResponseDTO> updateBot(@PathVariable Long botId, @RequestBody BotDto botDto) {
         Bot bot = BotMapper.toAppObject(botDto);
-        botService.updateBot(botId,bot);
-        return ResponseEntity.noContent().build(); // 204 No Content
+        Bot savedBot = botService.updateBot(botId,bot);
+        return ResponseEntity.ok(BotMapper.toBotResponseDto(savedBot));
     }
 
 }

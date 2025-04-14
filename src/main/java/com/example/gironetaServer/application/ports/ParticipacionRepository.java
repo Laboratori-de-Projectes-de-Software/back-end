@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface ParticipacionRepository {
     List<ParticipationResponseDto> findByLeagueId(Long leagueId); //Take a look about creating a Participation class instead using an Entity class
+    List<ParticipacionEntity> findByBotId(Long botId);
 }
