@@ -153,11 +153,6 @@ public class LeagueService implements CreateLeague {
         League league = leagueRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Liga no encontrada con id: " + id));
 
-        // Verificar si el usuario tiene acceso a esta liga
-        if (!league.getUserId().equals(userId)) {
-            throw new ForbiddenException("No tienes permiso para ver esta liga");
-        }
-
         return league;
     }
 
@@ -351,7 +346,7 @@ public class LeagueService implements CreateLeague {
     }
 
     @Transactional
-    public void deleteLeague(Long leagueId){
+    public void deleteLeague(Long leagueId) {
         if (leagueId == null || leagueId <= 0) {
             throw new IllegalArgumentException("El ID de la liga no puede ser nulo o menor o igual a cero");
         }
@@ -385,7 +380,7 @@ public class LeagueService implements CreateLeague {
     }
 
     @Transactional
-    public void startLeague(Long leagueId){
+    public void startLeague(Long leagueId) {
         if (leagueId == null || leagueId <= 0) {
             throw new IllegalArgumentException("El ID de la liga no puede ser nulo o menor o igual a cero");
         }
