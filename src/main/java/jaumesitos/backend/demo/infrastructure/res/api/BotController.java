@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import jaumesitos.backend.demo.infrastructure.security.AuthUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,7 @@ import java.util.List;
 public class BotController {
 
     private final BotService botService;
+    @Qualifier("botDTOMapper")
     private final BotDTOMapper botMapper;
     private final AuthService authService;
 

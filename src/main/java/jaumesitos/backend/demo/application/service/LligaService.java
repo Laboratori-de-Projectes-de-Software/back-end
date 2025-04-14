@@ -22,4 +22,15 @@ public class LligaService {
     public List<League> getLeagues(Integer owner){
         return illigarepository.getLeagues(owner);
     }
+
+    public League getLeagueById(int id) {
+        return illigarepository.findById(id).orElseThrow(() -> new RuntimeException("Liga no encontrada"));
+    }
+
+    public void deleteLeagueById(int id) {
+        if (!illigarepository.deleteById(id)) {
+            throw new RuntimeException("No existe esta liga");
+        }
+    }
+
 }
