@@ -3,6 +3,7 @@ package com.example.gironetaServer.infraestructure.adapters.in.controllers.mappe
 import com.example.gironetaServer.application.ports.UserRepository;
 import com.example.gironetaServer.domain.Bot;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.BotDto;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.BotResponseDTO;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.BotEntity;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import org.springframework.stereotype.Component;
@@ -39,25 +40,24 @@ public class BotMapper {
         return botEntity;
     }
 
-    public static BotDto toBotDto(Bot bot) {
-        BotDto botDto = new BotDto();
-        botDto.setId(bot.getId());
-        botDto.setName(bot.getName());
-        botDto.setDescripcion(bot.getDescripcion());
-        botDto.setUrlImagen(bot.getUrlImagen());
-        botDto.setEndpoint(bot.getEndpoint());
-        botDto.setUsuario_id(bot.getUsuario_id());
-        return botDto;
+    public static BotResponseDTO toBotResponseDto(Bot bot) {
+        BotResponseDTO toBotResponseDto = new BotResponseDTO();
+        toBotResponseDto.setBotId(bot.getId());
+        toBotResponseDto.setName(bot.getName());
+        toBotResponseDto.setDescription(bot.getDescripcion());
+        toBotResponseDto.setUrlImage(bot.getUrlImagen());
+        toBotResponseDto.setNWins(bot.getnWins());
+        toBotResponseDto.setNLosses(bot.getnLosses());
+        toBotResponseDto.setNDraws(bot.getnDraws());
+        return toBotResponseDto;
     }
 
     public static Bot toAppObject(BotDto botDto) {
         Bot bot = new Bot();
-        bot.setId(botDto.getId());
         bot.setName(botDto.getName());
         bot.setDescripcion(botDto.getDescripcion());
         bot.setUrlImagen(botDto.getUrlImagen());
         bot.setEndpoint(botDto.getEndpoint());
-        bot.setUsuario_id(botDto.getUsuario_id());
         return bot;
     }
 }

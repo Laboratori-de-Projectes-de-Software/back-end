@@ -10,17 +10,15 @@ import lombok.Setter;
 public class BotSummaryDto {
     private Long id; //El consenso usa INT no LONG
     private String name;
-    private String urlImagen;
-    private Long usuario_id;
+    private String description;
 
     public BotSummaryDto(){
 
     }
 
-    public BotSummaryDto(Long id, String name, String urlImagen, Long usuario_id) {
+    public BotSummaryDto(Long id, String name, String description) {
         this.id = id;
         this.name = name;
-        this.urlImagen = urlImagen;
-        this.usuario_id = usuario_id;
+        this.description = description;
     }
 }

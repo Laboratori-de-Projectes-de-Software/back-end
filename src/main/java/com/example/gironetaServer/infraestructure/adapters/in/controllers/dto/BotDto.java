@@ -1,28 +1,19 @@
 package com.example.gironetaServer.infraestructure.adapters.in.controllers.dto;
 
 public class BotDto {
-    private Long id; //El consenso usa INT no LONG
     private String name;
     private String descripcion;
     private String urlImagen;
     private String endpoint;
-    private Long usuario_id;
 
     public BotDto() {
     }
 
-    public BotDto(Long id, String name, String descripcion, String urlImagen, String endpoint, Long usuario_id) {
-        this.id = id;
+    public BotDto(String name, String descripcion, String urlImagen, String endpoint) {
         this.name = name;
         this.descripcion = descripcion;
         this.urlImagen = urlImagen;
         this.endpoint = endpoint;
-        this.usuario_id = usuario_id;
-    }
-
-    // Métodos getter
-    public Long getId() {
-        return id;
     }
 
     public String getName() {
@@ -41,11 +32,6 @@ public class BotDto {
         return endpoint;
     }
 
-    // Métodos setter
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -60,13 +46,5 @@ public class BotDto {
 
     public void setEndpoint(String endpoint) {
         this.endpoint = endpoint;
-    }
-
-    public Long getUsuario_id() {
-        return usuario_id;
-    }
-
-    public void setUsuario_id(Long usuario_id) {
-        this.usuario_id = usuario_id;
     }
 }

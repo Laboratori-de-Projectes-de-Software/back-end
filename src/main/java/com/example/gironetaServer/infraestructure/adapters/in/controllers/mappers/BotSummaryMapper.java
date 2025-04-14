@@ -13,8 +13,7 @@ public class BotSummaryMapper {
         return new BotSummaryDto(
                 bot.getId(),
                 bot.getName(),
-                bot.getUrlImagen(),
-                bot.getUsuario_id()
+                bot.getDescripcion()
         );
     }
 }

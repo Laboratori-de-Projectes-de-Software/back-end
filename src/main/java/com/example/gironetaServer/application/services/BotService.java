@@ -1,6 +1,7 @@
 package com.example.gironetaServer.application.services;
 
 import com.example.gironetaServer.application.ports.BotRepository;
+import com.example.gironetaServer.application.ports.ParticipacionRepository;
 import com.example.gironetaServer.application.usecases.users.CreateBot;
 import com.example.gironetaServer.application.usecases.users.GetBot;
 import com.example.gironetaServer.application.usecases.users.UpdateBot;
@@ -9,6 +10,8 @@ import com.example.gironetaServer.domain.exceptions.ConflictException;
 import com.example.gironetaServer.domain.exceptions.ForbiddenException;
 import com.example.gironetaServer.domain.exceptions.ResourceNotFoundException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.ParticipationResponseDto;
+import com.example.gironetaServer.infraestructure.adapters.out.db.entities.ParticipacionEntity;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
@@ -22,9 +25,11 @@ import java.util.Optional;
 public class BotService implements CreateBot, GetBot, UpdateBot {
 
     private final BotRepository botRepository;
+    private final ParticipacionRepository participacionRepository;
 
-    public BotService(BotRepository botRepository) {
+    public BotService(BotRepository botRepository, ParticipacionRepository participacionRepository) {
         this.botRepository = botRepository;
+        this.participacionRepository = participacionRepository;
     }
 
     @Override
@@ -36,6 +41,9 @@ public class BotService implements CreateBot, GetBot, UpdateBot {
         UserEntity authenticatedUser = (UserEntity) authentication.getPrincipal();
         Long userId = authenticatedUser.getId();
         bot.setUsuario_id(userId);
+        bot.setnDraws(0);
+        bot.setnLosses(0);
+        bot.setnWins(0);
 
         // Validar los campos obligatorios del bot
         if (bot == null ||
@@ -66,13 +74,34 @@ public class BotService implements CreateBot, GetBot, UpdateBot {
             throw new UnauthorizedException("Usuario no autenticado");
         }
 
+        List<ParticipacionEntity> participations = participacionRepository.findByBotId(id);
+
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("El ID del bot no puede ser nulo o menor que cero.");
         }
         Optional<Bot> bot = botRepository.findById(id);
+
+        int nWins = 0;
+        int nLosses = 0;
+        int nDraws = 0;
+
+        // Si no tiene participaciones, obtenemos sus estadisticas
+        if (participations != null || !participations.isEmpty()) {
+            for(ParticipacionEntity participation : participations) {
+                nWins += participation.getNumGanados();
+                nLosses += participation.getNumPerdidos();
+                nDraws += participation.getNumEmpatados();
+            }
+        }
+
         if (bot.isEmpty()) {
             throw new ResourceNotFoundException("Bot no encontrado con ID: " + id);
         }
+
+        bot.get().setnWins(nWins);
+        bot.get().setnLosses(nLosses);
+        bot.get().setnDraws(nDraws);
+
         return bot;
     }
 
@@ -115,7 +144,7 @@ public class BotService implements CreateBot, GetBot, UpdateBot {
     }
 
     @Override
-    public void updateBot(Long botId, Bot bot) {
+    public Bot updateBot(Long botId, Bot bot) {
         if (botId == null || botId <= 0) {
             throw new IllegalArgumentException("El ID del bot no puede ser nulo o menor que cero.");
         }
@@ -151,7 +180,7 @@ public class BotService implements CreateBot, GetBot, UpdateBot {
             existingBot.setEndpoint(bot.getEndpoint());
 
             try {
-                botRepository.save(existingBot);
+                return botRepository.save(existingBot);
             } catch (DataIntegrityViolationException e) {
                 // Ejemplo: Si el nuevo nombre del bot ya existe para el usuario
                 if (e.getMessage().contains("UNIQUE constraint") && e.getMessage().contains("name") && e.getMessage().contains(currentUserId.toString())) {

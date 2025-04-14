@@ -36,4 +36,10 @@ public class ParticipacionDatabaseRepository implements ParticipacionRepository 
                 .collect(Collectors.toList());
 
     }
+
+    @Override
+    @Transactional
+    public List<ParticipacionEntity> findByBotId(Long botId) {
+        return participacionJpaRepository.findByBotId(botId);
+    }
 }

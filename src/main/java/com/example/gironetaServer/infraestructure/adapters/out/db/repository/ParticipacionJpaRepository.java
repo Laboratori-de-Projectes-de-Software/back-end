@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ParticipacionJpaRepository extends JpaRepository<ParticipacionEntity, Long> {
     List<ParticipacionEntity> findByLeagueId(Long leagueId); //Take a look about creating a Participation class instead using an Entity class
+    List<ParticipacionEntity> findByBotId(Long botId);
 }
