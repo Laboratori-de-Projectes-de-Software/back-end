@@ -41,20 +41,15 @@ public class BotController {
     @GetMapping
     public ResponseEntity<List<BotDTOMin>> listarBots(@RequestParam(value = "owner", required = false) Long userId) {
         // Obtiene el nombre del usuario autenticado desde SecurityContextHolder
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // Set UserId en el bot
         // Obtener listado de bots
-        List<Bot> bots = null;
+        List<Bot> bots;
         try {
             bots = (userId == null)
                     ? botService.obtenerTodosLosBots()
                     : botService.obtenerBotsPorIdUsuario(new UsuarioId(userId));
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-
-        // comprobar que la lista no está vacía
-        if (bots.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 

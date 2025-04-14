@@ -2,22 +2,27 @@ package com.adondeband.back_end_adonde_band.API.enfrentamiento;
 
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.resultado.RESULTADO;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class EnfrentamientoDTO {
-    private long id;
-
-    private ESTADO estado;
-    private RESULTADO resultado;
-
-    private String bot1;
-
-    private String bot2;
+    private Long id;
+    private ESTADO state;
+    private RESULTADO result;
+    private String [] fighters;
+    private int roundNumber;
 
     String getGanador() {
-        return switch (resultado) {
-            case EMPATE -> null;
-            case VICTORIA -> bot1;
-            case DERROTA -> bot2;
+        return switch (result) {
+            case EMPATE   -> null;
+            case VICTORIA -> fighters[0];
+            case DERROTA  -> fighters[1];
         };
     }
 }

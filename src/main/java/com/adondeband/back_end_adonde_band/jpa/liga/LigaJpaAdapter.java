@@ -1,12 +1,16 @@
 package com.adondeband.back_end_adonde_band.jpa.liga;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
+import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaPort;
 import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaMapper;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -17,16 +21,20 @@ import java.util.stream.Collectors;
 public class LigaJpaAdapter implements LigaPort {
 
     private final LigaJpaRepository ligaJpaRepository;
+    private final UsuarioJpaRepository usuarioJpaRepository;
 
     private final LigaJpaMapper ligaJpaMapper;
+    private final UsuarioJpaMapper usuarioJpaMapper;
 
     private final ParticipacionJpaMapper participacionJpaMapper;
 
     public LigaJpaAdapter(final LigaJpaRepository ligaJpaRepository, final LigaJpaMapper ligaJpaMapper,
-                          final ParticipacionJpaMapper participacionJpaMapper) {
+                          final ParticipacionJpaMapper participacionJpaMapper, UsuarioJpaMapper usuarioJpaMapper, UsuarioJpaRepository usuarioJpaRepository) {
         this.ligaJpaRepository = ligaJpaRepository;
         this.ligaJpaMapper = ligaJpaMapper;
         this.participacionJpaMapper = participacionJpaMapper;
+        this.usuarioJpaMapper = usuarioJpaMapper;
+        this.usuarioJpaRepository = usuarioJpaRepository;
     }
 
     @Override
@@ -61,7 +69,16 @@ public class LigaJpaAdapter implements LigaPort {
     @Transactional
     public List<Liga> findLigasUsuario(UsuarioId userId) {
         //TODO
-        return List.of();
+        // Buscar UsuarioEntity en la base de datos usando el repositorio
+        List<UsuarioEntity> usuariosFound = usuarioJpaRepository.findById(userId.value());
+
+        if (usuariosFound.isEmpty()) throw new NotFoundException("Este usuario no existe");
+
+        // Devolver todas las ligas que pertenezcan a este usuario
+        return  ligaJpaRepository.findByUsuario(usuariosFound.getFirst())
+                .stream()
+                .map(ligaJpaMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override

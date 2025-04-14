@@ -2,16 +2,22 @@ package com.adondeband.back_end_adonde_band.dominio.enfrentamiento;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EnfrentamientoImpl implements EnfrentamientoService {
 
-    private EnfrentamientoPort enfrentamientoPort;
+    private final EnfrentamientoPort enfrentamientoPort;
+
+    public EnfrentamientoImpl(EnfrentamientoPort enfrentamientoPort) {
+        this.enfrentamientoPort = enfrentamientoPort;
+    }
 
     public Enfrentamiento insertarEnfrentamiento(Enfrentamiento enfrentamiento) {
         return enfrentamientoPort.save(enfrentamiento);
     }
 
-    public Enfrentamiento obtenerEnfrentamiento(Long idPartido) {
+    public List<Enfrentamiento> obtenerEnfrentamiento(Long idPartido) {
         return enfrentamientoPort.findById(idPartido);
     }
 }

@@ -7,6 +7,7 @@ import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoService;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
+import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
 import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenService;
 import com.adondeband.back_end_adonde_band.dominio.jornada.Jornada;
@@ -60,9 +61,13 @@ public class LigaController {
     @GetMapping
     public ResponseEntity<List<LigaResponseDTO>> listarLigas(@RequestParam(value = "owner", required = false) Long userId) {
         // TODO
-        List<Liga> ligas = (userId != null) ? ligaService.obtenerLigasPorUsuario(new UsuarioId(userId)) : ligaService.obtenerTodasLasLigas();
-
-        if (ligas.isEmpty()) {
+        // Obtener listado de ligas
+        List<Liga> ligas;
+        try {
+            ligas = (userId != null)
+                    ? ligaService.obtenerLigasPorUsuario(new UsuarioId(userId))
+                    : ligaService.obtenerTodasLasLigas();
+        } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
