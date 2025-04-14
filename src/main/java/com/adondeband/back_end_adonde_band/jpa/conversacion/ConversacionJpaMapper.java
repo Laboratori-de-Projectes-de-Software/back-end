@@ -9,9 +9,9 @@ import org.mapstruct.factory.Mappers;
 public interface ConversacionJpaMapper {
     ConversacionJpaMapper INSTANCE = Mappers.getMapper(ConversacionJpaMapper.class);
 
-    // Mapea de BotEntity a Bot
+    // Mapea de ConversacionEntity a Conversacion
     Conversacion toDomain(ConversacionEntity enfrentamientoEntity);
 
-    // Mapea de Bot a BotEntity
+    // Mapea de Conversacion a ConversacionEntity
     ConversacionEntity toEntity(Conversacion conversacion);
 }

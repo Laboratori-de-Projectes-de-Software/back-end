@@ -58,7 +58,6 @@ public class TestLigaService {
         assertEquals(liga.getFechaFin(), ligaSaved.getFechaFin());
         assertEquals(liga.getMatchTime(), ligaSaved.getMatchTime());
         assertEquals(liga.getRondas(), ligaSaved.getRondas());
-
     }
 
     @Test
