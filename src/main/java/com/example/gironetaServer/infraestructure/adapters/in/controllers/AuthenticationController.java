@@ -4,9 +4,10 @@ import com.example.gironetaServer.domain.exceptions.ResourceNotFoundException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.ErrorResponseDto;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserDTOLogin;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.RegisterUserDto;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserResponseDTO;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers.UserMapper;
+import com.example.gironetaServer.domain.exceptions.ConflictException;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserDTORegister;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import com.example.gironetaServer.infraestructure.adapters.security.AuthenticationService;
 import com.example.gironetaServer.infraestructure.adapters.security.JwtService;
@@ -34,9 +35,17 @@ public class AuthenticationController {
     // Not used Mappers for conversion between Domain and Entity (no idea where it
     // should be)
     @PostMapping("/register")
-    public ResponseEntity<UserEntity> register(@RequestBody RegisterUserDto registerUserDto) {
-        UserEntity registeredUser = authenticationService.signup(registerUserDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
+    public ResponseEntity<?> register(@RequestBody UserDTORegister registerUserDto) {
+        try {
+            authenticationService.signup(registerUserDto);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (ConflictException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ErrorResponseDto("Conflict", "El correo electrónico ya está registrado: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponseDto("Internal Server Error", "Ocurrió un error inesperado: " + e.getMessage()));
+        }
     }
 
     // Not used Mappers for conversion between Domain and Entity (no idea where it

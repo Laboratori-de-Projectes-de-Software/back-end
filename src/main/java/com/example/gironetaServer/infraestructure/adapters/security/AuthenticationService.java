@@ -5,7 +5,7 @@ import com.example.gironetaServer.domain.exceptions.ForbiddenException;
 import com.example.gironetaServer.domain.exceptions.ResourceNotFoundException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserDTOLogin;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.RegisterUserDto;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserDTORegister;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.UserJpaRepository;
 import org.apache.commons.lang3.NotImplementedException;
@@ -32,21 +32,20 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserEntity signup(RegisterUserDto input) {
+    public UserEntity signup(UserDTORegister input) {
         UserEntity user = new UserEntity();
         user.setUsername(input.getUsername());
         user.setEmail(input.getEmail());
         user.setPassword(passwordEncoder.encode(input.getPassword()));
 
         try {
-            UserEntity savedUser = userJpaRepository.save(user);
-            return savedUser;
+            return userJpaRepository.save(user);
         } catch (DataIntegrityViolationException e) {
-            // Verificar si es una violación de clave única para el email
+            // Check if the exception is due to a unique constraint violation on the email
             if (e.getMessage().contains("Duplicate entry") && e.getMessage().contains("email")) {
-                throw new ConflictException("El correo electrónico '" + input.getEmail() + "' ya está registrado");
+                throw new ConflictException("The email '" + input.getEmail() + "' is already registered");
             }
-            // Si es otra violación de integridad, relanzar la excepción
+            // Rethrow the exception if it's a different integrity violation
             throw e;
         }
     }
