@@ -34,6 +34,7 @@ public class LigaMapper {
         league.setRounds(ligaEntity.getRounds());
         league.setMatchTime(ligaEntity.getMatchTime());
         league.setUserId(ligaEntity.getUsuario().getId());
+        league.setState(toDomainState(ligaEntity.getState()));
 
         List<Long> botIds = new ArrayList<>();
         if (ligaEntity.getBots() != null) {
@@ -53,6 +54,7 @@ public class LigaMapper {
         ligaEntity.setUrlImagen(league.getUrlImagen());
         ligaEntity.setRounds(league.getRounds());
         ligaEntity.setMatchTime(league.getMatchTime());
+        ligaEntity.setState(toEntityState(league.getState()));
         UserEntity userEntity = UserMapper.toEntity(userRepository.getUserById(league.getUserId()));
         ligaEntity.setUsuario(userEntity);
 
