@@ -1,5 +1,6 @@
 package com.example.gironetaServer.application.ports;
 
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.MatchResponseDTO;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.EnfrentamientoEntity;
 
 import java.util.List;
@@ -9,5 +10,7 @@ public interface EnfrentamientoRepository {
     Optional<EnfrentamientoEntity> findById(Long id);
     List<EnfrentamientoEntity> findByJornadaId(Long jornadaId);
     EnfrentamientoEntity save(EnfrentamientoEntity enfrentamiento);
+    List<MatchResponseDTO> findByLeagueId(Long leagueId);
     void deleteById(Long id);
+
 }

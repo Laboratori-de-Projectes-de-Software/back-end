@@ -7,13 +7,10 @@ import com.example.gironetaServer.domain.exceptions.ForbiddenException;
 import com.example.gironetaServer.domain.exceptions.ResourceNotFoundException;
 import com.example.gironetaServer.domain.exceptions.TimeoutException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.ErrorResponseDto;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LeagueResponseDto;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.ParticipationResponseDto;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LeagueDto;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers.LigaMapper;
 
 import java.util.List;
@@ -301,6 +298,42 @@ public class LeagueController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponseDto("Internal Server Error",
                             "Ocurrió un error inesperado al obtener la clasificación: " + e.getMessage()));
+        }
+    }
+
+
+    //Obtener enfrenamientos (pasados, presentes y futuros)
+    @GetMapping("/league/{leagueId}/match")
+    public ResponseEntity<?> getMatchesFromLeague(@PathVariable Long leagueId) {
+        try {
+            // Obtenemos la lista de participaciones (leaderboard)
+            List<MatchResponseDTO> matches = leagueService.getMatchesFromLeague(leagueId);
+
+            if(matches.isEmpty()) {
+                throw new ResourceNotFoundException("No existe la liga");
+            }
+            return ResponseEntity.ok(matches);
+
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponseDto("Not Found",
+                            "No se encontraron los enfrentamientos: " + e.getMessage()));
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponseDto("Unauthorized",
+                            "Se requiere autenticación para mirar los enfrentamientos: " + e.getMessage()));
+        } catch (TimeoutException e) {
+            return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
+                    .body(new ErrorResponseDto("Request Timeout",
+                            "La operación excedió el tiempo límite: " + e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponseDto("Bad Request",
+                            "El ID de liga proporcionado no es válido: " + e.getMessage()));
+        }  catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponseDto("Internal Server Error",
+                            "Ocurrió un error inesperado al obtener los enfrentamientios: " + e.getMessage()));
         }
     }
 }

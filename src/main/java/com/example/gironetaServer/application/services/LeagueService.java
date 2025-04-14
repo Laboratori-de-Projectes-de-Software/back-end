@@ -1,17 +1,6 @@
 package com.example.gironetaServer.application.services;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.example.gironetaServer.application.ports.EnfrentamientoRepository;
 import com.example.gironetaServer.application.ports.LeagueRepository;
 import com.example.gironetaServer.application.ports.ParticipacionRepository;
 import com.example.gironetaServer.application.usecases.users.CreateLeague;
@@ -21,6 +10,7 @@ import com.example.gironetaServer.domain.exceptions.ForbiddenException;
 import com.example.gironetaServer.domain.exceptions.ResourceNotFoundException;
 import com.example.gironetaServer.domain.exceptions.TimeoutException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.MatchResponseDTO;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.ParticipationResponseDto;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.*;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.*;
@@ -41,23 +31,28 @@ public class LeagueService implements CreateLeague {
     private final UserJpaRepository userJpaRepository;
     private final JornadaJpaRepository jornadaJpaRepository;
     private final EnfrentamientoJpaRepository enfrentamientoJpaRepository;
-    private final ResultadoJpaRepository resultadoJpaRepository;
 
     private final ParticipacionRepository participacionRepository;
     private final ParticipacionJpaRepository participacionJpaRepository; //Not should be here, but just in case
 
+    private final EnfrentamientoRepository enfrentamientoRepository;
+
+
     public LeagueService(LeagueRepository leagueRepository, BotJpaRepository botJpaRepository,
                          LigaJpaRepository ligaJpaRepository, UserJpaRepository userJpaRepository, JornadaJpaRepository jornadaJpaRepository, EnfrentamientoJpaRepository enfrentamientoJpaRepository, ResultadoJpaRepository resultadoJpaRepository,
-                         ParticipacionRepository participacionRepository, ParticipacionJpaRepository participacionJpaRepository) {
+                         ParticipacionRepository participacionRepository, ParticipacionJpaRepository participacionJpaRepository,
+                         EnfrentamientoRepository enfrentamientoRepository
+                         ) {
         this.leagueRepository = leagueRepository;
         this.botJpaRepository = botJpaRepository;
         this.ligaJpaRepository = ligaJpaRepository;
         this.userJpaRepository = userJpaRepository;
         this.jornadaJpaRepository = jornadaJpaRepository;
         this.enfrentamientoJpaRepository = enfrentamientoJpaRepository;
-        this.resultadoJpaRepository = resultadoJpaRepository;
         this.participacionRepository = participacionRepository;
         this.participacionJpaRepository = participacionJpaRepository;
+        this.enfrentamientoRepository = enfrentamientoRepository;
+
     }
 
     @Override
@@ -460,18 +455,31 @@ public class LeagueService implements CreateLeague {
                     if (countEnfrentamientos < rounds) {
                         EnfrentamientoEntity enfrentamientoEntity = new EnfrentamientoEntity();
                         enfrentamientoEntity.setJornada(jornadaEntity);
-                        enfrentamientoEntity.setEstado(EnfrentamientoEntity.Estado.Created);
-                        enfrentamientoEntity.setResultados(new HashSet<>()); // Initialize the resultados set
+                        enfrentamientoEntity.setEstado(EnfrentamientoEntity.State.PENDANT);
 
-                        // Crear resultados para cada bot en el enfrentamiento
-                        ResultadoEntity resultadoBot1 = new ResultadoEntity(0, bot1, enfrentamientoEntity);
-                        ResultadoEntity resultadoBot2 = new ResultadoEntity(0, bot2, enfrentamientoEntity);
-                        enfrentamientoEntity.getResultados().add(resultadoBot1);
-                        enfrentamientoEntity.getResultados().add(resultadoBot2);
+                        // Decidir bot local y visitante
+                        BotEntity botLocal;
+                        BotEntity botVisitante;
+
+                        if (jornadaEntity.getNumJornada() % 2 == 0) { // Jornada par
+                            botLocal = bot1;
+                            botVisitante = bot2;
+                        } else { // Jornada impar
+                            botLocal = bot2;
+                            botVisitante = bot1;
+                        }
+
+                        //Añadir bots locales y visitantes junto a sus puntuaciones
+                        enfrentamientoEntity.setBotLocal(botLocal);
+                        enfrentamientoEntity.setPuntuacionLocal(0);
+                        enfrentamientoEntity.setBotVisitante(botVisitante);
+                        enfrentamientoEntity.setPuntuacionVisitante(0);
+
+                        //Añadir la ronda que es
+                        enfrentamientoEntity.setRonda(((jornadaEntity.getNumJornada() - 1) / (numBots - 1)) + 1);
 
                         enfrentamientos.add(enfrentamientoEntity);
                         enfrentamientosPrevios.add(enfrentamientoKey);
-                        enfrentamientosPrevios.add(enfrentamientoKeyReverso);
                     }
                 }
 
@@ -480,10 +488,7 @@ public class LeagueService implements CreateLeague {
 
                 // Guardar cada enfrentamiento y sus resultados
                 for (EnfrentamientoEntity enfrentamiento : enfrentamientos) {
-                    enfrentamientoJpaRepository.save(enfrentamiento);
-                    for (ResultadoEntity resultado : enfrentamiento.getResultados()) {
-                        resultadoJpaRepository.save(resultado);
-                    }
+                    enfrentamientoRepository.save(enfrentamiento);
                 }
 
                 // Rotar los bots para la siguiente jornada
@@ -515,5 +520,12 @@ public class LeagueService implements CreateLeague {
         }
 
         return participations;
+    }
+
+    @Transactional
+    public List<MatchResponseDTO> getMatchesFromLeague(Long leagueId) {
+
+              return enfrentamientoRepository.findByLeagueId(leagueId);
+
     }
 }
