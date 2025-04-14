@@ -4,7 +4,7 @@ import jakarta.annotation.PostConstruct;
 import jaumesitos.backend.demo.application.repository.ILligaRepository;
 import jaumesitos.backend.demo.config.DuplicateEntityException;
 import jaumesitos.backend.demo.domain.League;
-import jaumesitos.backend.demo.infrastructure.db.dbo.ClassificacioDBO;
+import jaumesitos.backend.demo.infrastructure.db.dbo.ParticipationDBO;
 import jaumesitos.backend.demo.infrastructure.db.dbo.LeagueDBO;
 import jaumesitos.backend.demo.infrastructure.db.mapper.LLigaDBOMapper;
 import jaumesitos.backend.demo.infrastructure.res.dto.LeagueResponseDTO;

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 
-public class Classificacio {
+public class Participation {
     int leagueid;
     int botid;
     int points;

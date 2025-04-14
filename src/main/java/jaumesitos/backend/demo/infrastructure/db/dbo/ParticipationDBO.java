@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Entity
 @IdClass(ClassificacioId.class)
 @Table(name = "classificacio") // <-- This line fixes the issue
-public class ClassificacioDBO {
+public class ParticipationDBO {
     @Id
     int leagueid;
     @Id
