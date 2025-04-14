@@ -5,32 +5,37 @@ import com.example.gironetaServer.infraestructure.adapters.out.db.entities.Leagu
 import java.util.List;
 
 public class LeagueResponseDto {
-    private Long id;
+    private int leagueId;
+    private LeagueEntity.State state;
     private String name;
     private String urlImagen;
+    private int user; // Owner
     private Integer rounds;
     private Long matchTime;
-    private List<Long> bots;
-    private LeagueEntity.State state;
-    private Long userId; // Owner
+    private List<Integer> bots;
 
     public LeagueResponseDto() {
     }
 
-    public LeagueResponseDto(Long id, String name, String urlImagen, Integer rounds, Long matchTime, List<Long> bots,
-                     Long userId) {
-        this.id = id;
+    public LeagueResponseDto(int leagueId, LeagueEntity.State state, String name, String urlImagen, int user,
+            Integer rounds, Long matchTime, List<Integer> bots) {
+        this.leagueId = leagueId;
+        this.state = state;
         this.name = name;
         this.urlImagen = urlImagen;
+        this.user = user;
         this.rounds = rounds;
         this.matchTime = matchTime;
         this.bots = bots;
-        this.userId = userId;
     }
 
-    // Métodos getter
-    public Long getId() {
-        return id;
+    // Getters
+    public int getLeagueId() {
+        return leagueId;
+    }
+
+    public LeagueEntity.State getState() {
+        return state;
     }
 
     public String getName() {
@@ -41,6 +46,10 @@ public class LeagueResponseDto {
         return urlImagen;
     }
 
+    public int getUser() {
+        return user;
+    }
+
     public Integer getRounds() {
         return rounds;
     }
@@ -49,17 +58,17 @@ public class LeagueResponseDto {
         return matchTime;
     }
 
-    public List<Long> getBots() {
+    public List<Integer> getBots() {
         return bots;
     }
 
-    public Long getUserId() {
-        return userId;
+    // Setters
+    public void setLeagueId(int leagueId) {
+        this.leagueId = leagueId;
     }
 
-    // Métodos setter
-    public void setId(Long id) {
-        this.id = id;
+    public void setState(LeagueEntity.State state) {
+        this.state = state;
     }
 
     public void setName(String name) {
@@ -70,6 +79,10 @@ public class LeagueResponseDto {
         this.urlImagen = urlImagen;
     }
 
+    public void setUser(int user) {
+        this.user = user;
+    }
+
     public void setRounds(Integer rounds) {
         this.rounds = rounds;
     }
@@ -78,19 +91,7 @@ public class LeagueResponseDto {
         this.matchTime = matchTime;
     }
 
-    public void setBots(List<Long> bots) {
+    public void setBots(List<Integer> bots) {
         this.bots = bots;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public LeagueEntity.State getState() {
-        return state;
-    }
-
-    public void setState(LeagueEntity.State state) {
-        this.state = state;
     }
 }
