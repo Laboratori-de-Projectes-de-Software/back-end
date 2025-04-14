@@ -160,7 +160,7 @@ public class LeagueService {
 
             leaguePort.save(leagueDomain);
 
-            return new ApiResponse(201, "Bot added");
+            return new ApiResponse(201, "Bot registered");
         } catch (IllegalArgumentException e) {
             return new ApiResponse(404, "League not found");
         } catch (Exception e) {
