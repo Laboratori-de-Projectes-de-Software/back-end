@@ -51,10 +51,6 @@ public class TestLigaMapper {
         liga.setFechaInicio(LocalDateTime.now());
         liga.setFechaFin(LocalDateTime.now());
         liga.setEstado(ESTADO.PENDIENTE);
-        liga.setMatchTime(120L);
-        liga.setImagen(null);
-        liga.setUsuario(null);
-        liga.setParticipaciones(null);
 
         // Act
         LigaEntity ligaEntity = ligaJpaMapper.toEntity(liga);

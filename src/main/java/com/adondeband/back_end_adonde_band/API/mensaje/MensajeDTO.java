@@ -15,6 +15,6 @@ import java.time.LocalDateTime;
 public class MensajeDTO {
 
     private String mensaje;
-    private String idBot;
+    private BotId idBot;
     private LocalDateTime timestamp;
 }

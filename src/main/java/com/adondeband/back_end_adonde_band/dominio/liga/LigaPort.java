@@ -1,7 +1,6 @@
 package com.adondeband.back_end_adonde_band.dominio.liga;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
-import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import jakarta.transaction.Transactional;
 
@@ -15,8 +14,6 @@ public interface LigaPort {
     List<Liga> findAll();
 
     List<Liga> findLigasUsuario(UsuarioId userId);
-
-    List<Participacion> findParticipacionesLiga(LigaId ligaId);
 
     Liga actualizarUrlImagen(LigaId ligaId, String url);
 

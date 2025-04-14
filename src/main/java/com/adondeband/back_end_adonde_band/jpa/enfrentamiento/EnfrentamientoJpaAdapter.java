@@ -4,9 +4,6 @@ import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoPort;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
 public class EnfrentamientoJpaAdapter implements EnfrentamientoPort {
     private final EnfrentamientoJpaRepository enfrentamientoJpaRepository;
@@ -19,26 +16,16 @@ public class EnfrentamientoJpaAdapter implements EnfrentamientoPort {
 
     @Override
     public Enfrentamiento save(Enfrentamiento enfrentamiento) {
-        // DEBUG
-        EnfrentamientoEntity enfrentamientoEntity = enfrentamientoMapper.toEntity(enfrentamiento);
-        EnfrentamientoEntity enfrentamientoSaved = enfrentamientoJpaRepository.save(enfrentamientoEntity);
-        Enfrentamiento enfrentamientoDomain = enfrentamientoMapper.toDomain(enfrentamientoSaved);
-
-        return enfrentamientoDomain;
-
-        /*
         return enfrentamientoMapper.toDomain(
                 enfrentamientoJpaRepository.save(
                         enfrentamientoMapper.toEntity(enfrentamiento)));
-         */
     }
 
     @Override
-    public List<Enfrentamiento> findById(Long idPartido) {
-        return  enfrentamientoJpaRepository.findById(idPartido)
-                .stream()
+    public Enfrentamiento findById(Long idPartido) {
+        return enfrentamientoJpaRepository.findById(idPartido)
                 .map(enfrentamientoMapper::toDomain)
-                .collect(Collectors.toList());
+                .orElse(null);
     }
 
 

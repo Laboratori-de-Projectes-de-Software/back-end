@@ -2,7 +2,6 @@ package com.adondeband.back_end_adonde_band.jpa.jornada;
 
 import com.adondeband.back_end_adonde_band.dominio.jornada.Jornada;
 import com.adondeband.back_end_adonde_band.dominio.jornada.JornadaPort;
-import com.adondeband.back_end_adonde_band.dominio.jornada.JornadaId;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public class JornadaJpaAdapter implements JornadaPort {
     }
 
     @Override
-    public List<Jornada> findById(Long s) {
+    public List<Jornada> findById(int s) {
         return jornadaJpaRepository.findById(s)
                 .stream()
                 .map(jornadaJpaMapper::toDomain)

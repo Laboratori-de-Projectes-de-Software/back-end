@@ -12,7 +12,6 @@ import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaRepository;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
 import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaMapper;
-import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -23,23 +22,19 @@ import java.util.stream.Collectors;
 public class BotJpaAdapter implements BotPort {
 
     private final BotJpaRepository botJpaRepository;
-    private final ImagenJpaRepository imagenJpaRepository;
-    private final UsuarioJpaRepository usuarioJpaRepository;
     private final BotJpaMapper botJpaMapper;
     private final UsuarioJpaMapper usuarioJpaMapper;
-
+    private final ImagenJpaRepository imagenJpaRepository;
 
     public BotJpaAdapter(
             final BotJpaRepository botJpaRepository,
             final BotJpaMapper botJpaMapper,
             final UsuarioJpaMapper usuarioJpaMapper,
-            final ImagenJpaRepository imagenJpaRepository,
-            UsuarioJpaRepository usuarioJpaRepository) {
+            final ImagenJpaRepository imagenJpaRepository) {
         this.botJpaRepository = botJpaRepository;
         this.botJpaMapper = botJpaMapper;
         this.usuarioJpaMapper = usuarioJpaMapper;
         this.imagenJpaRepository = imagenJpaRepository;
-        this.usuarioJpaRepository = usuarioJpaRepository;
     }
 
     public Bot actualizarUrlImagen(BotId botId, String url) {
@@ -112,12 +107,12 @@ public class BotJpaAdapter implements BotPort {
     @Transactional
     public List<Bot> findBotsUsuario(UsuarioId userId) {
         // Buscar UsuarioEntity en la base de datos usando el repositorio
-        List<UsuarioEntity> usuariosFound = usuarioJpaRepository.findById(userId.value());
-
-        if (usuariosFound.isEmpty()) throw new NotFoundException("Este usuario no existe");
+        UsuarioEntity usuarioEntity = botJpaRepository.findByUsuario(
+                usuarioJpaMapper.toEntity(userId)
+        ).getFirst().getUsuario();
 
         // Mapear los bots asociados al usuario
-        return botJpaRepository.findByUsuario(usuariosFound.getFirst())
+        return botJpaRepository.findByUsuario(usuarioEntity)
                 .stream()
                 .map(botJpaMapper::toDomain)
                 .collect(Collectors.toList());

@@ -12,7 +12,7 @@ public class ConversacionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     private String ficheroRuta;
 
