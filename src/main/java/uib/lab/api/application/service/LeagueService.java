@@ -106,7 +106,7 @@ public class LeagueService {
             if (!leagueList.isEmpty()) {
                 return new ApiResponse(200, "Leagues found", leagueList);
             } else {
-                return new ApiResponse(404, "No leagues found");
+                return new ApiResponse(200, "No leagues found", new ArrayList<>());
             }
         } catch (IllegalArgumentException e) {
             return new ApiResponse(404, "Leagues not found");
@@ -153,14 +153,12 @@ public class LeagueService {
             }
             int[] newBotIds = new int[botIds.length + 1];
 
-            for (int i = 0; i < botIds.length; ++i) {
-                newBotIds[i] = botIds[i];
-            }
+            System.arraycopy(botIds, 0, newBotIds, 0, botIds.length);
             newBotIds[newBotIds.length - 1] = botId;
 
             leagueDomain.setBotIds(newBotIds);
 
-            leagueDomain = leaguePort.save(leagueDomain);
+            leaguePort.save(leagueDomain);
 
             return new ApiResponse(201, "Bot added");
         } catch (IllegalArgumentException e) {
@@ -307,9 +305,13 @@ public class LeagueService {
 
             for (int i = 0; i < nMatches; ++i) {
                 MatchDomain match = matches.get(i);
-                Match.MatchResult result = match.getResult();
+
+                if (match.getState() != Match.MatchState.COMPLETED)
+                    continue;
+
                 int idLocal = match.getBotId1();
                 int idVisiting = match.getBotId2();
+                Match.MatchResult result = match.getResult();
 
                 if (result == Match.MatchResult.LOCAL) {
                     scores.put(idLocal, scores.get(idLocal) + 3);
@@ -360,7 +362,7 @@ public class LeagueService {
                 lastScore = score;
                 ++position;
             }
-            return new ApiResponse<>(200, "Leaderboard returned", ans);
+            return new ApiResponse<>(200, "Classification found", ans);
         } catch (IllegalArgumentException e) {
             return new ApiResponse<>(404, "League not found");
         } catch (Exception e) {

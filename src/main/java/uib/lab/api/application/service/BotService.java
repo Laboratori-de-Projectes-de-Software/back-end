@@ -14,6 +14,8 @@ import uib.lab.api.application.port.BotPort;
 import uib.lab.api.domain.BotDomain;
 import uib.lab.api.domain.UserDomain;
 import uib.lab.api.infraestructure.util.ApiResponse;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,7 +88,7 @@ public class BotService {
             if (!botList.isEmpty()) {
                 return new ApiResponse(200, "Bots found", botList);
             } else {
-                return new ApiResponse(404, "No bots found");
+                return new ApiResponse(200, "No bots found", new ArrayList<>());
             }
         } catch (IllegalArgumentException e) {
             return new ApiResponse(404, "User not found");
