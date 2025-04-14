@@ -1,16 +1,16 @@
 package com.example.gironetaServer.infraestructure.adapters.in.controllers.dto;
 
-public class RegisterUserDto {
+public class UserDTORegister {
     private String username;
     private String email;
     private String password;
 
     // Constructor por defecto
-    public RegisterUserDto() {
+    public UserDTORegister() {
     }
 
     // Constructor
-    public RegisterUserDto(String username, String email, String password) {
+    public UserDTORegister(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
