@@ -2,6 +2,7 @@ package com.adondeband.back_end_adonde_band.jpa.enfrentamiento;
 
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoPort;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class EnfrentamientoJpaAdapter implements EnfrentamientoPort {
     }
 
     @Override
+    @Transactional
     public Enfrentamiento save(Enfrentamiento enfrentamiento) {
         // DEBUG
         EnfrentamientoEntity enfrentamientoEntity = enfrentamientoMapper.toEntity(enfrentamiento);
@@ -34,6 +36,7 @@ public class EnfrentamientoJpaAdapter implements EnfrentamientoPort {
     }
 
     @Override
+    @Transactional
     public List<Enfrentamiento> findById(Long idPartido) {
         return  enfrentamientoJpaRepository.findById(idPartido)
                 .stream()

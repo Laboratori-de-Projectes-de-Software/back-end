@@ -109,7 +109,7 @@ public class LigaJpaAdapterTest {
         Liga liga = new Liga();
         liga.setNombre("Liga Test");
         liga.setImagen(new Imagen("test.png"));
-        liga.setRondas(5L);
+        liga.setRondas(5);
         liga.setMatchTime(30L);
         liga.setUsuario(new UsuarioId(1L));
 

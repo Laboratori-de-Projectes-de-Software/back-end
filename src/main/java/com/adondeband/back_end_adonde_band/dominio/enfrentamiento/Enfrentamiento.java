@@ -30,7 +30,7 @@ public class Enfrentamiento {
     
     private Conversacion conversacion;
 
-    private JornadaId jornada;
+    private Integer ronda;
 
     public Enfrentamiento(EnfrentamientoId id, BotId local, BotId visitante, Conversacion conversacion) {
         this.id = id;

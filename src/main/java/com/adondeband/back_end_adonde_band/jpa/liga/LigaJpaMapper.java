@@ -36,6 +36,13 @@ public interface LigaJpaMapper {
         return value.value();
     }
 
+    default LigaId map(LigaEntity ligaEntity) {
+        if (ligaEntity == null) {
+            return null;
+        }
+        return new LigaId(ligaEntity.getId());
+    }
+
     // Mapeo de atributos
     default LigaId toLigaId(Long value) {
         return new LigaId(value);
@@ -57,21 +64,4 @@ public interface LigaJpaMapper {
 
         return ESTADO.valueOf(estado_entity.name());
     }
-
-    default UsuarioEntity map(UsuarioId usuarioId) {
-        if (usuarioId == null) {
-            return null;
-        }
-        UsuarioEntity usuario = new UsuarioEntity();
-        usuario.setId(usuarioId.value());
-        return usuario;
-    }
-
-    default UsuarioId map(UsuarioEntity usuarioEntity) {
-        if (usuarioEntity == null) {
-            return null;
-        }
-        return new UsuarioId(usuarioEntity.getId());
-    }
-    */
 }

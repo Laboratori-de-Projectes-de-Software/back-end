@@ -38,18 +38,4 @@ public interface EnfrentamientoJpaMapper {
 
         return new EnfrentamientoId(id);
     }
-
-    default BotId toBotId(BotEntity entity) {
-        if(entity == null) return null;
-        return new BotId(entity.getNombre());
-    }
-
-    default BotEntity toBotEntity(BotId id) {
-        if (id == null) return null;
-
-        BotEntity botEntity = new BotEntity();
-        botEntity.setNombre(id.value());
-
-        return botEntity;
-    }
 }

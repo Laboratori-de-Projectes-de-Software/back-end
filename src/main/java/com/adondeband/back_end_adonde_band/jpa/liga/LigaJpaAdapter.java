@@ -12,7 +12,9 @@ import com.adondeband.back_end_adonde_band.jpa.bot.BotJpaRepository;
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenEntity;
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaRepository;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionEntity;
+import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaRepository;
+import jakarta.servlet.http.Part;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -27,13 +29,15 @@ public class LigaJpaAdapter implements LigaPort {
     private final ImagenJpaRepository imagenJpaRepository;
     private final ParticipacionJpaRepository participacionJpaRepository;
     private final BotJpaRepository botJpaRepository;
+    private final ParticipacionJpaMapper participacionJpaMapper;
 
-    public LigaJpaAdapter(final LigaJpaRepository ligaJpaRepository, final LigaJpaMapper ligaJpaMapper, ImagenJpaRepository imagenJpaRepository, ParticipacionJpaRepository participacionJpaRepository, BotJpaRepository botJpaRepository) {
+    public LigaJpaAdapter(final LigaJpaRepository ligaJpaRepository, final LigaJpaMapper ligaJpaMapper, ImagenJpaRepository imagenJpaRepository, ParticipacionJpaRepository participacionJpaRepository, BotJpaRepository botJpaRepository, ParticipacionJpaMapper participacionJpaMapper) {
         this.ligaJpaRepository = ligaJpaRepository;
         this.ligaJpaMapper = ligaJpaMapper;
         this.imagenJpaRepository = imagenJpaRepository;
         this.participacionJpaRepository = participacionJpaRepository;
         this.botJpaRepository = botJpaRepository;
+        this.participacionJpaMapper = participacionJpaMapper;
     }
 
     @Override
@@ -69,6 +73,31 @@ public class LigaJpaAdapter implements LigaPort {
                 .stream()
                 .map(ligaJpaMapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<Participacion> findParticipacionesLiga(LigaId ligaId) {
+        // Buscar liga por id
+        List<LigaEntity> ligasFound = ligaJpaRepository.findById(ligaId.value());
+
+        // Comprobar que la liga existe
+        if (ligasFound.isEmpty()) throw new NotFoundException("Este liga no existe");
+
+        // Obtener las participaciones de la liga
+        List<ParticipacionEntity> participacionEntity = participacionJpaRepository.findByLiga(ligasFound.getFirst());
+
+        List<Participacion> participaciones = participacionEntity
+                .stream()
+                .map(participacionJpaMapper::toDomain)
+                .toList();
+
+        return participaciones;
+
+//        return  participacionJpaRepository.findByLiga(ligasFound.getFirst())
+//                .stream()
+//                .map(participacionJpaMapper::toDomain)
+//                .collect(Collectors.toList());
     }
 
     @Override

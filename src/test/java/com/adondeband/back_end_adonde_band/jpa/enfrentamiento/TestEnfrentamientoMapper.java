@@ -30,7 +30,6 @@ public class TestEnfrentamientoMapper {
         enfrentamientoEntity.setLocal(null);
         enfrentamientoEntity.setVisitante(null);
         enfrentamientoEntity.setConversacion(null);
-        enfrentamientoEntity.setJornada(null);
 
 
         // Act
@@ -43,7 +42,6 @@ public class TestEnfrentamientoMapper {
         assertEquals(enfrentamiento.getLocal(), enfrentamientoEntity.getLocal());
         assertEquals(enfrentamiento.getVisitante(), enfrentamientoEntity.getVisitante());
         assertEquals(enfrentamiento.getConversacion(), enfrentamientoEntity.getConversacion());
-        assertEquals(enfrentamiento.getJornada(), enfrentamientoEntity.getJornada());
     }
 
 }

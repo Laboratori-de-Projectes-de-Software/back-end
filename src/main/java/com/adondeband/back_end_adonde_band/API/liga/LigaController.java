@@ -171,7 +171,7 @@ public class LigaController {
         }
 
         // Obtener el número de jornadas, enfrentamientos y enfrentamientos por jornada
-        int numJornadas = numParticipaciones - 1;
+        int numJornadas = numParticipaciones;
         int numEnfrentamientos = numParticipaciones * (numParticipaciones - 1);
         int numEnfrentamientosPorJornada = numParticipaciones % 2 == 0 ? numParticipaciones / 2 : (numParticipaciones - 1) / 2;
 
@@ -210,12 +210,13 @@ public class LigaController {
         // Asignar enfrentamientos a jornadas
         //for(Jornada jornada : jornadaList){
         for (int i = 1; i <= numJornadas; i++) {
+            System.out.println("Jornada " + i);
             // Lista para los enfrentamientos de esta jornada
             List<EnfrentamientoId> enfrentamientoIds = new ArrayList<>();
             // Copia de la lista de ids de bots para no repetir bots en esta jornada
             List <BotId> botsJornada = new ArrayList<>(botIds);
             // Asignar enfrentamientos a la jornada hasta que esten todos
-            while(!enfrentamientos.isEmpty() && enfrentamientoIds.size() != numEnfrentamientosPorJornada){
+             while(!enfrentamientos.isEmpty() && enfrentamientoIds.size() != numEnfrentamientosPorJornada){
                 // Obtener un enfrentamiento aleatorio de la lista de enfrentamientos
                 Enfrentamiento enfrentamiento = enfrentamientos.getFirst();
                 // Comprobar si los bots del enfrentamiento ya han sido asignados a la jornada
@@ -234,7 +235,7 @@ public class LigaController {
                 // Asignar jornada al enfrentamiento
                 // enfrentamiento.setJornada(jornada.getId());
 
-                // TODO: DESCOMENTAR enfrentamiento.setRonda(i);
+                enfrentamiento.setRonda(i);
 
                 // Actualizar enfrentamiento
                 enfrentamientoService.insertarEnfrentamiento(enfrentamiento);
