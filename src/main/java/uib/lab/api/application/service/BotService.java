@@ -7,8 +7,6 @@ import org.springframework.web.server.ResponseStatusException;
 import uib.lab.api.application.dto.bot.BotDTO;
 import uib.lab.api.application.dto.bot.BotResponseDTO;
 import uib.lab.api.application.dto.bot.BotSummaryResponseDTO;
-import uib.lab.api.application.dto.bot.BotUpdateRequestDTO;
-import uib.lab.api.application.port.MatchPort;
 import uib.lab.api.application.port.UserPort;
 import uib.lab.api.application.port.BotPort;
 import uib.lab.api.domain.BotDomain;
@@ -118,7 +116,7 @@ public class BotService {
             return new ApiResponse<>(500, "Internal Server Error");
         }
     }
-    public ApiResponse<BotResponseDTO> updateBot(int botId, BotUpdateRequestDTO request) {
+    public ApiResponse<BotResponseDTO> updateBot(int botId, BotDTO request) {
         try {
             // Buscar el bot existente
             BotDomain existingBot = botPort.findById(botId)
@@ -129,6 +127,7 @@ public class BotService {
             existingBot.setDescription(request.getDescription());
             existingBot.setUrlImagen(request.getUrlImagen());
             existingBot.setUrl(request.getEndpoint());
+            existingBot.setUserId(request.getUserId());
 
             // Guardar el bot actualizado
             botPort.save(existingBot);

@@ -204,7 +204,7 @@ public class LeagueService {
     public ApiResponse<LeagueResponseDTO> startLeague(int leagueId) {
         try {
             LeagueDomain league = leaguePort.findById(leagueId)
-                    .orElseThrow(() -> new RuntimeException("League not found"));
+                    .orElseThrow(() -> new IllegalArgumentException("League not found"));
 
             if (league.getState() == League.LeagueState.IN_PROGRESS) {
                 return new ApiResponse<>(400, "League already started", null);
