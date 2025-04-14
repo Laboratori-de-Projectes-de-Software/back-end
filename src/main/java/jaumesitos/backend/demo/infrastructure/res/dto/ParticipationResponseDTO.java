@@ -9,13 +9,11 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ClassificacioDTO {
-    Integer leagueid;
+public class ParticipationResponseDTO {
     Integer botid;
     Integer points;
     Integer matches;
     Integer wins;
     Integer draws;
     Integer losses;
-    LocalDateTime inscription;
 }
