@@ -403,6 +403,10 @@ public class LeagueService implements CreateLeague {
             throw new ForbiddenException("No tienes permiso para modificar esta liga");
         }
 
+        if (ligaEntity.getState() == LeagueEntity.State.Started) {
+            throw new ConflictException("La liga ya está empezada y no se puede volver a iniciar");
+        }
+
         // Cambiar el estado de la liga a "Started"
         try {
             ligaEntity.setState(LeagueEntity.State.Started);
@@ -501,7 +505,7 @@ public class LeagueService implements CreateLeague {
         } catch (DataIntegrityViolationException e) {
             throw new ConflictException("Error al iniciar la liga: " + e.getMessage());
         } catch (Exception e) {
-            throw new ConflictException("Error inesperado al iniciar la liga: " + e.getMessage());
+            throw new RuntimeException("Error inesperado al iniciar la liga: " + e.getMessage());
         }
     }
 
