@@ -168,6 +168,7 @@ public class LigaController {
         int numEnfrentamientos = numParticipaciones * (numParticipaciones - 1);
         int numEnfrentamientosPorJornada = numParticipaciones % 2 == 0 ? numParticipaciones / 2 : (numParticipaciones - 1) / 2;
 
+        /*
         // Crear Jornadas
         List<Jornada> jornadaList = new ArrayList<>();
         for(int i = 0; i < numJornadas; i++){
@@ -177,6 +178,7 @@ public class LigaController {
             jornada = jornadaService.crearJornada(jornada);
             jornadaList.add(jornada);
         }
+        */
 
         // Crear Enfrentamientos
         List<Participacion> participaciones = ligaService.obtenerParticipacionesPorLiga(new LigaId(leagueId));
@@ -199,7 +201,8 @@ public class LigaController {
         }
 
         // Asignar enfrentamientos a jornadas
-        for(Jornada jornada : jornadaList){
+        //for(Jornada jornada : jornadaList){
+        for (int i = 1; i <= numJornadas; i++) {
             // Lista para los enfrentamientos de esta jornada
             List<EnfrentamientoId> enfrentamientoIds = new ArrayList<>();
             // Copia de la lista de ids de bots para no repetir bots en esta jornada
@@ -220,19 +223,26 @@ public class LigaController {
                 botsJornada.remove(enfrentamiento.getVisitante());
                 // Eliminar enfrentamiento de la lista de enfrentamientos
                 enfrentamientos.remove(enfrentamiento);
+
                 // Asignar jornada al enfrentamiento
-                enfrentamiento.setJornada(jornada.getId());
+                // enfrentamiento.setJornada(jornada.getId());
+
+                // TODO: DESCOMENTAR enfrentamiento.setRonda(i);
+
                 // Actualizar enfrentamiento
                 enfrentamientoService.insertarEnfrentamiento(enfrentamiento);
                 // Añadir enfrentamiento a la lista de ids de enfrentamientos de la jornada
                 enfrentamientoIds.add(enfrentamiento.getId());
             }
+            /*
             // Asignar enfrentamientos a la jornada
             jornada.setEnfrentamientos(enfrentamientoIds);
             // Actualizar jornada
             jornadaService.crearJornada(jornada);
+            */
         }
 
+        /*
         // Obtener las jornadas de la liga
         List<JornadaId> jornadas = new ArrayList<>();
         for(Jornada jornada : jornadaList){
@@ -241,6 +251,7 @@ public class LigaController {
 
         // Actualizar liga
         liga.setJornadas(jornadas);
+        */
 
         // Actualizar estado liga
         liga.setEstado(ESTADO.EN_CURSO);
