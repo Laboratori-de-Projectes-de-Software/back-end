@@ -1,17 +1,16 @@
 package com.example.gironetaServer.infraestructure.adapters.in.controllers.dto;
 
-public class LoginUserDto {
+public class UserDTOLogin {
 
     private String email;
-
     private String password;
 
     // Constructor por defecto
-    public LoginUserDto() {
+    public UserDTOLogin() {
     }
 
     // Constructor
-    public LoginUserDto(String email, String password) {
+    public UserDTOLogin(String email, String password) {
         this.email = email;
         this.password = password;
     }
