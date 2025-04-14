@@ -2,6 +2,7 @@ package com.adondeband.back_end_adonde_band.API.liga;
 
 import com.adondeband.back_end_adonde_band.API.enfrentamiento.EnfrentamientoDTO;
 import com.adondeband.back_end_adonde_band.API.participacion.ParticipacionDTO;
+import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
 import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenService;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
@@ -48,8 +49,17 @@ public class LigaController {
     @GetMapping
     public ResponseEntity<List<LigaResponseDTO>> listarLigas(@RequestParam(value = "owner", required = false) Long userId) {
         // TODO
-        List<Liga> ligas = (userId != null) ? ligaService.obtenerLigasPorUsuario(new UsuarioId(userId)) : ligaService.obtenerTodasLasLigas();
+        // Obtener listado de ligas
+        List<Liga> ligas = null;
+        try {
+            ligas = (userId != null)
+                    ? ligaService.obtenerLigasPorUsuario(new UsuarioId(userId))
+                    : ligaService.obtenerTodasLasLigas();
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
 
+        // comprobar que la lista no está vacía
         if (ligas.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }

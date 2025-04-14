@@ -1,10 +1,13 @@
 package com.adondeband.back_end_adonde_band.jpa.liga;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
+import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaPort;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -17,10 +20,12 @@ public class LigaJpaAdapter implements LigaPort {
     private final LigaJpaRepository ligaJpaRepository;
 
     private final LigaJpaMapper ligaJpaMapper;
+    private final UsuarioJpaMapper usuarioJpaMapper;
 
-    public LigaJpaAdapter(final LigaJpaRepository ligaJpaRepository, final LigaJpaMapper ligaJpaMapper) {
+    public LigaJpaAdapter(final LigaJpaRepository ligaJpaRepository, final LigaJpaMapper ligaJpaMapper, UsuarioJpaMapper usuarioJpaMapper) {
         this.ligaJpaRepository = ligaJpaRepository;
         this.ligaJpaMapper = ligaJpaMapper;
+        this.usuarioJpaMapper = usuarioJpaMapper;
     }
 
     @Override
@@ -55,7 +60,21 @@ public class LigaJpaAdapter implements LigaPort {
     @Transactional
     public List<Liga> findLigasUsuario(UsuarioId userId) {
         //TODO
-        return List.of();
+        // Buscar UsuarioEntity en la base de datos usando el repositorio
+        List<LigaEntity> ligasFound = ligaJpaRepository.findByUsuario(
+                usuarioJpaMapper.toEntity(userId)
+        );
+
+        if (ligasFound.isEmpty()) throw new NotFoundException("Este usuarion no existe");
+
+        // Obtener usuario
+        UsuarioEntity usuario = ligasFound.getFirst().getUsuario();
+
+        // Devolver todas las ligas que pertenezcan a este usuario
+        return  ligaJpaRepository.findByUsuario(usuario)
+                .stream()
+                .map(ligaJpaMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
