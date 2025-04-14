@@ -24,9 +24,6 @@ import java.util.List;
 
 public class MatchController {
 
-    private final MatchService matchService;
-    @Qualifier("matchDTOMapper")
-    private final MatchDTOMapper mapper;
 
     //CODIS ERROR:
     //HttpStatus.OK -> 200
@@ -43,19 +40,5 @@ public class MatchController {
 
     //SWAGGER:
     //http://localhost:8080/swagger-ui/index.html#/
-
-    @Operation(summary = "Get all matches from a league", description = "Devuelve todos los enfrentamientos de una liga")
-    @GetMapping("/league/{leagueId}/match")
-    public ResponseEntity<?> getMatchesByLeagueId(@PathVariable int leagueId) {
-        try {
-            List<MatchDTO> matchDTOS = matchService.getMatchesByLeagueId(leagueId)
-                    .stream()
-                    .map(mapper::toDTO)
-                    .toList();
-            return ResponseEntity.ok(matchDTOS);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los partidos");
-        }
-    }
 
 }

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jaumesitos.backend.demo.domain.User;
 import jaumesitos.backend.demo.infrastructure.res.dto.*;
 import jaumesitos.backend.demo.infrastructure.res.mapper.BotDTOMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestBody;
 import jaumesitos.backend.demo.application.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ import java.util.Map;
 @Tag(name = "User Controller", description = "Endpoints for managing users")
 public class AuthController {
 
+    @Qualifier("userDTOMapper")
     private final UserDTOMapper userMapper; //convertidor de DTO a classe de lògica de negoci
     private final AuthService service; //adaptador
 
@@ -47,11 +49,13 @@ public class AuthController {
     //SWAGGER:
     //http://localhost:8080/swagger-ui/index.html#/
 
+    @Operation(summary = "INSERT SUMMARY", description = "INSERT DESCRIPTION")
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
         return new ResponseEntity<>("Endpoint /api/users/getallUsers", HttpStatus.ACCEPTED);
     }
 
+    @Operation(summary = "INSERT SUMMARY", description = "INSERT DESCRIPTION")
     @PostMapping("/auth/register")
     public ResponseEntity<?> register(@RequestBody UserDTORegister dto) {
         try {
@@ -65,6 +69,7 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "INSERT SUMMARY", description = "INSERT DESCRIPTION")
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody UserDTOLogin dto) {
         try {

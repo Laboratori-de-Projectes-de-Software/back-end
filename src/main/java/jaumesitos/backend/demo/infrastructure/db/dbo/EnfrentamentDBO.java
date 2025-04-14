@@ -15,15 +15,14 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class EnfrentamentDBO {
-
     @Id
     private int id;
 
     @Column(name = "id_local")
-    private String bot1Id;
+    private String botIdLocal;
 
     @Column(name = "id_visitant")
-    private String bot2Id;
+    private String botIdVisitant;
 
     @Column(name = "data")
     private LocalDateTime date;

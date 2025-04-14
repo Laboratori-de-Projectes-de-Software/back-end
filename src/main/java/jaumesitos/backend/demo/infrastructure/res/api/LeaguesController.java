@@ -12,6 +12,7 @@ import jaumesitos.backend.demo.infrastructure.db.mapper.LLigaDBOMapper;
 import jaumesitos.backend.demo.infrastructure.res.dto.*;
 import jaumesitos.backend.demo.infrastructure.res.mapper.BotDTOMapper;
 import jaumesitos.backend.demo.infrastructure.res.mapper.LligaDTOMapper;
+import jaumesitos.backend.demo.infrastructure.res.mapper.MatchDTOMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestBody;
 import jaumesitos.backend.demo.application.service.AuthService;
@@ -35,17 +36,17 @@ import java.util.Map;
 @RestController
 
 @RequestMapping("")
-@Tag(name = "Leagues Controller", description = "Endpoints for managing users")
+@Tag(name = "Leagues Controller", description = "Endpoints for managing leagues")
 public class LeaguesController {
-    @Qualifier("userDTOMapper")
-    private final UserDTOMapper userMapper; //convertidor de DTO a classe de lògica de negoci
     @Qualifier("lligaDTOMapper")
     private final LligaDTOMapper mapper;
-    private final AuthService service; //adaptador
     private final LligaService leagueservice;
     private final ClassificacioService classificationservice;
-    public final MatchService matchservice;
+    private final MatchService matchService;
+    @Qualifier("matchDTOMapper")
+    private final MatchDTOMapper matchmapper;
 
+    @Operation(summary = "INSERT SUMMARY", description = "INSERT DESCRIPTION")
     @PostMapping("/league")
     public ResponseEntity<?> postLeague(@RequestBody LeagueDTO dto) {
         try{
@@ -57,6 +58,7 @@ public class LeaguesController {
         return new ResponseEntity<>("LLiga creada correctament", HttpStatus.ACCEPTED);
     }
 
+    @Operation(summary = "INSERT SUMMARY", description = "INSERT DESCRIPTION")
     @GetMapping("/league/{owner}")
     public ResponseEntity<?> getLeagues(@PathVariable Integer owner) {
         try{
@@ -68,6 +70,7 @@ public class LeaguesController {
         }
     }
 
+    @Operation(summary = "INSERT SUMMARY", description = "INSERT DESCRIPTION")
     @PostMapping("/league/{leagueId}/bot")
     public ResponseEntity<?> registerBot(@PathVariable Integer leagueId,@RequestBody IntIdentifierDTO botId) {
         try{
@@ -79,7 +82,8 @@ public class LeaguesController {
         return new ResponseEntity<>("Classificació del bot creada correctament", HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/league/id/{leagueId}")
+    @Operation(summary = "Get a league by ID", description = "Devuelve una liga por su ID")
+    @GetMapping("/league/{leagueId}")
     public ResponseEntity<?> findLeagueById(@PathVariable Integer leagueId) {
         try {
             League league = leagueservice.getLeagueById(leagueId);
@@ -90,6 +94,7 @@ public class LeaguesController {
         }
     }
 
+    @Operation(summary = "Delete a league", description = "Elimina una liga de la base de datos")
     @DeleteMapping("/league/{leagueId}")
     public ResponseEntity<?> deleteLeagueById(@PathVariable int leagueId) {
         try {
@@ -101,4 +106,19 @@ public class LeaguesController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la liga");
         }
     }
+
+    @Operation(summary = "Get all matches from a league", description = "Devuelve todos los enfrentamientos de una liga")
+    @GetMapping("/league/{leagueId}/match")
+    public ResponseEntity<?> getMatchesByLeagueId(@PathVariable int leagueId) {
+        try {
+            List<MatchDTO> matchDTOS = matchService.getMatchesByLeagueId(leagueId)
+                    .stream()
+                    .map(matchmapper::toDTO)
+                    .toList();
+            return ResponseEntity.ok(matchDTOS);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los partidos");
+        }
+    }
+
 }
