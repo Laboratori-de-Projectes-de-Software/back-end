@@ -5,5 +5,5 @@ import java.util.List;
 public interface JornadaPort {
     Jornada save(Jornada jornada);
 
-    List<Jornada> findById(int s);
+    List<Jornada> findById(Long s);
 }

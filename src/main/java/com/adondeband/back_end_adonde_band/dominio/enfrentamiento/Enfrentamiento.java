@@ -5,6 +5,7 @@ import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.conversacion.Conversacion;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.jornada.Jornada;
+import com.adondeband.back_end_adonde_band.dominio.jornada.JornadaId;
 import com.adondeband.back_end_adonde_band.dominio.resultado.RESULTADO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Enfrentamiento {
 
-    private Long id;
+    private EnfrentamientoId id;
 
     private ESTADO estado;
 
@@ -29,9 +30,9 @@ public class Enfrentamiento {
     
     private Conversacion conversacion;
 
-    private Jornada jornada;
+    private JornadaId jornada;
 
-    public Enfrentamiento(Long id, BotId local, BotId visitante, Conversacion conversacion) {
+    public Enfrentamiento(EnfrentamientoId id, BotId local, BotId visitante, Conversacion conversacion) {
         this.id = id;
         this.local = local;
         this.visitante = visitante;
