@@ -23,6 +23,10 @@ public class MensajeEntity {
     private LocalDateTime hora = LocalDateTime.now();
 
     @ManyToOne
+    @JoinColumn(name = "bot_id", nullable = false)
+    private BotEntity bot;
+
+    @ManyToOne
     @JoinColumn(name = "enfrentamiento_id", nullable = false)
     private EnfrentamientoEntity enfrentamiento;
 
