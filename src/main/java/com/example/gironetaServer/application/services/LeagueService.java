@@ -1,5 +1,17 @@
 package com.example.gironetaServer.application.services;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.gironetaServer.application.ports.LeagueRepository;
 import com.example.gironetaServer.application.ports.ParticipacionRepository;
 import com.example.gironetaServer.application.usecases.users.CreateLeague;
@@ -145,11 +157,6 @@ public class LeagueService implements CreateLeague {
         Long userId = authenticatedUser.getId();
         League league = leagueRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Liga no encontrada con id: " + id));
-
-        // Verificar si el usuario tiene acceso a esta liga
-        if (!league.getUserId().equals(userId)) {
-            throw new ForbiddenException("No tienes permiso para ver esta liga");
-        }
 
         return league;
     }
@@ -344,7 +351,7 @@ public class LeagueService implements CreateLeague {
     }
 
     @Transactional
-    public void deleteLeague(Long leagueId){
+    public void deleteLeague(Long leagueId) {
         if (leagueId == null || leagueId <= 0) {
             throw new IllegalArgumentException("El ID de la liga no puede ser nulo o menor o igual a cero");
         }
@@ -378,7 +385,7 @@ public class LeagueService implements CreateLeague {
     }
 
     @Transactional
-    public void startLeague(Long leagueId){
+    public void startLeague(Long leagueId) {
         if (leagueId == null || leagueId <= 0) {
             throw new IllegalArgumentException("El ID de la liga no puede ser nulo o menor o igual a cero");
         }
