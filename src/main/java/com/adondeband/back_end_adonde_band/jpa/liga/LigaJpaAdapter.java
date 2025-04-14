@@ -7,12 +7,12 @@ import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaPort;
 import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
+import com.adondeband.back_end_adonde_band.jpa.bot.BotEntity;
+import com.adondeband.back_end_adonde_band.jpa.bot.BotJpaRepository;
+import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenEntity;
+import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaRepository;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionEntity;
-import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaRepository;
-import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
-import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaMapper;
-import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -23,33 +23,25 @@ import java.util.stream.Collectors;
 public class LigaJpaAdapter implements LigaPort {
 
     private final LigaJpaRepository ligaJpaRepository;
-    private final UsuarioJpaRepository usuarioJpaRepository;
-    private final ParticipacionJpaRepository participacionJpaRepository;
-
     private final LigaJpaMapper ligaJpaMapper;
-    private final UsuarioJpaMapper usuarioJpaMapper;
+    private final ImagenJpaRepository imagenJpaRepository;
+    private final ParticipacionJpaRepository participacionJpaRepository;
+    private final BotJpaRepository botJpaRepository;
 
-    private final ParticipacionJpaMapper participacionJpaMapper;
-
-    public LigaJpaAdapter(final LigaJpaRepository ligaJpaRepository, final LigaJpaMapper ligaJpaMapper,
-                          final ParticipacionJpaMapper participacionJpaMapper, final UsuarioJpaMapper usuarioJpaMapper,
-                          final UsuarioJpaRepository usuarioJpaRepository, final ParticipacionJpaRepository participacionJpaRepository) {
+    public LigaJpaAdapter(final LigaJpaRepository ligaJpaRepository, final LigaJpaMapper ligaJpaMapper, ImagenJpaRepository imagenJpaRepository, ParticipacionJpaRepository participacionJpaRepository, BotJpaRepository botJpaRepository) {
         this.ligaJpaRepository = ligaJpaRepository;
         this.ligaJpaMapper = ligaJpaMapper;
-        this.participacionJpaMapper = participacionJpaMapper;
-        this.usuarioJpaMapper = usuarioJpaMapper;
-        this.usuarioJpaRepository = usuarioJpaRepository;
+        this.imagenJpaRepository = imagenJpaRepository;
         this.participacionJpaRepository = participacionJpaRepository;
+        this.botJpaRepository = botJpaRepository;
     }
 
     @Override
     @Transactional
     public Liga save(Liga liga) {
-        LigaEntity l3 = ligaJpaMapper.toEntity(liga);
-        LigaEntity l2 = ligaJpaRepository.save(l3);
-        Liga l =  ligaJpaMapper.toDomain(
-                l2);
-        return l;
+        LigaEntity ligaEntity = ligaJpaMapper.toEntity(liga);
+        LigaEntity savedLigaEntity = ligaJpaRepository.save(ligaEntity);
+        return ligaJpaMapper.toDomain(savedLigaEntity);
     }
 
     @Override
@@ -73,14 +65,7 @@ public class LigaJpaAdapter implements LigaPort {
     @Override
     @Transactional
     public List<Liga> findLigasUsuario(UsuarioId userId) {
-        //TODO
-        // Buscar UsuarioEntity en la base de datos usando el repositorio
-        List<UsuarioEntity> usuariosFound = usuarioJpaRepository.findById(userId.value());
-
-        if (usuariosFound.isEmpty()) throw new NotFoundException("Este usuario no existe");
-
-        // Devolver todas las ligas que pertenezcan a este usuario
-        return  ligaJpaRepository.findByUsuario(usuariosFound.getFirst())
+        return  ligaJpaRepository.findLigaEntitiesByUsuarioId(userId.value())
                 .stream()
                 .map(ligaJpaMapper::toDomain)
                 .collect(Collectors.toList());
@@ -88,41 +73,83 @@ public class LigaJpaAdapter implements LigaPort {
 
     @Override
     @Transactional
-    public List<Participacion> findParticipacionesLiga(LigaId ligaId) {
-        // Buscar liga por id
-        List<LigaEntity> ligasFound = ligaJpaRepository.findById(ligaId.value());
-
-        // Comprobar que la liga existe
-        if (ligasFound.isEmpty()) throw new NotFoundException("Este liga no existe");
-
-        return  participacionJpaRepository.findByLiga(ligasFound.getFirst())
-                .stream()
-                .map(participacionJpaMapper::toDomain)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public Liga actualizarUrlImagen(LigaId ligaId, String url) {
-        return null;
+
+        LigaEntity ligaEntity = ligaJpaRepository.getLigaEntityById(ligaId.value());
+        ImagenEntity imagenEntity = imagenJpaRepository.getImagenEntityByRuta(url);
+
+        if (ligaEntity == null) throw new NotFoundException("Esta liga no existe");
+
+        if (imagenEntity == null) {
+            // Si la imagen no existe, crear una nueva
+            ImagenEntity newImagenEntity = new ImagenEntity();
+            newImagenEntity.setRuta(url);
+            imagenEntity = imagenJpaRepository.save(newImagenEntity);
+        }
+
+        ligaEntity.setImagen(imagenEntity);
+        // Guardar la liga actualizada en la base de datos
+        LigaEntity savedLigaEntity = ligaJpaRepository.save(ligaEntity);
+        return ligaJpaMapper.toDomain(savedLigaEntity);
     }
 
     @Override
-    public Liga actualizarnrondas(LigaId ligaId, int nrondas) {
-        return null;
+    @Transactional
+    public Liga actualizarNRondas(LigaId ligaId, int nrondas) {
+        LigaEntity ligaEntity = ligaJpaRepository.getLigaEntityById(ligaId.value());
+        if (ligaEntity == null) throw new NotFoundException("Esta liga no existe");
+        ligaEntity.setRondas(nrondas);
+        LigaEntity savedLigaEntity = ligaJpaRepository.save(ligaEntity);
+        return ligaJpaMapper.toDomain(savedLigaEntity);
     }
 
     @Override
+    @Transactional
     public Liga actualizarTiempoRonda(LigaId ligaId, int tiempoRonda) {
-        return null;
+        LigaEntity ligaEntity = ligaJpaRepository.getLigaEntityById(ligaId.value());
+        if (ligaEntity == null) throw new NotFoundException("Esta liga no existe");
+        ligaEntity.setMatchTime(tiempoRonda);
+        LigaEntity savedLigaEntity = ligaJpaRepository.save(ligaEntity);
+        return ligaJpaMapper.toDomain(savedLigaEntity);
     }
 
     @Override
-    public Liga actualizarBots(LigaId ligaId, List<BotId> bots) {
-        return null;
+    @Transactional
+    public Liga actualizarBotsLiga(LigaId ligaId, List<BotId> bots) {
+        LigaEntity ligaEntity = ligaJpaRepository.getLigaEntityById(ligaId.value());
+        if (ligaEntity == null) throw new NotFoundException("Esta liga no existe");
+
+
+        List<ParticipacionEntity> actuales = ligaEntity.getParticipaciones();
+
+        participacionJpaRepository.deleteAll(actuales);
+
+        ligaEntity.getParticipaciones().clear();
+
+        for (BotId bot : bots) {
+            BotEntity botEntity = botJpaRepository.getBotEntityByNombre(bot.value());
+            if (botEntity == null) throw new NotFoundException("El bot " + bot.value() + " no existe");
+
+            ParticipacionEntity nuevaParticipacion = new ParticipacionEntity(botEntity, ligaEntity);
+            participacionJpaRepository.save(nuevaParticipacion);
+            ligaEntity.getParticipaciones().add(nuevaParticipacion);
+        }
+        return  ligaJpaMapper.toDomain(ligaEntity);
     }
 
     @Override
+    @Transactional
     public Liga addBotToLiga(LigaId ligaId, BotId botId) {
-        return null;
+        LigaEntity ligaEntity = ligaJpaRepository.getLigaEntityById(ligaId.value());
+        if (ligaEntity == null) throw new NotFoundException("Esta liga no existe");
+
+        BotEntity botEntity = botJpaRepository.getBotEntityByNombre(botId.value());
+        if (botEntity == null) throw new NotFoundException("El bot " + botId.value() + " no existe");
+
+        ParticipacionEntity nuevaParticipacion = new ParticipacionEntity(botEntity, ligaEntity);
+        participacionJpaRepository.save(nuevaParticipacion);
+        ligaEntity.getParticipaciones().add(nuevaParticipacion);
+
+        return ligaJpaMapper.toDomain(ligaEntity);
     }
 }

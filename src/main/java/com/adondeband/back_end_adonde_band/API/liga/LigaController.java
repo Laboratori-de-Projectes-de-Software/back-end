@@ -131,9 +131,9 @@ public class LigaController {
     }
 
     @PostMapping("/{leagueId}/bot")
-    public ResponseEntity<?> addBotToLiga(@PathVariable String leagueId, @RequestBody String botId) {
-        Participacion p = participacionService.insertarParticipacion(new Participacion(botId, Long.parseLong(leagueId)));
-        if (p != null) {
+    public ResponseEntity<?> addBotToLiga(@PathVariable Long leagueId, @RequestBody String botId) {
+        Liga liga = ligaService.addBotToLiga(new LigaId(leagueId), new BotId(botId));
+        if (liga != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(null);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al añadir el bot a la liga");

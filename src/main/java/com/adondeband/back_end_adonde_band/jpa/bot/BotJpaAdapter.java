@@ -50,7 +50,6 @@ public class BotJpaAdapter implements BotPort {
 
         if (botEntity == null) throw new NotFoundException("Este bot no existe");
 
-
         if (imagenEntity == null) {
             // Si la imagen no existe, crear una nueva
             ImagenEntity newImagenEntity = new ImagenEntity();
@@ -65,12 +64,22 @@ public class BotJpaAdapter implements BotPort {
 
     @Override
     public Bot actualizarDescripcion(BotId botId, String descripcion) {
-        return null;
+        BotEntity botEntity = botJpaRepository.getBotEntityByNombre(botId.value());
+        if (botEntity == null) throw new NotFoundException("Este bot no existe");
+        botEntity.setCualidad(descripcion);
+
+        // Guardar el bot actualizado en la base de datos
+        return botJpaMapper.toDomain(botJpaRepository.save(botEntity));
     }
 
     @Override
     public Bot actualizarEndpoint(BotId botId, String endpoint) {
-        return null;
+        BotEntity botEntity = botJpaRepository.getBotEntityByNombre(botId.value());
+        if (botEntity == null) throw new NotFoundException("Este bot no existe");
+        botEntity.setEndpoint(endpoint);
+
+        // Guardar el bot actualizado en la base de datos
+        return botJpaMapper.toDomain(botJpaRepository.save(botEntity));
     }
 
     @Override

@@ -10,6 +10,12 @@ import jakarta.persistence.*;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"bot_id", "liga_id"})
+        }
+)
 public class ParticipacionEntity {
 
     @Id
@@ -24,14 +30,15 @@ public class ParticipacionEntity {
     @JoinColumn(name = "liga_id")
     private LigaEntity liga;
 
-    private int posicion;
-    private int puntuacion;
+    private int posicion = 0;
+    private int puntuacion = 0;
 
     public ParticipacionEntity(Long id) {
         this.id = id;
     }
 
-    public ParticipacionEntity() {
-
+    public ParticipacionEntity(BotEntity bot, LigaEntity liga) {
+        this.bot = bot;
+        this.liga = liga;
     }
 }
