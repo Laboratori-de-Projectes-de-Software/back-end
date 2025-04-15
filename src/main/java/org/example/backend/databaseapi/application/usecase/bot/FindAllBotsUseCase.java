@@ -30,6 +30,10 @@ public class FindAllBotsUseCase implements BuscarAllBotsPort {
                     int loses=0;
                     List<Resultado> resultados=findBotResultadoPort.findBotResultados(bot.getIdBot().value());
                     for (Resultado resultado:resultados){
+                        if(resultado.getPuntuacion()==null){
+                            continue;
+                        }
+
                         if(resultado.getPuntuacion()==3){
                             wins++;
                         }else if(resultado.getPuntuacion()==0){
