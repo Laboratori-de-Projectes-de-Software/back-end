@@ -17,12 +17,18 @@ public class Participacion {
 
     private LigaId liga;
 
-    private int posicion;
-    private int puntuacion;
+    private Integer posicion;
+
+    private Integer puntuacion;
+
+    private Integer numVictorias;
+
+    private Integer numEmpates;
+
+    private Integer numDerrotas;
 
     public Participacion(Long botId, Long ligaId) {
         this.bot = new BotId(botId);
         this.liga = new LigaId(ligaId);
-
     }
 }

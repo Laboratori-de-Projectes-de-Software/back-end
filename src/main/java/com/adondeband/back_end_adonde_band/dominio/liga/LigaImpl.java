@@ -1,6 +1,9 @@
 package com.adondeband.back_end_adonde_band.dominio.liga;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
+import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
+import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
+import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import org.springframework.stereotype.Service;
@@ -44,6 +47,18 @@ public class LigaImpl implements LigaService {
 
     @Override
     public List<Participacion> obtenerParticipacionesPorLiga(LigaId ligaId) {
+        if (obtenerLigaPorId(ligaId).isEmpty()) {
+            throw new NotFoundException("Esta liga no existe");
+        }
+
         return ligaPort.findParticipacionesLiga(ligaId);
+    }
+
+    @Override
+    public Liga startLiga(Liga liga, List<EnfrentamientoId> enfrentamientos) {
+        // Asignar Enfrentamientos a la Liga
+        liga.setEnfrentamientos(enfrentamientos);
+        liga.setEstado(ESTADO.EN_CURSO);
+        return crearLiga(liga);
     }
 }

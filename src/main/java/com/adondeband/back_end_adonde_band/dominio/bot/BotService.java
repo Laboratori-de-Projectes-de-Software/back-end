@@ -14,4 +14,6 @@ public interface BotService {
     List<Bot> obtenerBotsPorIdUsuario(UsuarioId userId);
 
     Bot obtenerBotPorId(Long id);
+
+    List<String> getBotNames(List <BotId> botIds);
 }

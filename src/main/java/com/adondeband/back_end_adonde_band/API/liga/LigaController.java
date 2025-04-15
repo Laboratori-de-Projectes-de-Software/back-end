@@ -1,8 +1,11 @@
 package com.adondeband.back_end_adonde_band.API.liga;
 
 import com.adondeband.back_end_adonde_band.API.enfrentamiento.EnfrentamientoDTO;
+import com.adondeband.back_end_adonde_band.API.enfrentamiento.EnfrentamientoDtoMapper;
 import com.adondeband.back_end_adonde_band.API.participacion.ParticipacionDTO;
+import com.adondeband.back_end_adonde_band.API.participacion.ParticipacionDtoMapper;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
+import com.adondeband.back_end_adonde_band.dominio.bot.BotService;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoService;
@@ -10,9 +13,6 @@ import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
 import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenService;
-import com.adondeband.back_end_adonde_band.dominio.jornada.Jornada;
-import com.adondeband.back_end_adonde_band.dominio.jornada.JornadaId;
-import com.adondeband.back_end_adonde_band.dominio.jornada.JornadaService;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaImpl;
@@ -29,8 +29,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,23 +37,31 @@ import java.util.List;
 @RequestMapping("api/v0/league")
 public class LigaController {
 
+    // Services
     private final LigaService ligaService;
-    private final LigaDtoMapper ligaDtoMapper;
-    private final ParticipacionService participacionService;
     private final UsuarioService usuarioService;
     private final ImagenService imagenService;
     private final EnfrentamientoService enfrentamientoService;
-    private final JornadaService jornadaService;
+    private final BotService botService;
+
+    // Mappers
+    private final LigaDtoMapper ligaDtoMapper;
+    private final ParticipacionDtoMapper participacionDtoMapper;
+    private final EnfrentamientoDtoMapper enfrentamientoDtoMapper;
+
 
     @Autowired
-    public LigaController(LigaImpl ligaService, LigaDtoMapper ligaDtoMapper, ParticipacionService participacionService, UsuarioService usuarioService, ImagenService imagenService, EnfrentamientoService enfrentamientoService, JornadaService jornadaService) {
+    public LigaController(LigaImpl ligaService, LigaDtoMapper ligaDtoMapper, ParticipacionDtoMapper participacionDtoMapper,
+                          UsuarioService usuarioService, ImagenService imagenService,
+                          EnfrentamientoService enfrentamientoService, BotService botService, EnfrentamientoDtoMapper enfrentamientoDtoMapper) {
         this.ligaService = ligaService;
         this.ligaDtoMapper = ligaDtoMapper;
-        this.participacionService = participacionService;
         this.usuarioService = usuarioService;
         this.imagenService = imagenService;
         this.enfrentamientoService = enfrentamientoService;
-        this.jornadaService = jornadaService;
+        this.botService = botService;
+        this.participacionDtoMapper = participacionDtoMapper;
+        this.enfrentamientoDtoMapper = enfrentamientoDtoMapper;
     }
 
     @GetMapping
@@ -140,9 +146,36 @@ public class LigaController {
     }
 
     @GetMapping("/{leagueId}/leaderboard")
-    public ResponseEntity<List<ParticipacionDTO>> obtenerClasificacion(@PathVariable String leagueId, @RequestBody String botId) {
-        //TODO
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null);
+    public ResponseEntity<List<ParticipacionDTO>> obtenerClasificacion(@PathVariable Long leagueId) {
+        // obtener Participaciones Por liga
+        List <Participacion> participaciones;
+        try {
+            participaciones = ligaService.obtenerParticipacionesPorLiga(new LigaId(leagueId));
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // Si la lista está vacía, no hay participaciones
+        List <ParticipacionDTO> participacionesDTO = new ArrayList<>(participaciones.size());
+
+        if (!participaciones.isEmpty()) {
+            List <BotId> botIds =  participaciones.
+                    stream().
+                    map(Participacion::getBot).
+                    toList();
+
+            List <String> botNames = botService.getBotNames(botIds);
+
+            // Map Participacion to ParticipacionDto
+            for (int i = 0; i < participaciones.size(); i++) {
+                ParticipacionDTO pDto = participacionDtoMapper.toDTO(participaciones.get(i));
+                pDto.setBotName(botNames.get(i));
+
+                participacionesDTO.add(pDto);
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(participacionesDTO);
     }
 
     @PostMapping("/{leagueId}/start")
@@ -170,107 +203,34 @@ public class LigaController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No hay suficientes participantes");
         }
 
-        // Obtener el número de jornadas, enfrentamientos y enfrentamientos por jornada
-        int numJornadas = numParticipaciones;
-        int numEnfrentamientos = numParticipaciones * (numParticipaciones - 1);
-        int numEnfrentamientosPorJornada = numParticipaciones % 2 == 0 ? numParticipaciones / 2 : (numParticipaciones - 1) / 2;
-
-        /*
-        // Crear Jornadas
-        List<Jornada> jornadaList = new ArrayList<>();
-        for(int i = 0; i < numJornadas; i++){
-            Jornada jornada = new Jornada();
-            jornada.setNumJornada(i+1);
-            jornada.setLiga(liga.getId());
-            jornada = jornadaService.crearJornada(jornada);
-            jornadaList.add(jornada);
-        }
-        */
-
         // Crear Enfrentamientos
-        List<Participacion> participaciones = ligaService.obtenerParticipacionesPorLiga(new LigaId(leagueId));
-        List <Enfrentamiento> enfrentamientos = new ArrayList<>();
-        for(int i = 0; i < numParticipaciones; i++){
-            for(int j = i + 1; j < numParticipaciones; j++){
-                Enfrentamiento enfrentamiento = new Enfrentamiento();
-                enfrentamiento.setEstado(ESTADO.PENDIENTE);
-                enfrentamiento.setLocal(participaciones.get(i).getBot());
-                enfrentamiento.setVisitante(participaciones.get(j).getBot());
-                enfrentamiento = enfrentamientoService.insertarEnfrentamiento(enfrentamiento);
-                enfrentamientos.add(enfrentamiento);
-            }
-        }
-        Collections.shuffle(enfrentamientos);
-        // Obtener una lista de todos los ids de los bots
-        List<BotId> botIds = new ArrayList<>();
-        for (Participacion participacion : participaciones) {
-            botIds.add(participacion.getBot());
-        }
+        List<Participacion> participaciones = ligaService.obtenerParticipacionesPorLiga(liga.getId());
+        List <EnfrentamientoId> enfrentamientosId = enfrentamientoService.crearEnfrentamientosLiga(participaciones, liga.getId());
 
-        // Asignar enfrentamientos a jornadas
-        //for(Jornada jornada : jornadaList){
-        for (int i = 1; i <= numJornadas; i++) {
-            System.out.println("Jornada " + i);
-            // Lista para los enfrentamientos de esta jornada
-            List<EnfrentamientoId> enfrentamientoIds = new ArrayList<>();
-            // Copia de la lista de ids de bots para no repetir bots en esta jornada
-            List <BotId> botsJornada = new ArrayList<>(botIds);
-            // Asignar enfrentamientos a la jornada hasta que esten todos
-             while(!enfrentamientos.isEmpty() && enfrentamientoIds.size() != numEnfrentamientosPorJornada){
-                // Obtener un enfrentamiento aleatorio de la lista de enfrentamientos
-                Enfrentamiento enfrentamiento = enfrentamientos.getFirst();
-                // Comprobar si los bots del enfrentamiento ya han sido asignados a la jornada
-                int j = 0;
-                while(j != enfrentamientos.size() && !(botsJornada.contains(enfrentamiento.getLocal()) && botsJornada.contains(enfrentamiento.getVisitante()))){
-                    // Si uno de los dos ya ha sido asignado a la jornada, se busca otro enfrentamiento
-                    enfrentamiento = enfrentamientos.get(j);
-                    j++;
-                }
-                // Eliminar bot local y visitante de posibles contricantes
-                botsJornada.remove(enfrentamiento.getLocal());
-                botsJornada.remove(enfrentamiento.getVisitante());
-                // Eliminar enfrentamiento de la lista de enfrentamientos
-                enfrentamientos.remove(enfrentamiento);
-
-                // Asignar jornada al enfrentamiento
-                // enfrentamiento.setJornada(jornada.getId());
-
-                enfrentamiento.setRonda(i);
-
-                // Actualizar enfrentamiento
-                enfrentamientoService.insertarEnfrentamiento(enfrentamiento);
-                // Añadir enfrentamiento a la lista de ids de enfrentamientos de la jornada
-                enfrentamientoIds.add(enfrentamiento.getId());
-            }
-            /*
-            // Asignar enfrentamientos a la jornada
-            jornada.setEnfrentamientos(enfrentamientoIds);
-            // Actualizar jornada
-            jornadaService.crearJornada(jornada);
-            */
-        }
-
-        /*
-        // Obtener las jornadas de la liga
-        List<JornadaId> jornadas = new ArrayList<>();
-        for(Jornada jornada : jornadaList){
-            jornadas.add(jornada.getId());
-        }
-
-        // Actualizar liga
-        liga.setJornadas(jornadas);
-        */
-
-        // Actualizar estado liga
-        liga.setEstado(ESTADO.EN_CURSO);
-        ligaService.crearLiga(liga);
+        liga = ligaService.startLiga(liga, enfrentamientosId);
 
         return ResponseEntity.status(HttpStatus.OK).body("Liga iniciada");
     }
 
     @GetMapping("/{leagueId}/match")
-    public ResponseEntity<List<EnfrentamientoDTO>> obtenerEnfrentamientos(@PathVariable String leagueId) {
-        //TODO
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null);
+    public ResponseEntity<List<EnfrentamientoDTO>> obtenerEnfrentamientos(@PathVariable Long leagueId) {
+
+        // Obtener la liga
+        List<Liga> ligas = ligaService.obtenerLigaPorId(new LigaId(leagueId));
+        // Comprobar si la liga existe
+
+        if (ligas.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        //Obtener la lista de enfrentamientos de la liga
+        List<Enfrentamiento> enfrentamientos = enfrentamientoService.obtenerEnfrentamientosPorLiga(new LigaId(leagueId));
+
+        // Convertir a EnfrentamientoDTO
+        List<EnfrentamientoDTO> enfrentamientosDTO = new ArrayList<>();
+        for (Enfrentamiento enfrentamiento : enfrentamientos) {
+            enfrentamientosDTO.add(enfrentamientoDtoMapper.toDTO(enfrentamiento));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(enfrentamientosDTO);
     }
 }

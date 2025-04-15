@@ -1,9 +1,11 @@
 package com.adondeband.back_end_adonde_band.dominio.bot;
 
+import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -44,5 +46,18 @@ public class BotImpl implements BotService {
     @Override
     public Bot obtenerBotPorId(Long id) {
         return botPort.findById(id);
+    }
+
+    @Override
+    public List<String> getBotNames(List<BotId> botIds) {
+        List <String> botNames = new ArrayList<>(botIds.size());
+
+        for (BotId botId : botIds) {
+            // obtener bot y añadir el nombre a la lista
+            Bot bot = obtenerBotPorId(botId.value());
+            botNames.add(bot.getNombre());
+        }
+
+        return botNames;
     }
 }

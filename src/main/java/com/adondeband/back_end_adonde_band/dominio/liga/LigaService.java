@@ -1,6 +1,8 @@
 package com.adondeband.back_end_adonde_band.dominio.liga;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
+import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento;
+import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
 import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 
@@ -19,4 +21,6 @@ public interface LigaService {
     Liga addBotToLiga(LigaId ligaId, BotId botId);
 
     List<Participacion> obtenerParticipacionesPorLiga(LigaId ligaId);
+
+    Liga startLiga(Liga liga, List<EnfrentamientoId> enfrentamientos);
 }
