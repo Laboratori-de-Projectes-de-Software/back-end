@@ -46,9 +46,9 @@ public class BotMapper {
         toBotResponseDto.setName(bot.getName());
         toBotResponseDto.setDescription(bot.getDescripcion());
         toBotResponseDto.setUrlImage(bot.getUrlImagen());
-        toBotResponseDto.setNWins(bot.getnWins());
-        toBotResponseDto.setNLosses(bot.getnLosses());
-        toBotResponseDto.setNDraws(bot.getnDraws());
+        toBotResponseDto.setnWins(bot.getnWins());
+        toBotResponseDto.setnLosses(bot.getnLosses());
+        toBotResponseDto.setnDraws(bot.getnDraws());
         return toBotResponseDto;
     }
 

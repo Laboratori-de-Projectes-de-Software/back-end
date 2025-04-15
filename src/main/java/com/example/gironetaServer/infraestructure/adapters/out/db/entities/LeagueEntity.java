@@ -42,14 +42,14 @@ public class LeagueEntity {
     private Set<JornadaEntity> jornadas; // Relación con Jornadas
 
     public enum State {
-        Created,
-        Started,
-        Finished
+        PENDING,
+        IN_PROCESS,
+        COMPLETED
     }
 
     @Enumerated(EnumType.STRING)
     @Column(name = "state", nullable = false)
-    private State state = State.Created; // Estado de la liga
+    private State state = State.PENDING; // Estado de la liga
 
     public LeagueEntity() {
     }
