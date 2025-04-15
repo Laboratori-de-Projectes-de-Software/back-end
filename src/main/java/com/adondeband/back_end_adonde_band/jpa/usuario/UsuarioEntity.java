@@ -2,6 +2,7 @@ package com.adondeband.back_end_adonde_band.jpa.usuario;
 
 import com.adondeband.back_end_adonde_band.jpa.bot.BotEntity;
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenEntity;
+import com.adondeband.back_end_adonde_band.jpa.liga.LigaEntity;
 import com.adondeband.back_end_adonde_band.jpa.rol.RolEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -40,4 +41,6 @@ public class UsuarioEntity {
         inverseJoinColumns = @JoinColumn(name = "rol_id")
     )
     private List<RolEntity> roles;
+    @OneToMany
+    private List<LigaEntity> ligas;
 }

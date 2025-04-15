@@ -1,8 +1,10 @@
 package com.adondeband.back_end_adonde_band.dominio.liga;
 
+import com.adondeband.back_end_adonde_band.dominio.jornada.JornadaId;
 import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionId;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,5 +33,11 @@ public class Liga {
 
     private List<ParticipacionId> participaciones;
 
-    // private List<Jornada> jornadas;
+    private UsuarioId usuario;
+
+    private Long matchTime;
+
+    private Integer rondas;
+
+    private List<JornadaId> jornadas;
 }

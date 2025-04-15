@@ -15,7 +15,9 @@ public class EnfrentamientoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
+
+    private Integer ronda;
 
     private ESTADO_Entity estado;
     private RESULTADO_Entity resultado;
@@ -28,7 +30,4 @@ public class EnfrentamientoEntity {
 
     @OneToOne
     private ConversacionEntity conversacion;
-
-    @ManyToOne
-    private JornadaEntity jornada;
 }

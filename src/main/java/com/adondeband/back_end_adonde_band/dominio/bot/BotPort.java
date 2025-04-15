@@ -13,4 +13,10 @@ public interface BotPort {
     List<Bot> findAll();
 
     List<Bot> findBotsUsuario(UsuarioId userId);
+
+    Bot actualizarUrlImagen(BotId botId, String url);
+
+    Bot actualizarDescripcion(BotId botId, String descripcion);
+
+    Bot actualizarEndpoint(BotId botId, String endpoint);
 }

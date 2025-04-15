@@ -1,5 +1,7 @@
 package com.adondeband.back_end_adonde_band.jpa.liga;
 
+import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
+import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import com.adondeband.back_end_adonde_band.jpa.entities.ESTADO_Entity;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionEntity;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
@@ -8,12 +10,15 @@ import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
+import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(uses =  {
             ParticipacionJpaMapper.class,
-            ImagenJpaMapper.class
+            ImagenJpaMapper.class,
+            UsuarioJpaMapper.class
         }, componentModel = "spring")
 public interface LigaJpaMapper {
     LigaJpaMapper INSTANCE = Mappers.getMapper(LigaJpaMapper.class);
@@ -29,6 +34,13 @@ public interface LigaJpaMapper {
             return null;
         }
         return value.value();
+    }
+
+    default LigaId map(LigaEntity ligaEntity) {
+        if (ligaEntity == null) {
+            return null;
+        }
+        return new LigaId(ligaEntity.getId());
     }
 
     // Mapeo de atributos

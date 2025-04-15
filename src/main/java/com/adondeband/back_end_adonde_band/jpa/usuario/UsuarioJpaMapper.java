@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(uses =   {
             RolJpaMapper.class,
-            BotJpaMapper.class,
             ImagenJpaMapper.class,
         }, componentModel = "spring")
 public interface UsuarioJpaMapper {
@@ -64,13 +63,6 @@ public interface UsuarioJpaMapper {
     default RolId toRolId(RolEntity entity) {
         if(entity == null) return null;
         return new RolId(entity.getNombre());
-    }
-
-    default BotId toBotId(BotEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-        return new BotId(entity.getNombre());
     }
 
     default UsuarioId toUsuarioId(UsuarioEntity entity) {

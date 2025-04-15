@@ -13,6 +13,7 @@ import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(uses =   {
             EnfrentamientoJpaMapper.class,
@@ -23,12 +24,21 @@ import org.mapstruct.factory.Mappers;
 public interface BotJpaMapper {
     BotJpaMapper INSTANCE = Mappers.getMapper(BotJpaMapper.class);
 
+
     // Mapea de BotEntity a Bot
     Bot toDomain(BotEntity botEntity);
 
     // Mapea de Bot a BotEntity
     BotEntity toEntity(Bot bot);
 
+    default BotEntity toEntity(BotId botId){
+        if (botId == null) {
+            return null;
+        }
+        BotEntity botEntity = new BotEntity();
+        botEntity.setNombre(botId.value());
+        return botEntity;
+    }
 
     // Mapeo de atributos
     default BotId toBotId(String value) {
@@ -37,6 +47,13 @@ public interface BotJpaMapper {
         }
 
         return new BotId(value);
+    }
+
+    default BotId map(BotEntity botEntity) {
+        if (botEntity == null) {
+            return null;
+        }
+        return new BotId(botEntity.getNombre());
     }
 
     default String toBotIdString(BotId id) {

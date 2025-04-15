@@ -48,15 +48,6 @@ public interface JornadaJpaMapper {
         return id.value();
     }
 
-    default LigaId toLigaId(LigaEntity entity) {
-        if (entity == null) {
-            //TODO LANZAR EXCEPCION
-            return null;
-        }
-
-        return new LigaId(entity.getId());
-    }
-
     default EnfrentamientoId toEnfrentamientoId(EnfrentamientoEntity entity) {
 
         if (entity == null) {

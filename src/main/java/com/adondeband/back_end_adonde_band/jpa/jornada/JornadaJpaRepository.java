@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface JornadaJpaRepository extends JpaRepository<JornadaEntity, Integer> {
-    List<JornadaEntity> findById(int Id);
+public interface JornadaJpaRepository extends JpaRepository<JornadaEntity, Long> {
+    List<JornadaEntity> findById(long Id);
 }

@@ -20,7 +20,4 @@ public class JornadaEntity {
 
     @ManyToOne
     private LigaEntity liga;
-
-    @OneToMany(mappedBy = "jornada")
-    private List<EnfrentamientoEntity> enfrentamientos;
 }

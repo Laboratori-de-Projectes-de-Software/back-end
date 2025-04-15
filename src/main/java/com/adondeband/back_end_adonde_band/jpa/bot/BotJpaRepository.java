@@ -11,4 +11,6 @@ public interface BotJpaRepository extends JpaRepository<BotEntity, String> {
     List<BotEntity> findByNombre(String nombre);
 
     List<BotEntity> findByUsuario(UsuarioEntity usuario);
+
+    BotEntity getBotEntityByNombre(String nombre);
 }
