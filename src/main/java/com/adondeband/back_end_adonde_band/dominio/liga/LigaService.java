@@ -12,7 +12,7 @@ public interface LigaService {
 
     Liga crearLiga(Liga liga);
 
-    List<Liga> obtenerLigaPorId(LigaId id);
+    Liga obtenerLigaPorId(LigaId id);
 
     List <Liga> obtenerTodasLasLigas();
 

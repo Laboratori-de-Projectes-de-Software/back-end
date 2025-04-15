@@ -16,7 +16,7 @@ public class EnfrentamientoDTO {
     private ESTADO state;
     private RESULTADO result;
     private Long [] fighters;
-    private int roundNumber;
+    private Integer roundNumber;
 
     Long getGanador() {
         return switch (result) {

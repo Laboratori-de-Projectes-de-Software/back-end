@@ -14,6 +14,7 @@ import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.jpa.bot.BotEntity;
 import com.adondeband.back_end_adonde_band.jpa.conversacion.ConversacionJpaMapper;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -65,13 +66,13 @@ public class EnfrentamientoJpaAdapter implements EnfrentamientoPort {
 
         LigaEntity ligaEntity = ligaJpaMapper.toEntity(liga);
 
-        List<EnfrentamientoEntity> enfrentamientoEntities = enfrentamientoJpaRepository.findByLiga(ligaEntity);
+        Sort sort = Sort.by(Sort.Direction.ASC, "ronda");
+        List<EnfrentamientoEntity> enfrentamientoEntities = enfrentamientoJpaRepository.findByLiga(ligaEntity, sort);
 
-        List<Enfrentamiento> enfrentamientos = enfrentamientoEntities
+        return enfrentamientoEntities
                 .stream()
                 .map(enfrentamientoMapper::toDomain)
                 .collect(Collectors.toList());
-        return enfrentamientos;
     }
 
     @Transactional

@@ -18,6 +18,7 @@ public interface EnfrentamientoDtoMapper {
     // Mapear de dominio a DTO
     @Mapping(target = "state", source = "estado")
     @Mapping(target = "result", source = "resultado")
+    @Mapping(target = "roundNumber", source = "ronda")
     @Mapping(target = "fighters", expression = "java(botsToLongArray(enfrentamiento.getLocal(), enfrentamiento.getVisitante()))")
     EnfrentamientoDTO toDTO (Enfrentamiento enfrentamiento);
 

@@ -10,6 +10,7 @@ import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoService;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
+import com.adondeband.back_end_adonde_band.dominio.exception.BotAlreadyParticipatesException;
 import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
 import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenService;
@@ -109,16 +110,14 @@ public class LigaController {
     }
 
     @GetMapping("/{leagueId}")
-    public ResponseEntity<List<LigaResponseDTO>> obtenerLiga(@PathVariable Long leagueId) {
-        List<Liga> ligas = ligaService.obtenerLigaPorId(new LigaId(leagueId));
+    public ResponseEntity<LigaResponseDTO> obtenerLiga(@PathVariable Long leagueId) {
+        Liga liga = ligaService.obtenerLigaPorId(new LigaId(leagueId));
 
-        if (ligas.isEmpty()) {
+        if (liga == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        // Convertir a LigaDTO
-        List<LigaResponseDTO> ligaDTO = new ArrayList<>();
-        ligaDTO.add(ligaDtoMapper.toDTO(ligas.getFirst()));
+        LigaResponseDTO ligaDTO = ligaDtoMapper.toDTO(liga);
 
         // Devolver la lista de LigaDTO en la respuesta HTTP
         return ResponseEntity.status(HttpStatus.OK).body(ligaDTO);
@@ -138,11 +137,14 @@ public class LigaController {
 
     @PostMapping("/{leagueId}/bot")
     public ResponseEntity<?> addBotToLiga(@PathVariable Long leagueId, @RequestBody String botId) {
-        Liga liga = ligaService.addBotToLiga(new LigaId(leagueId), new BotId(Long.parseLong(botId)));
-        if (liga != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        try {
+            ligaService.addBotToLiga(new LigaId(leagueId), new BotId(Long.parseLong(botId)));
+            return ResponseEntity.status(HttpStatus.CREATED).body("Bot " + botId + " añadido");
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (BotAlreadyParticipatesException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al añadir el bot a la liga");
     }
 
     @GetMapping("/{leagueId}/leaderboard")
@@ -155,9 +157,10 @@ public class LigaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        // Si la lista está vacía, no hay participaciones
+
         List <ParticipacionDTO> participacionesDTO = new ArrayList<>(participaciones.size());
 
+        // Si la lista está vacía, no hay participaciones
         if (!participaciones.isEmpty()) {
             List <BotId> botIds =  participaciones.
                     stream().
@@ -182,13 +185,11 @@ public class LigaController {
     public ResponseEntity<?> comenzarLiga(@PathVariable Long leagueId) {
         System.out.println("Comenzando liga con id: " + leagueId);
         //Obtener liga
-        List<Liga> ligas = ligaService.obtenerLigaPorId(new LigaId(leagueId));
+        Liga liga = ligaService.obtenerLigaPorId(new LigaId(leagueId));
         // Comprobar si la liga existe
-        if (ligas.isEmpty()) {
+        if (liga == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        // Comprobar si la liga ya ha comenzado o finalizado
-        Liga liga = ligas.getFirst();
         if (liga.getEstado().equals(ESTADO.FINALIZADO)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Liga ya finalizada");
         }
@@ -216,10 +217,10 @@ public class LigaController {
     public ResponseEntity<List<EnfrentamientoDTO>> obtenerEnfrentamientos(@PathVariable Long leagueId) {
 
         // Obtener la liga
-        List<Liga> ligas = ligaService.obtenerLigaPorId(new LigaId(leagueId));
+        Liga liga = ligaService.obtenerLigaPorId(new LigaId(leagueId));
         // Comprobar si la liga existe
 
-        if (ligas.isEmpty()) {
+        if (liga == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
