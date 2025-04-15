@@ -66,6 +66,11 @@ public class LigaController {
         return ligaService.obtenerLigas();
     }
 
+    @GetMapping
+    public List<LeagueResponseDTO> obtenerLigasByUserId(@RequestParam Long owner) {
+        return ligaService.obtenerLigasByUserId(owner);
+    }
+
 
     @GetMapping("/{leagueId}")
     public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Long leagueId) {
