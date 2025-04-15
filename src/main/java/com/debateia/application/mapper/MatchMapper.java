@@ -21,7 +21,7 @@ public class MatchMapper {
             dom.setBot2id(entity.getBot2().getId());
         }
         if (entity.getLeague() != null) {
-            dom.setLeagueId(entity.getLeague().getLeagueId());
+            dom.setLeagueId(entity.getLeague().getId());
         }
         return dom;
     }

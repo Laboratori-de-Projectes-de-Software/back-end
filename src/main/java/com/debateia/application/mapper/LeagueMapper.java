@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * @author kjorda
  */
 public class LeagueMapper {
-    public LeagueResponseDTO toLeagueResponseDTO(League l) {
+    public static LeagueResponseDTO toLeagueResponseDTO(League l) {
         LeagueResponseDTO d = new LeagueResponseDTO();
         d.setLeagueId(l.getLeagueId());
         d.setState(mapStateToEnum(l.getState()));
@@ -25,29 +25,29 @@ public class LeagueMapper {
         return d;
     }
     
-    public League toDomain(LeagueEntity e) {
+    public static League toDomain(LeagueEntity e) {
         League l = new League();
-        l.setLeagueId(e.getLeagueId());
-        l.setName(e.getName());
-        l.setUrlImagen(e.getUrlImagen());
-        l.setRounds(e.getRounds());
-        l.setMatchTime(e.getMatchTime());
-        l.setState(e.getState());
-        l.setMatchIds(e.getMatches().stream()
-                .map(elem -> elem.getId())
-                .collect(Collectors.toList()));
-        
-        l.setBotIds(e.getLeague_bots().stream()
-                .map(elem -> elem.getBotId())
-                .collect(Collectors.toList()));
-        
-        l.setUserId(e.getUser().getId());
-        
+//        l.setLeagueId(e.getId());
+//        l.setName(e.getName());
+//        l.setUrlImagen(e.getUrlImagen());
+//        l.setRounds(e.getRounds());
+//        l.setMatchTime(e.getMatchTime());
+//        l.setState(e.getState());
+//        l.setMatchIds(e.getMatches().stream()
+//                .map(elem -> elem.getId())
+//                .collect(Collectors.toList()));
+//        
+//        l.setBotIds(e.getLeague_bots().stream()
+//                .map(elem -> elem.getBotId())
+//                .collect(Collectors.toList()));
+//        
+//        l.setUserId(e.getUser().getId());
+//        
         return l;
     }
     
     
-    private State mapStateToEnum(String state) {
+    private static State mapStateToEnum(String state) {
         if (state == null) {
             return null;
         }

@@ -19,7 +19,7 @@ public class UserMapper {
         entity.setPassword(user.getPassword());
         if (user.getLeagueId() != null) {
             LeagueEntity dummyL = new LeagueEntity();
-            dummyL.setLeagueId(user.getLeagueId());
+            dummyL.setId(user.getLeagueId());
             entity.setLeague(dummyL);
         }
         if (user.getBotsId() != null) {
@@ -43,7 +43,7 @@ public class UserMapper {
         dom.setMail(entity.getMail());
         dom.setUsername(entity.getUsername());
         if (entity.getLeague() != null) {
-            dom.setLeagueId(entity.getLeague().getLeagueId());
+            dom.setLeagueId(entity.getLeague().getId());
         } else {
             dom.setLeagueId(null);
         }

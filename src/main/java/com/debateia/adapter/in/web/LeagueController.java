@@ -24,13 +24,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LeagueController {
     private final LeagueUseCase leagueUseCase;
-    private final LeagueMapper leagueMapper;
     private final MatchService matchService;
 
     @GetMapping("/{id}")
     public LeagueResponseDTO getLeague(@PathVariable Integer id) {
         League lg = leagueUseCase.getLeague(id);
-        return leagueMapper.toLeagueResponseDTO(lg);
+        return LeagueMapper.toLeagueResponseDTO(lg);
     }
 
     @PostMapping("/{id}/start")

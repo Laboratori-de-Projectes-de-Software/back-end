@@ -17,12 +17,11 @@ import org.springframework.stereotype.Component;
 public class JpaLeagueRepository implements LeagueRepository {
     
     private final LeagueJpaRepository leagueRepo;
-    private final LeagueMapper leagueMapper;
     
     @Override
     public League findByLeagueId(int leagueId) {
         LeagueEntity le = leagueRepo.findById(leagueId).orElse(null);
-        return leagueMapper.toDomain(le);
+        return LeagueMapper.toDomain(le);
     }
 
 }
