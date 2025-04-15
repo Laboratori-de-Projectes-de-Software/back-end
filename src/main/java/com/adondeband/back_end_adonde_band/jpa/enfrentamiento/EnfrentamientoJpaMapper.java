@@ -7,24 +7,28 @@ import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import com.adondeband.back_end_adonde_band.jpa.bot.BotEntity;
 import com.adondeband.back_end_adonde_band.jpa.bot.BotJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.jornada.JornadaJpaMapper;
+import com.adondeband.back_end_adonde_band.jpa.liga.LigaJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring",
         uses = {
         JornadaJpaMapper.class,
         BotJpaMapper.class,
-        //ParticipacionJpaMapper.class
+        LigaJpaMapper.class,
 })
 public interface EnfrentamientoJpaMapper {
     EnfrentamientoJpaMapper INSTANCE = Mappers.getMapper(EnfrentamientoJpaMapper.class);
 
     // Mapea de BotEntity a Bot
+    @Mapping(target = "ligaId",source = "liga")
     Enfrentamiento toDomain(EnfrentamientoEntity enfrentamientoEntity);
 
     // Mapea de Bot a BotEntity
+    @Mapping(target = "liga",source = "ligaId")
     EnfrentamientoEntity toEntity(Enfrentamiento enfrentamiento);
 
     default Long enfrentamientoIdToDTO (EnfrentamientoId id) {

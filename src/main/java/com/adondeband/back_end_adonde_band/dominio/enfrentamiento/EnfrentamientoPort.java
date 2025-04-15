@@ -6,4 +6,6 @@ public interface EnfrentamientoPort {
     Enfrentamiento save(Enfrentamiento enfrentamiento);
 
     List<Enfrentamiento> findById(Long idPartido);
+
+
 }
