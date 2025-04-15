@@ -1,5 +1,6 @@
 package com.adondeband.back_end_adonde_band.jpa.liga;
 
+import com.adondeband.back_end_adonde_band.jpa.enfrentamiento.EnfrentamientoEntity;
 import com.adondeband.back_end_adonde_band.jpa.entities.ESTADO_Entity;
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenEntity;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionEntity;
@@ -38,4 +39,6 @@ public class LigaEntity {
 
     @ManyToOne
     private UsuarioEntity usuario;
+    @OneToMany(mappedBy = "liga")
+    private List<EnfrentamientoEntity> enfrentamientos;
 }
