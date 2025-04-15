@@ -1,6 +1,7 @@
 package com.adondeband.back_end_adonde_band.dominio.liga;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
+import com.adondeband.back_end_adonde_band.dominio.bot.BotService;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
@@ -14,9 +15,11 @@ import java.util.List;
 public class LigaImpl implements LigaService {
 
     private final LigaPort ligaPort;
+    private final BotService botService;
 
-    public LigaImpl(LigaPort ligaPort) {
+    public LigaImpl(LigaPort ligaPort, BotService botService) {
         this.ligaPort = ligaPort;
+        this.botService = botService;
     }
 
     @Override
@@ -41,6 +44,14 @@ public class LigaImpl implements LigaService {
 
     @Override
     public Liga addBotToLiga(LigaId ligaId, BotId botId) {
+        if (botService.obtenerBotPorId(botId.value()) == null) {
+            throw new NotFoundException("Este bot no existe");
+        }
+
+        if (obtenerLigaPorId(ligaId).isEmpty()) {
+            throw new NotFoundException("Esta liga no existe");
+        }
+
         return ligaPort.addBotToLiga(ligaId, botId);
     }
 

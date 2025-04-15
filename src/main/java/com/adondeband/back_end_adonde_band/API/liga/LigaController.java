@@ -138,11 +138,12 @@ public class LigaController {
 
     @PostMapping("/{leagueId}/bot")
     public ResponseEntity<?> addBotToLiga(@PathVariable Long leagueId, @RequestBody String botId) {
-        Liga liga = ligaService.addBotToLiga(new LigaId(leagueId), new BotId(Long.parseLong(botId)));
-        if (liga != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        try {
+            ligaService.addBotToLiga(new LigaId(leagueId), new BotId(Long.parseLong(botId)));
+            return ResponseEntity.status(HttpStatus.CREATED).body("Bot " + botId + " añadido");
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al añadir el bot a la liga");
     }
 
     @GetMapping("/{leagueId}/leaderboard")

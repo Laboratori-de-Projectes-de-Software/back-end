@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LigaResponseDTO {
-
     private Long id;
     private String nombre;
     private ESTADO estado;
@@ -21,8 +20,6 @@ public class LigaResponseDTO {
     private List<Integer> bots;
     private int rondas;
     private long matchTime;
-
-
 
     public LigaResponseDTO(LigaDTO ligaDTO) {
         this.nombre = ligaDTO.getName();
