@@ -10,6 +10,7 @@ import com.debateia.application.ports.in.rest.LeagueUseCase;
 import com.debateia.application.service.MatchService;
 import com.debateia.domain.League;
 import com.debateia.domain.Match;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,7 +84,6 @@ public class LeagueController {
     @PostMapping("/{id}/bot")
     public ResponseEntity<?> registerBot(@RequestBody Integer botId) {
         
-        
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     
@@ -97,8 +97,21 @@ public class LeagueController {
             @PathVariable Integer id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication) {
         
+        if (authentication == null || !authentication.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid auth header");
+        }
+        final String authToken = authentication.substring(7);
+        final Integer userId = jwtService.extractUserId(authToken);
         
-        return ResponseEntity.ok(null);
+        try {
+            League deleted = leagueUseCase.deleteLeague(id, userId);
+            return ResponseEntity.ok(LeagueMapper.toLeagueResponseDTO(deleted));
+        }
+        catch (EntityNotFoundException e) { // liga no existe
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        
     }
     
     @PostMapping("/{id}/start")

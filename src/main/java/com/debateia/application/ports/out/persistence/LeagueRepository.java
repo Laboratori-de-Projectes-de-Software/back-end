@@ -7,6 +7,7 @@ import com.debateia.domain.League;
  * @author kjorda
  */
 public interface LeagueRepository {
-    public League findByLeagueId(int leagueId);
+    public League findById(int leagueId);
     public League saveLeague(League l);
+    public void deleteById(int leagueId);
 }

@@ -30,7 +30,7 @@ public interface LeagueUseCase {
     public List<Participation> getScores(int leagueId);
     
     // Delete one league
-    public League deleteLeague(int leagueId);
+    public League deleteLeague(int leagueId, int userId);
     
     // Start a league (creates all matches)
     public void startLeague(int leagueId);

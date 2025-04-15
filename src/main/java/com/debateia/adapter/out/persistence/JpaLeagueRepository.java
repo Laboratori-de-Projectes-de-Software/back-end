@@ -19,7 +19,7 @@ public class JpaLeagueRepository implements LeagueRepository {
     private final LeagueJpaRepository leagueRepo;
     
     @Override
-    public League findByLeagueId(int leagueId) {
+    public League findById(int leagueId) {
         LeagueEntity le = leagueRepo.findById(leagueId).orElse(null);
         return LeagueMapper.toDomain(le);
     }
@@ -30,5 +30,12 @@ public class JpaLeagueRepository implements LeagueRepository {
         LeagueEntity saved = leagueRepo.save(toSave);
         return LeagueMapper.toDomain(saved);
     }
+    
+    
+    @Override
+    public void deleteById(int leagueId) {
+         leagueRepo.deleteById(leagueId);
+    }
+    
 
 }

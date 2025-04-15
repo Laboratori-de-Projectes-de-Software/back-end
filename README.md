@@ -17,3 +17,27 @@ Hecho esto, podremos acceder a la página web en http://localhost:8080
 
 Además, cada vez que modifiquemos el código, podremos ver los cambios simplemente ejecutando el script ```deploy.sh``` del repositorio back-end-bc-spn.
 El repositorio front-end-bc-spn debe existir en el mismo directorio padre para que los cambios del frontend aparezcan. 
+
+## Endpoints autentificación
+- [x] Create a user
+- [x] Log-in a user
+
+## Endpoints bots
+- [x] Post one bot
+- [x] Get all bots (or from a specific user)
+- [x] Get one bot
+- [x] Update one bot
+
+## Endpoints ligas
+- [x] Post one league
+- [ ] Get all leagues
+- [x] Get one league
+- [ ] Update one league
+
+- [ ] Register bot to league
+- [ ] Get classification from a league
+- [x] Delete one league
+
+- [x] Start a league (creates all matches)
+- [x] Get all matches from a league
+- [x] Get all messages from a match

@@ -27,7 +27,7 @@ public class LeagueService implements LeagueUseCase {
     
     @Override
     public League getLeague(int leagueId) {
-        return leagueRepository.findByLeagueId(leagueId);
+        return leagueRepository.findById(leagueId);
     }
 
     @Override
@@ -51,13 +51,21 @@ public class LeagueService implements LeagueUseCase {
     }
 
     @Override
-    public League deleteLeague(int leagueId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public League deleteLeague(int leagueId, int userId) {
+        League lg = leagueRepository.findById(leagueId);
+        if (lg.getUserId() != userId) {
+            return null;
+            // TODO: Error, no permitido
+        }
+        
+        leagueRepository.deleteById(leagueId);
+        
+        return lg;
     }
 
     @Override
     public void startLeague(int leagueId) {
-        League league = leagueRepository.findByLeagueId(leagueId);
+        League league = leagueRepository.findById(leagueId);
         matchService.createLeagueMatches(league);
     }
 
