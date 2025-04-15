@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 public class UserResponseDTO {
     private String token;
     private LocalDateTime expiresIn;
-    private String username;
-    private Long id;
+    private String user;
+    private Long userId;
 
     public UserResponseDTO() {
     }
@@ -30,16 +30,16 @@ public class UserResponseDTO {
         this.expiresIn = expiresIn;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUser() {
+        return user;
     }
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(String user) {
+        this.user = user;
     }
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
