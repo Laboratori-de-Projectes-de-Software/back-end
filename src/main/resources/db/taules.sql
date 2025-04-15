@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS enfrontament (
 );
 
 CREATE TABLE IF NOT EXISTS resposta (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     id_autor INT,
     id_enfrontament INT,
     temps TIMESTAMP,

@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/leagues/**").authenticated()   // PUT requires authentication
                         .requestMatchers(HttpMethod.GET, "/league/**").authenticated()  // GET requires authentication
                         .requestMatchers(HttpMethod.DELETE, "/league/**").authenticated()   // DELETE requires authentication
+                        .requestMatchers(HttpMethod.GET, "/match/**").permitAll()  // POST requires authentication
 
 
                         .anyRequest().authenticated()

@@ -10,5 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface SpringDataRespostaRepository  extends JpaRepository<RespostaDBO, String> {
-    List<Resposta> findByMatchId(int id);
+    List<Resposta> findByMatchId(int matchId);
+
 }

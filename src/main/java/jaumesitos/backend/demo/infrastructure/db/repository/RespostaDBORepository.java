@@ -2,15 +2,13 @@ package jaumesitos.backend.demo.infrastructure.db.repository;
 
 import jaumesitos.backend.demo.application.repository.IRespostaRepository;
 import jaumesitos.backend.demo.domain.Resposta;
+import java.util.stream.Collectors;
 import jaumesitos.backend.demo.infrastructure.db.mapper.RespostaDBOMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +21,10 @@ public class RespostaDBORepository implements IRespostaRepository {
 
     @Override
     public List<Resposta> findByMatchId(int id) {
-        return springDataRespostaRepository.findByMatchId(id);
+        return springDataRespostaRepository.findByMatchId(id)
+                .stream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override

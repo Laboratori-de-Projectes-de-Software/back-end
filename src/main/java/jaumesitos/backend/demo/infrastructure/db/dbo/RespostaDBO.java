@@ -5,18 +5,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
+@Table(name = "resposta")
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
 public class RespostaDBO {
+
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "text")
     private String argument;
+
+    @Column(name = "temps")
     private String date;
 
-    @ManyToOne
-    @JoinColumn(name = "id_enfrontament") // o el nombre real de la columna en tu tabla
-    private MatchDBO match;
+    @Column(name = "id_enfrontament")
+    private int matchId;
 
+    @Column(name = "id_autor")
+    private Integer authorId;
 }

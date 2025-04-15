@@ -40,13 +40,14 @@ public class MatchController {
     //http://localhost:8080/swagger-ui/index.html#/
 
     @GetMapping("/match/{matchId}/messages")
-    @Operation(summary = "Obtiene todos los mensajes de un enfrentamiento", description = "Devuelve todas las respuestas asociadas al ID del enfrentamiento")
+    @Operation(summary = "Get all messages from a Match", description = "Devuelve todas las respuestas asociadas al ID del enfrentamiento")
     public ResponseEntity<?> getMensajesByMatchId(@PathVariable int matchId) {
         try {
             List<Resposta> mesages = respostaService.getMesgesByMatchID(matchId);
             return ResponseEntity.ok(mesages);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los mensajes");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al obtener los mensajes: " + e.getMessage());
         }
     }
 
