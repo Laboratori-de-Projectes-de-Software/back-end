@@ -2,7 +2,9 @@ package com.adondeband.back_end_adonde_band.API.liga;
 
 import com.adondeband.back_end_adonde_band.API.enfrentamiento.EnfrentamientoDTO;
 import com.adondeband.back_end_adonde_band.API.participacion.ParticipacionDTO;
+import com.adondeband.back_end_adonde_band.API.participacion.ParticipacionDtoMapper;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
+import com.adondeband.back_end_adonde_band.dominio.bot.BotService;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoService;
@@ -10,9 +12,6 @@ import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
 import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenService;
-import com.adondeband.back_end_adonde_band.dominio.jornada.Jornada;
-import com.adondeband.back_end_adonde_band.dominio.jornada.JornadaId;
-import com.adondeband.back_end_adonde_band.dominio.jornada.JornadaService;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaImpl;
@@ -29,8 +28,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,23 +36,29 @@ import java.util.List;
 @RequestMapping("api/v0/league")
 public class LigaController {
 
+    // Services
     private final LigaService ligaService;
-    private final LigaDtoMapper ligaDtoMapper;
-    private final ParticipacionService participacionService;
     private final UsuarioService usuarioService;
     private final ImagenService imagenService;
     private final EnfrentamientoService enfrentamientoService;
-    private final JornadaService jornadaService;
+    private final BotService botService;
+
+    // Mappers
+    private final LigaDtoMapper ligaDtoMapper;
+    private final ParticipacionDtoMapper participacionDtoMapper;
+
 
     @Autowired
-    public LigaController(LigaImpl ligaService, LigaDtoMapper ligaDtoMapper, ParticipacionService participacionService, UsuarioService usuarioService, ImagenService imagenService, EnfrentamientoService enfrentamientoService, JornadaService jornadaService) {
+    public LigaController(LigaImpl ligaService, LigaDtoMapper ligaDtoMapper, ParticipacionDtoMapper participacionDtoMapper,
+                          UsuarioService usuarioService, ImagenService imagenService,
+                          EnfrentamientoService enfrentamientoService, BotService botService) {
         this.ligaService = ligaService;
         this.ligaDtoMapper = ligaDtoMapper;
-        this.participacionService = participacionService;
         this.usuarioService = usuarioService;
         this.imagenService = imagenService;
         this.enfrentamientoService = enfrentamientoService;
-        this.jornadaService = jornadaService;
+        this.botService = botService;
+        this.participacionDtoMapper = participacionDtoMapper;
     }
 
     @GetMapping
@@ -140,9 +143,36 @@ public class LigaController {
     }
 
     @GetMapping("/{leagueId}/leaderboard")
-    public ResponseEntity<List<ParticipacionDTO>> obtenerClasificacion(@PathVariable String leagueId, @RequestBody String botId) {
-        //TODO
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null);
+    public ResponseEntity<List<ParticipacionDTO>> obtenerClasificacion(@PathVariable Long leagueId) {
+        // obtener Participaciones Por liga
+        List <Participacion> participaciones;
+        try {
+            participaciones = ligaService.obtenerParticipacionesPorLiga(new LigaId(leagueId));
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // Si la lista está vacía, no hay participaciones
+        List <ParticipacionDTO> participacionesDTO = new ArrayList<>(participaciones.size());
+
+        if (!participaciones.isEmpty()) {
+            List <BotId> botIds =  participaciones.
+                    stream().
+                    map(Participacion::getBot).
+                    toList();
+
+            List <String> botNames = botService.getBotNames(botIds);
+
+            // Map Participacion to ParticipacionDto
+            for (int i = 0; i < participaciones.size(); i++) {
+                ParticipacionDTO pDto = participacionDtoMapper.toDTO(participaciones.get(i));
+                pDto.setBotName(botNames.get(i));
+
+                participacionesDTO.add(pDto);
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(participacionesDTO);
     }
 
     @PostMapping("/{leagueId}/start")

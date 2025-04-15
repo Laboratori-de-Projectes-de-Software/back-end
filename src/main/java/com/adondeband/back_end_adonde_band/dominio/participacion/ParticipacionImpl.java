@@ -7,11 +7,12 @@ public class ParticipacionImpl implements ParticipacionService {
 
     private final ParticipacionPort participacionPort;
 
-    public Participacion insertarParticipacion(Participacion participacion) {
-        return participacionPort.save(participacion);
-    }
 
     public ParticipacionImpl(ParticipacionPort participacionPort) {
         this.participacionPort = participacionPort;
+    }
+
+    public Participacion insertarParticipacion(Participacion participacion) {
+        return participacionPort.save(participacion);
     }
 }

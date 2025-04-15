@@ -1,6 +1,7 @@
 package com.adondeband.back_end_adonde_band.dominio.liga;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
+import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoService;
@@ -50,6 +51,10 @@ public class LigaImpl implements LigaService {
 
     @Override
     public List<Participacion> obtenerParticipacionesPorLiga(LigaId ligaId) {
+        if (obtenerLigaPorId(ligaId).isEmpty()) {
+            throw new NotFoundException("Esta liga no existe");
+        }
+
         return ligaPort.findParticipacionesLiga(ligaId);
     }
 

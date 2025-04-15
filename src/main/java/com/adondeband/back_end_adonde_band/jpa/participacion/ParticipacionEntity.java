@@ -30,8 +30,15 @@ public class ParticipacionEntity {
     @JoinColumn(name = "liga_id")
     private LigaEntity liga;
 
-    private int posicion = 0;
-    private int puntuacion = 0;
+    private Integer posicion = 0;
+
+    private Integer puntuacion = 0;
+
+    private Integer numVictorias = 0;
+
+    private Integer numEmpates = 0;
+
+    private Integer numDerrotas = 0;
 
     public ParticipacionEntity(Long id) {
         this.id = id;
