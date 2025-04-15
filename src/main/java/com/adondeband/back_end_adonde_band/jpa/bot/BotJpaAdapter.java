@@ -94,7 +94,6 @@ public class BotJpaAdapter implements BotPort {
     @Transactional
     public Bot findByNombre(String s) {
         BotEntity botEntity = botJpaRepository.findByNombre(s);
-        if (botEntity == null) throw new NotFoundException("Este bot no existe");
         return botJpaMapper.toDomain(botEntity);
     }
 

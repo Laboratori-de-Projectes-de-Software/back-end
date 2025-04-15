@@ -35,11 +35,11 @@ public class TestBotService {
     @Transactional
     public void testGetBotByName() {
         // Arrange
-        Bot bot = new Bot("Bot2", "Cualidad1");
+        Bot bot = new Bot("Bot10", "Cualidad1");
         botService.crearBot(bot);
 
         // Act
-        Bot botFound = botService.obtenerBotPorNombre("Bot2");
+        Bot botFound = botService.obtenerBotPorNombre("Bot10");
 
         // Assert
         assertEquals(bot.getNombre(), botFound.getNombre());

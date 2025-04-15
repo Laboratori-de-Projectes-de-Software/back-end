@@ -131,8 +131,8 @@ public class LigaController {
     }
 
     @PostMapping("/{leagueId}/bot")
-    public ResponseEntity<?> addBotToLiga(@PathVariable Long leagueId, @RequestBody Long botId) {
-        Liga liga = ligaService.addBotToLiga(new LigaId(leagueId), new BotId(botId));
+    public ResponseEntity<?> addBotToLiga(@PathVariable Long leagueId, @RequestBody String botId) {
+        Liga liga = ligaService.addBotToLiga(new LigaId(leagueId), new BotId(Long.parseLong(botId)));
         if (liga != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(null);
         }
