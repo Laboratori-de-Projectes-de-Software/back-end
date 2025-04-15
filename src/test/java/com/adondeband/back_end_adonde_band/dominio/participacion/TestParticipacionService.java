@@ -5,7 +5,6 @@ import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotService;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
-import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaService;
 import jakarta.transaction.Transactional;
 import org.junit.Test;
@@ -15,8 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -33,7 +30,7 @@ public class TestParticipacionService {
 
     @Test
     @Transactional
-    public void testSaveLiga() {
+    public void testAddBotToLiga() {
         // Arrange
         Liga liga = new Liga();
 //        liga.setId(new LigaId(1L));
@@ -43,11 +40,11 @@ public class TestParticipacionService {
         liga.setFechaFin(LocalDateTime.now());
         liga.setImagen(null);
 
-        Bot bot1 = new Bot(new BotId("bot1"), "Cualidad1");
+        Bot bot1 = new Bot("Bot 1", "Cualidad1");
 
         Participacion participacion = new Participacion();
         System.out.println("Participacion: " + participacion.getId() + "\n\n\n\n\n\n");
-        participacion.setBot(bot1.getNombre());
+        participacion.setBot(bot1.getId());
         participacion.setLiga(liga.getId());
         participacion.setPosicion(1);
         participacion.setPuntuacion(100);
@@ -56,8 +53,9 @@ public class TestParticipacionService {
         // participacion2.setBot(bot1.getNombre());
 
         // Act
-        Bot botSaved = botService.crearBot(bot1);
-        Liga ligaSaved = ligaService.crearLiga(liga);
+        // Guardar el bot y la liga para que tengan un id (como se haría en un caso real)
+        botService.crearBot(bot1);
+        ligaService.crearLiga(liga);
         Participacion participacionSaved = participacionService.insertarParticipacion(participacion);
 
         // Assert

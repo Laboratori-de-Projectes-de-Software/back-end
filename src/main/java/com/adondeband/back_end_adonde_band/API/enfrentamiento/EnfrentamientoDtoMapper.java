@@ -18,14 +18,14 @@ public interface EnfrentamientoDtoMapper {
     // Mapear de dominio a DTO
     @Mapping(target = "state", source = "estado")
     @Mapping(target = "result", source = "resultado")
-    @Mapping(target = "fighters", expression = "java(botsToStringArray(enfrentamiento.getLocal(), enfrentamiento.getVisitante()))")
+    @Mapping(target = "fighters", expression = "java(botsToLongArray(enfrentamiento.getLocal(), enfrentamiento.getVisitante()))")
     EnfrentamientoDTO toDTO (Enfrentamiento enfrentamiento);
 
-    default String[] botsToStringArray(BotId local, BotId visitante) {
-        String[] res = new String[2];
+    default Long[] botsToLongArray(BotId local, BotId visitante) {
+        Long[] res = new Long[2];
 
-        res[0] = (local != null) ? local.value() : "null";
-        res[1] = (visitante != null) ? visitante.value() : "null";
+        res[0] = (local != null) ? local.value() : null;
+        res[1] = (visitante != null) ? visitante.value() : null;
 
         return res;
     }
