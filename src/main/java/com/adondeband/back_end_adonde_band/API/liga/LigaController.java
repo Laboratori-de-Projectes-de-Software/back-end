@@ -10,6 +10,7 @@ import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoService;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
+import com.adondeband.back_end_adonde_band.dominio.exception.BotAlreadyParticipatesException;
 import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
 import com.adondeband.back_end_adonde_band.dominio.imagen.ImagenService;
@@ -141,6 +142,8 @@ public class LigaController {
             return ResponseEntity.status(HttpStatus.CREATED).body("Bot " + botId + " añadido");
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (BotAlreadyParticipatesException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
 

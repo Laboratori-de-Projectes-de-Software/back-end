@@ -1,6 +1,7 @@
 package com.adondeband.back_end_adonde_band.jpa.liga;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
+import com.adondeband.back_end_adonde_band.dominio.exception.BotAlreadyParticipatesException;
 import org.springframework.data.domain.Sort;
 import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
@@ -169,6 +170,11 @@ public class LigaJpaAdapter implements LigaPort {
         // obtener Liga y bot
         LigaEntity ligaEntity = ligaJpaRepository.getLigaEntityById(ligaId.value());
         BotEntity botEntity = botJpaRepository.findById(botId.value()).orElse(null);
+
+        // Comprobar que el bot no participa ya en esta liga
+        if (!participacionJpaRepository.findByLigaAndBot(ligaEntity, botEntity).isEmpty()) {
+            throw new BotAlreadyParticipatesException("El bot ya participa en esta liga.");
+        }
 
         // Obtener participaciones por liga
         List <ParticipacionEntity> participaciones = ligaEntity.getParticipaciones();

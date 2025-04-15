@@ -1,5 +1,6 @@
 package com.adondeband.back_end_adonde_band.jpa.participacion;
 
+import com.adondeband.back_end_adonde_band.jpa.bot.BotEntity;
 import com.adondeband.back_end_adonde_band.jpa.liga.LigaEntity;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,6 @@ import java.util.List;
 @Repository
 public interface ParticipacionJpaRepository extends JpaRepository<ParticipacionEntity, Long> {
     List<ParticipacionEntity> findByLiga(LigaEntity liga, Sort sort);
+
+    List<ParticipacionEntity> findByLigaAndBot(LigaEntity liga, BotEntity bot);
 }
