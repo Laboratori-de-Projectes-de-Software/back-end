@@ -71,7 +71,8 @@ public class AuthApiDelegate
             LoginResponse loginResponse = new LoginResponse()
                     .setToken(jwtToken)
                     .setExpiresIn(System.currentTimeMillis() + jwtService.getExpirationTime())
-                    .setUser(authenticatedUser.getNombre());
+                    .setUser(authenticatedUser.getNombre())
+                    .setUserId(authenticatedUser.getId().value());
 
             return ResponseEntity.ok(loginResponse);
         }catch (UsernameNotFoundException | BadCredentialsException e){
