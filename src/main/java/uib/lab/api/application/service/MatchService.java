@@ -74,7 +74,7 @@ public class MatchService {
             if (!matchesList.isEmpty()) {
                 return new ApiResponse(200, "Matches found", matchesList);
             } else {
-                return new ApiResponse<>(404, "No matches found");
+                return new ApiResponse(200, "No matches found", new ArrayList<MatchResponseDTO>());
             }
         } catch (IllegalArgumentException e) {
             return new ApiResponse<>(404, "Matches not found");
