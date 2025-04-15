@@ -14,7 +14,6 @@ import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaRepository;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionEntity;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaRepository;
-import jakarta.servlet.http.Part;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -156,7 +155,7 @@ public class LigaJpaAdapter implements LigaPort {
         ligaEntity.getParticipaciones().clear();
 
         for (BotId bot : bots) {
-            BotEntity botEntity = botJpaRepository.getBotEntityByNombre(bot.value());
+            BotEntity botEntity = botJpaRepository.findById(bot.value()).orElse(null);
             if (botEntity == null) throw new NotFoundException("El bot " + bot.value() + " no existe");
 
             ParticipacionEntity nuevaParticipacion = new ParticipacionEntity(botEntity, ligaEntity);
@@ -172,7 +171,7 @@ public class LigaJpaAdapter implements LigaPort {
         LigaEntity ligaEntity = ligaJpaRepository.getLigaEntityById(ligaId.value());
         if (ligaEntity == null) throw new NotFoundException("Esta liga no existe");
 
-        BotEntity botEntity = botJpaRepository.getBotEntityByNombre(botId.value());
+        BotEntity botEntity = botJpaRepository.findById(botId.value()).orElse(null);
         if (botEntity == null) throw new NotFoundException("El bot " + botId.value() + " no existe");
 
         ParticipacionEntity nuevaParticipacion = new ParticipacionEntity(botEntity, ligaEntity);

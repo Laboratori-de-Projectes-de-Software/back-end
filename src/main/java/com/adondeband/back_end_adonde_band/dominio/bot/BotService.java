@@ -7,9 +7,11 @@ import java.util.List;
 public interface BotService {
     Bot crearBot(Bot bot);
 
-    List<Bot> obtenerBotPorNombre(String nombre);
+    Bot obtenerBotPorNombre(String nombre);
 
     List<Bot> obtenerTodosLosBots();
 
     List<Bot> obtenerBotsPorIdUsuario(UsuarioId userId);
+
+    Bot obtenerBotPorId(Long id);
 }

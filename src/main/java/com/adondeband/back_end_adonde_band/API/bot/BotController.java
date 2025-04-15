@@ -1,5 +1,6 @@
 package com.adondeband.back_end_adonde_band.API.bot;
 
+import com.adondeband.back_end_adonde_band.api.model.BotDTO;
 import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotService;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotImpl;
@@ -75,33 +76,29 @@ public class BotController {
         // Guardar imagen del bot (por si no existe)
         Imagen imagenSaved = imagenService.guardarImagen(bot.getImagen());
         bot.setImagen(imagenSaved);
-
-        Bot nuevoBot = null;
         // Guardar bot y obtener el nuevo bot proveniente de la BD
         try {
-            nuevoBot = botService.crearBot(bot);
+            bot = botService.crearBot(bot);
         } catch (IllegalArgumentException e) {
             // El bot ya existe
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(botMapper.toDTO(nuevoBot));
+        return ResponseEntity.status(HttpStatus.CREATED).body(botMapper.toDTO(bot));
     }
 
     @GetMapping("/{botId}")
-    public ResponseEntity<List<BotDTOResponse>> obtenerBot(@PathVariable String botId) {
+    public ResponseEntity<BotDTOResponse> obtenerBot(@PathVariable Long botId) {
         // Obtener la lista de Bots desde el servicio
-        List<Bot> bots = botService.obtenerBotPorNombre(botId);
+        Bot bot = botService.obtenerBotPorId(botId);
 
-        if (bots.isEmpty()) {
+        if (bot == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        };
 
-        // Convertir manualmente de Bot a BotDTO
-        List<BotDTOResponse> botDTO = new ArrayList<>();
-        botDTO.add(botMapper.toDTO(bots.getFirst()));
+        BotDTOResponse botDTOResponse = botMapper.toDTO(bot);
 
         // Devolver la lista de BotDTO en la respuesta HTTP
-        return ResponseEntity.status(HttpStatus.OK).body(botDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(botDTOResponse);
     }
 }

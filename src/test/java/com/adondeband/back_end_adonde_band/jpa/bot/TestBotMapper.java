@@ -34,7 +34,7 @@ public class TestBotMapper {
         Bot bot = botJpaMapper.toDomain(botEntity);
 
         // Assert
-        assertEquals(bot.getNombre().value(), botEntity.getNombre());
+        assertEquals(bot.getNombre(), botEntity.getNombre());
         assertEquals(bot.getCualidad(), botEntity.getCualidad());;
         assertEquals(bot.getUsuario().value(), botEntity.getUsuario().getId());
     }
