@@ -1,7 +1,5 @@
 package com.adondeband.back_end_adonde_band.dominio.enfrentamiento;
 
-//import com.adondeband.back_end_adonde_band.API.mensaje.MensajeDTO;
-//import com.adondeband.back_end_adonde_band.API.mensaje.MensajeDtoMapper;
 import com.adondeband.back_end_adonde_band.dominio.conversacion.Conversacion;
 import com.adondeband.back_end_adonde_band.dominio.conversacion.ConversacionImpl;
 import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
@@ -15,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
@@ -29,8 +25,6 @@ public class TestEnfrentamientoService {
     private ConversacionImpl conversacionService;
     @Autowired
     private BotService botService;
-
-    //private MensajeDtoMapper mensajeDtoMapper;
 
 
     @Test
