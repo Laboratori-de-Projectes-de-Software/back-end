@@ -1,6 +1,6 @@
 package com.debateia.adapter.out.persistence;
 
-import com.debateia.adapter.mapper.LeagueMapper;
+import com.debateia.application.mapper.LeagueMapper;
 import com.debateia.adapter.out.persistence.entities.LeagueEntity;
 import com.debateia.application.ports.out.persistence.LeagueRepository;
 import com.debateia.domain.League;
@@ -22,7 +22,7 @@ public class JpaLeagueRepository implements LeagueRepository {
     @Override
     public League findByLeagueId(int leagueId) {
         LeagueEntity le = leagueRepo.findById(leagueId).orElse(null);
-        return leagueMapper.toLeagueDomain(le);
+        return leagueMapper.toDomain(le);
     }
 
 }

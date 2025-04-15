@@ -4,9 +4,12 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class League {
     
     private int leagueId;
@@ -15,8 +18,8 @@ public class League {
     private int rounds;
     private long matchTime;
     
-    private List<Match> matches;
-    private List<Integer> bots;
+    private List<Integer> matchIds;
+    private List<Integer> botIds;
     private String state;
-    private User user;
+    private Integer userId;
 }

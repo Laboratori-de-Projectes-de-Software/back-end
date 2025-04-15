@@ -1,12 +1,9 @@
 package com.debateia.application.service;
 
 import com.debateia.adapter.in.web.dto.State;
-import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.MatchRepository;
-import com.debateia.domain.Bot;
 import com.debateia.domain.League;
 import com.debateia.domain.Match;
-import com.debateia.domain.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +20,7 @@ public class MatchService {
 
     public List<Match> createLeagueMatches(League league) {
         List<Match> matches = new ArrayList<>(league.getRounds());
-        matches = generarCombatesBalanceados(matches, league.getBots(), league.getRounds());
+        matches = generarCombatesBalanceados(matches, league.getBotIds(), league.getRounds());
 
         // @TODO cuando se use la tabla tbl_league_bots, consultarla y pasar por parametro a la funcion anterior para hacer setFighters
         /* @TODO
@@ -92,7 +89,4 @@ public class MatchService {
         }
         return matches;
     }
-
-
-
 }

@@ -1,7 +1,5 @@
 package com.debateia.adapter.out.persistence;
 
-import com.debateia.adapter.mapper.LeagueMapperImpl;
-import com.debateia.adapter.out.persistence.entities.MatchEntity;
 import com.debateia.application.mapper.MatchMapper;
 import com.debateia.application.ports.out.persistence.MatchRepository;
 import com.debateia.domain.Match;

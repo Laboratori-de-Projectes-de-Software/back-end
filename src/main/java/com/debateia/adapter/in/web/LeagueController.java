@@ -1,7 +1,7 @@
 package com.debateia.adapter.in.web;
 import com.debateia.adapter.in.web.dto.response.LeagueResponseDTO;
 import com.debateia.adapter.in.web.dto.response.MatchResponseDTO;
-import com.debateia.adapter.mapper.LeagueMapper;
+import com.debateia.application.mapper.LeagueMapper;
 import com.debateia.application.mapper.MatchMapper;
 import com.debateia.application.ports.in.rest.LeagueUseCase;
 import com.debateia.application.service.MatchService;

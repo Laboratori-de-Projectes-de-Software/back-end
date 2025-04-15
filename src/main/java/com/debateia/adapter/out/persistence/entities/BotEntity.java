@@ -46,5 +46,8 @@ public class BotEntity {
     private Integer draws;
 
     @OneToMany(mappedBy = "bot", fetch = FetchType.LAZY)
-    private List<MessageEntity> messages = new ArrayList<>();
+    private List<MessageEntity> messages;
+    
+    @OneToMany(mappedBy = "bot", fetch = FetchType.LAZY)
+    private List<LeagueBotsEntity> bot_leagues;
 }

@@ -39,5 +39,8 @@ public class LeagueEntity {
     private Long matchTime;
 
     @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<MatchEntity> matches = new ArrayList<>();
+    private List<MatchEntity> matches;
+    
+    @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<LeagueBotsEntity> league_bots;
 }
