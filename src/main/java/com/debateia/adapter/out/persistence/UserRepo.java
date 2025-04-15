@@ -1,26 +1,17 @@
 package com.debateia.adapter.out.persistence;
 
-import com.debateia.adapter.out.persistence.entities.UserEntity;
-import com.debateia.application.mapper.UserMapper;
+import com.debateia.adapter.mapper.UserMapper;
 import com.debateia.application.ports.out.persistence.UserRepository;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import com.debateia.domain.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class JpaUserRepository implements UserRepository {
+public class UserRepo implements UserRepository {
     private final UserJpaRepository userJpaRepository;
 
     @Override

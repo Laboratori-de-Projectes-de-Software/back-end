@@ -5,7 +5,7 @@ import com.debateia.adapter.in.web.dto.response.BotResponseDTO;
 import com.debateia.adapter.in.web.dto.response.BotSummaryResponseDTO;
 import com.debateia.adapter.out.persistence.entities.BotEntity;
 import com.debateia.application.jwt.JwtService;
-import com.debateia.application.mapper.BotMapper;
+import com.debateia.adapter.mapper.BotMapper;
 import com.debateia.application.service.BotService;
 import com.debateia.domain.Bot;
 import jakarta.persistence.EntityNotFoundException;

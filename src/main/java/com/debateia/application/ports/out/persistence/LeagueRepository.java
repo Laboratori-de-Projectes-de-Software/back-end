@@ -4,10 +4,6 @@ import com.debateia.domain.League;
 import java.util.List;
 import java.util.Optional;
 
-/**
- *
- * @author kjorda
- */
 public interface LeagueRepository {
     public Optional<League> findById(Integer leagueId);
     public League saveLeague(League l);

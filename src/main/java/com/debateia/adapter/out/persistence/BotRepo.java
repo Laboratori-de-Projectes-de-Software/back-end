@@ -1,7 +1,7 @@
 package com.debateia.adapter.out.persistence;
 
 import com.debateia.adapter.out.persistence.entities.BotEntity;
-import com.debateia.application.mapper.BotMapper;
+import com.debateia.adapter.mapper.BotMapper;
 import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.domain.Bot;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class JpaBotRepository implements BotRepository {
+public class BotRepo implements BotRepository {
     private final BotJpaRepository botJpaRepository;
 
     @Override

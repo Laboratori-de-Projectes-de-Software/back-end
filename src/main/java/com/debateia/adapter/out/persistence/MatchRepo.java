@@ -1,6 +1,6 @@
 package com.debateia.adapter.out.persistence;
 
-import com.debateia.application.mapper.MatchMapper;
+import com.debateia.adapter.mapper.MatchMapper;
 import com.debateia.application.ports.out.persistence.MatchRepository;
 import com.debateia.domain.Match;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class JpaMatchRepository implements MatchRepository {
+public class MatchRepo implements MatchRepository {
     private final MatchJpaRepository matchJpaRepository;
 
     @Override

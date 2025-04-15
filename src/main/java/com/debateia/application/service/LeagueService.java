@@ -3,6 +3,7 @@ package com.debateia.application.service;
 import com.debateia.application.ports.in.rest.LeagueUseCase;
 import com.debateia.application.ports.out.persistence.LeagueRepository;
 import com.debateia.application.ports.out.persistence.MatchRepository;
+import com.debateia.application.ports.out.persistence.ParticipationRepository;
 import com.debateia.application.ports.out.persistence.UserRepository;
 import com.debateia.domain.League;
 import com.debateia.domain.Participation;
@@ -14,17 +15,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-/**
- * Handles matches, combats, scores, etc...
- * @author kjorda
- */
 
 @Service
 @RequiredArgsConstructor
 public class LeagueService implements LeagueUseCase {
     private final LeagueRepository leagueRepository;
-    private final MatchService matchService;
     private final UserRepository userRepository;
+    private final ParticipationRepository partRepository;
+    private final MatchService matchService;
     
     @Override
     public League postLeague(League l) {

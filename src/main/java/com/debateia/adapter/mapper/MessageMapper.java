@@ -1,4 +1,4 @@
-package com.debateia.application.mapper;
+package com.debateia.adapter.mapper;
 
 import com.debateia.adapter.in.web.dto.response.MessageResponseDTO;
 import com.debateia.adapter.out.persistence.entities.MessageEntity;

@@ -1,7 +1,7 @@
 package com.debateia.adapter.in.web;
 
 import com.debateia.application.jwt.TokenData;
-import com.debateia.application.mapper.UserMapper;
+import com.debateia.adapter.mapper.UserMapper;
 import com.debateia.application.service.AuthService;
 
 import com.debateia.domain.User;

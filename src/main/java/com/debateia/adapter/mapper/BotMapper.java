@@ -1,4 +1,4 @@
-package com.debateia.application.mapper;
+package com.debateia.adapter.mapper;
 
 import com.debateia.adapter.in.web.dto.request.BotDTO;
 import com.debateia.adapter.in.web.dto.response.BotResponseDTO;

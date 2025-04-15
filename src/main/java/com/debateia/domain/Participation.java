@@ -1,12 +1,15 @@
 package com.debateia.domain;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Participation {
-    /* Anadir atributos necesarios para trabajar con el dominio que esten en las Entities/DTOs */
-    private Integer aiId;
-    private Integer combatId;
+    private Integer leagueId;
+    private Integer botId;
+    private Integer points;
+    private Integer position;
 }

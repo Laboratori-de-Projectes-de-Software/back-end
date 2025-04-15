@@ -1,7 +1,6 @@
 package com.debateia.application.service;
 
 import com.debateia.application.ports.in.rest.AuthUseCase;
-import com.debateia.adapter.out.persistence.AuthMapper;
 import com.debateia.application.jwt.JwtService;
 import com.debateia.adapter.in.web.dto.request.UpdateCredRequest;
 import com.debateia.adapter.in.web.dto.request.UserDTOLogin;
@@ -35,7 +34,6 @@ public class AuthService implements AuthUseCase {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     @Autowired
-    private AuthMapper authMapper;
     @Value("${spring.application.security.jwt.expiration}")
     private int expiration; // Elimina "final"
 

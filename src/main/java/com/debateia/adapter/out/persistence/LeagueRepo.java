@@ -1,6 +1,6 @@
 package com.debateia.adapter.out.persistence;
 
-import com.debateia.application.mapper.LeagueMapper;
+import com.debateia.adapter.mapper.LeagueMapper;
 import com.debateia.adapter.out.persistence.entities.LeagueEntity;
 import com.debateia.application.ports.out.persistence.LeagueRepository;
 import com.debateia.domain.League;
@@ -9,27 +9,22 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-/**
- *
- * @author kjorda
- */
-
 @Component
 @RequiredArgsConstructor
-public class JpaLeagueRepository implements LeagueRepository {
+public class LeagueRepo implements LeagueRepository {
     
-    private final LeagueJpaRepository leagueRepo;
+    private final LeagueJpaRepository leagueJpa;
     
     @Override
     public Optional<League> findById(Integer leagueId) {
-        return leagueRepo.findById(leagueId)
+        return leagueJpa.findById(leagueId)
                 .map(LeagueMapper::toDomain);
     }
     
     @Override
     public League saveLeague(League lg) {
         LeagueEntity toSave = LeagueMapper.toEntity(lg);
-        LeagueEntity saved = leagueRepo.save(toSave);
+        LeagueEntity saved = leagueJpa.save(toSave);
         
         return LeagueMapper.toDomain(saved);
     }
@@ -37,7 +32,7 @@ public class JpaLeagueRepository implements LeagueRepository {
     
     @Override
     public void deleteById(Integer leagueId) {
-         leagueRepo.deleteById(leagueId);
+         leagueJpa.deleteById(leagueId);
     }
     
     @Override
@@ -45,20 +40,20 @@ public class JpaLeagueRepository implements LeagueRepository {
         LeagueEntity toSave = LeagueMapper.toEntity(lg);
         
         toSave.setId(leagueId);
-        LeagueEntity saved = leagueRepo.save(toSave);
+        LeagueEntity saved = leagueJpa.save(toSave);
         
         return LeagueMapper.toDomain(saved);
     }
     
     @Override
     public List<League> findAll() {
-        List<LeagueEntity> leagues = leagueRepo.findAll();
+        List<LeagueEntity> leagues = leagueJpa.findAll();
         return leagues.stream().map(LeagueMapper::toDomain).toList();
     }
     
     @Override
     public List<League> findByUserId(Integer userId) {
-        List<LeagueEntity> leagues = leagueRepo.findByUser_Id(userId);
+        List<LeagueEntity> leagues = leagueJpa.findByUser_Id(userId);
         return leagues.stream().map(LeagueMapper::toDomain).toList();
     }
 

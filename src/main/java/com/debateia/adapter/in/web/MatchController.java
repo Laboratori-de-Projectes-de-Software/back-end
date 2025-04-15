@@ -2,7 +2,7 @@ package com.debateia.adapter.in.web;
 
 
 import com.debateia.adapter.in.web.dto.response.MessageResponseDTO;
-import com.debateia.application.mapper.MessageMapper;
+import com.debateia.adapter.mapper.MessageMapper;
 import com.debateia.application.service.MatchService;
 import com.debateia.application.service.MessageService;
 import lombok.Getter;

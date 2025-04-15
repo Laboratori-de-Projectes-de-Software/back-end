@@ -1,10 +1,7 @@
 package com.debateia.adapter.out.persistence.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "tbl_participation")
@@ -12,20 +9,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@IdClass(LeagueBotsId.class) // Add this for composite key
 public class ParticipationEntity {
+    
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "participation_id")
-    private Integer id;
-
+    @Column(name = "league_id")
+    private Integer leagueId;
+    
+    @Id
+    @Column(name = "bot_id")
+    private Integer botId;
+    
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "league_id", nullable = false)
+    @JoinColumn(name = "league_id", insertable = false, updatable = false)
     private LeagueEntity league;
-
+    
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bot_id", nullable = false)
+    @JoinColumn(name = "bot_id", insertable = false, updatable = false)
     private BotEntity bot;
-
+    
     private Integer points;
     private Integer position;
 }

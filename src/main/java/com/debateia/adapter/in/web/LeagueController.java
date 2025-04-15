@@ -4,8 +4,8 @@ import com.debateia.adapter.in.web.dto.response.LeagueResponseDTO;
 import com.debateia.adapter.in.web.dto.response.MatchResponseDTO;
 import com.debateia.adapter.in.web.dto.response.ParticipationResponseDTO;
 import com.debateia.application.jwt.JwtService;
-import com.debateia.application.mapper.LeagueMapper;
-import com.debateia.application.mapper.MatchMapper;
+import com.debateia.adapter.mapper.LeagueMapper;
+import com.debateia.adapter.mapper.MatchMapper;
 import com.debateia.application.ports.in.rest.LeagueUseCase;
 import com.debateia.application.service.MatchService;
 import com.debateia.domain.League;
@@ -21,10 +21,6 @@ import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 
-/**
- * Handles creating matches, etc...
- * @author kjorda
- */
 
 @RestController
 @RequestMapping("/league")
