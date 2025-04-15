@@ -1,7 +1,6 @@
 package com.adondeband.back_end_adonde_band.dominio.liga;
 
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
-import com.adondeband.back_end_adonde_band.dominio.jornada.JornadaId;
 import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionId;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;

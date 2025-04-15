@@ -1,6 +1,7 @@
 package com.adondeband.back_end_adonde_band.API.liga;
 
 import com.adondeband.back_end_adonde_band.API.enfrentamiento.EnfrentamientoDTO;
+import com.adondeband.back_end_adonde_band.API.enfrentamiento.EnfrentamientoDtoMapper;
 import com.adondeband.back_end_adonde_band.API.participacion.ParticipacionDTO;
 import com.adondeband.back_end_adonde_band.API.participacion.ParticipacionDtoMapper;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
@@ -46,12 +47,13 @@ public class LigaController {
     // Mappers
     private final LigaDtoMapper ligaDtoMapper;
     private final ParticipacionDtoMapper participacionDtoMapper;
+    private final EnfrentamientoDtoMapper enfrentamientoDtoMapper;
 
 
     @Autowired
     public LigaController(LigaImpl ligaService, LigaDtoMapper ligaDtoMapper, ParticipacionDtoMapper participacionDtoMapper,
                           UsuarioService usuarioService, ImagenService imagenService,
-                          EnfrentamientoService enfrentamientoService, BotService botService) {
+                          EnfrentamientoService enfrentamientoService, BotService botService, EnfrentamientoDtoMapper enfrentamientoDtoMapper) {
         this.ligaService = ligaService;
         this.ligaDtoMapper = ligaDtoMapper;
         this.usuarioService = usuarioService;
@@ -59,6 +61,7 @@ public class LigaController {
         this.enfrentamientoService = enfrentamientoService;
         this.botService = botService;
         this.participacionDtoMapper = participacionDtoMapper;
+        this.enfrentamientoDtoMapper = enfrentamientoDtoMapper;
     }
 
     @GetMapping
@@ -200,14 +203,34 @@ public class LigaController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No hay suficientes participantes");
         }
 
-        liga = ligaService.startLiga(liga);
+        // Crear Enfrentamientos
+        List<Participacion> participaciones = ligaService.obtenerParticipacionesPorLiga(liga.getId());
+        List <EnfrentamientoId> enfrentamientosId = enfrentamientoService.crearEnfrentamientosLiga(participaciones, liga.getId());
+
+        liga = ligaService.startLiga(liga, enfrentamientosId);
 
         return ResponseEntity.status(HttpStatus.OK).body("Liga iniciada");
     }
 
     @GetMapping("/{leagueId}/match")
-    public ResponseEntity<List<EnfrentamientoDTO>> obtenerEnfrentamientos(@PathVariable String leagueId) {
-        //TODO
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null);
+    public ResponseEntity<List<EnfrentamientoDTO>> obtenerEnfrentamientos(@PathVariable Long leagueId) {
+
+        // Obtener la liga
+        List<Liga> ligas = ligaService.obtenerLigaPorId(new LigaId(leagueId));
+        // Comprobar si la liga existe
+
+        if (ligas.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        //Obtener la lista de enfrentamientos de la liga
+        List<Enfrentamiento> enfrentamientos = enfrentamientoService.obtenerEnfrentamientosPorLiga(new LigaId(leagueId));
+
+        // Convertir a EnfrentamientoDTO
+        List<EnfrentamientoDTO> enfrentamientosDTO = new ArrayList<>();
+        for (Enfrentamiento enfrentamiento : enfrentamientos) {
+            enfrentamientosDTO.add(enfrentamientoDtoMapper.toDTO(enfrentamiento));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(enfrentamientosDTO);
     }
 }

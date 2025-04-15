@@ -2,6 +2,9 @@ package com.adondeband.back_end_adonde_band.dominio.liga;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
+import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento;
+import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
+import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoService;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
 import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionService;
@@ -30,6 +33,8 @@ public class TestLigaService {
     private BotService botService;
     @Autowired
     private ParticipacionService participacionService;
+    @Autowired
+    private EnfrentamientoService enfrentamientoService;
 
     @Test
     @Transactional
@@ -117,6 +122,62 @@ public class TestLigaService {
     public void testGetLigasByUser() {
         //TODO
     }
+
+//    @Test
+//    @Transactional
+//    public void testGetEnfrentamientos() {
+//        // Crear liga
+//        Liga liga = new Liga();
+//        liga.setNombre("La liga EA Sports");
+//        liga.setEstado(ESTADO.PENDIENTE);
+//        liga.setFechaInicio(LocalDateTime.now());
+//        liga.setFechaFin(LocalDateTime.now());
+//        liga.setImagen(null);
+//        liga.setParticipaciones(new ArrayList<>());
+//
+//        // Crear jornadas
+//        List<JornadaId> jornadaIds = new ArrayList<>();
+//        List<EnfrentamientoId> enfrentamientoIdsTodos = new ArrayList<>();
+//        for (int i = 1; i <= 5; i++) {
+//            Jornada jornada = new Jornada();
+//            jornada.setLiga(liga.getId());
+//            jornada.setNumJornada(i);
+//            jornadaIds.add(jornada.getId());
+//            // Crear enfrentamientos
+//            List<EnfrentamientoId> enfrentamientoIds = new ArrayList<>();
+//            for (int j = 1; j <= 5; j++) {
+//                Enfrentamiento enfrentamiento = new Enfrentamiento();
+//                enfrentamiento.setLocal(new BotId((long) i));
+//                enfrentamiento.setVisitante(new BotId((long) j));
+//                enfrentamiento.setRonda(jornada.getNumJornada());
+//                enfrentamiento.setEstado(ESTADO.PENDIENTE);
+//
+//                enfrentamientoIds.add(enfrentamiento.getId());
+//                enfrentamientoIdsTodos.add(enfrentamiento.getId());
+//                // Save en jpa
+//                enfrentamientoService.insertarEnfrentamiento(enfrentamiento);
+//            }
+//            // Guardar enfrentamientos en la jornada
+//            jornada.setEnfrentamientos(enfrentamientoIds);
+//            // Save jornada en jpa
+//            jornadaService.crearJornada(jornada);
+//        }
+//
+//        // act
+//        Liga ligaSaved = ligaService.crearLiga(liga);
+//        List<EnfrentamientoId> idsEnfrentamientosJornada = new ArrayList<>();
+//        List<Enfrentamiento> enfrentamientos = new ArrayList<>();
+//        for (EnfrentamientoId id : idsEnfrentamientosJornada) {
+//            enfrentamientos.add(enfrentamientoService.obtenerEnfrentamiento(id.value()).getFirst());
+//        }
+//
+//
+//        // assert
+//        assertNotNull("El id de la liga no debe ser null", ligaSaved.getId());
+//        assertEquals(liga.getNombre(), ligaSaved.getNombre());
+//        assertEquals(enfrentamientoIdsTodos.size(), enfrentamientos.size());
+//        assertEquals(enfrentamientoIdsTodos.getFirst(), enfrentamientos.getFirst().getId());
+//    }
 
 //    @Test
 //    @Transactional

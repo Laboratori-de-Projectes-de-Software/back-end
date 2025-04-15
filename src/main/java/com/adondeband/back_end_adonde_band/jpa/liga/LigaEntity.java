@@ -39,6 +39,7 @@ public class LigaEntity {
 
     @ManyToOne
     private UsuarioEntity usuario;
+
     @OneToMany(mappedBy = "liga")
     private List<EnfrentamientoEntity> enfrentamientos;
 }

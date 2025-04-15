@@ -12,6 +12,7 @@ import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
 import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaMapper;
+import jakarta.persistence.Entity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -28,6 +29,18 @@ public interface LigaJpaMapper {
 
     // Mapea de Liga a LigaEntity
     LigaEntity toEntity(Liga liga);
+
+
+    default LigaEntity mapeo (LigaId value){
+        if (value == null) {
+            return null;
+        }
+        LigaEntity ligaEntity = new LigaEntity();
+        ligaEntity.setId(value.value());
+
+
+        return ligaEntity;
+    }
 
     default Long map(LigaId value){
         if (value == null) {

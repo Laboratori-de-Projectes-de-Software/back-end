@@ -1,5 +1,8 @@
 package com.adondeband.back_end_adonde_band.dominio.enfrentamiento;
 
+import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
+import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
+import com.adondeband.back_end_adonde_band.dominio.liga.LigaService;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
@@ -16,9 +19,11 @@ import java.util.List;
 public class EnfrentamientoImpl implements EnfrentamientoService {
 
     private final EnfrentamientoPort enfrentamientoPort;
+    private final LigaService ligaService;
 
-    public EnfrentamientoImpl(EnfrentamientoPort enfrentamientoPort) {
+    public EnfrentamientoImpl(EnfrentamientoPort enfrentamientoPort, LigaService ligaService) {
         this.enfrentamientoPort = enfrentamientoPort;
+        this.ligaService = ligaService;
     }
 
     @Override
@@ -31,6 +36,13 @@ public class EnfrentamientoImpl implements EnfrentamientoService {
         return enfrentamientoPort.findById(idPartido);
     }
 
+    @Override
+    public List<Enfrentamiento> obtenerEnfrentamientosPorLiga(LigaId ligaId) {
+
+        Liga liga = ligaService.obtenerLigaPorId(ligaId).getFirst();
+        return enfrentamientoPort.findEnfrentamientosByLiga(liga);
+    }
+    @Override
     public List<EnfrentamientoId> crearEnfrentamientosLiga(List<Participacion> participaciones, LigaId ligaId){
         // Obtener el número de jornadas, enfrentamientos y enfrentamientos por jornada
         int numJornadas = participaciones.size() % 2 == 0 ? participaciones.size() - 1 : participaciones.size();

@@ -12,6 +12,7 @@ public interface EnfrentamientoService {
 
     List<Enfrentamiento> obtenerEnfrentamiento(Long idPartido);
 
+    List<Enfrentamiento> obtenerEnfrentamientosPorLiga(LigaId ligaId);
     List<EnfrentamientoId> crearEnfrentamientosLiga(List<Participacion> participaciones, LigaId ligaId);
     Enfrentamiento actualizarConversacion(EnfrentamientoId enfrentamientoId, Conversacion conversacion);
 }

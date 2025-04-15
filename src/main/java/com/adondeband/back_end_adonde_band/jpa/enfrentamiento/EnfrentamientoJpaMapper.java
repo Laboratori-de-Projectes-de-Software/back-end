@@ -7,7 +7,6 @@ import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import com.adondeband.back_end_adonde_band.jpa.bot.BotEntity;
 import com.adondeband.back_end_adonde_band.jpa.bot.BotJpaMapper;
-import com.adondeband.back_end_adonde_band.jpa.jornada.JornadaJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.liga.LigaEntity;
 import com.adondeband.back_end_adonde_band.jpa.liga.LigaJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
@@ -18,9 +17,9 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring",
         uses = {
-        JornadaJpaMapper.class,
         BotJpaMapper.class,
         LigaJpaMapper.class,
+        //ParticipacionJpaMapper.class
 })
 public interface EnfrentamientoJpaMapper {
     EnfrentamientoJpaMapper INSTANCE = Mappers.getMapper(EnfrentamientoJpaMapper.class);
@@ -43,16 +42,5 @@ public interface EnfrentamientoJpaMapper {
         if (id == null) return null;
 
         return new EnfrentamientoId(id);
-    }
-
-    // EnfrentamientoJpaMapper.java
-    default LigaEntity ligaIdToLigaEntity(LigaId ligaId) {
-        if (ligaId == null) {
-            return null;
-        }
-
-        LigaEntity ligaEntity = new LigaEntity();
-        ligaEntity.setId(ligaId.value()); // Asignar el valor del LigaId al campo id de LigaEntity
-        return ligaEntity;
     }
 }

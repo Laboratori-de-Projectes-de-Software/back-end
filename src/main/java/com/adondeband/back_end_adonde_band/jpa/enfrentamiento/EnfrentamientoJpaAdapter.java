@@ -6,6 +6,10 @@ import com.adondeband.back_end_adonde_band.dominio.conversacion.Conversacion;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoPort;
+import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
+import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
+import com.adondeband.back_end_adonde_band.jpa.liga.LigaEntity;
+import com.adondeband.back_end_adonde_band.jpa.liga.LigaJpaMapper;
 import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.jpa.bot.BotEntity;
 import com.adondeband.back_end_adonde_band.jpa.conversacion.ConversacionJpaMapper;
@@ -19,14 +23,16 @@ import java.util.stream.Collectors;
 public class EnfrentamientoJpaAdapter implements EnfrentamientoPort {
     private final EnfrentamientoJpaRepository enfrentamientoJpaRepository;
     private final EnfrentamientoJpaMapper enfrentamientoMapper;
+    private final LigaJpaMapper ligaJpaMapper;
     private final ConversacionJpaMapper conversacionJpaMapper;
 
-    public EnfrentamientoJpaAdapter(final EnfrentamientoJpaRepository enfrentamientoJpaRepository,
-                                    final EnfrentamientoJpaMapper enfrentamientoMapper, final ConversacionJpaMapper conversacionJpaMapper) {
+    public EnfrentamientoJpaAdapter(EnfrentamientoJpaRepository enfrentamientoJpaRepository, EnfrentamientoJpaMapper enfrentamientoMapper, LigaJpaMapper ligaJpaMapper, ConversacionJpaMapper conversacionJpaMapper) {
         this.enfrentamientoJpaRepository = enfrentamientoJpaRepository;
         this.enfrentamientoMapper = enfrentamientoMapper;
+        this.ligaJpaMapper = ligaJpaMapper;
         this.conversacionJpaMapper = conversacionJpaMapper;
     }
+
 
     @Override
     @Transactional
@@ -55,6 +61,19 @@ public class EnfrentamientoJpaAdapter implements EnfrentamientoPort {
     }
 
     @Override
+    public List<Enfrentamiento> findEnfrentamientosByLiga(Liga liga) {
+
+        LigaEntity ligaEntity = ligaJpaMapper.toEntity(liga);
+
+        List<EnfrentamientoEntity> enfrentamientoEntities = enfrentamientoJpaRepository.findByLiga(ligaEntity);
+
+        List<Enfrentamiento> enfrentamientos = enfrentamientoEntities
+                .stream()
+                .map(enfrentamientoMapper::toDomain)
+                .collect(Collectors.toList());
+        return enfrentamientos;
+    }
+
     @Transactional
     public Enfrentamiento actualizarConversacion(EnfrentamientoId enfrentamientoId, Conversacion conversacion) {
         // Buscar Enfrentamiento
