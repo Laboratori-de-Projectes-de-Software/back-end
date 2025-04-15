@@ -142,7 +142,6 @@ public class LigaServiceImpl implements LigaService{
 
 
 
-
     @Override
     public LeagueResponseDTO deleteLiga(Long id) {
         Liga league = ligaRepository.findById(id)

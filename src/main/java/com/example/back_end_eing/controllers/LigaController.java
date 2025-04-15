@@ -72,7 +72,6 @@ public class LigaController {
     }
 
 
-
     @GetMapping("/{leagueId}")
     public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Long leagueId) {
 

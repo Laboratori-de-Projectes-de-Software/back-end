@@ -17,6 +17,8 @@ public interface LigaService {
 
     List<LeagueResponseDTO> obtenerLigas();
 
+    List<LeagueResponseDTO> obtenerLigasByUserId(Long userId);
+
     LeagueResponseDTO getLiga(Long id);
 
     List<LeagueResponseDTO> obtenerLigasByUserId(Long userId);
@@ -28,4 +30,6 @@ public interface LigaService {
     void registerBotToLeague(Long botId, Long leagueId);
 
     void actualizarLiga(LeagueDTO ligadto, Long leagueId);
+
+
 }
