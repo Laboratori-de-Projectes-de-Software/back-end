@@ -110,7 +110,7 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
                 .getUsuario()
                 .getUserId();
         if(!currentOwner.equals(liga.getUsuario().value())){
-            throw new MetodoNoPermitido("No puedes actualizar una liga de otro usuarip");
+            throw new MetodoNoPermitido("No puedes actualizar una liga de otro usuario");
         }
         LigaJpaEntity ligaJpa = LigaJpaEntity.builder()
                 .ligaId(id)
@@ -119,7 +119,7 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
                         usuarioJpaAdapter.getUser(liga.getUsuario().value())
                                 .orElseThrow()
                 )
-                .estado(Estado.PENDANT)
+                .estado(liga.getEstado())
                 .rondas(liga.getRondas())
                 .matchTime(liga.getMatchTime())
                 .botsLiga(liga.getBotsLiga()

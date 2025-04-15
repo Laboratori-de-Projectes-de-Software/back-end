@@ -13,6 +13,7 @@ import org.example.backend.databaseapi.application.dto.resultado.ParticipationDT
 import org.example.backend.databaseapi.application.port.in.liga.*;
 import org.example.backend.databaseapi.application.service.JwtService;
 import org.example.backend.databaseapi.domain.liga.Liga;
+import org.example.backend.databaseapi.domain.partida.Estado;
 import org.example.backend.databaseapi.domain.usuario.UsuarioId;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -81,6 +82,8 @@ public class LigaController {
         Liga liga=ligaDTOMapper.toLiga(request);
         String jwt = jwtToken.substring(7);
         liga.setUsuario(new UsuarioId(jwtService.extractUserId(jwt)));
+        //Si se hacen cambios a una liga significa que no ha empezado
+        liga.setEstado(Estado.PENDANT);
         liga=actualizarLigaPort.actualizarLiga(liga,leagueId);
         return ResponseEntity.ok(ligaDTOMapper.toLeagueDTOResponse(liga));
     }

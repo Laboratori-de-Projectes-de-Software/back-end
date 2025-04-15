@@ -6,6 +6,8 @@ import lombok.*;
 import org.example.backend.databaseapi.application.dto.partida.Result;
 import org.example.backend.databaseapi.domain.partida.Estado;
 import org.example.backend.databaseapi.jpa.liga.LigaJpaEntity;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedBy;
 
 
@@ -37,6 +39,7 @@ public class PartidaJpaEntity {
     private Result resultado;
 
     @ManyToOne(optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="id_liga")
     private LigaJpaEntity liga;
 

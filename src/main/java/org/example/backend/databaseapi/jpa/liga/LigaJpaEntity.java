@@ -6,6 +6,8 @@ import lombok.*;
 import org.example.backend.databaseapi.domain.partida.Estado;
 import org.example.backend.databaseapi.jpa.bot.BotJpaEntity;
 import org.example.backend.databaseapi.jpa.usuario.UsuarioJpaEntity;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class LigaJpaEntity {
     @Enumerated(EnumType.STRING)
     private Estado estado;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "bot_liga",
             joinColumns = @JoinColumn(name = "id_liga"),
