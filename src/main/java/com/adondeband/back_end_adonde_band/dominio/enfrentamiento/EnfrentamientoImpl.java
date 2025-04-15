@@ -4,6 +4,8 @@ import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
+import com.adondeband.back_end_adonde_band.dominio.conversacion.Conversacion;
+import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,10 +21,12 @@ public class EnfrentamientoImpl implements EnfrentamientoService {
         this.enfrentamientoPort = enfrentamientoPort;
     }
 
+    @Override
     public Enfrentamiento insertarEnfrentamiento(Enfrentamiento enfrentamiento) {
         return enfrentamientoPort.save(enfrentamiento);
     }
 
+    @Override
     public List<Enfrentamiento> obtenerEnfrentamiento(Long idPartido) {
         return enfrentamientoPort.findById(idPartido);
     }
@@ -88,5 +92,13 @@ public class EnfrentamientoImpl implements EnfrentamientoService {
             }
         }
         return enfrentamientosReturn;
+    }
+    
+    @Override
+    public Enfrentamiento actualizarConversacion(EnfrentamientoId enfrentamientoId, Conversacion conversacion) {
+        if (obtenerEnfrentamiento(enfrentamientoId.value()).isEmpty()) {
+            throw new NotFoundException("Este enfrentamiento no existe");
+        }
+        return enfrentamientoPort.actualizarConversacion(enfrentamientoId, conversacion);
     }
 }

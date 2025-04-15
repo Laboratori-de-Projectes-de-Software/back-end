@@ -36,12 +36,12 @@ public interface BotJpaMapper {
             return null;
         }
         BotEntity botEntity = new BotEntity();
-        botEntity.setNombre(botId.value());
+        botEntity.setId( botId.value());
         return botEntity;
     }
 
     // Mapeo de atributos
-    default BotId toBotId(String value) {
+    default BotId toBotId(Long value) {
         if (value == null) {
             return null;
         }
@@ -53,10 +53,10 @@ public interface BotJpaMapper {
         if (botEntity == null) {
             return null;
         }
-        return new BotId(botEntity.getNombre());
+        return new BotId(botEntity.getId());
     }
 
-    default String toBotIdString(BotId id) {
+    default Long toBotId(BotId id) {
         if (id == null) {
             return null;
         }

@@ -22,6 +22,7 @@ public interface BotDtoMapper {
     Bot toDomain(BotDTOResponse botDTO);
 
     // Mapea de Bot a BotDTO
+    @Mapping(target = "botId", source = "id")
     @Mapping(target = "name", source = "nombre")
     @Mapping(target = "urlImage", source = "imagen")
     @Mapping(target = "description", source = "cualidad")
@@ -31,11 +32,15 @@ public interface BotDtoMapper {
     BotDTOResponse toDTO(Bot bot);
 
     // Mapeo de atributos
-    default String toNombre(BotId id) {
-        return id.value();
-    }
+    default BotId toBotId(Long id) {
+        return new BotId(id);}
 
-    default BotId toBotId(String id) { return new BotId(id);}
+    default Long toLong(BotId id) {
+        if (id == null) {
+            return null;
+        }
+
+        return id.value();}
 
     default String toImagenStr(Imagen img){
         return img.getRuta();

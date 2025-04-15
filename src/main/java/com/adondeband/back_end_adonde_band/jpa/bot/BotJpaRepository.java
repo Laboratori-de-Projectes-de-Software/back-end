@@ -7,10 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BotJpaRepository extends JpaRepository<BotEntity, String> {
-    List<BotEntity> findByNombre(String nombre);
-
+public interface BotJpaRepository extends JpaRepository<BotEntity, Long> {
     List<BotEntity> findByUsuario(UsuarioEntity usuario);
 
-    BotEntity getBotEntityByNombre(String nombre);
+    BotEntity findByNombre(String nombre);
+
 }
