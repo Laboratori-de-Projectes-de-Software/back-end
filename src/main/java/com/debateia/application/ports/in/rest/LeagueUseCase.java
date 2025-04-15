@@ -10,11 +10,15 @@ import java.util.List;
  */
 public interface LeagueUseCase {
     
+    // Post one league
+    public League postLeague(League league);
+
     // Get all leagues
     public List<League> getAllLeagues();
     
     // Get one league
     public League getLeague(int leagueId);
+    
     
     // Update one league
     public League updateLeague(int leagueId, League l);

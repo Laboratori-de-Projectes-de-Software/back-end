@@ -21,6 +21,11 @@ public class LeagueService implements LeagueUseCase {
     private final MatchService matchService;
     
     @Override
+    public League postLeague(League l) {
+        return leagueRepository.saveLeague(l);
+    }
+    
+    @Override
     public League getLeague(int leagueId) {
         return leagueRepository.findByLeagueId(leagueId);
     }

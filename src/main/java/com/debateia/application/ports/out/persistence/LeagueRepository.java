@@ -8,4 +8,5 @@ import com.debateia.domain.League;
  */
 public interface LeagueRepository {
     public League findByLeagueId(int leagueId);
+    public League saveLeague(League l);
 }

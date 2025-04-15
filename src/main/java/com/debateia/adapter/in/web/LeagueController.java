@@ -1,6 +1,9 @@
 package com.debateia.adapter.in.web;
+import com.debateia.adapter.in.web.dto.request.LeagueDTO;
 import com.debateia.adapter.in.web.dto.response.LeagueResponseDTO;
 import com.debateia.adapter.in.web.dto.response.MatchResponseDTO;
+import com.debateia.adapter.in.web.dto.response.ParticipationResponseDTO;
+import com.debateia.application.jwt.JwtService;
 import com.debateia.application.mapper.LeagueMapper;
 import com.debateia.application.mapper.MatchMapper;
 import com.debateia.application.ports.in.rest.LeagueUseCase;
@@ -13,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.http.HttpHeaders;
 
 /**
  * Handles creating matches, etc...
@@ -25,13 +29,78 @@ import java.util.List;
 public class LeagueController {
     private final LeagueUseCase leagueUseCase;
     private final MatchService matchService;
-
-    @GetMapping("/{id}")
-    public LeagueResponseDTO getLeague(@PathVariable Integer id) {
-        League lg = leagueUseCase.getLeague(id);
-        return LeagueMapper.toLeagueResponseDTO(lg);
+    private final JwtService jwtService;
+   
+    // TODO: TRY/CATCH
+    
+    @PostMapping
+    public ResponseEntity<LeagueResponseDTO> postLeague(
+            @RequestBody LeagueDTO league,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication) {
+        
+        if (authentication == null || !authentication.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid auth header");
+        }
+        final String authToken = authentication.substring(7);
+        final Integer userId = jwtService.extractUserId(authToken);
+        
+        League toCreate = LeagueMapper.toDomain(league);
+        toCreate.setUserId(userId);
+        
+        League created = leagueUseCase.postLeague(toCreate);
+        
+        return ResponseEntity.ok(LeagueMapper.toLeagueResponseDTO(created));
     }
-
+    
+    @GetMapping
+    public ResponseEntity<List<LeagueResponseDTO>> getAllLeagues() {
+        return ResponseEntity.ok(null);
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<LeagueResponseDTO> getLeague(@PathVariable Integer id) {
+        League lg = leagueUseCase.getLeague(id);
+        return ResponseEntity.ok(LeagueMapper.toLeagueResponseDTO(lg));
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<LeagueResponseDTO> updateLeague(
+            @PathVariable Integer id,
+            @RequestBody LeagueDTO league,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication) {
+        
+        if (authentication == null || !authentication.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid auth header");
+        }
+        final String authToken = authentication.substring(7);
+        final Integer userId = jwtService.extractUserId(authToken);
+        
+        
+        
+        return ResponseEntity.ok(null);
+    }
+    
+    @PostMapping("/{id}/bot")
+    public ResponseEntity<?> registerBot(@RequestBody Integer botId) {
+        
+        
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    
+    @GetMapping("/{id}/leaderboard")
+    public ResponseEntity<List<ParticipationResponseDTO>> getScores(@PathVariable Integer id) {
+        return ResponseEntity.ok(null);
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<LeagueResponseDTO> deleteLeague(
+            @PathVariable Integer id,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication) {
+        
+        
+        return ResponseEntity.ok(null);
+    }
+    
     @PostMapping("/{id}/start")
     public ResponseEntity<?> startLeague(@PathVariable Integer id) {
         leagueUseCase.startLeague(id);

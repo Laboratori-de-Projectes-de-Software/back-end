@@ -23,5 +23,12 @@ public class JpaLeagueRepository implements LeagueRepository {
         LeagueEntity le = leagueRepo.findById(leagueId).orElse(null);
         return LeagueMapper.toDomain(le);
     }
+    
+    @Override
+    public League saveLeague(League lg) {
+        LeagueEntity toSave = LeagueMapper.toEntity(lg);
+        LeagueEntity saved = leagueRepo.save(toSave);
+        return LeagueMapper.toDomain(saved);
+    }
 
 }
