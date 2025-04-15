@@ -132,8 +132,8 @@ public class LigaController {
         }
 
         try {
-            ligaService.actualizarLiga(leagueDTO, leagueId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new LeagueResponseDTO());
+            LeagueResponseDTO responseDTO = ligaService.actualizarLiga(leagueDTO, leagueId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LeagueResponseDTO());
         }
