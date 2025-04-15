@@ -19,4 +19,6 @@ public interface LigaService {
     Liga addBotToLiga(LigaId ligaId, BotId botId);
 
     List<Participacion> obtenerParticipacionesPorLiga(LigaId ligaId);
+
+    Liga startLiga(Liga liga);
 }
