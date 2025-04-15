@@ -48,7 +48,7 @@ public class LigaImpl implements LigaService {
             throw new NotFoundException("Este bot no existe");
         }
 
-        if (obtenerLigaPorId(ligaId).isEmpty()) {
+        if (obtenerLigaPorId(ligaId) == null) {
             throw new NotFoundException("Esta liga no existe");
         }
 
