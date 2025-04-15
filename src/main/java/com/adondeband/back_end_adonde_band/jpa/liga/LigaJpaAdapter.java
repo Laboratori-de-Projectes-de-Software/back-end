@@ -1,7 +1,7 @@
 package com.adondeband.back_end_adonde_band.jpa.liga;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
-import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento;
+import org.springframework.data.domain.Sort;
 import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
@@ -85,19 +85,16 @@ public class LigaJpaAdapter implements LigaPort {
         if (ligasFound.isEmpty()) throw new NotFoundException("Este liga no existe");
 
         // Obtener las participaciones de la liga
-        List<ParticipacionEntity> participacionEntity = participacionJpaRepository.findByLiga(ligasFound.getFirst());
+        Sort sort = Sort.by(
+                Sort.Order.asc("posicion"),
+                Sort.Order.desc("numVictorias")
+        );
+        List<ParticipacionEntity> participacionEntity = participacionJpaRepository.findByLiga(ligasFound.getFirst(), sort);
 
-        List<Participacion> participaciones = participacionEntity
+        return participacionEntity
                 .stream()
                 .map(participacionJpaMapper::toDomain)
                 .toList();
-
-        return participaciones;
-
-//        return  participacionJpaRepository.findByLiga(ligasFound.getFirst())
-//                .stream()
-//                .map(participacionJpaMapper::toDomain)
-//                .collect(Collectors.toList());
     }
 
     @Override
@@ -169,13 +166,15 @@ public class LigaJpaAdapter implements LigaPort {
     @Override
     @Transactional
     public Liga addBotToLiga(LigaId ligaId, BotId botId) {
+        // obtener Liga y bot
         LigaEntity ligaEntity = ligaJpaRepository.getLigaEntityById(ligaId.value());
-        if (ligaEntity == null) throw new NotFoundException("Esta liga no existe");
-
         BotEntity botEntity = botJpaRepository.findById(botId.value()).orElse(null);
-        if (botEntity == null) throw new NotFoundException("El bot " + botId.value() + " no existe");
+
+        // Obtener participaciones por liga
+        List <ParticipacionEntity> participaciones = ligaEntity.getParticipaciones();
 
         ParticipacionEntity nuevaParticipacion = new ParticipacionEntity(botEntity, ligaEntity);
+        nuevaParticipacion.setPosicion(participaciones.size());
         participacionJpaRepository.save(nuevaParticipacion);
         ligaEntity.getParticipaciones().add(nuevaParticipacion);
 
