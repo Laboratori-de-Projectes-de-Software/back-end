@@ -66,6 +66,12 @@ public class LigaController {
         return ligaService.obtenerLigas();
     }
 
+    @GetMapping
+    public List<LeagueResponseDTO> obtenerLigasByUserId(@RequestParam Long owner) {
+        return ligaService.obtenerLigasByUserId(owner);
+    }
+
+
 
     @GetMapping("/{leagueId}")
     public ResponseEntity<LeagueResponseDTO> getLiga(@PathVariable Long leagueId) {
@@ -77,11 +83,11 @@ public class LigaController {
     }
 
     @DeleteMapping("/{leagueId}")
-    public ResponseEntity<Void> deleteLiga(@PathVariable Long leagueId) {
+    public ResponseEntity<LeagueResponseDTO> deleteLiga(@PathVariable Long leagueId) {
 
-        ligaService.deleteLiga(leagueId);
+        LeagueResponseDTO responseDTO = ligaService.deleteLiga(leagueId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
 

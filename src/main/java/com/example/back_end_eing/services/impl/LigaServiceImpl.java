@@ -109,15 +109,50 @@ public class LigaServiceImpl implements LigaService{
         return leagueResponseDTOS;
     }
 
+    @Override
+    public List<LeagueResponseDTO> obtenerLigasByUserId(Long userId) {
+
+        usuarioRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(Math.toIntExact(userId)));
+
+        List<Liga> ligas = ligaRepository.findAllByUserId(userId);
+
+        List<LeagueResponseDTO> leagueResponseDTOS = new ArrayList<>();
+        for(Liga liga : ligas){
+
+            List<Bot> bots = botRepository.findByLeague(liga.getId());
+
+            leagueResponseDTOS.add(
+                    LeagueResponseDTO.builder()
+                            .leagueId(liga.getId().intValue())
+                            .status(liga.getEstado())
+                            .name(liga.getNombreLiga())
+                            .user(liga.getUsuario().getNombreUsuario())
+                            .urlImagen(liga.getImagen())
+                            .rounds(liga.getNumJornadas())
+                            .matchTime(liga.getMatchTime())
+                            .bots(bots.stream().map((bot -> bot.getId().intValue())).toList())
+                            .build()
+            );
+        }
+
+        return leagueResponseDTOS;
+    }
+
+
+
+
 
     @Override
-    public void deleteLiga(Long id) {
+    public LeagueResponseDTO deleteLiga(Long id) {
         Liga league = ligaRepository.findById(id)
                 .orElseThrow(() -> new LigaNotFoundException(id));
-        List<Clasificacion> clasificaciones = clasificacionRepository.findByLigaId(id);
+        List<Integer> bots = clasificacionRepository.findBotIdsByLigaId(id);
+
+        LeagueResponseDTO responseDTO = new LeagueResponseDTO(league,bots);
 
         ligaRepository.delete(league);
-        clasificacionRepository.deleteAll(clasificaciones);
+        return responseDTO;
     }
 
     // TODO Añadir error por liga repetida -> por lo que parece no hay atributos unicos, por lo que no hay repetición de ligas??
