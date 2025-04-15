@@ -69,7 +69,7 @@ public class LigaServiceImpl implements LigaService{
         Liga league = ligaRepository.findById(id)
                 .orElseThrow(() -> new LigaNotFoundException(id));
 
-        List<Integer> bots = clasificacionRepository.findBotIdsByLigaId(id);
+        List<Long> bots = clasificacionRepository.findBotIdsByLigaId(id);
 
         return new LeagueResponseDTO(league, bots);
 
@@ -101,7 +101,7 @@ public class LigaServiceImpl implements LigaService{
                             .urlImagen(liga.getImagen())
                             .rounds(liga.getNumJornadas())
                             .matchTime(liga.getMatchTime())
-                            .bots(bots.stream().map((bot -> bot.getId().intValue())).toList())
+                            .bots(bots.stream().map((Bot::getId)).toList())
                             .build()
             );
         }
@@ -131,7 +131,7 @@ public class LigaServiceImpl implements LigaService{
                             .urlImagen(liga.getImagen())
                             .rounds(liga.getNumJornadas())
                             .matchTime(liga.getMatchTime())
-                            .bots(bots.stream().map((bot -> bot.getId().intValue())).toList())
+                            .bots(bots.stream().map((Bot::getId)).toList())
                             .build()
             );
         }
@@ -146,7 +146,7 @@ public class LigaServiceImpl implements LigaService{
     public LeagueResponseDTO deleteLiga(Long id) {
         Liga league = ligaRepository.findById(id)
                 .orElseThrow(() -> new LigaNotFoundException(id));
-        List<Integer> bots = clasificacionRepository.findBotIdsByLigaId(id);
+        List<Long> bots = clasificacionRepository.findBotIdsByLigaId(id);
 
         LeagueResponseDTO responseDTO = new LeagueResponseDTO(league,bots);
 
@@ -154,21 +154,22 @@ public class LigaServiceImpl implements LigaService{
         return responseDTO;
     }
 
-    // TODO Añadir error por liga repetida -> por lo que parece no hay atributos unicos, por lo que no hay repetición de ligas??
-    public void LigaRegistro(LeagueDTO ligaDto){
+    public LeagueResponseDTO LigaRegistro(LeagueDTO ligaDto){
         // solo un número de bots par, controlar en el front-end números > 0
-        if (ligaDto.getBots().length % 2 != 0) {
-            throw new IncorrectNumBotsException(ligaDto.getBots().length);
+        if (ligaDto.getBots().size() % 2 != 0) {
+            throw new IncorrectNumBotsException(ligaDto.getBots().size());
         }
         Usuario usuario = getUsuario(ligaDto.getCreador());
         // establecer estado = ABIERTA por defecto si el usuario no lo especifica
 
         String estado = EstadoLigaConstants.ABIERTA;
-        Liga liga = new Liga(ligaDto.getName(), ligaDto.getRounds(), ligaDto.getBots().length, estado, ligaDto.getUrlImagen(), 1, usuario, ligaDto.getMatchTime());
-        ligaRepository.save(liga);
+        Liga liga = new Liga(ligaDto.getName(), ligaDto.getRounds(), ligaDto.getBots().size(), estado, ligaDto.getUrlImagen(), 1, usuario, ligaDto.getMatchTime());
+        Liga saved = ligaRepository.save(liga);
+        //se acaba de crear la liga no ntendrá bots asignados
+        return new LeagueResponseDTO(saved, new ArrayList<>());
     }
 
-    public void actualizarLiga(LeagueDTO ligaDto, Long id){
+    public LeagueResponseDTO actualizarLiga(LeagueDTO ligaDto, Long id){
         Optional<Liga> consulta = null;
         consulta = ligaRepository.findById(id);
         if(!consulta.isPresent()){
@@ -182,21 +183,22 @@ public class LigaServiceImpl implements LigaService{
         }
 
         //el nuevo numero de bots no puede ser menor a los bots inscritos actualmente a la liga, además, ha de ser par
-        if (ligaDto.getBots().length % 2 != 0) {
-            throw new IncorrectNumBotsException(ligaDto.getBots().length);
+        if (ligaDto.getBots().size() % 2 != 0) {
+            throw new IncorrectNumBotsException(ligaDto.getBots().size());
         }
         List<Clasificacion> bots = clasificacionRepository.findByLigaId(id);
-        if(ligaDto.getBots().length < bots.size()){
-            throw new IncorrectNumBotsException(ligaDto.getBots().length);
+        if(ligaDto.getBots().size() < bots.size()){
+            throw new IncorrectNumBotsException(ligaDto.getBots().size());
         }
 
         liga.setNombreLiga(ligaDto.getName());
         liga.setImagen(ligaDto.getUrlImagen());
         liga.setNumJornadas(ligaDto.getRounds());
-        liga.setNumBots(ligaDto.getBots().length);
+        liga.setNumBots(ligaDto.getBots().size());
         liga.setUsuario(user.get());
 
-        ligaRepository.save(liga);
+        Liga saved = ligaRepository.save(liga);
+        return new LeagueResponseDTO(saved, ligaDto.getBots());
     }
 
 

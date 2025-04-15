@@ -19,10 +19,10 @@ public class LeagueResponseDTO {
     private String urlImagen;
     private Integer rounds;
     private Long matchTime;
-    private List<Integer> bots;
+    private List<Long> bots;
 
 
-    public LeagueResponseDTO(Liga liga, List<Integer> bots) {
+    public LeagueResponseDTO(Liga liga, List<Long> bots) {
 
         this.leagueId = Math.toIntExact(liga.getId());
         this.status = liga.getEstado();

@@ -30,34 +30,28 @@ public class LigaController {
     @Autowired
     private EnfrentamientoService enfrentamientoService;
 
-
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    @PostMapping
-    public ResponseEntity<String> registrarLiga(@RequestParam String nombreLiga,
-                                                @RequestParam String urlImagen,
-                                                @RequestParam Integer numJornadas,
-                                                @RequestParam long matchTime,
-                                                @RequestParam Integer numBots,
-                                                @RequestParam int id) {
+    @PutMapping
+    public ResponseEntity<LeagueResponseDTO> registrarLiga(@RequestBody LeagueDTO leagueDTO) {
         String urlImagenCloudinary;
-        if (urlImagen == null || urlImagen.isEmpty()) {
+        if (leagueDTO.getUrlImagen() == null || leagueDTO.getUrlImagen().isEmpty()) {
             urlImagenCloudinary = null;
         } else {
             try {
-                urlImagenCloudinary = cloudinaryService.uploadBase64(urlImagen);
+                urlImagenCloudinary = cloudinaryService.uploadBase64(leagueDTO.getUrlImagen());
             } catch (IOException e) {
-                return ResponseEntity.status(500).body("Error al subir la imagen a Cloudinary: " + e.getMessage());
+                return ResponseEntity.status(500).body(new LeagueResponseDTO());
             }
         }
 
         try {
-            LeagueDTO ligadto = new LeagueDTO(nombreLiga, urlImagenCloudinary, numJornadas, matchTime, numBots, id);
-            ligaService.LigaRegistro(ligadto);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Liga registrada correctamente");
+
+            LeagueResponseDTO responseDTO = ligaService.LigaRegistro(leagueDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LeagueResponseDTO());
         }
     }
 
@@ -124,7 +118,7 @@ public class LigaController {
     }
 
     @PutMapping("/{leagueId}")
-    public ResponseEntity<String> actualizarLiga(@RequestBody LeagueDTO leagueDTO,
+    public ResponseEntity<LeagueResponseDTO> actualizarLiga(@RequestBody LeagueDTO leagueDTO,
                                                 @PathVariable Long leagueId) {
         String urlImagenCloudinary;
         if (leagueDTO.getUrlImagen() == null || leagueDTO.getUrlImagen().isEmpty()) {
@@ -133,15 +127,15 @@ public class LigaController {
             try {
                 urlImagenCloudinary = cloudinaryService.uploadBase64(leagueDTO.getUrlImagen());
             } catch (IOException e) {
-                return ResponseEntity.status(500).body("Error al subir la imagen a Cloudinary: " + e.getMessage());
+                return ResponseEntity.status(500).body(new LeagueResponseDTO());
             }
         }
 
         try {
             ligaService.actualizarLiga(leagueDTO, leagueId);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Liga registrada correctamente");
+            return ResponseEntity.status(HttpStatus.CREATED).body(new LeagueResponseDTO());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar la liga" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LeagueResponseDTO());
         }
     }
 

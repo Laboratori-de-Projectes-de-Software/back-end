@@ -4,7 +4,9 @@ package com.example.back_end_eing.controllers;
 import com.example.back_end_eing.dto.BotDTO;
 import com.example.back_end_eing.dto.BotResponseDTO;
 import com.example.back_end_eing.dto.BotSummaryResponseDTO;
+import com.example.back_end_eing.exceptions.BotNotFoundException;
 import com.example.back_end_eing.models.Bot;
+import com.example.back_end_eing.repositories.BotRepository;
 import com.example.back_end_eing.services.BotService;
 import com.example.back_end_eing.services.CloudinaryService;
 import jakarta.websocket.server.PathParam;
@@ -24,61 +26,53 @@ public class BotController {
     private BotService botService;
     @Autowired
     private CloudinaryService cloudinaryService;
+    @Autowired
+    private BotRepository botRepository;
 
-    @PostMapping()
-    public ResponseEntity<String> registrarBot(@RequestParam String nombre,
-                                            @RequestParam String descripcion,
-                                            @RequestParam String foto,
-                                            @RequestParam String API,
-                                            @RequestParam int id) {
-
+    @PutMapping
+    public ResponseEntity<BotResponseDTO> registrarBot(@RequestBody BotDTO botdto) {
         String urlFoto;
-        if (foto == null || foto.isEmpty()) {
-            urlFoto = null;
-        }else {
-            try {
-                urlFoto = cloudinaryService.uploadBase64(foto);
-            } catch (IOException e) {
-                return ResponseEntity.status(500).body("Error al subir la imagen a Cloudinary: " + e.getMessage());
-            }
-        }
-
-        BotDTO botdto = new BotDTO(nombre, descripcion, urlFoto, API, id);
-        botService.BotRegistro(botdto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Bot registrado correctamente");
-    }
-
-    @GetMapping()
-    public ResponseEntity<List<BotSummaryResponseDTO>> listarBots(@RequestParam Long owner) {
-        System.out.println("Listando Bots "+owner);
-        return ResponseEntity.ok(botService.listarBots(owner));
-
-    }
-
-    @GetMapping("/{botId}")
-    public ResponseEntity<BotResponseDTO> obtenerBot(@PathVariable("botId") Long botId) {
-        System.out.println("Obteniendo Bots "+botId);
-        return ResponseEntity.ok(botService.obtenerBot(botId));
-
-    }
-
-    @PutMapping("/{botId}")
-    public ResponseEntity<String> uptadeBot(@RequestBody BotDTO botdto,
-                                            @PathVariable("botId") Long botId){
-
-                                                String urlFoto;
         if (botdto.getUrlImagen() == null || botdto.getUrlImagen().isEmpty()) {
             urlFoto = null;
         }else {
             try {
                 urlFoto = cloudinaryService.uploadBase64(botdto.getUrlImagen());
             } catch (IOException e) {
-                return ResponseEntity.status(500).body("Error al subir la imagen a Cloudinary: " + e.getMessage());
+                return ResponseEntity.status(500).body(new BotResponseDTO());
             }
         }
-        botService.actualizarBot(botdto, botId);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Bot actualizado correctamente");
+        BotResponseDTO responseDTO = botService.BotRegistro(botdto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<BotSummaryResponseDTO>> listarBots(@RequestParam Long owner) {
+
+        return ResponseEntity.ok(botService.listarBots(owner));
+
+    }
+
+    @GetMapping("/{botId}")
+    public ResponseEntity<BotResponseDTO> obtenerBot(@PathVariable("botId") Long botId) {
+
+        return ResponseEntity.ok(botService.obtenerBot(botId));
+
+    }
+
+    @PutMapping("/{botId}")
+    public ResponseEntity<BotResponseDTO> uptadeBot(@RequestBody BotDTO botdto,
+                                            @PathVariable("botId") Long botId) throws IOException {
+
+                                                String urlFoto;
+        if (botdto.getUrlImagen() == null || botdto.getUrlImagen().isEmpty()) {
+            urlFoto = null;
+        }else {
+            cloudinaryService.uploadBase64(botdto.getUrlImagen());
+        }
+        BotResponseDTO responseDTO = botService.actualizarBot(botdto, botId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @GetMapping("/all")

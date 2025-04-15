@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,7 +16,7 @@ public class LeagueDTO {
     private String urlImagen;
     private Integer rounds;
     private long matchTime;
-    private int[] bots;
+    private List<Long> bots;
     private int creador;
 
 
@@ -22,7 +25,7 @@ public class LeagueDTO {
         this.urlImagen = urlImagen;
         this.rounds = rounds;
         this.matchTime = matchTime;
-        this.bots = new int[numBots];
+        this.bots = new ArrayList<>(numBots);
         this.creador = userId;
     }
 }

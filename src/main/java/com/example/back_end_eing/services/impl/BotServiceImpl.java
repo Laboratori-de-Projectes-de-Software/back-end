@@ -28,7 +28,8 @@ public class BotServiceImpl implements BotService {
     private BotRepository botRepository;
     private UsuarioRepository userRepository;
 
-    public void BotRegistro(BotDTO botdto) {
+    public BotResponseDTO BotRegistro(BotDTO botdto) {
+        BotResponseDTO botResponseDTO = new BotResponseDTO();
         //mirar si existe un bot con esa api y nombre
         if (botRepository.findByApiKey(botdto.getEndpoint()).isEmpty()) {
             if (botRepository.findByNombreBot(botdto.getName()).isEmpty()) {
@@ -36,11 +37,13 @@ public class BotServiceImpl implements BotService {
                 Usuario user = getUser(botdto.getUserId());
                 Bot bot = new Bot(botdto, user);
                 //registrar bot a la base de datos
-                botRepository.save(bot);
+                Bot saved = botRepository.save(bot);
+                botResponseDTO = new BotResponseDTO(botdto, saved.getId(), saved.getFotoBot());
             }
         } else {
             throw (new RepeatedBotException(botdto.getEndpoint()));
         }
+        return botResponseDTO;
     }
 
     private Usuario getUser(int id) {
@@ -127,7 +130,7 @@ public class BotServiceImpl implements BotService {
         return bot;
     }
 
-    public void actualizarBot(BotDTO botDTO, Long id){
+    public BotResponseDTO actualizarBot(BotDTO botDTO, Long id){
         Optional<Bot> consulta = null;
         consulta = botRepository.findById(id);
         if(!consulta.isPresent()){
@@ -135,20 +138,6 @@ public class BotServiceImpl implements BotService {
         }
         Bot bot = consulta.get();
 
-        //controlamos que no repita el nombre y el apikey
-        /* consulta = botRepository.findByNombreBot(botDTO.getName());
-        if(consulta.isPresent()){
-            if(consulta.get().getId() == bot.getId()){
-                throw(new RepeatedBotException(null));
-            }
-        }
-
-        consulta = botRepository.findByApiKey(botDTO.getEndpoint());
-        if(consulta.isPresent()){
-            if(consulta.get().getId() == bot.getId()){
-                throw(new RepeatedBotException(null));
-            }
-        } */
 
         Optional<Usuario> user = userRepository.findById((long)botDTO.getUserId());
         if(!user.isPresent()){
@@ -161,7 +150,8 @@ public class BotServiceImpl implements BotService {
         bot.setFotoBot(botDTO.getUrlImagen());
         bot.setApiKey(botDTO.getEndpoint());
 
-        botRepository.save(bot);
+        Bot res = botRepository.save(bot);
+        return new BotResponseDTO(botDTO, id, res.getFotoBot());
     }
 
     @Override

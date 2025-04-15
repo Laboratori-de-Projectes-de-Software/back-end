@@ -13,7 +13,7 @@ public interface LigaService {
     //Devolver la liga ordenada por clasificación
     List<ParticipationResponseDTO> getClasificacion(Long ligaId);
 
-    void LigaRegistro(LeagueDTO ligadto);
+    LeagueResponseDTO LigaRegistro(LeagueDTO ligadto);
 
     List<LeagueResponseDTO> obtenerLigas();
 
@@ -21,15 +21,13 @@ public interface LigaService {
 
     LeagueResponseDTO getLiga(Long id);
 
-    List<LeagueResponseDTO> obtenerLigasByUserId(Long userId);
-
     Long getOwnerByLeagueId(Long id);
 
     LeagueResponseDTO deleteLiga(Long id);
 
     void registerBotToLeague(Long botId, Long leagueId);
 
-    void actualizarLiga(LeagueDTO ligadto, Long leagueId);
+    LeagueResponseDTO actualizarLiga(LeagueDTO ligadto, Long leagueId);
 
 
 }

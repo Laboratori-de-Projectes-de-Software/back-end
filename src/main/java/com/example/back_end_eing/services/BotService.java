@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface BotService {
     
-    void BotRegistro(BotDTO botdto);
+    BotResponseDTO BotRegistro(BotDTO botdto);
 
     List<BotSummaryResponseDTO> listarBots(Long userId);
 
-    void actualizarBot(BotDTO botdto, Long id);
+    BotResponseDTO actualizarBot(BotDTO botdto, Long id);
 
     BotResponseDTO obtenerBot(Long botId);
 

@@ -20,7 +20,7 @@ public interface ClasificacionRepository extends CrudRepository<Clasificacion, L
     @Query("SELECT c.bot.id " +
             "FROM Clasificacion c " +
             "WHERE c.liga.id = :ligaId")
-    List<Integer> findBotIdsByLigaId(@Param("ligaId") Long ligaId);
+    List<Long> findBotIdsByLigaId(@Param("ligaId") Long ligaId);
 
 
 }
