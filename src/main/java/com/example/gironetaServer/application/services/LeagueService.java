@@ -12,6 +12,7 @@ import com.example.gironetaServer.domain.exceptions.TimeoutException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.MatchResponseDTO;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.ParticipationResponseDto;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers.LigaMapper;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.*;
 import com.example.gironetaServer.infraestructure.adapters.out.db.repository.*;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,16 +34,15 @@ public class LeagueService implements CreateLeague {
     private final EnfrentamientoJpaRepository enfrentamientoJpaRepository;
 
     private final ParticipacionRepository participacionRepository;
-    private final ParticipacionJpaRepository participacionJpaRepository; //Not should be here, but just in case
+    private final ParticipacionJpaRepository participacionJpaRepository; // Not should be here, but just in case
 
     private final EnfrentamientoRepository enfrentamientoRepository;
 
-
     public LeagueService(LeagueRepository leagueRepository, BotJpaRepository botJpaRepository,
-                         LigaJpaRepository ligaJpaRepository, UserJpaRepository userJpaRepository, JornadaJpaRepository jornadaJpaRepository, EnfrentamientoJpaRepository enfrentamientoJpaRepository,
-                         ParticipacionRepository participacionRepository, ParticipacionJpaRepository participacionJpaRepository,
-                         EnfrentamientoRepository enfrentamientoRepository
-                         ) {
+            LigaJpaRepository ligaJpaRepository, UserJpaRepository userJpaRepository,
+            JornadaJpaRepository jornadaJpaRepository, EnfrentamientoJpaRepository enfrentamientoJpaRepository,
+            ParticipacionRepository participacionRepository, ParticipacionJpaRepository participacionJpaRepository,
+            EnfrentamientoRepository enfrentamientoRepository) {
         this.leagueRepository = leagueRepository;
         this.botJpaRepository = botJpaRepository;
         this.ligaJpaRepository = ligaJpaRepository;
@@ -221,6 +221,11 @@ public class LeagueService implements CreateLeague {
             throw new ForbiddenException("No tienes permiso para editar esta liga");
         }
 
+        if (existingLeague.getState() == LigaMapper.toDomainState(LeagueEntity.State.IN_PROCESS)
+                || existingLeague.getState() == LigaMapper.toDomainState(LeagueEntity.State.COMPLETED)) {
+            throw new ConflictException("La liga ya está empezada y no se puede registrar un bot");
+        }
+
         // Actualizar los campos de la liga existente
         existingLeague.setName(leagueDetails.getName());
         existingLeague.setUrlImagen(leagueDetails.getUrlImagen());
@@ -318,6 +323,11 @@ public class LeagueService implements CreateLeague {
             throw new ForbiddenException("No tienes permiso para modificar esta liga");
         }
 
+        if (ligaEntity.getState() == LeagueEntity.State.IN_PROCESS
+                || ligaEntity.getState() == LeagueEntity.State.COMPLETED) {
+            throw new ConflictException("La liga ya está empezada y no se puede registrar un bot");
+        }
+
         // Verificar si el bot existe
         BotEntity botEntity = botJpaRepository.findById(botId)
                 .orElseThrow(() -> new ResourceNotFoundException("Bot no encontrado con id: " + botId));
@@ -403,13 +413,13 @@ public class LeagueService implements CreateLeague {
             throw new ForbiddenException("No tienes permiso para modificar esta liga");
         }
 
-        if (ligaEntity.getState() == LeagueEntity.State.Started) {
+        if (ligaEntity.getState() == LeagueEntity.State.IN_PROCESS) {
             throw new ConflictException("La liga ya está empezada y no se puede volver a iniciar");
         }
 
         // Cambiar el estado de la liga a "Started"
         try {
-            ligaEntity.setState(LeagueEntity.State.Started);
+            ligaEntity.setState(LeagueEntity.State.IN_PROCESS);
             ligaJpaRepository.save(ligaEntity);
 
             int rounds = ligaEntity.getRounds();
@@ -459,7 +469,7 @@ public class LeagueService implements CreateLeague {
                     if (countEnfrentamientos < rounds) {
                         EnfrentamientoEntity enfrentamientoEntity = new EnfrentamientoEntity();
                         enfrentamientoEntity.setJornada(jornadaEntity);
-                        enfrentamientoEntity.setEstado(EnfrentamientoEntity.State.PENDANT);
+                        enfrentamientoEntity.setEstado(EnfrentamientoEntity.State.PENDING);
 
                         // Decidir bot local y visitante
                         BotEntity botLocal;
@@ -473,13 +483,13 @@ public class LeagueService implements CreateLeague {
                             botVisitante = bot1;
                         }
 
-                        //Añadir bots locales y visitantes junto a sus puntuaciones
+                        // Añadir bots locales y visitantes junto a sus puntuaciones
                         enfrentamientoEntity.setBotLocal(botLocal);
                         enfrentamientoEntity.setPuntuacionLocal(0);
                         enfrentamientoEntity.setBotVisitante(botVisitante);
                         enfrentamientoEntity.setPuntuacionVisitante(0);
 
-                        //Añadir la ronda que es
+                        // Añadir la ronda que es
                         enfrentamientoEntity.setRonda(((jornadaEntity.getNumJornada() - 1) / (numBots - 1)) + 1);
 
                         enfrentamientos.add(enfrentamientoEntity);
@@ -509,7 +519,7 @@ public class LeagueService implements CreateLeague {
         }
     }
 
-    //Obtener clasificacion de liga
+    // Obtener clasificacion de liga
     @Transactional
     public List<ParticipationResponseDto> getLeaderboardFromLeague(Long leagueId) {
 

@@ -119,11 +119,11 @@ public class LigaMapper {
     public static LeagueEntity.State toEntityState(League.LeagueState domainState) {
         switch (domainState) {
             case Creada:
-                return LeagueEntity.State.Created;
+                return LeagueEntity.State.PENDING;
             case Empezada:
-                return LeagueEntity.State.Started;
+                return LeagueEntity.State.IN_PROCESS;
             case Terminada:
-                return LeagueEntity.State.Finished;
+                return LeagueEntity.State.COMPLETED;
             default:
                 throw new IllegalArgumentException("Estado de liga no reconocido: " + domainState);
         }
@@ -132,11 +132,11 @@ public class LigaMapper {
     // Función para convertir el estado de la infraestructura al estado del dominio
     public static League.LeagueState toDomainState(LeagueEntity.State entityState) {
         switch (entityState) {
-            case Created:
+            case PENDING:
                 return League.LeagueState.Creada;
-            case Started:
+            case IN_PROCESS:
                 return League.LeagueState.Empezada;
-            case Finished:
+            case COMPLETED:
                 return League.LeagueState.Terminada;
             default:
                 throw new IllegalArgumentException("Estado de liga no reconocido: " + entityState);

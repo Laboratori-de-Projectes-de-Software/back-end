@@ -11,6 +11,7 @@ public class League {
     private List<Long> bots;
     private Long userId;
     private LeagueState state = LeagueState.Creada;
+
     public enum LeagueState {
         Creada,
         Empezada,

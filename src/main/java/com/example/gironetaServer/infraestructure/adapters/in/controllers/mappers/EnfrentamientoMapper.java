@@ -6,8 +6,6 @@ import com.example.gironetaServer.infraestructure.adapters.out.db.entities.Enfre
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.ParticipacionEntity;
 import org.springframework.stereotype.Component;
 
-
-
 @Component
 public class EnfrentamientoMapper {
 
@@ -18,21 +16,21 @@ public class EnfrentamientoMapper {
         match.setState(enfrentamientoEntity.getEstado());
 
         if (enfrentamientoEntity.getPuntuacionLocal() > enfrentamientoEntity.getPuntuacionVisitante()) {
-            match.setResult(MatchResponseDTO.Result.LOCAL);
+            match.setResult(1);
 
-        } else if(enfrentamientoEntity.getPuntuacionLocal() < enfrentamientoEntity.getPuntuacionVisitante()){
-            match.setResult(MatchResponseDTO.Result.VISITANT);
+        } else if (enfrentamientoEntity.getPuntuacionLocal() < enfrentamientoEntity.getPuntuacionVisitante()) {
+            match.setResult(2);
         } else {
-            match.setResult(MatchResponseDTO.Result.DRAW);
+            match.setResult(0);
         }
 
-        //private String[] fighters;
+        // private String[] fighters;
         String[] fighters = { enfrentamientoEntity.getBotLocal().getName(),
                 enfrentamientoEntity.getBotVisitante().getName()
         };
         match.setFighters(fighters);
 
-        //Ronda
+        // Ronda
         match.setRoundNumber(enfrentamientoEntity.getRonda());
         return match;
     }

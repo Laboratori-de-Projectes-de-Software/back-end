@@ -22,7 +22,7 @@ public class EnfrentamientoEntity {
 
     // Enum para el estado de la pelea
     public enum State {
-        PENDANT, IN_PROCESS, COMPLETED
+        PENDING, IN_PROCESS, COMPLETED
     }
 
     @Enumerated(EnumType.STRING)
@@ -52,6 +52,5 @@ public class EnfrentamientoEntity {
 
     @OneToMany(mappedBy = "enfrentamiento", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MensajeEntity> mensajes; // Relación con Mensajes
-
 
 }

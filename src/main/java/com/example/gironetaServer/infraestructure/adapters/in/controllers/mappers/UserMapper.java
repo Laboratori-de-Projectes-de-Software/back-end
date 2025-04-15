@@ -71,8 +71,8 @@ public class UserMapper {
         UserResponseDTO userResponseDTO = new UserResponseDTO();
         userResponseDTO.setToken(token);
         userResponseDTO.setExpiresIn(expiresIn);
-        userResponseDTO.setUsername(username);
-        userResponseDTO.setId(id);
+        userResponseDTO.setUser(username);
+        userResponseDTO.setUserId(id);
 
         return userResponseDTO;
     }
