@@ -82,11 +82,11 @@ public class LigaController {
     }
 
     @DeleteMapping("/{leagueId}")
-    public ResponseEntity<Void> deleteLiga(@PathVariable Long leagueId) {
+    public ResponseEntity<LeagueResponseDTO> deleteLiga(@PathVariable Long leagueId) {
 
-        ligaService.deleteLiga(leagueId);
+        LeagueResponseDTO responseDTO = ligaService.deleteLiga(leagueId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
 
@@ -110,10 +110,8 @@ public class LigaController {
 
     @PostMapping("/{leagueId}/bot")
     public ResponseEntity<String> registrarBotEnLiga(@PathVariable Long leagueId,
-                                                     @RequestBody BotRequestDTO body) {
+                                                     @RequestBody Long botId) {
 
-
-        Long botId = body.getBotId();
         try {
             ligaService.registerBotToLeague(botId, leagueId);
             return ResponseEntity.status(HttpStatus.CREATED).body("Bot registrado correctamente");

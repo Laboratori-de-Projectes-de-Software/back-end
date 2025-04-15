@@ -141,14 +141,17 @@ public class LigaServiceImpl implements LigaService{
 
 
 
+
     @Override
-    public void deleteLiga(Long id) {
+    public LeagueResponseDTO deleteLiga(Long id) {
         Liga league = ligaRepository.findById(id)
                 .orElseThrow(() -> new LigaNotFoundException(id));
-        List<Clasificacion> clasificaciones = clasificacionRepository.findByLigaId(id);
+        List<Integer> bots = clasificacionRepository.findBotIdsByLigaId(id);
+
+        LeagueResponseDTO responseDTO = new LeagueResponseDTO(league,bots);
 
         ligaRepository.delete(league);
-        clasificacionRepository.deleteAll(clasificaciones);
+        return responseDTO;
     }
 
     // TODO Añadir error por liga repetida -> por lo que parece no hay atributos unicos, por lo que no hay repetición de ligas??
