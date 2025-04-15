@@ -109,6 +109,37 @@ public class LigaServiceImpl implements LigaService{
         return leagueResponseDTOS;
     }
 
+    @Override
+    public List<LeagueResponseDTO> obtenerLigasByUserId(Long userId) {
+
+        usuarioRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(Math.toIntExact(userId)));
+
+        List<Liga> ligas = ligaRepository.findAllByUserId(userId);
+
+        List<LeagueResponseDTO> leagueResponseDTOS = new ArrayList<>();
+        for(Liga liga : ligas){
+
+            List<Bot> bots = botRepository.findByLeague(liga.getId());
+
+            leagueResponseDTOS.add(
+                    LeagueResponseDTO.builder()
+                            .leagueId(liga.getId().intValue())
+                            .status(liga.getEstado())
+                            .name(liga.getNombreLiga())
+                            .user(liga.getUsuario().getNombreUsuario())
+                            .urlImagen(liga.getImagen())
+                            .rounds(liga.getNumJornadas())
+                            .matchTime(liga.getMatchTime())
+                            .bots(bots.stream().map((bot -> bot.getId().intValue())).toList())
+                            .build()
+            );
+        }
+
+        return leagueResponseDTOS;
+    }
+
+
 
     @Override
     public void deleteLiga(Long id) {
