@@ -2,10 +2,10 @@ package com.example.back_end_eing.services.impl;
 
 import com.example.back_end_eing.dto.LeagueResponseDTO;
 import com.example.back_end_eing.exceptions.*;
-import com.example.back_end_eing.models.Bot;
+import com.example.back_end_eing.models.*;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
 
-import com.example.back_end_eing.repositories.BotRepository;
+import com.example.back_end_eing.repositories.*;
 import com.example.back_end_eing.services.LigaService;
 
 
@@ -18,15 +18,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.back_end_eing.repositories.ClasificacionRepository;
-import com.example.back_end_eing.repositories.LigaRepository;
-import com.example.back_end_eing.models.Clasificacion;
-
 import com.example.back_end_eing.constants.EstadoLigaConstants;
 import com.example.back_end_eing.dto.LeagueDTO;
-import com.example.back_end_eing.models.Liga;
-import com.example.back_end_eing.models.Usuario;
-import com.example.back_end_eing.repositories.UsuarioRepository;
 
 @AllArgsConstructor
 @Service
@@ -41,6 +34,7 @@ public class LigaServiceImpl implements LigaService{
     private ClasificacionRepository clasificacionRepository;
     @Autowired
     private UsuarioRepository usuarioRepository;
+
 
 
 
@@ -120,8 +114,10 @@ public class LigaServiceImpl implements LigaService{
     public void deleteLiga(Long id) {
         Liga league = ligaRepository.findById(id)
                 .orElseThrow(() -> new LigaNotFoundException(id));
+        List<Clasificacion> clasificaciones = clasificacionRepository.findByLigaId(id);
 
         ligaRepository.delete(league);
+        clasificacionRepository.deleteAll(clasificaciones);
     }
 
     // TODO Añadir error por liga repetida -> por lo que parece no hay atributos unicos, por lo que no hay repetición de ligas??
@@ -179,9 +175,16 @@ public class LigaServiceImpl implements LigaService{
         Liga league = ligaRepository.findById(leagueId)
                 .orElseThrow(() -> new LigaNotFoundException(leagueId));
 
+        List<Clasificacion> clasificaciones = clasificacionRepository.findByLigaId(leagueId) != null
+                ? clasificacionRepository.findByLigaId(leagueId)
+                : new ArrayList<>();
+
+        if(league.getNumBots() <= clasificaciones.size()){
+            throw new BotLimitReachedException("Límite de bots alcanzado");
+        }
 
         if (clasificacionRepository.findByBotIdAndLigaId(botId, leagueId) != null) {
-            throw new IllegalArgumentException("El bot ya está registrado en esta liga");
+            throw new BotAlreadyRegisteredException("El bot ya está registrado en esta liga");
         }
 
         Clasificacion clasificacion = new Clasificacion(bot, league);

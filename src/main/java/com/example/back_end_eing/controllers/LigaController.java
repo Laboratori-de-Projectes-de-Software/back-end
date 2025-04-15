@@ -2,6 +2,8 @@ package com.example.back_end_eing.controllers;
 
 
 import com.example.back_end_eing.dto.BotRequestDTO;
+import com.example.back_end_eing.exceptions.BotAlreadyRegisteredException;
+import com.example.back_end_eing.exceptions.BotLimitReachedException;
 import com.example.back_end_eing.services.EnfrentamientoService;
 
 import com.example.back_end_eing.dto.LeagueDTO;
@@ -92,9 +94,9 @@ public class LigaController {
     }
 
     @PostMapping("/{leagueId}/start")
-    public ResponseEntity<String> generarEnfrentamientos(@RequestParam Long id) {
+    public ResponseEntity<String> generarEnfrentamientos(@PathVariable Long leagueId) {
         try {
-            enfrentamientoService.generarEnfrentamientos(id);
+            enfrentamientoService.generarEnfrentamientos(leagueId);
             return ResponseEntity.status(HttpStatus.CREATED).body("Enfrentamientos generados correctamente");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al generar enfrentamientos" + e.getMessage());
@@ -110,8 +112,10 @@ public class LigaController {
         try {
             ligaService.registerBotToLeague(botId, leagueId);
             return ResponseEntity.status(HttpStatus.CREATED).body("Bot registrado correctamente");
-        } catch (Exception e) {
+        } catch (BotAlreadyRegisteredException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        } catch (BotLimitReachedException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: " + e.getMessage());
 
         }
     }
@@ -145,4 +149,6 @@ public class LigaController {
         return new ResponseEntity<>(owner, HttpStatus.OK);
 
     }
+
+
 }

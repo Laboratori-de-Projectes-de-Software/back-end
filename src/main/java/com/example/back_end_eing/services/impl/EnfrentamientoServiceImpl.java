@@ -106,6 +106,7 @@ public class EnfrentamientoServiceImpl implements EnfrentamientoService {
 
             jornadaGuardada.setEnfrentamientos(enfrentamientos);
             jornadaRepository.save(jornadaGuardada);
+            liga.setEstado("EN CURSO");
 
             Collections.rotate(listaRotativa, 1);
 
