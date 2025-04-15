@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface SpringDataRespostaRepository  {
-    List<Resposta> findByMatchId(String id);
-    void save(RespostaDBO dbo);
+public interface SpringDataRespostaRepository  extends JpaRepository<RespostaDBO, String> {
+    List<Resposta> findByMatchId(int id);
 }

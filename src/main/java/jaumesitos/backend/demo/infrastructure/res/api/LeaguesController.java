@@ -1,36 +1,24 @@
 package jaumesitos.backend.demo.infrastructure.res.api;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jaumesitos.backend.demo.application.service.ClassificacioService;
+import jaumesitos.backend.demo.application.service.ParticipationService;
 import jaumesitos.backend.demo.application.service.LligaService;
 import jaumesitos.backend.demo.application.service.MatchService;
 import jaumesitos.backend.demo.config.DuplicateEntityException;
-import jaumesitos.backend.demo.domain.Classificacio;
 import jaumesitos.backend.demo.domain.League;
-import jaumesitos.backend.demo.domain.User;
-import jaumesitos.backend.demo.infrastructure.db.mapper.LLigaDBOMapper;
+import jaumesitos.backend.demo.domain.Participation;
 import jaumesitos.backend.demo.infrastructure.res.dto.*;
-import jaumesitos.backend.demo.infrastructure.res.mapper.BotDTOMapper;
 import jaumesitos.backend.demo.infrastructure.res.mapper.LligaDTOMapper;
 import jaumesitos.backend.demo.infrastructure.res.mapper.MatchDTOMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestBody;
-import jaumesitos.backend.demo.application.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import lombok.RequiredArgsConstructor;
-
-import jaumesitos.backend.demo.infrastructure.res.mapper.UserDTOMapper;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -41,7 +29,7 @@ public class LeaguesController {
     @Qualifier("lligaDTOMapper")
     private final LligaDTOMapper mapper;
     private final LligaService leagueservice;
-    private final ClassificacioService classificationservice;
+    private final ParticipationService classificationservice;
     private final MatchService matchService;
     @Qualifier("matchDTOMapper")
     private final MatchDTOMapper matchmapper;
@@ -74,8 +62,8 @@ public class LeaguesController {
     @PostMapping("/league/{leagueId}/bot")
     public ResponseEntity<?> registerBot(@PathVariable Integer leagueId,@RequestBody IntIdentifierDTO botId) {
         try{
-            Classificacio c = new Classificacio(leagueId,botId.getIdentifier(),0,0,0,0,0, LocalDateTime.now());
-            classificationservice.postClassificacio(c);
+            Participation c = new Participation(leagueId,botId.getIdentifier(),0,0,0,0,0, LocalDateTime.now());
+            classificationservice.postParticipation(c);
         }catch(DuplicateEntityException e){
             return new ResponseEntity<>("La classificació per aquest bot ja existeix", HttpStatus.CONFLICT);
         }

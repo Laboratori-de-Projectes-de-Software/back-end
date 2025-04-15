@@ -41,7 +41,7 @@ public class MatchController {
 
     @GetMapping("/match/{matchId}/messages")
     @Operation(summary = "Obtiene todos los mensajes de un enfrentamiento", description = "Devuelve todas las respuestas asociadas al ID del enfrentamiento")
-    public ResponseEntity<?> getMensajesByMatchId(@PathVariable String matchId) {
+    public ResponseEntity<?> getMensajesByMatchId(@PathVariable int matchId) {
         try {
             List<Resposta> mesages = respostaService.getMesgesByMatchID(matchId);
             return ResponseEntity.ok(mesages);

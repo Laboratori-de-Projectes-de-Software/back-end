@@ -10,6 +10,5 @@ import java.util.List;
 public interface ParticipationDBOMapper {
     ParticipationDBO toDBO(Participation c);
     Participation toDomain(ParticipationDBO dbo);
-
     List<Participation> toListDomain(List<ParticipationDBO> p);
 }

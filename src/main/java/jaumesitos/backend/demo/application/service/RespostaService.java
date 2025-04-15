@@ -21,7 +21,7 @@ public class RespostaService {
         respostaRepository.save(resposta);
     }
 
-    public List<Resposta> getMesgesByMatchID(String matchId) {
+    public List<Resposta> getMesgesByMatchID(int matchId) {
         return respostaRepository.findByMatchId(matchId);
     }
 }

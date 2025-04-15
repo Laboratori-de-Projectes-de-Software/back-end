@@ -22,7 +22,7 @@ public class RespostaDBORepository implements IRespostaRepository {
     private final RespostaDBOMapper mapper;
 
     @Override
-    public List<Resposta> findByMatchId(String id) {
+    public List<Resposta> findByMatchId(int id) {
         return springDataRespostaRepository.findByMatchId(id);
     }
 
