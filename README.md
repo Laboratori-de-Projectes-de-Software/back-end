@@ -30,9 +30,9 @@ El repositorio front-end-bc-spn debe existir en el mismo directorio padre para q
 
 ## Endpoints ligas
 - [x] Post one league
-- [ ] Get all leagues
+- [x] Get all leagues
 - [x] Get one league
-- [ ] Update one league
+- [x] Update one league
 
 - [ ] Register bot to league
 - [ ] Get classification from a league

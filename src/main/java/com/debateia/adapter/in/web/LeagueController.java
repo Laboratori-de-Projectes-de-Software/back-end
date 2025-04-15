@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 
 /**
@@ -54,14 +56,35 @@ public class LeagueController {
     }
     
     @GetMapping
-    public ResponseEntity<List<LeagueResponseDTO>> getAllLeagues() {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<List<LeagueResponseDTO>> getAllLeagues(
+            @RequestParam(name = "owner", required = false) Integer ownerId) {
+        
+        List<League> leagues;
+        try {
+            leagues = leagueUseCase.getAllLeagues(Optional.ofNullable(ownerId));
+        }
+        catch (EntityNotFoundException e) {
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        
+        List<LeagueResponseDTO> response = leagues.stream()
+                .map(LeagueMapper::toLeagueResponseDTO)
+                .toList(); // conversion a DTO muy prog funcional :3
+        
+        return ResponseEntity.ok(response);
     }
     
     @GetMapping("/{id}")
     public ResponseEntity<LeagueResponseDTO> getLeague(@PathVariable Integer id) {
-        League lg = leagueUseCase.getLeague(id);
-        return ResponseEntity.ok(LeagueMapper.toLeagueResponseDTO(lg));
+        try {
+            League lg = leagueUseCase.getLeague(id);
+            return ResponseEntity.ok(LeagueMapper.toLeagueResponseDTO(lg));
+        }
+        catch (EntityNotFoundException e) { // liga no existe
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
     
     @PutMapping("/{id}")
@@ -73,12 +96,24 @@ public class LeagueController {
         if (authentication == null || !authentication.startsWith("Bearer ")) {
             throw new IllegalArgumentException("Invalid auth header");
         }
+        
         final String authToken = authentication.substring(7);
         final Integer userId = jwtService.extractUserId(authToken);
         
-        
-        
-        return ResponseEntity.ok(null);
+        try {
+            League newLeague = LeagueMapper.toDomain(league);
+            newLeague.setUserId(userId);
+            League updated = leagueUseCase.updateLeague(id, userId, newLeague);
+            return ResponseEntity.ok(LeagueMapper.toLeagueResponseDTO(updated));
+        }
+        catch (EntityNotFoundException e) { // liga no existe
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        catch (DataIntegrityViolationException e) { // El userId de la liga no es el del token
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
     
     @PostMapping("/{id}/bot")
@@ -111,13 +146,22 @@ public class LeagueController {
             System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        
+        catch (DataIntegrityViolationException e) { // El userId de la liga no es el del token
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
     
     @PostMapping("/{id}/start")
     public ResponseEntity<?> startLeague(@PathVariable Integer id) {
-        leagueUseCase.startLeague(id);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        try {
+            leagueUseCase.startLeague(id);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
+        catch (EntityNotFoundException e) { // liga no existe
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @GetMapping("/{id}/match")

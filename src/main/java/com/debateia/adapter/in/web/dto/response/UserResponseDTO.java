@@ -1,15 +1,14 @@
 package com.debateia.adapter.in.web.dto.response;
 
-import lombok.*;
-
-import java.io.Serializable;
 import java.time.LocalDate;
 
-@NoArgsConstructor
-@Data
-public class UserResponseDTO implements Serializable {
-    private String token;
-    private LocalDate expiresIn;
-    private String user;
-    private int userId;
+import org.springframework.beans.factory.annotation.Value;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record UserResponseDTO(
+        @JsonProperty("token") String accessToken,
+        LocalDate expiresIn,
+        String user,
+        int userId) {
 }

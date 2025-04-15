@@ -1,5 +1,6 @@
 package com.debateia.application.service;
 
+import com.debateia.application.ports.in.rest.AuthUseCase;
 import com.debateia.adapter.out.persistence.AuthMapper;
 import com.debateia.application.jwt.JwtService;
 import com.debateia.adapter.in.web.dto.request.UpdateCredRequest;

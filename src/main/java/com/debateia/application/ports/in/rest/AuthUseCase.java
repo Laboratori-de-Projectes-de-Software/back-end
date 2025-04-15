@@ -1,4 +1,4 @@
-package com.debateia.application.service;
+package com.debateia.application.ports.in.rest;
 
 import com.debateia.adapter.in.web.dto.request.UpdateCredRequest;
 import com.debateia.adapter.in.web.dto.request.UserDTOLogin;
@@ -7,7 +7,7 @@ import com.debateia.adapter.in.web.dto.request.UserDTORegister;
 import com.debateia.domain.User;
 import org.springframework.http.ResponseEntity;
 
-import com.debateia.adapter.out.persistence.UserResponseDTO;
+import com.debateia.adapter.in.web.dto.response.UserResponseDTO;
 import com.debateia.adapter.out.persistence.entities.UserEntity;
 
 import jakarta.validation.constraints.NotNull;

@@ -1,6 +1,6 @@
 package com.debateia.application.mapper;
 
-import com.debateia.adapter.out.persistence.UserResponseDTO;
+import com.debateia.adapter.in.web.dto.response.UserResponseDTO;
 import com.debateia.adapter.out.persistence.entities.BotEntity;
 import com.debateia.adapter.out.persistence.entities.LeagueEntity;
 import com.debateia.adapter.out.persistence.entities.UserEntity;
@@ -60,6 +60,6 @@ public class UserMapper {
     }
 
     public static UserResponseDTO toResponseDTO(User dom) {
-        return new UserResponseDTO(dom.getToken(), dom.getExpiresIn(), dom.getUsername());
+        return new UserResponseDTO(dom.getToken(), dom.getExpiresIn(), dom.getUsername(), dom.getUserId());
     }
 }

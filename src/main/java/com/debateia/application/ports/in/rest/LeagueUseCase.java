@@ -3,25 +3,27 @@ package com.debateia.application.ports.in.rest;
 import com.debateia.domain.League;
 import com.debateia.domain.Participation;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
  * @author kjorda
  */
 public interface LeagueUseCase {
+    // TODO: Integer instead of int?
     
     // Post one league
     public League postLeague(League league);
 
     // Get all leagues
-    public List<League> getAllLeagues();
+    public List<League> getAllLeagues(Optional<Integer> ownerId);
     
     // Get one league
     public League getLeague(int leagueId);
     
     
     // Update one league
-    public League updateLeague(int leagueId, League l);
+    public League updateLeague(int leagueId, int userId, League l);
     
     // Register bot to league
     public void registerBot(int leagueId, int botId);

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import com.debateia.adapter.in.web.dto.request.UpdateCredRequest;
 import com.debateia.adapter.in.web.dto.request.UserDTOLogin;
 import com.debateia.adapter.in.web.dto.request.UserDTORegister;
-import com.debateia.adapter.out.persistence.UserResponseDTO;
+import com.debateia.adapter.in.web.dto.response.UserResponseDTO;
 
 @RestController
 @RequestMapping("/auth")
@@ -32,7 +32,7 @@ public class AuthController {
             User user = authService.register(request);
             TokenData td = authService.generateTokens(user);
             UserResponseDTO response = new UserResponseDTO(
-                    td.accessToken(), td.expiresIn(), user.getUsername());
+                    td.accessToken(), td.expiresIn(), user.getUsername(), user.getUserId());
             return ResponseEntity.ok(response);
         } catch (DataIntegrityViolationException e) {
             System.err.println(e.getMessage());
@@ -45,7 +45,7 @@ public class AuthController {
         try {
             User user = authService.authenticate(loginRequest);
             TokenData td = authService.generateTokens(user);
-            UserResponseDTO response = new UserResponseDTO(td.accessToken(), td.expiresIn(), user.getUsername());
+            UserResponseDTO response = new UserResponseDTO(td.accessToken(), td.expiresIn(), user.getUsername(), user.getUserId());
             return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
@@ -64,7 +64,7 @@ public class AuthController {
         User updatedUser = authService.updateCred(authentication, request);
         try {
             TokenData td = authService.generateTokens(updatedUser);
-            final UserResponseDTO response = new UserResponseDTO(td.accessToken(), td.expiresIn(), updatedUser.getUsername());
+            final UserResponseDTO response = new UserResponseDTO(td.accessToken(), td.expiresIn(), updatedUser.getUsername(), updatedUser.getUserId());
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Registration failed: Invalid request.");
@@ -77,7 +77,7 @@ public class AuthController {
         try {
             User user = authService.refreshToken(authentication);
             TokenData td = authService.generateTokens(user);
-            return ResponseEntity.ok(new UserResponseDTO(td.accessToken(), td.expiresIn(), user.getUsername()));
+            return ResponseEntity.ok(new UserResponseDTO(td.accessToken(), td.expiresIn(), user.getUsername(), user.getUserId()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();  // Puedes retornar un mensaje de error si lo prefieres
         }
