@@ -1,6 +1,7 @@
 package com.example.back_end_eing.services.impl;
 
 import com.example.back_end_eing.dto.EnfrentamientoDTO;
+import com.example.back_end_eing.dto.MatchResponseDTO;
 import com.example.back_end_eing.models.*;
 import com.example.back_end_eing.exceptions.*;
 import com.example.back_end_eing.repositories.*;
@@ -112,8 +113,41 @@ public class EnfrentamientoServiceImpl implements EnfrentamientoService {
 
         }
 
-        // cambiar ESTADO DE LIGA?
+
     }
+
+    public List<MatchResponseDTO> getMatchesByLeagueId(Long leagueId) {
+        Liga liga = ligaRepository.findById(leagueId)
+                .orElseThrow(() -> new RuntimeException("Liga no encontrada"));
+
+        List<MatchResponseDTO> matches = new ArrayList<>();
+
+        //Ordenar por num de jornada
+        List<Jornada> jornadasOrdenadas = liga.getJornadas().stream()
+                .sorted(Comparator.comparing(Jornada::getNumJornada))
+                .toList();
+
+        for (Jornada jornada : jornadasOrdenadas) {
+            for (Enfrentamiento enfrentamiento : jornada.getEnfrentamientos()) {
+                List<String> fighters = enfrentamiento.getParticipaciones()
+                        .stream()
+                        .map(p -> p.getBot().getNombreBot())
+                        .toList();
+
+                matches.add(new MatchResponseDTO(
+                        enfrentamiento.getId().intValue(),
+                        enfrentamiento.getResultado()!=null ? "FINALIZADO" : "",
+                        enfrentamiento.getResultado(),
+                        fighters.toArray(new String[0]),
+                        jornada.getNumJornada()
+                ));
+            }
+        }
+
+        return matches;
+    }
+
+    //PRIVATE METHODS
 
     private Enfrentamiento crearEnfrentamiento(Jornada jornada, Bot bot1, Bot bot2) {
         Enfrentamiento enfrentamiento = new Enfrentamiento();
