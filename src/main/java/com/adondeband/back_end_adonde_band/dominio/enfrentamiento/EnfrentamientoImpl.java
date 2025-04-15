@@ -38,7 +38,6 @@ public class EnfrentamientoImpl implements EnfrentamientoService {
 
     @Override
     public List<Enfrentamiento> obtenerEnfrentamientosPorLiga(LigaId ligaId) {
-
         Liga liga = ligaService.obtenerLigaPorId(ligaId);
         return enfrentamientoPort.findEnfrentamientosByLiga(liga);
     }
@@ -71,6 +70,7 @@ public class EnfrentamientoImpl implements EnfrentamientoService {
     }
 
     private List<BotId> obtenerListaBotIds (List<Participacion> participaciones) {
+        // Obtener una lista de todos los ids de los bots
         List<BotId> botIds = new ArrayList<>();
         for (Participacion participacion : participaciones) {
             botIds.add(participacion.getBot());
@@ -92,6 +92,7 @@ public class EnfrentamientoImpl implements EnfrentamientoService {
             int numEnfrentamientos = 0;
             // Copia de la lista de ids de bots para no repetir bots en esta jornada
             List <BotId> botsJornada = new ArrayList<>(botIds);
+          
             // Asignar enfrentamientos a la jornada hasta que estén todos
             while(!enfrentamientos.isEmpty() && numEnfrentamientos != numEnfrentamientosPorJornada){
                 // Obtener un enfrentamiento aleatorio de la lista de enfrentamientos

@@ -157,6 +157,7 @@ public class LigaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
+
         List <ParticipacionDTO> participacionesDTO = new ArrayList<>(participaciones.size());
 
         // Si la lista está vacía, no hay participaciones
