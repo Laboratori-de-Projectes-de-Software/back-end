@@ -26,7 +26,6 @@ import java.util.Optional;
 public class BotServiceImpl implements BotService {
 
     private BotRepository botRepository;
-
     private UsuarioRepository userRepository;
 
     public void BotRegistro(BotDTO botdto) {
@@ -120,7 +119,13 @@ public class BotServiceImpl implements BotService {
                 .orElseGet(() -> Collections.emptyList());
     }
 
+    @Override
+    public Bot getBotById(Long id) {
+        Bot bot = botRepository.findById(id)
+                .orElseThrow();
 
+        return bot;
+    }
 
     public void actualizarBot(BotDTO botDTO, Long id){
         Optional<Bot> consulta = null;
@@ -131,7 +136,7 @@ public class BotServiceImpl implements BotService {
         Bot bot = consulta.get();
 
         //controlamos que no repita el nombre y el apikey
-        consulta = botRepository.findByNombreBot(botDTO.getName());
+        /* consulta = botRepository.findByNombreBot(botDTO.getName());
         if(consulta.isPresent()){
             if(consulta.get().getId() == bot.getId()){
                 throw(new RepeatedBotException(null));
@@ -143,7 +148,7 @@ public class BotServiceImpl implements BotService {
             if(consulta.get().getId() == bot.getId()){
                 throw(new RepeatedBotException(null));
             }
-        }
+        } */
 
         Optional<Usuario> user = userRepository.findById((long)botDTO.getUserId());
         if(!user.isPresent()){
@@ -157,6 +162,14 @@ public class BotServiceImpl implements BotService {
         bot.setApiKey(botDTO.getEndpoint());
 
         botRepository.save(bot);
+    }
+
+    @Override
+    public void deleteBot(Long id) {
+        Bot bot = botRepository.findById(id)
+                .orElseThrow(() -> new BotNotFoundException());
+
+        botRepository.delete(bot);
     }
 
 }
