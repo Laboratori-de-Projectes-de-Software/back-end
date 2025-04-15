@@ -13,7 +13,7 @@ public class MatchDTOResponse {
 
     private Integer matchId;
     private String state;
-    private String result;
+    private Result result;
     private List<String> fighters;
     private Integer roundNumber;
 }

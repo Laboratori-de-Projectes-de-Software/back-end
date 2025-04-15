@@ -36,8 +36,10 @@ public class IniciarLigaUseCase implements IniciarLigaPort {
 
         List<BotId> rotatingBots=liga.getBotsLiga().subList(1,liga.getBotsLiga().size());
         int count=liga.getBotsLiga().size();
+
+        //Se añade un bot que nos indica que no tiene emparejamiento
         if(count%2==1){
-            rotatingBots.add(new BotId(0));
+            rotatingBots.add(new BotId(-1));
             count++;
         }
         for (int ronda=1;ronda<count;ronda++){
@@ -45,6 +47,14 @@ public class IniciarLigaUseCase implements IniciarLigaPort {
             fixedBots.add(liga.getBotsLiga().getFirst());
             fixedBots.addAll(rotatingBots);
             for (int i = 0; i < count / 2; i++ ) {
+                int botid1=fixedBots.get(i).value();
+                int botid2=fixedBots.get(count-1-i).value();
+                
+                //Si el bot tiene id -1 significa que no tiene emparejamiento
+                if(botid1==-1 || botid2==-1){
+                    continue;
+                }
+
                 Partida partida=Partida.builder()
                         .liga(new LigaId(ligaId))
                         .estado(Estado.PENDANT)
