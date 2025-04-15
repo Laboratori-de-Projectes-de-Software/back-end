@@ -15,12 +15,18 @@ import java.util.List;
 public interface LigaDtoMapper {
     LigaDtoMapper INSTANCE = Mappers.getMapper(LigaDtoMapper.class);
 
-    @Mapping(target = "imagen", source = "urlImagen")
     // Mapear de DTO a Dominio
+    @Mapping(target = "nombre", source = "name")
+    @Mapping(target = "estado", source = "state")
+    @Mapping(target = "imagen", source = "imageUrl")
+    @Mapping(target = "rondas", source = "rounds")
     Liga toDomain(LigaResponseDTO ligaDTO);
 
-    @Mapping(target = "urlImagen", source = "imagen")
     // Mapea de Bot a BotDTO
+    @Mapping(target = "name", source = "nombre")
+    @Mapping(target = "state", source = "estado")
+    @Mapping(target = "imageUrl", source = "imagen")
+    @Mapping(target = "rounds", source = "rondas")
     LigaResponseDTO toDTO(Liga liga);
 
     default long toId(LigaId id) {
