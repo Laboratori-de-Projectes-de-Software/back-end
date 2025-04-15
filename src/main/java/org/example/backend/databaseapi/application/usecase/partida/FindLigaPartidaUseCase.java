@@ -32,7 +32,7 @@ public class FindLigaPartidaUseCase implements BuscarPartidasLigaPort {
                             partida.getPartidaId().value(),
                             partida.getEstado().toString(),
                             partida.getResult(),
-                            findPartidaResultadoPort.findPartidaResultado(idliga)
+                            findPartidaResultadoPort.findPartidaResultado(partida.getPartidaId().value())
                                     .stream()
                                     .map(resultado -> findBotPort.findBot(resultado.getResultadoId().botvalue())
                                             .orElseThrow().getNombre()
