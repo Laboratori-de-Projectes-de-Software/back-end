@@ -4,6 +4,7 @@ package com.example.back_end_eing.controllers;
 import com.example.back_end_eing.dto.BotDTO;
 import com.example.back_end_eing.dto.BotResponseDTO;
 import com.example.back_end_eing.dto.BotSummaryResponseDTO;
+import com.example.back_end_eing.models.Bot;
 import com.example.back_end_eing.services.BotService;
 import com.example.back_end_eing.services.CloudinaryService;
 import jakarta.websocket.server.PathParam;
@@ -62,25 +63,19 @@ public class BotController {
     }
 
     @PutMapping("/{botId}")
-    public ResponseEntity<String> uptadeBot(@RequestParam String nombre,
-                                            @RequestParam String descripcion,
-                                            @RequestParam String foto,
-                                            @RequestParam String API,
-                                            @RequestParam int id,
+    public ResponseEntity<String> uptadeBot(@RequestBody BotDTO botdto,
                                             @PathVariable("botId") Long botId){
 
                                                 String urlFoto;
-        if (foto == null || foto.isEmpty()) {
+        if (botdto.getUrlImagen() == null || botdto.getUrlImagen().isEmpty()) {
             urlFoto = null;
         }else {
             try {
-                urlFoto = cloudinaryService.uploadBase64(foto);
+                urlFoto = cloudinaryService.uploadBase64(botdto.getUrlImagen());
             } catch (IOException e) {
                 return ResponseEntity.status(500).body("Error al subir la imagen a Cloudinary: " + e.getMessage());
             }
         }
-
-        BotDTO botdto = new BotDTO(nombre, descripcion, urlFoto, API, id);
         botService.actualizarBot(botdto, botId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Bot actualizado correctamente");
@@ -91,6 +86,23 @@ public class BotController {
 
         return ResponseEntity.ok(botService.getAllBots());
 
+    }
+
+    @GetMapping("/{botId}/byid")
+    public ResponseEntity<BotDTO> getLigaById(@PathVariable Long botId) {
+
+        Bot bot = botService.getBotById(botId);
+        int id = bot.getUsuario().getId().intValue();
+        BotDTO botDTO = new BotDTO(bot.getNombreBot(), bot.getDescripcionBot(), bot.getFotoBot(), bot.getApiKey(), id);
+        return new ResponseEntity<>(botDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{botId}")
+    public ResponseEntity<Void> deleteBot(@PathVariable Long botId) {
+
+        botService.deleteBot(botId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
