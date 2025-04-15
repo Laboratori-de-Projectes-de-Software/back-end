@@ -3,10 +3,12 @@ package com.adondeband.back_end_adonde_band.jpa.enfrentamiento;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
+import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import com.adondeband.back_end_adonde_band.jpa.bot.BotEntity;
 import com.adondeband.back_end_adonde_band.jpa.bot.BotJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.jornada.JornadaJpaMapper;
+import com.adondeband.back_end_adonde_band.jpa.liga.LigaEntity;
 import com.adondeband.back_end_adonde_band.jpa.liga.LigaJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
@@ -41,5 +43,16 @@ public interface EnfrentamientoJpaMapper {
         if (id == null) return null;
 
         return new EnfrentamientoId(id);
+    }
+
+    // EnfrentamientoJpaMapper.java
+    default LigaEntity ligaIdToLigaEntity(LigaId ligaId) {
+        if (ligaId == null) {
+            return null;
+        }
+
+        LigaEntity ligaEntity = new LigaEntity();
+        ligaEntity.setId(ligaId.value()); // Asignar el valor del LigaId al campo id de LigaEntity
+        return ligaEntity;
     }
 }
