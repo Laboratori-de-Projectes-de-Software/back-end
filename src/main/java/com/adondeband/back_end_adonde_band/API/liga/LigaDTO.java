@@ -16,7 +16,7 @@ public class LigaDTO {
     private String imagen; // luego quizá se convierta en ImagenDTO
     private int rounds;
     private long matchTime;
-    private List<Integer> bots;
+    private List<Long> bots;
 
     public LigaDTO(LigaResponseDTO ligaResponseDTO) {
         this.name = ligaResponseDTO.getNombre();

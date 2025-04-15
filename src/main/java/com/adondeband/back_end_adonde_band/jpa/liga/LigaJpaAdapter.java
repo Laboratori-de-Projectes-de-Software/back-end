@@ -50,11 +50,11 @@ public class LigaJpaAdapter implements LigaPort {
 
     @Override
     @Transactional
-    public List<Liga> findById(LigaId id) {
-        return  ligaJpaRepository.findById(id.value())
-                .stream()
-                .map(ligaJpaMapper::toDomain)
-                .collect(Collectors.toList());
+    public Liga findById(LigaId id) {
+        LigaEntity ligaEntity = ligaJpaRepository.getLigaEntityById(id.value());
+        Liga liga = ligaJpaMapper.toDomain(ligaEntity);
+
+        return liga;
     }
 
     @Override

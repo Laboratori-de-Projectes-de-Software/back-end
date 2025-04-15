@@ -118,7 +118,7 @@ public class LigaJpaAdapterTest {
         ligaJpaAdapter.addBotToLiga(ligaGuardada.getId(),new BotId(1L));
         ligaJpaAdapter.addBotToLiga(ligaGuardada.getId(),new BotId(2L));
 
-        Liga ligaActualizada = ligaJpaAdapter.findById(ligaGuardada.getId()).getFirst();
+        Liga ligaActualizada = ligaJpaAdapter.findById(ligaGuardada.getId());
 
         assertEquals(ligaGuardada.getNombre(), ligaActualizada.getNombre());
         assertEquals(ligaGuardada.getImagen(), ligaActualizada.getImagen());

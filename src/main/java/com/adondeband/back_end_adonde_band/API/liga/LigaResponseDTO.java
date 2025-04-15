@@ -18,7 +18,7 @@ public class LigaResponseDTO {
     private String nombre;
     private ESTADO estado;
     private String urlImagen; // luego quizá se convierta en ImagenDTO
-    private List<Integer> bots;
+    private List<Long> bots;
     private int rondas;
     private long matchTime;
 

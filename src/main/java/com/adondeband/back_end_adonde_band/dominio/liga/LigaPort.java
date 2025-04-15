@@ -11,7 +11,7 @@ import java.util.List;
 public interface LigaPort {
     Liga save(Liga liga);
 
-    List<Liga> findById(LigaId id);
+    Liga findById(LigaId id);
 
     List<Liga> findAll();
 

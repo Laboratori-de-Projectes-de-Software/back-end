@@ -85,12 +85,12 @@ public class TestLigaService {
         LigaId id = ligaSaved.getId();
 
         // Act
-        List<Liga> ligasFound = ligaService.obtenerLigaPorId(id);
+        Liga ligasFound = ligaService.obtenerLigaPorId(id);
 
         // Assert
-        assert (!ligasFound.isEmpty());
-        assertEquals(ligaSaved.getId().value(), ligasFound.getFirst().getId().value());
-        assertEquals(ligaSaved.getNombre(), ligasFound.getFirst().getNombre());
+        assert (!(ligasFound == null));
+        assertEquals(ligaSaved.getId().value(), ligasFound.getId().value());
+        assertEquals(ligaSaved.getNombre(), ligasFound.getNombre());
     }
 
     @Test

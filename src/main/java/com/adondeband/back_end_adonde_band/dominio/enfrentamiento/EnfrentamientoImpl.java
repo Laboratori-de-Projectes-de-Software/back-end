@@ -39,7 +39,7 @@ public class EnfrentamientoImpl implements EnfrentamientoService {
     @Override
     public List<Enfrentamiento> obtenerEnfrentamientosPorLiga(LigaId ligaId) {
 
-        Liga liga = ligaService.obtenerLigaPorId(ligaId).getFirst();
+        Liga liga = ligaService.obtenerLigaPorId(ligaId);
         return enfrentamientoPort.findEnfrentamientosByLiga(liga);
     }
     @Override

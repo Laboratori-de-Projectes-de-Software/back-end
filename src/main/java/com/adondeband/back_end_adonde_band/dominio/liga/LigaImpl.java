@@ -25,7 +25,7 @@ public class LigaImpl implements LigaService {
     }
 
     @Override
-    public List<Liga> obtenerLigaPorId(LigaId id) {
+    public Liga obtenerLigaPorId(LigaId id) {
         return ligaPort.findById(id);
     }
 
@@ -47,7 +47,7 @@ public class LigaImpl implements LigaService {
 
     @Override
     public List<Participacion> obtenerParticipacionesPorLiga(LigaId ligaId) {
-        if (obtenerLigaPorId(ligaId).isEmpty()) {
+        if (obtenerLigaPorId(ligaId) == null) {
             throw new NotFoundException("Esta liga no existe");
         }
 
