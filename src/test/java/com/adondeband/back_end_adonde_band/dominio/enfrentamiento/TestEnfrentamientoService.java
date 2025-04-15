@@ -37,16 +37,16 @@ public class TestEnfrentamientoService {
     @Transactional
     public void testGetMensajes() {
         // Arrange
-        Bot bot1 = new Bot(new BotId("Bot1"), "Cualidad1");
+        Bot bot1 = new Bot("Bot1", "Cualidad1");
         botService.crearBot(bot1);
-        Bot bot2 = new Bot(new BotId("Bot2"), "Cualidad2");
+        Bot bot2 = new Bot("Bot2", "Cualidad2");
         botService.crearBot(bot2);
         Conversacion conversacion = new Conversacion();
         conversacion.setFicheroRuta("src/test/java/com/adondeband/back_end_adonde_band/dominio/enfrentamiento/conv.json");
 
         Enfrentamiento enfrentamiento = new Enfrentamiento();
-        enfrentamiento.setLocal(new BotId("Bot1"));
-        enfrentamiento.setVisitante(new BotId("Bot2"));
+        enfrentamiento.setLocal(new BotId(1L));
+        enfrentamiento.setVisitante(new BotId(2L));
         enfrentamiento.setConversacion(conversacion);
 
         // Act

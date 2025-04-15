@@ -15,10 +15,10 @@ public class EnfrentamientoDTO {
     private Long id;
     private ESTADO state;
     private RESULTADO result;
-    private String [] fighters;
+    private Long [] fighters;
     private int roundNumber;
 
-    String getGanador() {
+    Long getGanador() {
         return switch (result) {
             case EMPATE   -> null;
             case VICTORIA -> fighters[0];

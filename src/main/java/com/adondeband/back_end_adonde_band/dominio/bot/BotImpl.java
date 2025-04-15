@@ -19,7 +19,7 @@ public class BotImpl implements BotService {
     @Override
     @Transactional
     public Bot crearBot(Bot bot) {
-        if (botPort.findByNombre(bot.getNombre().value()).isEmpty()) {
+        if (botPort.findByNombre(bot.getNombre()) == null) {
             return botPort.save(bot);
         } else {
             throw new IllegalArgumentException("El nombre del bot ya existe");
@@ -27,7 +27,7 @@ public class BotImpl implements BotService {
     }
 
     @Override
-    public List<Bot> obtenerBotPorNombre(String nombre) {
+    public Bot obtenerBotPorNombre(String nombre) {
         return botPort.findByNombre(nombre);
     }
 
@@ -39,5 +39,10 @@ public class BotImpl implements BotService {
     @Override
     public List<Bot> obtenerBotsPorIdUsuario(UsuarioId userId) {
         return botPort.findBotsUsuario(userId);
+    }
+
+    @Override
+    public Bot obtenerBotPorId(Long id) {
+        return botPort.findById(id);
     }
 }

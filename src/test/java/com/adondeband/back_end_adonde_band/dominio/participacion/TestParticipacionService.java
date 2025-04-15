@@ -43,11 +43,11 @@ public class TestParticipacionService {
         liga.setFechaFin(LocalDateTime.now());
         liga.setImagen(null);
 
-        Bot bot1 = new Bot(new BotId("bot1"), "Cualidad1");
+        Bot bot1 = new Bot("Bot 1", "Cualidad1");
 
         Participacion participacion = new Participacion();
         System.out.println("Participacion: " + participacion.getId() + "\n\n\n\n\n\n");
-        participacion.setBot(bot1.getNombre());
+        participacion.setBot(bot1.getId());
         participacion.setLiga(liga.getId());
         participacion.setPosicion(1);
         participacion.setPuntuacion(100);

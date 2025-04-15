@@ -4,12 +4,9 @@ import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotPort;
 import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
-import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenEntity;
-import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.imagen.ImagenJpaRepository;
-import com.adondeband.back_end_adonde_band.jpa.participacion.ParticipacionJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioEntity;
 import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaMapper;
 import com.adondeband.back_end_adonde_band.jpa.usuario.UsuarioJpaRepository;
@@ -42,12 +39,13 @@ public class BotJpaAdapter implements BotPort {
         this.usuarioJpaRepository = usuarioJpaRepository;
     }
 
+    @Override
+    @Transactional
     public Bot actualizarUrlImagen(BotId botId, String url) {
         // Actualizar la URL de la imagen en el bot
 
         ImagenEntity imagenEntity = imagenJpaRepository.getImagenEntityByRuta(url);
-        BotEntity botEntity = botJpaRepository.getBotEntityByNombre(botId.value());
-
+        BotEntity botEntity = botJpaRepository.findById(botId.value()).orElse(null);
         if (botEntity == null) throw new NotFoundException("Este bot no existe");
 
         if (imagenEntity == null) {
@@ -63,8 +61,9 @@ public class BotJpaAdapter implements BotPort {
     }
 
     @Override
+    @Transactional
     public Bot actualizarDescripcion(BotId botId, String descripcion) {
-        BotEntity botEntity = botJpaRepository.getBotEntityByNombre(botId.value());
+        BotEntity botEntity = botJpaRepository.findById(botId.value()).orElse(null);
         if (botEntity == null) throw new NotFoundException("Este bot no existe");
         botEntity.setCualidad(descripcion);
 
@@ -73,8 +72,9 @@ public class BotJpaAdapter implements BotPort {
     }
 
     @Override
+    @Transactional
     public Bot actualizarEndpoint(BotId botId, String endpoint) {
-        BotEntity botEntity = botJpaRepository.getBotEntityByNombre(botId.value());
+        BotEntity botEntity = botJpaRepository.findById(botId.value()).orElse(null);
         if (botEntity == null) throw new NotFoundException("Este bot no existe");
         botEntity.setEndpoint(endpoint);
 
@@ -92,11 +92,18 @@ public class BotJpaAdapter implements BotPort {
 
     @Override
     @Transactional
-    public List<Bot> findByNombre(String s) {
-        return botJpaRepository.findByNombre(s)
-                .stream()
-                .map(botJpaMapper::toDomain)
-                .collect(Collectors.toList());
+    public Bot findByNombre(String s) {
+        BotEntity botEntity = botJpaRepository.findByNombre(s);
+        if (botEntity == null) throw new NotFoundException("Este bot no existe");
+        return botJpaMapper.toDomain(botEntity);
+    }
+
+    @Override
+    @Transactional
+    public Bot findById(Long id) {
+        BotEntity botEntity = botJpaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Este bot no existe"));
+        return botJpaMapper.toDomain(botEntity);
     }
 
     @Override

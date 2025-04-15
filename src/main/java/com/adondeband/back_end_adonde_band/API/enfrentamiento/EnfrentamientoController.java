@@ -50,8 +50,8 @@ public class EnfrentamientoController {
     public ResponseEntity<EnfrentamientoDTO> testInit() {
         // Arrange
         // Obtener bots 1 y 2
-        Bot bot1 = botService.obtenerBotPorNombre("Bot1").getFirst();
-        Bot bot2 = botService.obtenerBotPorNombre("Bot2").getFirst();
+        Bot bot1 = botService.obtenerBotPorNombre("Bot1");
+        Bot bot2 = botService.obtenerBotPorNombre("Bot2");
 
         // Crear y guardar conversación
         Conversacion conversacion = new Conversacion();
@@ -60,8 +60,8 @@ public class EnfrentamientoController {
 
         // Crear Enfrentamiento
         Enfrentamiento enfrentamiento = new Enfrentamiento();
-        enfrentamiento.setLocal(bot1.getNombre());
-        enfrentamiento.setVisitante(bot2.getNombre());
+        enfrentamiento.setLocal(bot1.getId());
+        enfrentamiento.setVisitante(bot2.getId());
         enfrentamiento.setConversacion(conversacionSaved);
 
         // Guardar enfrentamiento

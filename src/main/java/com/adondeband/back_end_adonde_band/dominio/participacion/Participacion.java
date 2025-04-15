@@ -20,7 +20,7 @@ public class Participacion {
     private int posicion;
     private int puntuacion;
 
-    public Participacion(String botId, Long ligaId) {
+    public Participacion(Long botId, Long ligaId) {
         this.bot = new BotId(botId);
         this.liga = new LigaId(ligaId);
 

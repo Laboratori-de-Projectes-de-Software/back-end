@@ -8,7 +8,9 @@ import java.util.List;
 public interface BotPort {
     Bot save(Bot bot);
 
-    List<Bot> findByNombre(String s);
+    Bot findByNombre(String s);
+
+    Bot findById(Long id);
 
     List<Bot> findAll();
 

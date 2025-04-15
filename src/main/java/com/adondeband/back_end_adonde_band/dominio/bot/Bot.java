@@ -16,7 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Bot {
 
-    private BotId nombre;
+    private BotId id;
+
+    private String nombre;
 
     private Integer numVictorias;
 
@@ -34,7 +36,7 @@ public class Bot {
 
     private List<ParticipacionId> participaciones;
 
-    public Bot (BotId nombre, String cualidad) {
+    public Bot (String cualidad, String nombre) {
         this.nombre = nombre;
         this.cualidad = cualidad;
         this.numVictorias = 0;
