@@ -105,10 +105,8 @@ public class LigaController {
 
     @PostMapping("/{leagueId}/bot")
     public ResponseEntity<String> registrarBotEnLiga(@PathVariable Long leagueId,
-                                                     @RequestBody BotRequestDTO body) {
+                                                     @RequestBody Long botId) {
 
-
-        Long botId = body.getBotId();
         try {
             ligaService.registerBotToLeague(botId, leagueId);
             return ResponseEntity.status(HttpStatus.CREATED).body("Bot registrado correctamente");
