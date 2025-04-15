@@ -1,14 +1,14 @@
 package jaumesitos.backend.demo.infrastructure.db.mapper;
 
 import jaumesitos.backend.demo.domain.Match;
-import jaumesitos.backend.demo.infrastructure.db.dbo.EnfrentamentDBO;
+import jaumesitos.backend.demo.infrastructure.db.dbo.MatchDBO;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
-public interface EnfrentamentDBOMapper {
+public interface MatchDBOMapper {
 
     @Mappings({
             @Mapping(source = "id", target = "id"),
@@ -17,8 +17,8 @@ public interface EnfrentamentDBOMapper {
             @Mapping(source = "date", target = "date"),
             @Mapping(source = "result", target = "resultat")
     })
-    Match toDomain(EnfrentamentDBO enfrentamentDBO);
+    Match toDomain(MatchDBO enfrentamentDBO);
 
     @InheritInverseConfiguration
-    EnfrentamentDBO toDBO(Match enfrentament);
+    MatchDBO toDBO(Match enfrentament);
 }

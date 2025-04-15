@@ -5,7 +5,7 @@ import jaumesitos.backend.demo.domain.Resposta;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -21,7 +21,7 @@ public class RespostaService {
         respostaRepository.save(resposta);
     }
 
-    public Optional<Resposta> getRespostaById(String id) {
-        return respostaRepository.findById(id);
+    public List<Resposta> getMesgesByMatchID(String matchId) {
+        return respostaRepository.findByMatchId(matchId);
     }
 }

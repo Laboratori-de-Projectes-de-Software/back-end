@@ -6,6 +6,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface RespostaDBOMapper {
-    RespostaDBO toDBO(Resposta enfrentament);
-    Resposta toDomain(RespostaDBO enfrentamentDBO);
+    RespostaDBO toDBO(Resposta resposta);
+    Resposta toDomain(RespostaDBO respostaDBO);
 }

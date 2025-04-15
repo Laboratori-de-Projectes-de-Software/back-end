@@ -2,19 +2,16 @@ package jaumesitos.backend.demo.infrastructure.res.api;
 
 
 import io.swagger.v3.oas.annotations.Operation;
-import jaumesitos.backend.demo.application.service.MatchService;
-import jaumesitos.backend.demo.infrastructure.res.dto.MatchDTO;
-import jaumesitos.backend.demo.infrastructure.res.mapper.MatchDTOMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
+import jaumesitos.backend.demo.application.service.RespostaService;
+import jaumesitos.backend.demo.domain.Resposta;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,6 +21,7 @@ import java.util.List;
 
 public class MatchController {
 
+    private final RespostaService respostaService;
 
     //CODIS ERROR:
     //HttpStatus.OK -> 200
@@ -40,5 +38,17 @@ public class MatchController {
 
     //SWAGGER:
     //http://localhost:8080/swagger-ui/index.html#/
+
+    @GetMapping("/match/{matchId}/messages")
+    @Operation(summary = "Obtiene todos los mensajes de un enfrentamiento", description = "Devuelve todas las respuestas asociadas al ID del enfrentamiento")
+    public ResponseEntity<?> getMensajesByMatchId(@PathVariable String matchId) {
+        try {
+            List<Resposta> mesages = respostaService.getMesgesByMatchID(matchId);
+            return ResponseEntity.ok(mesages);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los mensajes");
+        }
+    }
+
 
 }

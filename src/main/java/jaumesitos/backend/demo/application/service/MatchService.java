@@ -2,7 +2,7 @@ package jaumesitos.backend.demo.application.service;
 
 import jaumesitos.backend.demo.application.repository.IMatchRepository;
 import jaumesitos.backend.demo.domain.Match;
-import jaumesitos.backend.demo.infrastructure.db.mapper.EnfrentamentDBOMapper;
+import jaumesitos.backend.demo.infrastructure.db.mapper.MatchDBOMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ public class MatchService {
     private final IMatchRepository enfrentamentRepository;
 
 
-    public MatchService(IMatchRepository enfrentamentRepository, EnfrentamentDBOMapper enfrentamentDBOMapper) {
+    public MatchService(IMatchRepository enfrentamentRepository) {
         this.enfrentamentRepository = enfrentamentRepository;
     }
 

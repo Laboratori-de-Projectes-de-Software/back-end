@@ -2,7 +2,7 @@ package jaumesitos.backend.demo.infrastructure.db.repository;
 
 import jaumesitos.backend.demo.application.repository.IMatchRepository;
 import jaumesitos.backend.demo.domain.Match;
-import jaumesitos.backend.demo.infrastructure.db.mapper.EnfrentamentDBOMapper;
+import jaumesitos.backend.demo.infrastructure.db.mapper.MatchDBOMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class EnfrentamentDBORepository implements IMatchRepository {
-    private final SpringDataEnfrentamentRepository springDataRepository;
-    @Qualifier("enfrentamentDBOMapper")
-    private final EnfrentamentDBOMapper mapper;
+public class MatchDBORepository implements IMatchRepository {
+    private final SpringDataMatchRepository springDataRepository;
+    @Qualifier("matchDBOMapper")
+    private final MatchDBOMapper mapper;
 
     @Override
     public void save(Match enfrentament) {

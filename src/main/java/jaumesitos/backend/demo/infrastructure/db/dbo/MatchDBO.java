@@ -1,12 +1,13 @@
 package jaumesitos.backend.demo.infrastructure.db.dbo;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class EnfrentamentDBO {
+public class MatchDBO {
     @Id
     private int id;
 
