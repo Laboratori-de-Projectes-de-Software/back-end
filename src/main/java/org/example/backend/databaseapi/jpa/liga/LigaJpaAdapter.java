@@ -124,8 +124,11 @@ public class LigaJpaAdapter implements CreateLigaPort, FindAllLigasPort, FindLig
                 .matchTime(liga.getMatchTime())
                 .botsLiga(liga.getBotsLiga()
                         .stream()
-                        .map(botId -> botJpaAdapter.getJpaBot(botId.value())
-                                .orElseThrow())
+                        .filter(Objects::nonNull)
+                        .map(botId ->{ BotJpaEntity bot=botJpaAdapter.getJpaBot(botId.value())
+                                .orElseThrow();
+                            System.out.println(botId.value());
+                        return bot;})
                         .toList()
                 )
                 .urlImagen(liga.getUrlImagen())

@@ -59,10 +59,17 @@ public class IniciarLigaUseCase implements IniciarLigaPort {
 
                 Partida partida=Partida.builder()
                         .liga(new LigaId(ligaId))
-                        .estado(Estado.PENDANT)
                         .roundNumber(ronda)
                         .duracionTotal(liga.getMatchTime())
                         .build();
+
+                //Tal vez se tenga que modificar en un futuro
+                if(ronda==1){
+                    partida.setEstado(Estado.IN_PROCESS);
+                }else{
+                    partida.setEstado(Estado.PENDANT);
+                }
+
                 partida=createPartidaUseCase.altaPartida(partida);
 
                 Resultado resultado=Resultado.builder()
@@ -78,6 +85,13 @@ public class IniciarLigaUseCase implements IniciarLigaPort {
                 createResultadoUseCase.crearResultado(resultado);
             }
             Collections.rotate(rotatingBots, +1);
+        }
+
+        for(BotId id:rotatingBots){
+            if(id.value()==-1){
+                rotatingBots.remove(id);
+                break;
+            }
         }
         liga.setEstado(Estado.IN_PROCESS);
         actualizarLigaUseCase.actualizarLiga(liga,ligaId);
