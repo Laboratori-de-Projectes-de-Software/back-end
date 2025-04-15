@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.List;
 
 @Setter
 @Getter
@@ -13,16 +12,14 @@ import java.util.List;
 public class LigaDTO {
 
     private String name;
-    private String imagen; // luego quizá se convierta en ImagenDTO
-    private int rounds;
-    private long matchTime;
-    private List<Integer> bots;
+    private String imageUrl; // luego quizá se convierta en ImagenDTO
+    private Integer rounds;
+    private Long matchTime;
 
     public LigaDTO(LigaResponseDTO ligaResponseDTO) {
-        this.name = ligaResponseDTO.getNombre();
-        this.imagen = ligaResponseDTO.getUrlImagen();
-        this.rounds = ligaResponseDTO.getRondas();
+        this.name = ligaResponseDTO.getName();
+        this.imageUrl = ligaResponseDTO.getImageUrl();
+        this.rounds = ligaResponseDTO.getRounds();
         this.matchTime = ligaResponseDTO.getMatchTime();
-        this.bots = ligaResponseDTO.getBots();
     }
 }
