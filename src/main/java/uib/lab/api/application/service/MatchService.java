@@ -67,7 +67,8 @@ public class MatchService {
                             new String[] {
                                     botNamesMap.getOrDefault(match.getBotId1(), "Unknown Bot"),
                                     botNamesMap.getOrDefault(match.getBotId2(), "Unknown Bot")
-                            }))
+                            },
+                            new Integer[]{botIds.get(0), botIds.get(1)}))
                     .collect(Collectors.toList());
 
             // Verificar si se encontraron partidos y devolver la respuesta
@@ -105,7 +106,7 @@ public class MatchService {
                 match.setBotId1(botList.get(i));
                 match.setBotId2(botList.get(j));
                 match.setState(Match.MatchState.PENDING);
-                match.setResult(null);
+                match.setResult(-1);
                 match.setRounds(league.getNumRounds());
                 matches.add(match);
             }

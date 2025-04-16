@@ -5,7 +5,7 @@ import uib.lab.api.infraestructure.jpaEntity.Match;
 public class MatchDomain {
     private int id;
     private Match.MatchState state;
-    private Match.MatchResult result;
+    private int result;
     private int botId1;
     private int botId2;
     private int roundId;
@@ -16,7 +16,7 @@ public class MatchDomain {
 
     }
 
-    public MatchDomain(int id, Match.MatchState state, Match.MatchResult result, int botId1, int botId2, int roundId, int rounds, int[] chatsId){
+    public MatchDomain(int id, Match.MatchState state, int result, int botId1, int botId2, int roundId, int rounds, int[] chatsId){
         this.id = id;
         this.state = state;
         this.result = result;
@@ -43,11 +43,11 @@ public class MatchDomain {
         return this.state;
     }
 
-    public void setResult(Match.MatchResult result){
+    public void setResult(int result){
         this.result = result;
     }
 
-    public Match.MatchResult getResult(){
+    public int getResult(){
         return this.result;
     }
 

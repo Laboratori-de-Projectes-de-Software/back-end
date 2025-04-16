@@ -311,13 +311,13 @@ public class LeagueService {
 
                 int idLocal = match.getBotId1();
                 int idVisiting = match.getBotId2();
-                Match.MatchResult result = match.getResult();
+                int result = match.getResult();
 
-                if (result == Match.MatchResult.LOCAL) {
+                if (result == 0) {
                     scores.put(idLocal, scores.get(idLocal) + 3);
                     wins.put(idLocal, wins.get(idLocal) + 1);
                     loses.put(idVisiting, loses.get(idVisiting) + 1);
-                } else if (result == Match.MatchResult.VISITING) {
+                } else if (result == 1) {
                     scores.put(idVisiting, scores.get(idVisiting) + 3);
                     loses.put(idLocal, loses.get(idLocal) + 1);
                     wins.put(idVisiting, wins.get(idVisiting) + 1);

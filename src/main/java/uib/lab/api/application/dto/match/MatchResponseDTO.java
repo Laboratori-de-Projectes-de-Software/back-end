@@ -12,12 +12,13 @@ import javax.validation.constraints.Min;
 @Setter
 public class MatchResponseDTO {
 
-    public MatchResponseDTO(int matchId, Match.MatchState state, Match.MatchResult result, int roundNumber, String[] fighters){
+    public MatchResponseDTO(int matchId, Match.MatchState state, int result, int roundNumber, String[] fighters, Integer[] ids){
         this.matchId = matchId;
         this.state = state;
         this.result = result;
         this.roundNumber = roundNumber;
         this.fighters = fighters;
+        this.ids = ids;
     }
 
     @NotNull
@@ -28,11 +29,13 @@ public class MatchResponseDTO {
     private Match.MatchState state;
 
     @NotBlank
-    private Match.MatchResult result;
+    private int result;
 
     @NotNull
     @Min(1)
     private int roundNumber;
 
     private String[] fighters;
+
+    private Integer[] ids;
 }

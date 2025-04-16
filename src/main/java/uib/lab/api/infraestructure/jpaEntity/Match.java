@@ -15,10 +15,6 @@ public class Match {
     public enum MatchState {
         PENDING, IN_PROGRESS, COMPLETED;
     }
-
-    public enum MatchResult{
-        LOCAL, VISITING, DRAW;
-    }
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +23,8 @@ public class Match {
     @Enumerated(EnumType.STRING)
     private MatchState state;
 
-    @Enumerated(EnumType.STRING)
-    private MatchResult result;
+
+    private int result; //-1 empate, 0, 1
 
     private int rounds;
 
