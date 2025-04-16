@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RestController
 
-@RequestMapping("")
+@RequestMapping("/api/v0")
 @Tag(name = "Matches Controller", description = "Endpoints for managing matches between bots")
 
 public class MatchController {
