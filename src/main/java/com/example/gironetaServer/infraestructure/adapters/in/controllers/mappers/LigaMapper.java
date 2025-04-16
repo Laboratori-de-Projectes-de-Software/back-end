@@ -1,7 +1,10 @@
 package com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers;
 
+import com.example.gironetaServer.application.ports.BotRepository;
 import com.example.gironetaServer.application.ports.UserRepository;
+import com.example.gironetaServer.domain.Bot;
 import com.example.gironetaServer.domain.League;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.BotResponseDTO;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LeagueDto;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LeagueResponseDto;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.BotEntity;
@@ -20,10 +23,15 @@ public class LigaMapper {
 
     private final UserRepository userRepository;
     private final BotJpaRepository botJpaRepository;
+    private final BotRepository botRepository;
+    private final BotMapper botMapper;
 
-    public LigaMapper(UserRepository userRepository, BotJpaRepository botJpaRepository) {
+    public LigaMapper(UserRepository userRepository, BotJpaRepository botJpaRepository, BotRepository botRepository,
+            BotMapper botMapper) {
         this.userRepository = userRepository;
         this.botJpaRepository = botJpaRepository;
+        this.botRepository = botRepository;
+        this.botMapper = botMapper;
     }
 
     public League toDomain(LeagueEntity ligaEntity) {
@@ -94,9 +102,18 @@ public class LigaMapper {
         leagueResponseDto.setImageUrl(league.getUrlImagen());
         leagueResponseDto.setRounds(league.getRounds());
         leagueResponseDto.setMatchTime(league.getMatchTime());
-        leagueResponseDto.setBots(league.getBots().stream()
-                .map(Long::intValue)
-                .collect(java.util.stream.Collectors.toList()));
+
+        // Convertir los IDs de bots a objetos BotResponseDTO
+        List<BotResponseDTO> botResponseDTOs = new ArrayList<>();
+        if (league.getBots() != null && !league.getBots().isEmpty()) {
+            botResponseDTOs = league.getBots().stream()
+                    .map(botId -> botRepository.findById(botId)
+                            .map(BotMapper::toBotResponseDto)
+                            .orElse(null))
+                    .filter(botResponseDTO -> botResponseDTO != null)
+                    .collect(Collectors.toList());
+        }
+        leagueResponseDto.setBots(botResponseDTOs);
         leagueResponseDto.setState(toEntityState(league.getState()));
 
         return leagueResponseDto;
