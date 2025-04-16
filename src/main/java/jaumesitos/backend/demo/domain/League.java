@@ -11,9 +11,12 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Resposta {
-    private String id;
-    private String argument;
-    private LocalDateTime date;
-
+public class League {
+    private Integer matchTime;
+    private String name;
+    private Integer rounds;
+    private String urlImage;
+    private Boolean state;
+    private Integer bots[];
+    private Integer userId;
 }

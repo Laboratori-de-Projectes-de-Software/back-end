@@ -2,10 +2,11 @@ package jaumesitos.backend.demo.application.service;
 
 import jaumesitos.backend.demo.application.repository.IRespostaRepository;
 import jaumesitos.backend.demo.domain.Resposta;
+import jaumesitos.backend.demo.infrastructure.db.dbo.RespostaDBO;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -21,7 +22,7 @@ public class RespostaService {
         respostaRepository.save(resposta);
     }
 
-    public Optional<Resposta> getRespostaById(String id) {
-        return respostaRepository.findById(id);
+    public List<Resposta> getMesgesByMatchID(int matchId) {
+        return respostaRepository.findByMatchId(matchId);
     }
 }

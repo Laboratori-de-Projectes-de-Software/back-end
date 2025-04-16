@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Resposta {
+public class Match {
     private String id;
-    private String argument;
+    private String idBotLocal;
+    private String idBotVisitant;
     private LocalDateTime date;
-
+    private String resultat;
 }

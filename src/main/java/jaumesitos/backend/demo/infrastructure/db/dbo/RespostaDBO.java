@@ -1,19 +1,30 @@
 package jaumesitos.backend.demo.infrastructure.db.dbo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
+@Table(name = "resposta")
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
 public class RespostaDBO {
+
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "text")
     private String argument;
+
+    @Column(name = "temps")
     private String date;
+
+    @Column(name = "id_enfrontament")
+    private int matchId;
+
+    @Column(name = "id_autor")
+    private Integer authorId;
 }

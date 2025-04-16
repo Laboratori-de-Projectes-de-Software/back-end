@@ -33,7 +33,14 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/auth/register", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/bot/**", "/league/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/bot/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/leagues/**").authenticated()  // POST requires authentication
+                        .requestMatchers(HttpMethod.PUT, "/leagues/**").authenticated()   // PUT requires authentication
+                        .requestMatchers(HttpMethod.GET, "/league/**").authenticated()  // GET requires authentication
+                        .requestMatchers(HttpMethod.DELETE, "/league/**").authenticated()   // DELETE requires authentication
+                        .requestMatchers(HttpMethod.GET, "/match/**").permitAll()  // POST requires authentication
+
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

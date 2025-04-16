@@ -6,6 +6,7 @@ import jaumesitos.backend.demo.domain.Bot;
 import jaumesitos.backend.demo.domain.User;
 import jaumesitos.backend.demo.infrastructure.res.dto.BotDTO;
 import jaumesitos.backend.demo.infrastructure.res.dto.BotResponseDTO;
+import jaumesitos.backend.demo.infrastructure.res.dto.LeagueDTO;
 import jaumesitos.backend.demo.infrastructure.res.mapper.BotDTOMapper;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import jaumesitos.backend.demo.infrastructure.security.AuthUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,7 @@ import java.util.List;
 public class BotController {
 
     private final BotService botService;
+    @Qualifier("botDTOMapper")
     private final BotDTOMapper botMapper;
     private final AuthService authService;
 
@@ -56,7 +59,6 @@ public class BotController {
             BotResponseDTO response = botMapper.toResponseDTO(saved);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating bot");
         }
