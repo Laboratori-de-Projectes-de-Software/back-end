@@ -1,8 +1,8 @@
 package com.debateia.adapter.in.rest.bot;
 
-import com.debateia.application.jwt.JwtService;
 import com.debateia.adapter.mapper.BotMapper;
 import com.debateia.application.ports.in.rest.BotUseCase;
+import com.debateia.application.ports.in.rest.JWTUseCase;
 import com.debateia.domain.Bot;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BotController {
     private final BotUseCase botUseCase;
-    private final JwtService jwtService;
+    private final JWTUseCase jwtUseCase;
     private final BotMapper botMapper;
 
     @GetMapping
@@ -51,7 +51,7 @@ public class BotController {
             throw new IllegalArgumentException("Invalid auth header");
         }
         final String authToken = authentication.substring(7);
-        final Integer userId = jwtService.extractUserId(authToken);
+        final Integer userId = jwtUseCase.extractUserId(authToken);
         try {
             bot = botUseCase.createBot(botIn, userId); // meter en BD si el usuario existe
         } catch (DataIntegrityViolationException e) { // bot ya existia
@@ -87,7 +87,7 @@ public class BotController {
             throw new IllegalArgumentException("Invalid auth header");
         }
         final String authToken = authentication.substring(7);
-        final Integer userId = jwtService.extractUserId(authToken);
+        final Integer userId = jwtUseCase.extractUserId(authToken);
         try {
             Bot botUpdate = botUseCase.updateBot(botId, userId, botIn);
             BotResponseDTO response = botMapper.toResponseDto(botUpdate);

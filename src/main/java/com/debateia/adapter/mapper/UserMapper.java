@@ -25,7 +25,7 @@ public interface UserMapper {
     
     @Mapping(target = "userId", source = "id")
     @Mapping(target = "leagueId", source = "league.id")
-    @Mapping(target = "botsId", ignore = true) // Not needed for login/register/auth
+    @Mapping(target = "botsId", ignore = true) // <- Maybe should implement it but we don't use it so ¯\_(ツ)_/¯
     @Mapping(target = "token", ignore = true)
     @Mapping(target = "expiresIn", ignore = true)
     User entityToDomain(UserEntity entity);

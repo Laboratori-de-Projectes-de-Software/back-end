@@ -1,6 +1,6 @@
 package com.debateia.domain;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -21,5 +21,5 @@ public class User {
     private List<Integer> botsId;
     
     private String token;
-    private LocalDate expiresIn;
+    private Instant expiresIn;
 }

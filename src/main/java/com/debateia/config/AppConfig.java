@@ -1,4 +1,4 @@
-package com.debateia.application.jwt.config;
+package com.debateia.config;
 
 import com.debateia.domain.User;
 import lombok.RequiredArgsConstructor;

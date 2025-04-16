@@ -1,6 +1,6 @@
-package com.debateia.application.jwt;
+package com.debateia.application.ports.in.rest;
 
-import com.debateia.adapter.out.user.UserEntity;
+import com.debateia.domain.User;
 
 public interface JWTUseCase {
     /**
@@ -17,7 +17,7 @@ public interface JWTUseCase {
      * @param user User object containing user details
      * @return generated JWT token string
      */
-    public String generateToken(UserEntity user);
+    public String generateToken(User user);
 
     /**
      * Generates a refresh token for a user
@@ -25,15 +25,16 @@ public interface JWTUseCase {
      * @param user User object containing user details
      * @return generated refresh token string
      */
-    public String generateRefreshToken(UserEntity user);
+    public String generateRefreshToken(User user);
 
     /**
      * Validates if a token is valid for a given user
      * 
      * @param token JWT token to validate
-     * @param user  User to validate against
      * @return true if token is valid, false otherwise
      */
-    public boolean isTokenValid(String token, UserEntity user);
+    public boolean isTokenValid(String token);
+    
+    public Integer extractUserId(String token);
 
 }

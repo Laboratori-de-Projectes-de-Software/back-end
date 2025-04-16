@@ -35,7 +35,7 @@ public class LeagueEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    private int rounds;
+    private Integer rounds;
 
     @Column(name = "match_time")
     private Long matchTime;

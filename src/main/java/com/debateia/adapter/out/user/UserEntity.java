@@ -36,5 +36,5 @@ public class UserEntity {
     private LeagueEntity league;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<BotEntity> bots = new ArrayList<>();
+    private List<BotEntity> bots;
 }

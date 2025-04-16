@@ -18,7 +18,7 @@ public interface MatchMapper {
     @Mapping(target = "bot1id", source = "bot1.id")
     @Mapping(target = "bot2id", source = "bot2.id")
     @Mapping(target = "leagueId", source = "league.id")
-    @Mapping(target = "messageIds", ignore = true) // <- TODO (!)
+    @Mapping(target = "messageIds", ignore = true) // <- Maybe should implement it but we don't use it so ¯\_(ツ)_/¯
     @Mapping(target = "fighters", ignore = true) // <- The names of the bots cannot be directly obtained
     Match toDomain(MatchEntity entity);          // from the MatchEntity. We add them after the conversion manually.
     

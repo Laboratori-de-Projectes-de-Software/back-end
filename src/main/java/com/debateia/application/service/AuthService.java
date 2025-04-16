@@ -1,11 +1,11 @@
 package com.debateia.application.service;
 
 import com.debateia.application.ports.in.rest.AuthUseCase;
-import com.debateia.application.jwt.JwtService;
 import com.debateia.adapter.in.rest.auth.UpdateCredRequest;
 import com.debateia.adapter.in.rest.auth.UserDTOLogin;
 import com.debateia.adapter.in.rest.auth.UserDTORegister;
-import com.debateia.application.jwt.TokenData;
+import com.debateia.adapter.in.rest.auth.TokenData;
+import com.debateia.application.ports.in.rest.JWTUseCase;
 import com.debateia.application.ports.out.persistence.UserRepository;
 import com.debateia.domain.User;
 import jakarta.validation.constraints.NotNull;
@@ -20,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +29,7 @@ import org.springframework.beans.factory.annotation.Value;
 public class AuthService implements AuthUseCase {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final JWTUseCase jwtUseCase;
     private final AuthenticationManager authenticationManager;
     @Autowired
     @Value("${spring.application.security.jwt.expiration}")
@@ -51,13 +49,12 @@ public class AuthService implements AuthUseCase {
                 .password(passwordEncoder.encode(request.password()))
                 .build();
         final User savedUser = repository.save(user);
-        final String jwtToken = jwtService.generateToken(savedUser);
-        final String refreshToken = jwtService.generateRefreshToken(user); // @TODO ??????????????
-        Instant now = Instant.now();
-        Instant expirationInstant = now.plusMillis(expiration);
-        LocalDate expirationDate = expirationInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+        final String jwtToken = jwtUseCase.generateToken(savedUser);
+        final String refreshToken = jwtUseCase.generateRefreshToken(user); // @TODO ??????????????
+        
+        Instant expirationInstant = Instant.now().plusMillis(expiration);
         savedUser.setToken(jwtToken);
-        savedUser.setExpiresIn(expirationDate);
+        savedUser.setExpiresIn(expirationInstant);
         return savedUser;
     }
 
@@ -88,7 +85,7 @@ public User updateCred(@NotNull final String authentication, UpdateCredRequest r
     }
     final String authToken = authentication.substring(7);
     System.out.println("USERNAME: ");
-    final String currentUsername = jwtService.extractUsername(authToken);
+    final String currentUsername = jwtUseCase.extractUsername(authToken);
     if (currentUsername == null) {
         throw new IllegalArgumentException("Token invalido");
     }
@@ -141,7 +138,7 @@ public User updateCred(@NotNull final String authentication, UpdateCredRequest r
         final String refreshToken = authentication.substring(7);
 
         // Obtener el username del refreshToken
-        final String userEmail = jwtService.extractUsername(refreshToken);
+        final String userEmail = jwtUseCase.extractUsername(refreshToken);
         if (userEmail == null) {
             throw new IllegalArgumentException("Invalid refresh token: username extraction failed");
         }
@@ -152,7 +149,7 @@ public User updateCred(@NotNull final String authentication, UpdateCredRequest r
         );
 
         // Verificar si el token es válido
-        final boolean isTokenValid = jwtService.isTokenValid(refreshToken);
+        final boolean isTokenValid = jwtUseCase.isTokenValid(refreshToken);
         if (!isTokenValid) {
             throw new IllegalArgumentException("Invalid refresh token");
         }
@@ -161,17 +158,14 @@ public User updateCred(@NotNull final String authentication, UpdateCredRequest r
         return user;
     }
 
-
+    
+    @Override
     public TokenData generateTokens(User user) {
-        final String accessToken = jwtService.generateToken(user);
-        final String refreshToken = jwtService.generateRefreshToken(user);
+        final String accessToken = jwtUseCase.generateToken(user);
+        final String refreshToken = jwtUseCase.generateRefreshToken(user);
 
-        Instant now = Instant.now();
-        Instant expirationInstant = now.plusMillis(expiration);
-        LocalDate expirationDate = expirationInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+        Instant expirationInstant = Instant.now().plusMillis(expiration);
 
-        return new TokenData(accessToken, expirationDate);
+        return new TokenData(accessToken, expirationInstant);
     }
-
-
 }

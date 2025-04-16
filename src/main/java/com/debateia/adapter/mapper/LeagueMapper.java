@@ -41,7 +41,7 @@ public interface LeagueMapper {
     @Mapping(target = "user", source = "userId", qualifiedByName = "mapUserIdToEntity")
     @Mapping(target = "matches", expression = "java(new ArrayList<>())")
     @Mapping(target = "participations", source = "botIds", qualifiedByName = "mapBotIdsToParticipations")
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", source = "leagueId")
     LeagueEntity toEntity(League league);
     
     @Named("mapStateToEnum")

@@ -18,10 +18,10 @@ public interface BotMapper {
     
     BotSummaryResponseDTO toSummaryDTO(Bot bot);
 
+    @Mapping(target = "NDraws", constant = "0")
+    @Mapping(target = "NLosses", constant = "0")
+    @Mapping(target = "NWins", constant = "0")
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "NDraws", ignore = true)
-    @Mapping(target = "NLosses", ignore = true)
-    @Mapping(target = "NWins", ignore = true)
     @Mapping(target = "userId", ignore = true)
     Bot DTOtoDomain(BotDTO dto);
     
@@ -30,9 +30,9 @@ public interface BotMapper {
     Bot EntityToDomain(BotEntity entity);
     
     @Mapping(target = "user", source = "userId", qualifiedByName = "createUserEntity")
-    @Mapping(target = "nLosses", constant = "0")
-    @Mapping(target = "nWins", constant = "0")
-    @Mapping(target = "nDraws", constant = "0")
+    @Mapping(target = "nLosses", source = "NLosses")
+    @Mapping(target = "nWins", source = "NWins")
+    @Mapping(target = "nDraws", source = "NDraws")
     @Mapping(target = "messages", ignore = true)
     @Mapping(target = "participations", ignore = true)
     BotEntity toEntity(Bot bot);

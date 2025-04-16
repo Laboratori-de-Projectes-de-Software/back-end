@@ -29,9 +29,9 @@ public class ParticipationEntity {
     @JoinColumn(name = "bot_id", insertable = false, updatable = false)
     private BotEntity bot;
     
-    private int points; // Si no se setea manualmente se iniciliza a 0
-    private int position;
-    private int nWins; 
-    private int nDraws;
-    private int nLoses;
+    private Integer points; // Si no se setea manualmente se iniciliza a 0
+    private Integer position;
+    private Integer nWins; 
+    private Integer nDraws;
+    private Integer nLoses;
 }

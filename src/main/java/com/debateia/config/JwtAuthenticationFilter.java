@@ -1,5 +1,6 @@
-package com.debateia.application.jwt;
+package com.debateia.config;
 
+import com.debateia.application.ports.in.rest.JWTUseCase;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final JWTUseCase jwtUseCase;
     private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;
 
@@ -46,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         System.out.println("Header: "+authHeader);
         final String jwt = authHeader.substring(7);  // Extraemos el token del header
-        final String userEmail = jwtService.extractUsername(jwt);  // Extraemos el email del token
+        final String userEmail = jwtUseCase.extractUsername(jwt);  // Extraemos el email del token
         System.out.println("USER EMAIL: " + userEmail);
 
         if (userEmail == null || SecurityContextHolder.getContext().getAuthentication() != null) {
@@ -55,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         // Validamos el token con el método que ya tienes
-        boolean isTokenValid = jwtService.isTokenValid(authHeader);
+        boolean isTokenValid = jwtUseCase.isTokenValid(authHeader);
         if (isTokenValid) {
             // Si el token es válido, autenticamos al usuario
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);

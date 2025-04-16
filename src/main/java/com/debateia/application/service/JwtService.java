@@ -1,5 +1,6 @@
-package com.debateia.application.jwt;
+package com.debateia.application.service;
 
+import com.debateia.application.ports.in.rest.JWTUseCase;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.debateia.application.ports.out.persistence.UserRepository;
-import com.debateia.adapter.out.user.UserEntity;
 import com.debateia.domain.User;
 
 import javax.crypto.SecretKey;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class JwtService {
+public class JwtService implements JWTUseCase {
     private final UserRepository repository;
     @Value("${spring.application.security.jwt.secret-key}")
     private String secretKey;
@@ -36,6 +36,7 @@ public class JwtService {
                 .get("username", String.class); // ← Accedemos al claim personalizado "username"
     }
 
+    @Override
     public Integer extractUserId(String token) {
         return Jwts.parser()
                 .verifyWith(getSignInKey())

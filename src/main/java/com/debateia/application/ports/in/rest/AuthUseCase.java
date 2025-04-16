@@ -5,10 +5,8 @@ import com.debateia.adapter.in.rest.auth.UserDTOLogin;
 import com.debateia.adapter.in.rest.auth.UserDTORegister;
 
 import com.debateia.domain.User;
-import org.springframework.http.ResponseEntity;
 
-import com.debateia.adapter.in.rest.auth.UserResponseDTO;
-import com.debateia.adapter.out.user.UserEntity;
+import com.debateia.adapter.in.rest.auth.TokenData;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -20,4 +18,6 @@ public interface AuthUseCase {
     User updateCred(@NotNull final String authentication, final UpdateCredRequest request);
 
     User refreshToken(@NotNull final String authentication);
+    
+    public TokenData generateTokens(User user);
 }

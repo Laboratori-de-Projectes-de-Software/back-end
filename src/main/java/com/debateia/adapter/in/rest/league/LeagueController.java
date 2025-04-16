@@ -1,9 +1,9 @@
 package com.debateia.adapter.in.rest.league;
 import com.debateia.adapter.in.rest.match.MatchResponseDTO;
-import com.debateia.application.jwt.JwtService;
 import com.debateia.adapter.mapper.LeagueMapper;
 import com.debateia.adapter.mapper.MatchMapper;
 import com.debateia.adapter.mapper.PartMapper;
+import com.debateia.application.ports.in.rest.JWTUseCase;
 import com.debateia.application.ports.in.rest.LeagueUseCase;
 import com.debateia.application.ports.in.rest.MatchUseCase;
 import com.debateia.domain.League;
@@ -28,7 +28,7 @@ import org.springframework.http.HttpHeaders;
 public class LeagueController {
     private final LeagueUseCase leagueUseCase;
     private final MatchUseCase matchUseCase;
-    private final JwtService jwtService;
+    private final JWTUseCase jwtUseCase;
     private final LeagueMapper leagueMapper;
     private final PartMapper partMapper;
     private final MatchMapper matchMapper;
@@ -42,7 +42,7 @@ public class LeagueController {
             throw new IllegalArgumentException("Invalid auth header");
         }
         final String authToken = authentication.substring(7);
-        final Integer userId = jwtService.extractUserId(authToken);
+        final Integer userId = jwtUseCase.extractUserId(authToken);
         
         try {
             League toCreate = leagueMapper.toDomain(league);
@@ -102,7 +102,7 @@ public class LeagueController {
         }
         
         final String authToken = authentication.substring(7);
-        final Integer userId = jwtService.extractUserId(authToken);
+        final Integer userId = jwtUseCase.extractUserId(authToken);
         
         try {
             League newLeague = leagueMapper.toDomain(league);
@@ -130,7 +130,7 @@ public class LeagueController {
             throw new IllegalArgumentException("Invalid auth header");
         }
         final String authToken = authentication.substring(7);
-        final Integer userId = jwtService.extractUserId(authToken);
+        final Integer userId = jwtUseCase.extractUserId(authToken);
         
         try {
             leagueUseCase.registerBot(id, botId, userId);
@@ -169,7 +169,7 @@ public class LeagueController {
             throw new IllegalArgumentException("Invalid auth header");
         }
         final String authToken = authentication.substring(7);
-        final Integer userId = jwtService.extractUserId(authToken);
+        final Integer userId = jwtUseCase.extractUserId(authToken);
         
         try {
             League deleted = leagueUseCase.deleteLeague(id, userId);
