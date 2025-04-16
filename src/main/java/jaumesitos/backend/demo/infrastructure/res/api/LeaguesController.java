@@ -28,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 
-@RequestMapping("")
+@RequestMapping("/api/v0")
 @Tag(name = "Leagues Controller", description = "Endpoints for managing leagues")
 public class LeaguesController {
     @Qualifier("lligaDTOMapper")

@@ -29,7 +29,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("")
+@RequestMapping("/api/v0")
 @Tag(name = "Bot Controller", description = "Endpoints for managing bots")
 public class BotController {
 

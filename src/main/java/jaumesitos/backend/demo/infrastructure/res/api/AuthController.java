@@ -25,7 +25,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 
-@RequestMapping("")
+@RequestMapping("/api/v0")
 @Tag(name = "User Controller", description = "Endpoints for managing users")
 public class AuthController {
 
