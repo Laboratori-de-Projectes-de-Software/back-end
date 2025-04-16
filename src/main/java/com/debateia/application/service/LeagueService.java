@@ -1,10 +1,11 @@
 package com.debateia.application.service;
 
 import com.debateia.application.ports.in.rest.LeagueUseCase;
+import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.LeagueRepository;
-import com.debateia.application.ports.out.persistence.MatchRepository;
 import com.debateia.application.ports.out.persistence.ParticipationRepository;
 import com.debateia.application.ports.out.persistence.UserRepository;
+import com.debateia.domain.Bot;
 import com.debateia.domain.League;
 import com.debateia.domain.Participation;
 import com.debateia.domain.User;
@@ -20,12 +21,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LeagueService implements LeagueUseCase {
     private final LeagueRepository leagueRepository;
+    private final BotRepository botRepository;
     private final UserRepository userRepository;
     private final ParticipationRepository partRepository;
     private final MatchService matchService;
     
     @Override
-    public League postLeague(League l) {
+    public League postLeague(League l) throws DataIntegrityViolationException {
         return leagueRepository.saveLeague(l);
     }
     
@@ -35,7 +37,7 @@ public class LeagueService implements LeagueUseCase {
         if (lg.isEmpty())
             throw new EntityNotFoundException("Liga con ID " + leagueId + " no encontrada");
             
-        return leagueRepository.findById(leagueId).get();
+        return lg.get();
     }
 
     @Override
@@ -65,8 +67,12 @@ public class LeagueService implements LeagueUseCase {
     }
 
     @Override
-    public void registerBot(int leagueId, int botId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void registerBot(int leagueId, int botId, int userId) throws DataIntegrityViolationException {
+        Optional<Bot> bot = botRepository.findById(botId);
+        if (bot.isEmpty() || bot.get().getUserId() != userId)
+            throw new DataIntegrityViolationException("");
+        
+        partRepository.createParticipation(leagueId, botId);
     }
 
     @Override

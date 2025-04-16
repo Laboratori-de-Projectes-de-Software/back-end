@@ -4,6 +4,7 @@ import com.debateia.domain.League;
 import com.debateia.domain.Participation;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  *
@@ -13,7 +14,7 @@ public interface LeagueUseCase {
     // TODO: Integer instead of int?
     
     // Post one league
-    public League postLeague(League league);
+    public League postLeague(League league) throws DataIntegrityViolationException;
 
     // Get all leagues
     public List<League> getAllLeagues(Optional<Integer> ownerId);
@@ -26,7 +27,7 @@ public interface LeagueUseCase {
     public League updateLeague(int leagueId, int userId, League l);
     
     // Register bot to league
-    public void registerBot(int leagueId, int botId);
+    public void registerBot(int leagueId, int botId, int userId) throws DataIntegrityViolationException;
     
     // Get classification from a league
     public List<Participation> getScores(int leagueId);

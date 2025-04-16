@@ -30,7 +30,6 @@ public class LeagueController {
     private final MatchService matchService;
     private final JwtService jwtService;
    
-    // TODO: TRY/CATCH
     
     @PostMapping
     public ResponseEntity<LeagueResponseDTO> postLeague(
@@ -43,12 +42,18 @@ public class LeagueController {
         final String authToken = authentication.substring(7);
         final Integer userId = jwtService.extractUserId(authToken);
         
-        League toCreate = LeagueMapper.toDomain(league);
-        toCreate.setUserId(userId);
+        try {
+            League toCreate = LeagueMapper.toDomain(league);
+            toCreate.setUserId(userId);
+            League created = leagueUseCase.postLeague(toCreate);
+            return ResponseEntity.ok(LeagueMapper.toLeagueResponseDTO(created));
+        }
+        catch (DataIntegrityViolationException e) { // Alguno de los bots no existe
+//            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         
-        League created = leagueUseCase.postLeague(toCreate);
-        
-        return ResponseEntity.ok(LeagueMapper.toLeagueResponseDTO(created));
     }
     
     @GetMapping
@@ -113,9 +118,25 @@ public class LeagueController {
     }
     
     @PostMapping("/{id}/bot")
-    public ResponseEntity<?> registerBot(@RequestBody Integer botId) {
+    public ResponseEntity<?> registerBot(
+            @PathVariable Integer id,
+            @RequestBody Integer botId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication) {
         
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        if (authentication == null || !authentication.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid auth header");
+        }
+        final String authToken = authentication.substring(7);
+        final Integer userId = jwtService.extractUserId(authToken);
+        
+        try {
+            leagueUseCase.registerBot(id, botId, userId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        catch (DataIntegrityViolationException e) { // El userId de la liga no es el del token
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
     
     @GetMapping("/{id}/leaderboard")

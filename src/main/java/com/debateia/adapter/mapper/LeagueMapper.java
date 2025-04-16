@@ -3,10 +3,13 @@ package com.debateia.adapter.mapper;
 import com.debateia.adapter.in.web.dto.State;
 import com.debateia.adapter.in.web.dto.request.LeagueDTO;
 import com.debateia.adapter.in.web.dto.response.LeagueResponseDTO;
+import com.debateia.adapter.out.persistence.entities.BotEntity;
 import com.debateia.adapter.out.persistence.entities.LeagueEntity;
+import com.debateia.adapter.out.persistence.entities.ParticipationEntity;
 import com.debateia.adapter.out.persistence.entities.UserEntity;
 import com.debateia.domain.League;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -53,7 +56,7 @@ public class LeagueMapper {
                 .map(elem -> elem.getId())
                 .collect(Collectors.toList()));
         
-        l.setBotIds(e.getLeague_bots().stream()
+        l.setBotIds(e.getParticipations().stream()
                 .map(elem -> elem.getBotId())
                 .collect(Collectors.toList()));
         
@@ -78,7 +81,19 @@ public class LeagueMapper {
         }
         
         e.setMatches(new ArrayList<>());
-        e.setLeague_bots(new ArrayList<>());
+        
+        List<ParticipationEntity> dummies = l.getBotIds().stream()
+                .map(elem -> {
+                    ParticipationEntity ent = new ParticipationEntity();
+                    ent.setLeagueId(l.getLeagueId());
+                    ent.setBotId(elem);
+                    ent.setPoints(0);
+                    return ent;
+                })
+                .collect(Collectors.toList());
+        
+        e.setParticipations(dummies);
+
         e.setState(l.getState());
         
         // TODO: Añadir records de league_bots basandonos en la lista de botids del dominio

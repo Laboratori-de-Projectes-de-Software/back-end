@@ -41,5 +41,5 @@ public class LeagueEntity {
     private List<MatchEntity> matches;
     
     @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ParticipationEntity> league_bots;
+    private List<ParticipationEntity> participations;
 }

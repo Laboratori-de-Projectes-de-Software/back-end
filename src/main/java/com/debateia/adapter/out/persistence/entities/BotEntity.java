@@ -49,5 +49,5 @@ public class BotEntity {
     private List<MessageEntity> messages;
     
     @OneToMany(mappedBy = "bot", fetch = FetchType.LAZY)
-    private List<ParticipationEntity> bot_leagues;
+    private List<ParticipationEntity> participations;
 }

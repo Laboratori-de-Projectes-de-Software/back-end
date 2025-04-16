@@ -34,7 +34,7 @@ El repositorio front-end-bc-spn debe existir en el mismo directorio padre para q
 - [x] Get one league
 - [x] Update one league
 
-- [ ] Register bot to league
+- [x] Register bot to league
 - [ ] Get classification from a league
 - [x] Delete one league
 

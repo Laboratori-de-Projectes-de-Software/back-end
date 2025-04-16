@@ -2,8 +2,10 @@ package com.debateia.adapter.out.persistence;
 
 import com.debateia.adapter.mapper.LeagueMapper;
 import com.debateia.adapter.out.persistence.entities.LeagueEntity;
+import com.debateia.adapter.out.persistence.entities.ParticipationEntity;
 import com.debateia.application.ports.out.persistence.LeagueRepository;
 import com.debateia.domain.League;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,17 @@ public class LeagueRepo implements LeagueRepository {
     @Override
     public League saveLeague(League lg) {
         LeagueEntity toSave = LeagueMapper.toEntity(lg);
-        LeagueEntity saved = leagueJpa.save(toSave);
+        
+        List<ParticipationEntity> parts = toSave.getParticipations();
+        toSave.setParticipations(new ArrayList<>());
+        
+        LeagueEntity saved = leagueJpa.save(toSave); // Get league id
+        for (ParticipationEntity part : parts) {
+            part.setLeagueId(saved.getId()); // Set league id in participations
+        }
+        
+        saved.setParticipations(parts);
+        saved = leagueJpa.save(saved); // Update league (save with same id). Will create participations in DB.
         
         return LeagueMapper.toDomain(saved);
     }
