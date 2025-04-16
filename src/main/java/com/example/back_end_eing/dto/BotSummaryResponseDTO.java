@@ -9,4 +9,5 @@ public class BotSummaryResponseDTO {
     String name;
     Long id;
     String description;
+    String urlImage;
 }

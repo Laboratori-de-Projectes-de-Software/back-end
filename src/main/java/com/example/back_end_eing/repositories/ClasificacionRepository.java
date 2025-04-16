@@ -1,6 +1,5 @@
 package com.example.back_end_eing.repositories;
 
-import com.example.back_end_eing.models.Bot;
 import com.example.back_end_eing.models.Clasificacion;
 
 import java.util.List;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClasificacionRepository extends CrudRepository<Clasificacion, Long> {
 
+    @Query(value = "SELECT * FROM clasificacion WHERE bot_id = :botId AND liga_id = :ligaId", nativeQuery = true)
     Clasificacion findByBotIdAndLigaId(Long botId, Long ligaId);
 
     List<Clasificacion> findByLigaId(Long ligaId);
@@ -20,5 +20,7 @@ public interface ClasificacionRepository extends CrudRepository<Clasificacion, L
     @Query("SELECT c.bot.id " +
             "FROM Clasificacion c " +
             "WHERE c.liga.id = :ligaId")
-    List<Integer> findBotIdsByLigaId(@Param("ligaId") Long ligaId);
+    List<Long> findBotIdsByLigaId(@Param("ligaId") Long ligaId);
+
+
 }

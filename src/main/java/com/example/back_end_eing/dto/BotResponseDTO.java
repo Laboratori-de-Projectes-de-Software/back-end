@@ -1,22 +1,33 @@
 package com.example.back_end_eing.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Builder
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BotResponseDTO {
-    private final Long botId;
-    private final String name;
-    private final String description;
-    private final String urlImage;
-    @JsonProperty("nWins")
-    private final Integer nWins;
-    @JsonProperty("nLosses")
-    private final Integer nLosses;
-    @JsonProperty("nDraws")
-    private final Integer nDraws;
+    private  Long botId;
+    private  String name;
+    private  String description;
+    private  String urlImage;
+    private  Integer nWins;
+    private  Integer nLosses;
+    private  Integer nDraws;
+
+
+    public BotResponseDTO(BotDTO bot, Long botId, String urlImage) {
+        this.botId = botId;
+        this.name = bot.getName();
+        this.description = bot.getDescription();
+        this.urlImage = urlImage;
+        this.nWins = 0;
+        this.nLosses = 0;
+        this.nDraws = 0;
+    }
 }
 
 

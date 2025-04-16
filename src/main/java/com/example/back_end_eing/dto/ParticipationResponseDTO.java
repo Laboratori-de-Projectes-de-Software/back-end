@@ -14,4 +14,7 @@ public class ParticipationResponseDTO {
     private String name;
     private Integer points;
     private Integer position;
+    private Integer nWins;
+    private Integer nDraws;
+    private Integer nLosses;
 }

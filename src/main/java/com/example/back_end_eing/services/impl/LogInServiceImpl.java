@@ -1,12 +1,11 @@
 package com.example.back_end_eing.services.impl;
 
-import com.example.back_end_eing.dto.LogInUserDto;
-import com.example.back_end_eing.dto.RegisterUserDto;
+import com.example.back_end_eing.dto.UserDTOLogin;
+import com.example.back_end_eing.dto.UserDTORegister;
 import com.example.back_end_eing.dto.UserResponseDTO;
 import com.example.back_end_eing.exceptions.EmailAlreadyExistsException;
 import com.example.back_end_eing.exceptions.UserAlreadyExistsException;
 import com.example.back_end_eing.exceptions.UserNameNotFoundException;
-import com.example.back_end_eing.exceptions.UserNotFoundException;
 import com.example.back_end_eing.models.Usuario;
 import com.example.back_end_eing.repositories.UsuarioRepository;
 import com.example.back_end_eing.services.JwtService;
@@ -25,17 +24,17 @@ public class LogInServiceImpl implements LogInService {
 
 
     @Override
-    public UserResponseDTO signUp(RegisterUserDto registerUserDto){
-        if(usuarioRepository.findByEmail(registerUserDto.getEmail()).isPresent()){
+    public UserResponseDTO signUp(UserDTORegister userDTORegister){
+        if(usuarioRepository.findByEmail(userDTORegister.getMail()).isPresent()){
             throw new EmailAlreadyExistsException();
         }
-        if (usuarioRepository.findByNombreUsuario(registerUserDto.getNombreUsuario()).isPresent()) {
+        if (usuarioRepository.findByNombreUsuario(userDTORegister.getUser()).isPresent()) {
             throw new UserAlreadyExistsException();
         }
         // Encriptar la contraseña antes de guardarla
-        String hashedPassword = passwordEncoder.encode(registerUserDto.getPassword());
+        String hashedPassword = passwordEncoder.encode(userDTORegister.getPassword());
 
-        Usuario usuario = new Usuario(registerUserDto.getNombreUsuario(), registerUserDto.getEmail(), hashedPassword, null);
+        Usuario usuario = new Usuario(userDTORegister.getUser(), userDTORegister.getMail(), hashedPassword, null);
         Usuario savedUsuario = usuarioRepository.save(usuario);
 
         return UserResponseDTO.builder()
@@ -46,13 +45,13 @@ public class LogInServiceImpl implements LogInService {
     }
 
     @Override
-    public UserResponseDTO logIn(LogInUserDto logInUserDto) {
+    public UserResponseDTO logIn(UserDTOLogin userDTOLogin) {
         // Buscar usuario en la base de datos por nombre de usuario
-        Usuario usuario = usuarioRepository.findByNombreUsuario(logInUserDto.getNombreUsuario())
-                .orElseThrow(() -> new UserNameNotFoundException(logInUserDto.getNombreUsuario()));
+        Usuario usuario = usuarioRepository.findByNombreUsuario(userDTOLogin.getUser())
+                .orElseThrow(() -> new UserNameNotFoundException(userDTOLogin.getUser()));
 
         // Comparar la contraseña ingresada con la almacenada
-        if (!passwordEncoder.matches(logInUserDto.getPassword(), usuario.getPassword())) {
+        if (!passwordEncoder.matches(userDTOLogin.getPassword(), usuario.getPassword())) {
             throw new IllegalArgumentException("Contraseña incorrecta");
         }
 

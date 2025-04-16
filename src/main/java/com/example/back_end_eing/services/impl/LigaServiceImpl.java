@@ -1,34 +1,27 @@
 package com.example.back_end_eing.services.impl;
 
 import com.example.back_end_eing.dto.LeagueResponseDTO;
+import com.example.back_end_eing.exceptions.*;
+import com.example.back_end_eing.models.*;
 import com.example.back_end_eing.dto.ParticipationResponseDTO;
+
+import com.example.back_end_eing.repositories.*;
 import com.example.back_end_eing.services.LigaService;
 
-import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.back_end_eing.repositories.BotRepository;
-import com.example.back_end_eing.repositories.ClasificacionRepository;
-import com.example.back_end_eing.repositories.LigaRepository;
-import com.example.back_end_eing.models.Clasificacion;
-import com.example.back_end_eing.exceptions.BotNotFoundException;
-import com.example.back_end_eing.exceptions.ClasificacionLigaNotFoundException;
-import com.example.back_end_eing.exceptions.ClasificacionNotFoundException;
-import com.example.back_end_eing.exceptions.LigaNotFoundException;
 import com.example.back_end_eing.constants.EstadoLigaConstants;
 import com.example.back_end_eing.dto.LeagueDTO;
-import com.example.back_end_eing.exceptions.IncorrectNumBotsException;
-import com.example.back_end_eing.exceptions.UserNotFoundException;
-import com.example.back_end_eing.models.Liga;
-import com.example.back_end_eing.models.Usuario;
-import com.example.back_end_eing.repositories.UsuarioRepository;
 
+@AllArgsConstructor
 @Service
 public class LigaServiceImpl implements LigaService{
 
@@ -36,27 +29,14 @@ public class LigaServiceImpl implements LigaService{
     private BotRepository botRepository;
     @Autowired
     private LigaRepository ligaRepository;
+
     @Autowired
     private ClasificacionRepository clasificacionRepository;
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    private Liga liga;
 
-    private Usuario usuario;
 
-    @Override
-    public void LigaActualizacion(Long liga, Long local, Long visitante, String resultado) {
-       // comprobaciones(local, visitante, liga);
-
-//        //actualizaciones de puntos
-//        Clasificacion clasificacion = clasificacionRepository.findByBotIdAndLigaId(local, liga);
-//        actualizarPuntos(clasificacion, resultado, true);
-//        //clasificacion = clasificacionRepository.findByBotIdAndLigaId(visitante, liga);
-//        //actualizarPuntos(clasificacion, resultado, false);
-//
-//        //actualizarPosiciones(liga);
-    }
 
     @Override
     public List<ParticipationResponseDTO> getClasificacion(Long id) {
@@ -89,128 +69,169 @@ public class LigaServiceImpl implements LigaService{
         Liga league = ligaRepository.findById(id)
                 .orElseThrow(() -> new LigaNotFoundException(id));
 
-        List<Integer> bots = clasificacionRepository.findBotIdsByLigaId(id);
+        List<Long> bots = clasificacionRepository.findBotIdsByLigaId(id);
 
         return new LeagueResponseDTO(league, bots);
 
     }
-    private void actualizarPuntos(Clasificacion clasificacion, String resultado, boolean local){
-        switch (resultado) {
-            case "local":
-                if(local){
-                    clasificacion.setVictorias(clasificacion.getVictorias()+1);
-                    clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+3);
-                }else{
-                    clasificacion.setVictorias(clasificacion.getDerrotas()+1);
-                }
-                break;
 
-            case "visitante":
-                if(local){
-                    clasificacion.setVictorias(clasificacion.getDerrotas()+1);
-                }else{
-                    clasificacion.setVictorias(clasificacion.getVictorias()+1);
-                    clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+3);
-                }
-                break;
+    @Override
+    public Long getOwnerByLeagueId(Long id) {
+        Liga league = ligaRepository.findById(id)
+                .orElseThrow();
 
-            case "empate":
-                clasificacion.setEmpates(clasificacion.getEmpates()+1);
-                clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+1);
-                break;
-        
-            default:
-                break;
+        return league.getUsuario().getId();
+    }
+
+
+    public List<LeagueResponseDTO> obtenerLigas() {
+        List<Liga> ligas = ligaRepository.findAll();
+
+        List<LeagueResponseDTO> leagueResponseDTOS = new ArrayList<>();
+        for(Liga liga : ligas){
+
+            List<Bot> bots = botRepository.findByLeague(liga.getId());
+
+            leagueResponseDTOS.add(
+                    LeagueResponseDTO.builder()
+                            .leagueId(liga.getId().intValue())
+                            .status(liga.getEstado())
+                            .name(liga.getNombreLiga())
+                            .user(liga.getUsuario().getNombreUsuario())
+                            .urlImagen(liga.getImagen())
+                            .rounds(liga.getNumJornadas())
+                            .matchTime(liga.getMatchTime())
+                            .bots(bots.stream().map((Bot::getId)).toList())
+                            .build()
+            );
         }
-        clasificacionRepository.save(clasificacion);
+
+        return leagueResponseDTOS;
     }
 
     @Override
-    public void deleteLiga(Long id) {
+    public List<LeagueResponseDTO> obtenerLigasByUserId(Long userId) {
+
+        usuarioRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(Math.toIntExact(userId)));
+
+        List<Liga> ligas = ligaRepository.findAllByUserId(userId);
+
+        List<LeagueResponseDTO> leagueResponseDTOS = new ArrayList<>();
+        for(Liga liga : ligas){
+
+            List<Bot> bots = botRepository.findByLeague(liga.getId());
+
+            leagueResponseDTOS.add(
+                    LeagueResponseDTO.builder()
+                            .leagueId(liga.getId().intValue())
+                            .status(liga.getEstado())
+                            .name(liga.getNombreLiga())
+                            .user(liga.getUsuario().getNombreUsuario())
+                            .urlImagen(liga.getImagen())
+                            .rounds(liga.getNumJornadas())
+                            .matchTime(liga.getMatchTime())
+                            .bots(bots.stream().map((Bot::getId)).toList())
+                            .build()
+            );
+        }
+
+        return leagueResponseDTOS;
+    }
+
+
+
+
+    @Override
+    public LeagueResponseDTO deleteLiga(Long id) {
         Liga league = ligaRepository.findById(id)
                 .orElseThrow(() -> new LigaNotFoundException(id));
+        List<Long> bots = clasificacionRepository.findBotIdsByLigaId(id);
+
+        LeagueResponseDTO responseDTO = new LeagueResponseDTO(league,bots);
 
         ligaRepository.delete(league);
+        return responseDTO;
     }
 
-
-    /********** PRIVATE METHODS **********/
-
-//    private void comprobaciones(Long local, Long visitante, Long liga){
-//        botExiste(local);
-//        botExiste(visitante);
-//        ligaExiste(liga);
-//        clasificacionExiste(local, liga);
-//        clasificacionExiste(visitante, liga);
-//    }
-
-
-//    private void clasificacionExisteLiga(long liga){
-//        if(clasificacionRepository.findByLigaId(liga) == null){
-//            throw new ClasificacionLigaNotFoundException(liga);
-//        }
-//    }
-//
-//    @Transactional
-//    protected void actualizarPuntos(Clasificacion clasificacion, String resultado, boolean local){
-//        switch (resultado) {
-//            case "local":
-//                if(local){
-//                    clasificacion.setVictorias(clasificacion.getVictorias()+1);
-//                    clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+3);
-//                }else{
-//                    clasificacion.setVictorias(clasificacion.getDerrotas()+1);
-//                }
-//                break;
-//
-//            case "visitante":
-//                if(local){
-//                    clasificacion.setVictorias(clasificacion.getDerrotas()+1);
-//                }else{
-//                    clasificacion.setVictorias(clasificacion.getVictorias()+1);
-//                    clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+3);
-//                }
-//                break;
-//
-//            case "empate":
-//                clasificacion.setEmpates(clasificacion.getEmpates()+1);
-//                clasificacion.setPuntuacionBot(clasificacion.getPuntuacionBot()+1);
-//                break;
-//
-//            default:
-//                break;
-//        }
-//    }
-//
-////    @Transactional
-////    protected void actualizarPosiciones(Long liga){
-////        List<Clasificacion> clasificaciones = LigaClasificacion(liga);
-////        int pos = 1;
-////        for (Clasificacion clasificacion : clasificaciones) {
-////            clasificacion.setPosicion(pos);
-////            pos++;
-////        }
-////    }
-
-    
-
-    public void LigaRegistro(LeagueDTO ligaDto){
+    public LeagueResponseDTO LigaRegistro(LeagueDTO ligaDto){
         // solo un número de bots par, controlar en el front-end números > 0
-        if (ligaDto.getBots().length % 2 != 0) {
-            throw new IncorrectNumBotsException(ligaDto.getBots().length);
+        if (ligaDto.getBots().size() % 2 != 0) {
+            throw new IncorrectNumBotsException(ligaDto.getBots().size());
         }
-        usuario = getUsuario(ligaDto.getCreador());
+        Usuario usuario = getUsuario(ligaDto.getCreador());
         // establecer estado = ABIERTA por defecto si el usuario no lo especifica
-        String estado = null;
-        if (estado == null || estado.isEmpty()) {
-            estado = EstadoLigaConstants.ABIERTA;
-        }
-        liga = new Liga(ligaDto.getName(), ligaDto.getRounds(), ligaDto.getBots().length, estado, ligaDto.getUrlImagen(), 1, usuario);
-        ligaRepository.save(liga);
+
+        String estado = EstadoLigaConstants.ABIERTA;
+        Liga liga = new Liga(ligaDto.getName(), ligaDto.getRounds(), ligaDto.getBots().size(), estado, ligaDto.getUrlImagen(), 1, usuario, ligaDto.getMatchTime());
+        Liga saved = ligaRepository.save(liga);
+        //se acaba de crear la liga no ntendrá bots asignados
+        return new LeagueResponseDTO(saved, new ArrayList<>());
     }
+
+    public LeagueResponseDTO actualizarLiga(LeagueDTO ligaDto, Long id){
+        Optional<Liga> consulta = null;
+        consulta = ligaRepository.findById(id);
+        if(!consulta.isPresent()){
+            throw(new LigaNotFoundException(id));
+        }
+        Liga liga = consulta.get();
+
+        Optional<Usuario> user = usuarioRepository.findById((long)ligaDto.getCreador());
+        if(!user.isPresent()){
+            throw(new UserNotFoundException(0));
+        }
+
+        //el nuevo numero de bots no puede ser menor a los bots inscritos actualmente a la liga, además, ha de ser par
+        if (ligaDto.getBots().size() % 2 != 0) {
+            throw new IncorrectNumBotsException(ligaDto.getBots().size());
+        }
+        List<Clasificacion> bots = clasificacionRepository.findByLigaId(id);
+        if(ligaDto.getBots().size() < bots.size()){
+            throw new IncorrectNumBotsException(ligaDto.getBots().size());
+        }
+
+        liga.setNombreLiga(ligaDto.getName());
+        liga.setImagen(ligaDto.getUrlImagen());
+        liga.setNumJornadas(ligaDto.getRounds());
+        liga.setNumBots(ligaDto.getBots().size());
+        liga.setUsuario(user.get());
+
+        Liga saved = ligaRepository.save(liga);
+        return new LeagueResponseDTO(saved, ligaDto.getBots());
+    }
+
+
+    @Override
+    public void registerBotToLeague(Long botId, Long leagueId) {
+
+        Bot bot = botRepository.findById(botId)
+                .orElseThrow(BotNotFoundException::new);
+
+        Liga league = ligaRepository.findById(leagueId)
+                .orElseThrow(() -> new LigaNotFoundException(leagueId));
+
+        List<Clasificacion> clasificaciones = clasificacionRepository.findByLigaId(leagueId) != null
+                ? clasificacionRepository.findByLigaId(leagueId)
+                : new ArrayList<>();
+
+        if(league.getNumBots() <= clasificaciones.size()){
+            throw new BotLimitReachedException("Límite de bots alcanzado");
+        }
+
+        if (clasificacionRepository.findByBotIdAndLigaId(botId, leagueId) != null) {
+            throw new BotAlreadyRegisteredException("El bot ya está registrado en esta liga");
+        }
+
+        Clasificacion clasificacion = new Clasificacion(bot, league);
+
+        clasificacionRepository.save(clasificacion);
+    }
+
 
     private Usuario getUsuario(int id){
         return usuarioRepository.findById((long) id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 }
+

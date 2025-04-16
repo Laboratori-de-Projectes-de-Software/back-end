@@ -1,18 +1,16 @@
 package com.example.back_end_eing.dto;
 
-import com.example.back_end_eing.models.Bot;
-import com.example.back_end_eing.models.Liga;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.util.ArrayList;
+import com.example.back_end_eing.models.Liga;
+import lombok.*;
+
+
 import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class LeagueResponseDTO {
     private Integer leagueId;
     private String status;
@@ -21,19 +19,19 @@ public class LeagueResponseDTO {
     private String urlImagen;
     private Integer rounds;
     private Long matchTime;
-    private List<Integer> bots;
+    private List<Long> bots;
 
 
-    public LeagueResponseDTO(Liga liga, List<Integer> bots) {
+    public LeagueResponseDTO(Liga liga, List<Long> bots) {
 
         this.leagueId = Math.toIntExact(liga.getId());
         this.status = liga.getEstado();
         this.name = liga.getNombreLiga();
         this.user = liga.getUsuario().getNombreUsuario();
-        this.urlImagen = null;
+        this.urlImagen = liga.getImagen();
         this.bots = bots;
         this.rounds = liga.getNumJornadas();
-        this.matchTime = 120L;
+        this.matchTime = liga.getMatchTime() * 60;
 
     }
 }
