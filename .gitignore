@@ -1,24 +1,10 @@
-# --- Archivos generados y compilados ---
-*.class
-*.log
-hs_err_pid*
-replay_pid*
+HELP.md
 target/
-build/
+!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-# --- Paquetes y binarios ---
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# --- Herramientas y entornos ---
-### STS (Spring Tool Suite) ###
+### STS ###
 .apt_generated
 .classpath
 .factorypath
@@ -28,7 +14,7 @@ build/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea/
+.idea
 *.iws
 *.iml
 *.ipr
@@ -39,16 +25,9 @@ build/
 /dist/
 /nbdist/
 /.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
-
-# --- Archivos de BlueJ (si alguien lo usa) ---
-*.ctxt
-
-# --- Mobile Tools for Java (J2ME) ---
-.mtj.tmp/
-
-# --- Maven Wrapper ---
-!.mvn/wrapper/maven-wrapper.jar
-
