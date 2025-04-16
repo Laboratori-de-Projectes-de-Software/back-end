@@ -58,7 +58,7 @@ public class UserMapper {
         return userResponse;
     }
 
-    public UserResponseDTO toUserResponseDTO(String token, long expiresInMillis, String username, Long id) {
+    public UserResponseDTO toUserResponseDTO(String token, long expiresInMillis, String username, Long id, String mail) {
         // Convertir expiresInMillis a LocalDateTime
         // expiresIn va a contener la hora de expiración de CET
         LocalDateTime expiresIn = Instant.ofEpochMilli(System.currentTimeMillis() + expiresInMillis)
@@ -70,7 +70,8 @@ public class UserMapper {
         userResponseDTO.setToken(token);
         userResponseDTO.setExpiresIn(expiresIn);
         userResponseDTO.setUser(username);
-        userResponseDTO.setUserId(id);
+        userResponseDTO.setId(id);
+        userResponseDTO.setMail(mail);
 
         return userResponseDTO;
     }

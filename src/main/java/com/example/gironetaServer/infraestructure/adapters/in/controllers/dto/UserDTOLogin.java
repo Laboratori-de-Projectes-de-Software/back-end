@@ -2,7 +2,7 @@ package com.example.gironetaServer.infraestructure.adapters.in.controllers.dto;
 
 public class UserDTOLogin {
 
-    private String email;
+    private String user;
     private String password;
 
     // Constructor por defecto
@@ -10,18 +10,18 @@ public class UserDTOLogin {
     }
 
     // Constructor
-    public UserDTOLogin(String email, String password) {
-        this.email = email;
+    public UserDTOLogin(String user, String password) {
+        this.user = user;
         this.password = password;
     }
 
     // Getters y setters
-    public String getEmail() {
-        return email;
+    public String getUser() {
+        return user;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getPassword() {

@@ -33,6 +33,11 @@ public class AuthenticationService {
     }
 
     public UserEntity signup(UserDTORegister input) {
+        // Verificar si el username ya está registrado
+        if (userJpaRepository.findByUsername(input.getUser()).isPresent()) {
+            throw new ConflictException("The username '" + input.getUser() + "' is already taken");
+        }
+
         UserEntity user = new UserEntity();
         user.setUsername(input.getUser());
         user.setEmail(input.getMail());
@@ -54,10 +59,10 @@ public class AuthenticationService {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            input.getEmail(),
+                            input.getUser(),
                             input.getPassword()));
 
-            return userJpaRepository.findByEmail(input.getEmail())
+            return userJpaRepository.findByUsername(input.getUser())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         } catch (BadCredentialsException e) {
             throw new UnauthorizedException("Invalid credentials: " + e.getMessage());

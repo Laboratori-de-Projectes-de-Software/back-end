@@ -53,7 +53,7 @@ public class AuthenticationController {
         try {
             UserEntity authenticatedUser = authenticationService.authenticate(loginUserDto);
             String jwtToken = jwtService.generateToken(authenticatedUser, authenticatedUser.getId(), authenticatedUser.getEmail());
-            UserResponseDTO userResponseDTO = userMapper.toUserResponseDTO(jwtToken, jwtService.getExpirationTime(), authenticatedUser.getUsername(), authenticatedUser.getId());
+            UserResponseDTO userResponseDTO = userMapper.toUserResponseDTO(jwtToken, jwtService.getExpirationTime(), authenticatedUser.getUsername(), authenticatedUser.getId(), authenticatedUser.getEmail());
             return ResponseEntity.ok(userResponseDTO);
         } catch (UnauthorizedException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

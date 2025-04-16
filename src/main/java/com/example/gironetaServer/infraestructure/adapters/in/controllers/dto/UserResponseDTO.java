@@ -6,10 +6,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UserResponseDTO {
+    private Long id;
+    private String user;
+    private String mail;
     private String token;
     private LocalDateTime expiresIn;
-    private String user;
-    private Long userId;
+
 
     public UserResponseDTO() {
     }
@@ -26,6 +28,14 @@ public class UserResponseDTO {
         return expiresIn;
     }
 
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
     public void setExpiresIn(LocalDateTime expiresIn) {
         this.expiresIn = expiresIn;
     }
@@ -33,13 +43,16 @@ public class UserResponseDTO {
     public String getUser() {
         return user;
     }
+
     public void setUser(String user) {
         this.user = user;
     }
-    public Long getUserId() {
-        return userId;
+
+    public Long getId() {
+        return id;
     }
-    public void setUserId(Long userId) {
-        this.userId = userId;
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
