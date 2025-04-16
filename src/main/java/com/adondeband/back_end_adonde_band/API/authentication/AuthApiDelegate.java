@@ -47,10 +47,10 @@ public class AuthApiDelegate
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<Usuario> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
         try {
             Usuario registeredUser = authenticationService.signup(authenticationDtoMapper.registerUserDtotoDomain(registerUserDto));
-            return ResponseEntity.status(HttpStatus.OK).body("Usuario registrado con éxito");
+            return ResponseEntity.ok(registeredUser);
         } catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
