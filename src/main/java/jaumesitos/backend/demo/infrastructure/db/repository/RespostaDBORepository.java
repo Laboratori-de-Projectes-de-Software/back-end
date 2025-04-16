@@ -3,6 +3,8 @@ package jaumesitos.backend.demo.infrastructure.db.repository;
 import jaumesitos.backend.demo.application.repository.IRespostaRepository;
 import jaumesitos.backend.demo.domain.Resposta;
 import java.util.stream.Collectors;
+
+import jaumesitos.backend.demo.infrastructure.db.dbo.RespostaDBO;
 import jaumesitos.backend.demo.infrastructure.db.mapper.RespostaDBOMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;

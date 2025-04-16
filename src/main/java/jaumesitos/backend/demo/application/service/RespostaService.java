@@ -22,7 +22,7 @@ public class RespostaService {
         respostaRepository.save(resposta);
     }
 
-    public List<RespostaDBO> getMesgesByMatchID(int matchId) {
+    public List<Resposta> getMesgesByMatchID(int matchId) {
         return respostaRepository.findByMatchId(matchId);
     }
 }

@@ -6,6 +6,6 @@ import jaumesitos.backend.demo.infrastructure.db.dbo.RespostaDBO;
 import java.util.List;
 
 public interface IRespostaRepository {
-    List<RespostaDBO> findByMatchId(int id);
+    List<Resposta> findByMatchId(int id);
     void save(Resposta resposta);
 }
