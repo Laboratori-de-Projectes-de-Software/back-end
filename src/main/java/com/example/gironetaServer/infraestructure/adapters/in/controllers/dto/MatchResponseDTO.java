@@ -1,10 +1,6 @@
 package com.example.gironetaServer.infraestructure.adapters.in.controllers.dto;
 
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.EnfrentamientoEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 public class MatchResponseDTO {
 
@@ -20,7 +16,7 @@ public class MatchResponseDTO {
     public MatchResponseDTO() {
     }
 
-    public MatchResponseDTO(Long id, EnfrentamientoEntity.State state, int result, String[] fighters,
+    public MatchResponseDTO(Long id, EnfrentamientoEntity.State state, int result, BotResponseDTO[] fighters,
             int roundNumber) {
         this.id = id;
         this.state = state;
@@ -53,11 +49,11 @@ public class MatchResponseDTO {
         this.result = result;
     }
 
-    public String[] getFighters() {
+    public BotResponseDTO[] getFighters() {
         return fighters;
     }
 
-    public void setFighters(String[] fighters) {
+    public void setFighters(BotResponseDTO[] fighters) {
         this.fighters = fighters;
     }
 
