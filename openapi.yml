@@ -1,0 +1,585 @@
+openapi: 3.0.0
+info:
+  title: Gironeta Server API
+  description: This file defines the communication contract between the AI league application front-end and the back-end service.
+  version: 1.0.0
+
+paths:
+
+  /api/v0/auth/register:
+    post:
+      summary: Register a new user
+      description: This endpoint allows a new user to register in the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterDTO'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '409':
+          description: Conflict, user already exists
+
+  /api/v0/auth/login:
+    post:
+      summary: User login
+      description: This endpoint allows a user to log in to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginDTO'
+      responses:
+        '200':
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticatedUserDTO'
+        '401':
+          description: Unauthorized, invalid credentials
+
+  /api/v0/bot:
+    post:
+      summary: Create a new bot
+      description: This endpoint allows a user to create a new bot.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBotDTO'
+      responses:
+        '200':
+          description: Bot created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BotDTO'
+        '409':
+          description: Conflict, bot already exists
+    get:
+      summary: Get bots
+      description: This endpoint retrieves bots, allowing to filter results by owner.
+      parameters:
+        - name: owner
+          in: query
+          description: Filter bots by owner
+          required: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: List of bots retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BotDTO'
+
+  /api/v0/bot/{botId}:
+    get:
+      summary: Get bot by ID
+      description: This endpoint retrieves a bot by its ID.
+      parameters:
+        - name: botId
+          in: path
+          required: true
+          description: The ID of the bot to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Bot retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BotDTO'
+        '404':
+          description: Bot not found
+    put:
+      summary: Update bot by ID
+      description: This endpoint updates a bot by its ID.
+      parameters:
+        - name: botId
+          in: path
+          required: true
+          description: The ID of the bot to update
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBotDTO'
+      responses:
+        '200':
+          description: Bot updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BotDTO'
+        '404':
+          description: Bot not found
+
+  /api/v0/league:
+    post:
+      summary: Create a new league
+      description: This endpoint allows a user to create a new league.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLeagueDTO'
+      responses:
+        '200':
+          description: League created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueDTO'
+    get:
+      summary: Get leagues
+      description: This endpoint retrieves leagues, allowing to filter results by owner.
+      parameters:
+        - name: owner
+          in: query
+          description: Filter leagues by owner
+          required: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: List of leagues retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LeagueDTO'
+
+  /api/v0/league/{leagueId}:
+    get:
+      summary: Get league by ID
+      description: This endpoint retrieves a league by its ID.
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          description: The ID of the league to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: League retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueDTO'
+        '404':
+          description: League not found
+    put:
+      summary: Update league by ID
+      description: This endpoint updates a league by its ID.
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          description: The ID of the league to update
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLeagueDTO'
+      responses:
+        '200':
+          description: League updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueDTO'
+        '404':
+          description: League not found
+    delete:
+      summary: Delete league by ID
+      description: This endpoint deletes a league by its ID.
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          description: The ID of the league to delete
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: League deleted successfully
+        '404':
+          description: League not found
+
+  /api/v0/league/{leagueId}/bot:
+    post:
+      summary: Add bots to a league
+      description: This endpoint allows a user to add bots to a league.
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          description: The ID of the league to which the bot will be added
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              description: List of bot IDs to add to the league
+              items:
+                type: integer
+                format: int64
+      responses:
+        '204':
+          description: Bots added to league successfully
+        '404':
+          description: League not found
+        '400':
+          description: Bad request, invalid bot IDs
+
+  /api/v0/league/{leagueId}/leaderboard:
+    get:
+      summary: Get league leaderboard
+      description: This endpoint retrieves the leaderboard of a league.
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          description: The ID of the league to retrieve the leaderboard for
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: League leaderboard retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ParticipationDTO'
+        '404':
+          description: League not found
+
+  /api/v0/league/{leagueId}/start:
+    post:
+      summary: Start a league
+      description: This endpoint starts a league.
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          description: The ID of the league to start
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: League started successfully
+        '404':
+          description: League not found
+
+  /api/v0/league/{leagueId}/match:
+    get:
+      summary: Get matches of a league
+      description: This endpoint retrieves the matches of a league.
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          description: The ID of the league to retrieve matches for
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: League matches retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchDTO'
+        '404':
+          description: League not found
+
+  /api/v0/match/{matchId}/message:
+    get:
+      summary: Get match messages
+      description: This endpoint retrieves the messages of a match.
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          description: The ID of the match to retrieve messages for
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Match messages retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageDTO'
+        '404':
+          description: Match not found
+
+components:
+  schemas:
+
+    UserRegisterDTO:
+      type: object
+      properties:
+        user:
+          type: string
+        mail:
+          type: string
+        password:
+          type: string
+      required:
+        - user
+        - mail
+        - password
+
+    UserLoginDTO:
+      type: object
+      properties:
+        user:
+          type: string
+        password:
+          type: string
+      required:
+        - user
+        - password
+
+    CreateBotDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        quality:
+          type: string
+        imageUrl:
+          type: string
+        apiUrl:
+          type: string
+      required:
+        - name
+        - quality
+        - apiUrl
+
+    BotDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        quality:
+          type: string
+        imageUrl:
+          type: string
+        apiUrl:
+          type: string
+        nWins:
+          type: integer
+        nDraws:
+          type: integer
+        nLosses:
+          type: integer
+      required:
+        - id
+        - name
+        - quality
+        - apiUrl
+
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        user:
+          type: string
+        mail:
+          type: string
+      required:
+        - id
+        - user
+        - mail
+
+    AuthenticatedUserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        user:
+          type: string
+        mail:
+          type: string
+        token:
+          type: string
+        expiresIn:
+          type: string
+          format: date-time
+      required:
+        - id
+        - user
+        - mail
+        - token
+        - expiresIn
+
+    CreateLeagueDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        imageUrl:
+          type: string
+        rounds:
+          type: integer
+        matchTime:
+          type: integer
+          format: int64
+      required:
+        - name
+        - rounds
+        - matchTime
+
+    LeagueDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        imageUrl:
+          type: string
+        rounds:
+          type: integer
+        matchTime:
+          type: integer
+          format: int64
+        bots:
+          type: array
+          items:
+            $ref: '#/components/schemas/BotDTO'
+        state:
+          type: string
+          enum:
+            - PENDING
+            - IN_PROGRESS
+            - COMPLETED
+      required:
+        - id
+        - name
+        - rounds
+        - matchTime
+        - bots
+        - state
+
+    ParticipationDTO:
+      type: object
+      properties:
+        botId:
+          type: integer
+          format: int64
+        botName:
+          type: string
+        points:
+          type: integer
+        position:
+          type: integer
+        nWins:
+          type: integer
+        nDraws:
+          type: integer
+        nLosses:
+          type: integer
+      required:
+        - botId
+        - botName
+        - points
+        - position
+        - nWins
+        - nDraws
+        - nLosses
+
+    MatchDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        state:
+          type: string
+          enum:
+            - PENDING
+            - IN_PROGRESS
+            - COMPLETED
+        result:
+          type: integer
+          description: Result of the match, -1 for draw, otherwise the winner's index in the fighters array
+        fighters:
+          type: array
+          items:
+            $ref: '#/components/schemas/BotDTO'
+        roundNumber:
+          type: integer
+      required:
+        - id
+        - state
+        - result
+        - fighters
+        - roundNumber
+
+    MessageDTO:
+      type: object
+      properties:
+        botId:
+          type: integer
+          format: int64
+        text:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+      required:
+        - botId
+        - text
+        - timestamp

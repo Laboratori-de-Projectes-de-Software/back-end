@@ -1,43 +1,61 @@
 package com.example.gironetaServer.infraestructure.adapters.out.db.repository;
 
-import com.example.gironetaServer.application.ports.LigaRepository;
-import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LigaEntity;
+import com.example.gironetaServer.application.ports.LeagueRepository;
+import com.example.gironetaServer.domain.League;
+import com.example.gironetaServer.infraestructure.adapters.out.db.entities.LeagueEntity;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers.LigaMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
-public class LigaDatabaseRepository implements LigaRepository {
+public class LigaDatabaseRepository implements LeagueRepository {
 
-    private final LigaJpaRepository ligaJpaRepository;
+    private final LigaJpaRepository leagueJpaRepository;
+    private final LigaMapper leagueMapper;
 
-    public LigaDatabaseRepository(LigaJpaRepository ligaJpaRepository) {
-        this.ligaJpaRepository = ligaJpaRepository;
+    public LigaDatabaseRepository(LigaJpaRepository leagueJpaRepository, LigaMapper leagueMapper) {
+        this.leagueJpaRepository = leagueJpaRepository;
+        this.leagueMapper = leagueMapper;
     }
 
     @Override
-    public Optional<LigaEntity> findById(Long id) {
-        return ligaJpaRepository.findById(id);
+    @Transactional
+    public Optional<League> findById(Long id) {
+        return leagueJpaRepository.findById(id)
+                .map(leagueMapper::toDomain);
     }
 
     @Override
-    public Optional<LigaEntity> findByNombre(String nombre) {
-        return ligaJpaRepository.findByNombre(nombre);
+    @Transactional
+    public List<League> findByUserId(Long userId) {
+        return leagueJpaRepository.findByUsuarioId(userId)
+                .stream()
+                .map(ligaEntity -> leagueMapper.toDomain(ligaEntity))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<LigaEntity> findAll() {
-        return ligaJpaRepository.findAll();
+    @Transactional
+    public List<League> findAll() {
+        return leagueJpaRepository.findAll()
+                .stream()
+                .map(leagueMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public LigaEntity save(LigaEntity liga) {
-        return ligaJpaRepository.save(liga);
+    public League save(League league) {
+        LeagueEntity leagueEntity = leagueMapper.toEntity(league);
+        leagueEntity = leagueJpaRepository.save(leagueEntity);
+        return leagueMapper.toDomain(leagueEntity);
     }
 
     @Override
     public void deleteById(Long id) {
-        ligaJpaRepository.deleteById(id);
+        leagueJpaRepository.deleteById(id);
     }
 }

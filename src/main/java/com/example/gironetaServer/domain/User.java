@@ -10,6 +10,9 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public User() {
+    }
+
     public Long getId() {
         return id;
     }

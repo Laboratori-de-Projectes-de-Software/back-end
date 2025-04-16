@@ -1,10 +1,10 @@
 package com.example.gironetaServer.infraestructure.adapters.in.controllers.dto;
 
-public class LoginResponse {
-
+public class JwtResponseDto {
     private String token;
+    private String type = "Bearer";
 
-    public LoginResponse(String token) {
+    public JwtResponseDto(String token) {
         this.token = token;
     }
 
@@ -14,5 +14,13 @@ public class LoginResponse {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
