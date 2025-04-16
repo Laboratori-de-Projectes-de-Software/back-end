@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class League {
     
-    private int leagueId;
+    private Integer leagueId;
     private String name;
     private String urlImagen;
-    private int rounds;
-    private long matchTime;
+    private Integer rounds;
+    private Long matchTime;
     
     private List<Integer> matchIds;
     private List<Integer> botIds;

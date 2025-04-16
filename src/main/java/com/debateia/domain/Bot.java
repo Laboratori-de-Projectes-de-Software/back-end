@@ -16,9 +16,9 @@ public class Bot {
     private String endpoint;
     private String urlImagen;
     private Integer userId;
-    private int nWins;
-    private int nDraws;
-    private int nLosses;
+    private Integer nWins;
+    private Integer nDraws;
+    private Integer nLosses;
 }
 
 

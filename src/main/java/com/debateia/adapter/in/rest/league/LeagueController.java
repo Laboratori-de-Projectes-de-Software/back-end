@@ -137,7 +137,8 @@ public class LeagueController {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }
         catch (DataIntegrityViolationException e) { // El userId de la liga no es el del token
-            System.err.println(e.getMessage());
+            e.printStackTrace();
+//            System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }

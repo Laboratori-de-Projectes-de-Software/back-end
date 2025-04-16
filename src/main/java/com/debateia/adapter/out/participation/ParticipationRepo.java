@@ -21,6 +21,10 @@ public class ParticipationRepo implements ParticipationRepository {
             .leagueId(leagueId)
             .botId(botId)
             .points(0)
+            .position(0)
+            .nWins(0)
+            .nDraws(0)
+            .nLoses(0)
             .build();
         
         partJpa.save(part);

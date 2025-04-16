@@ -27,11 +27,11 @@ public class MatchService implements MatchUseCase {
     @Override
     public List<Match> createLeagueMatches(League league) {
         List<Match> matches = new ArrayList<>(league.getRounds());
-        List<String> names = new ArrayList<>(league.getBotIds().size());
+        HashMap<Integer, String> names = new HashMap<>();
         
-        for (Integer id : league.getBotIds()) { // TODO: COMPROBAR SI FUNCIONA
+        for (Integer id : league.getBotIds()) {
             Bot bot = botRepository.findById(id).get();
-            names.add(bot.getName());
+            names.put(id, bot.getName());
         }
         
         matches = generarCombatesBalanceados(matches, league.getBotIds(), names, league.getRounds());
@@ -55,7 +55,7 @@ public class MatchService implements MatchUseCase {
      * se reparten aleatoriamente entre los bots.
      * @return Lista de Matches con SOLO bot1id, bot2id setteados
      */
-    private List<Match> generarCombatesBalanceados(List<Match> matches, List<Integer> botIds, List<String> botNames, int rounds) {
+    private List<Match> generarCombatesBalanceados(List<Match> matches, List<Integer> botIds, HashMap<Integer, String> botNames, int rounds) {
         int nbots = botIds.size();
         int maxMatchesPorBot = rounds / nbots;
         int extraMatches = rounds % nbots;

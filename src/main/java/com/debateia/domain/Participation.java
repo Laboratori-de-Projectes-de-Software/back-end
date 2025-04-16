@@ -13,7 +13,7 @@ public class Participation {
     private Integer points;
     private Integer position;
     private String name;
-    private int nWins;
-    private int nDraws;
-    private int nLoses;
+    private Integer nWins;
+    private Integer nDraws;
+    private Integer nLoses;
 }
