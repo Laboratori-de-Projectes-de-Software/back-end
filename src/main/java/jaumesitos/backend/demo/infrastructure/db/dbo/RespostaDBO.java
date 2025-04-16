@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "resposta")
 @Getter
@@ -20,7 +22,7 @@ public class RespostaDBO {
     private String argument;
 
     @Column(name = "temps")
-    private String date;
+    private LocalDateTime date;
 
     @Column(name = "id_enfrontament")
     private int matchId;

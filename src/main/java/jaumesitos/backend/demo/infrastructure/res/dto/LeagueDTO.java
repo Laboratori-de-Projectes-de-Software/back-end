@@ -18,5 +18,4 @@ public class LeagueDTO {
     private String urlImage;
     private String state;
     private Integer [] bots;
-    private Integer userId;
 }
