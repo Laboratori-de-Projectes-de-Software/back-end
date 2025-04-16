@@ -71,12 +71,10 @@ public class LigaMapper {
 
     public LeagueDto toLeagueDto(League league) {
         LeagueDto ligaDto = new LeagueDto();
-        ligaDto.setId(league.getId());
         ligaDto.setName(league.getName());
-        ligaDto.setUrlImagen(league.getUrlImagen());
+        ligaDto.setImageUrl(league.getUrlImagen());
         ligaDto.setRounds(league.getRounds());
         ligaDto.setMatchTime(league.getMatchTime());
-        ligaDto.setBots(league.getBots());
 
         // Obtener el nombre del usuario (owner)
         if (league.getUserId() != null) {
@@ -93,14 +91,13 @@ public class LigaMapper {
         LeagueResponseDto leagueResponseDto = new LeagueResponseDto();
         leagueResponseDto.setLeagueId(league.getId().intValue());
         leagueResponseDto.setName(league.getName());
-        leagueResponseDto.setUrlImagen(league.getUrlImagen());
+        leagueResponseDto.setImageUrl(league.getUrlImagen());
         leagueResponseDto.setRounds(league.getRounds());
         leagueResponseDto.setMatchTime(league.getMatchTime());
         leagueResponseDto.setBots(league.getBots().stream()
                 .map(Long::intValue)
                 .collect(java.util.stream.Collectors.toList()));
         leagueResponseDto.setState(toEntityState(league.getState()));
-        leagueResponseDto.setUser(league.getUserId().intValue());
 
         return leagueResponseDto;
     }
@@ -108,10 +105,9 @@ public class LigaMapper {
     public static League toAppObject(LeagueDto ligaDto) {
         League league = new League();
         league.setName(ligaDto.getName());
-        league.setUrlImagen(ligaDto.getUrlImagen());
+        league.setUrlImagen(ligaDto.getImageUrl());
         league.setRounds(ligaDto.getRounds());
         league.setMatchTime(ligaDto.getMatchTime());
-        league.setBots(ligaDto.getBots());
         return league;
     }
 

@@ -5,33 +5,31 @@ import com.example.gironetaServer.infraestructure.adapters.out.db.entities.Leagu
 import java.util.List;
 
 public class LeagueResponseDto {
-    private int leagueId;
-    private LeagueEntity.State state;
+    private int id;
     private String name;
-    private String urlImagen;
-    private int user; // Owner
+    private String imageUrl;
     private Integer rounds;
     private Long matchTime;
     private List<Integer> bots;
+    private LeagueEntity.State state;
 
     public LeagueResponseDto() {
     }
 
-    public LeagueResponseDto(int leagueId, LeagueEntity.State state, String name, String urlImagen, int user,
+    public LeagueResponseDto(int id, LeagueEntity.State state, String name, String imageUrl,
             Integer rounds, Long matchTime, List<Integer> bots) {
-        this.leagueId = leagueId;
+        this.id = id;
         this.state = state;
         this.name = name;
-        this.urlImagen = urlImagen;
-        this.user = user;
+        this.imageUrl = imageUrl;
         this.rounds = rounds;
         this.matchTime = matchTime;
         this.bots = bots;
     }
 
     // Getters
-    public int getLeagueId() {
-        return leagueId;
+    public int getId() {
+        return id;
     }
 
     public LeagueEntity.State getState() {
@@ -42,13 +40,10 @@ public class LeagueResponseDto {
         return name;
     }
 
-    public String getUrlImagen() {
-        return urlImagen;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public int getUser() {
-        return user;
-    }
 
     public Integer getRounds() {
         return rounds;
@@ -63,8 +58,8 @@ public class LeagueResponseDto {
     }
 
     // Setters
-    public void setLeagueId(int leagueId) {
-        this.leagueId = leagueId;
+    public void setLeagueId(int id) {
+        this.id = id;
     }
 
     public void setState(LeagueEntity.State state) {
@@ -75,12 +70,8 @@ public class LeagueResponseDto {
         this.name = name;
     }
 
-    public void setUrlImagen(String urlImagen) {
-        this.urlImagen = urlImagen;
-    }
-
-    public void setUser(int user) {
-        this.user = user;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void setRounds(Integer rounds) {
