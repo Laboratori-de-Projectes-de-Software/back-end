@@ -2,12 +2,9 @@ package com.example.gironetaServer.infraestructure.adapters.in.controllers;
 
 import com.example.gironetaServer.domain.exceptions.ResourceNotFoundException;
 import com.example.gironetaServer.domain.exceptions.UnauthorizedException;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.ErrorResponseDto;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserDTOLogin;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserResponseDTO;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.*;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers.UserMapper;
 import com.example.gironetaServer.domain.exceptions.ConflictException;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserDTORegister;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import com.example.gironetaServer.infraestructure.adapters.security.AuthenticationService;
 import com.example.gironetaServer.infraestructure.adapters.security.JwtService;
@@ -37,8 +34,9 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserDTORegister registerUserDto) {
         try {
-            authenticationService.signup(registerUserDto);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            UserEntity userEntity = authenticationService.signup(registerUserDto);
+            UserDTORegisterResponse userDTORegisterResponse = userMapper.toUserDTORegisterResponse(userEntity);
+            return ResponseEntity.status(HttpStatus.OK).body(userDTORegisterResponse);
         } catch (ConflictException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ErrorResponseDto("Conflict", "El correo electrónico ya está registrado: " + e.getMessage()));
@@ -55,7 +53,7 @@ public class AuthenticationController {
         try {
             UserEntity authenticatedUser = authenticationService.authenticate(loginUserDto);
             String jwtToken = jwtService.generateToken(authenticatedUser, authenticatedUser.getId(), authenticatedUser.getEmail());
-            UserResponseDTO userResponseDTO = userMapper.toUserResponseDTO(jwtToken, jwtService.getExpirationTime(), authenticatedUser.getUsername(), authenticatedUser.getId());
+            UserResponseDTO userResponseDTO = userMapper.toUserResponseDTO(jwtToken, jwtService.getExpirationTime(), authenticatedUser.getUsername(), authenticatedUser.getId(), authenticatedUser.getEmail());
             return ResponseEntity.ok(userResponseDTO);
         } catch (UnauthorizedException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

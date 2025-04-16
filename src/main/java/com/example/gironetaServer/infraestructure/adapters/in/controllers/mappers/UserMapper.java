@@ -1,9 +1,7 @@
 package com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers;
 
 import com.example.gironetaServer.domain.User;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserDto;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserResponse;
-import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.UserResponseDTO;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.*;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.UserEntity;
 import org.springframework.stereotype.Component;
 
@@ -60,7 +58,7 @@ public class UserMapper {
         return userResponse;
     }
 
-    public UserResponseDTO toUserResponseDTO(String token, long expiresInMillis, String username, Long id) {
+    public UserResponseDTO toUserResponseDTO(String token, long expiresInMillis, String username, Long id, String mail) {
         // Convertir expiresInMillis a LocalDateTime
         // expiresIn va a contener la hora de expiración de CET
         LocalDateTime expiresIn = Instant.ofEpochMilli(System.currentTimeMillis() + expiresInMillis)
@@ -72,8 +70,17 @@ public class UserMapper {
         userResponseDTO.setToken(token);
         userResponseDTO.setExpiresIn(expiresIn);
         userResponseDTO.setUser(username);
-        userResponseDTO.setUserId(id);
+        userResponseDTO.setId(id);
+        userResponseDTO.setMail(mail);
 
         return userResponseDTO;
+    }
+
+    public UserDTORegisterResponse toUserDTORegisterResponse(UserEntity userEntity) {
+        UserDTORegisterResponse userDTORegisterResponse = new UserDTORegisterResponse();
+        userDTORegisterResponse.setId(userEntity.getId());
+        userDTORegisterResponse.setUser(userEntity.getUsername());
+        userDTORegisterResponse.setMail(userEntity.getEmail());
+        return userDTORegisterResponse;
     }
 }

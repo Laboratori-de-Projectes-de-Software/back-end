@@ -3,9 +3,9 @@ package com.example.gironetaServer.domain;
 public class Bot {
     private Long id; //El consenso usa INT no LONG
     private String name;
-    private String descripcion;
-    private String urlImagen;
-    private String endpoint;
+    private String quality;
+    private String imageUrl;
+    private String apiUrl;
     private Long usuario_id;
     private int nWins;
     private int nLosses;
@@ -14,12 +14,12 @@ public class Bot {
     public Bot() {
     }
 
-    public Bot(Long id, String name, String descripcion, String urlImagen, String endpoint, Long usuario_id, int nWins, int nLosses, int nDraws) {
+    public Bot(Long id, String name, String quality, String imageUrl, String apiUrl, Long usuario_id, int nWins, int nLosses, int nDraws) {
         this.id = id;
         this.name = name;
-        this.descripcion = descripcion;
-        this.urlImagen = urlImagen;
-        this.endpoint = endpoint;
+        this.quality = quality;
+        this.imageUrl = imageUrl;
+        this.apiUrl = apiUrl;
         this.usuario_id = usuario_id;
         this.nWins = nWins;
         this.nLosses = nLosses;
@@ -35,16 +35,16 @@ public class Bot {
         return name;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getQuality() {
+        return quality;
     }
 
-    public String getUrlImagen() {
-        return urlImagen;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public String getEndpoint() {
-        return endpoint;
+    public String getApiUrl() {
+        return apiUrl;
     }
 
     public Long getUsuario_id() {
@@ -60,16 +60,16 @@ public class Bot {
         this.name = name;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setQuality(String quality) {
+        this.quality = quality;
     }
 
-    public void setUrlImagen(String urlImagen) {
-        this.urlImagen = urlImagen;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
+    public void setApiUrl(String apiUrl) {
+        this.apiUrl = apiUrl;
     }
 
     public void setUsuario_id(Long usuario_id) {

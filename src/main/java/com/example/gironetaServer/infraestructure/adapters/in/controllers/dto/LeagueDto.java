@@ -3,39 +3,31 @@ package com.example.gironetaServer.infraestructure.adapters.in.controllers.dto;
 import java.util.List;
 
 public class LeagueDto {
-    private Long id;
     private String name;
-    private String urlImagen;
+    private String imageUrl;
     private Integer rounds;
     private Long matchTime;
-    private List<Long> bots;
     private String user; // Owner
 
     public LeagueDto() {
     }
 
-    public LeagueDto(Long id, String name, String urlImagen, Integer rounds, Long matchTime, List<Long> bots,
+    public LeagueDto(String name, String imageUrl, Integer rounds, Long matchTime,
                      String user) {
-        this.id = id;
         this.name = name;
-        this.urlImagen = urlImagen;
+        this.imageUrl = imageUrl;
         this.rounds = rounds;
         this.matchTime = matchTime;
-        this.bots = bots;
         this.user = user;
     }
 
     // Métodos getter
-    public Long getId() {
-        return id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public String getUrlImagen() {
-        return urlImagen;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public Integer getRounds() {
@@ -46,25 +38,17 @@ public class LeagueDto {
         return matchTime;
     }
 
-    public List<Long> getBots() {
-        return bots;
-    }
-
     public String getUser() {
         return user;
     }
 
     // Métodos setter
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setUrlImagen(String urlImagen) {
-        this.urlImagen = urlImagen;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void setRounds(Integer rounds) {
@@ -73,10 +57,6 @@ public class LeagueDto {
 
     public void setMatchTime(Long matchTime) {
         this.matchTime = matchTime;
-    }
-
-    public void setBots(List<Long> bots) {
-        this.bots = bots;
     }
 
     public void setUser(String user) {

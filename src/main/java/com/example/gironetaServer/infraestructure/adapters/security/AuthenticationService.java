@@ -33,9 +33,14 @@ public class AuthenticationService {
     }
 
     public UserEntity signup(UserDTORegister input) {
+        // Verificar si el username ya está registrado
+        if (userJpaRepository.findByUsername(input.getUser()).isPresent()) {
+            throw new ConflictException("The username '" + input.getUser() + "' is already taken");
+        }
+
         UserEntity user = new UserEntity();
-        user.setUsername(input.getUsername());
-        user.setEmail(input.getEmail());
+        user.setUsername(input.getUser());
+        user.setEmail(input.getMail());
         user.setPassword(passwordEncoder.encode(input.getPassword()));
 
         try {
@@ -43,7 +48,7 @@ public class AuthenticationService {
         } catch (DataIntegrityViolationException e) {
             // Check if the exception is due to a unique constraint violation on the email
             if (e.getMessage().contains("Duplicate entry") && e.getMessage().contains("email")) {
-                throw new ConflictException("The email '" + input.getEmail() + "' is already registered");
+                throw new ConflictException("The email '" + input.getMail() + "' is already registered");
             }
             // Rethrow the exception if it's a different integrity violation
             throw e;
@@ -54,10 +59,10 @@ public class AuthenticationService {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            input.getEmail(),
+                            input.getUser(),
                             input.getPassword()));
 
-            return userJpaRepository.findByEmail(input.getEmail())
+            return userJpaRepository.findByUsername(input.getUser())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         } catch (BadCredentialsException e) {
             throw new UnauthorizedException("Invalid credentials: " + e.getMessage());

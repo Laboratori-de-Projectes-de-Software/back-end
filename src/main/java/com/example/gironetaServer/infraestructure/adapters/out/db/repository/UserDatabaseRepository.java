@@ -37,8 +37,9 @@ public class UserDatabaseRepository implements UserRepository {
 
     @Override
     public User getUserByUsername(String username) {
-        UserEntity userEntity = userJpaRepository.findByUsername(username);
-        return userEntity != null ? toDomain(userEntity) : null;
+        return userJpaRepository.findByUsername(username)
+                .map(this::toDomain)
+                .orElse(null);
     }
 
     @Override

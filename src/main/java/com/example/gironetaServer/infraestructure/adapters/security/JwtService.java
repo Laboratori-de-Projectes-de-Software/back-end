@@ -25,7 +25,7 @@ public class JwtService {
     private long jwtExpiration;
 
     public String extractUsername(String token) {
-        return extractClaim(token, claims -> claims.get("email", String.class));
+        return extractClaim(token, claims -> claims.get("username", String.class));
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {

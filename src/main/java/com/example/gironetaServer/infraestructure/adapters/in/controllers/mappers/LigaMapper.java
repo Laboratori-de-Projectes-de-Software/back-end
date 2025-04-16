@@ -1,7 +1,10 @@
 package com.example.gironetaServer.infraestructure.adapters.in.controllers.mappers;
 
+import com.example.gironetaServer.application.ports.BotRepository;
 import com.example.gironetaServer.application.ports.UserRepository;
+import com.example.gironetaServer.domain.Bot;
 import com.example.gironetaServer.domain.League;
+import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.BotResponseDTO;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LeagueDto;
 import com.example.gironetaServer.infraestructure.adapters.in.controllers.dto.LeagueResponseDto;
 import com.example.gironetaServer.infraestructure.adapters.out.db.entities.BotEntity;
@@ -20,10 +23,15 @@ public class LigaMapper {
 
     private final UserRepository userRepository;
     private final BotJpaRepository botJpaRepository;
+    private final BotRepository botRepository;
+    private final BotMapper botMapper;
 
-    public LigaMapper(UserRepository userRepository, BotJpaRepository botJpaRepository) {
+    public LigaMapper(UserRepository userRepository, BotJpaRepository botJpaRepository, BotRepository botRepository,
+            BotMapper botMapper) {
         this.userRepository = userRepository;
         this.botJpaRepository = botJpaRepository;
+        this.botRepository = botRepository;
+        this.botMapper = botMapper;
     }
 
     public League toDomain(LeagueEntity ligaEntity) {
@@ -71,12 +79,10 @@ public class LigaMapper {
 
     public LeagueDto toLeagueDto(League league) {
         LeagueDto ligaDto = new LeagueDto();
-        ligaDto.setId(league.getId());
         ligaDto.setName(league.getName());
-        ligaDto.setUrlImagen(league.getUrlImagen());
+        ligaDto.setImageUrl(league.getUrlImagen());
         ligaDto.setRounds(league.getRounds());
         ligaDto.setMatchTime(league.getMatchTime());
-        ligaDto.setBots(league.getBots());
 
         // Obtener el nombre del usuario (owner)
         if (league.getUserId() != null) {
@@ -93,14 +99,22 @@ public class LigaMapper {
         LeagueResponseDto leagueResponseDto = new LeagueResponseDto();
         leagueResponseDto.setLeagueId(league.getId().intValue());
         leagueResponseDto.setName(league.getName());
-        leagueResponseDto.setUrlImagen(league.getUrlImagen());
+        leagueResponseDto.setImageUrl(league.getUrlImagen());
         leagueResponseDto.setRounds(league.getRounds());
         leagueResponseDto.setMatchTime(league.getMatchTime());
-        leagueResponseDto.setBots(league.getBots().stream()
-                .map(Long::intValue)
-                .collect(java.util.stream.Collectors.toList()));
+
+        // Convertir los IDs de bots a objetos BotResponseDTO
+        List<BotResponseDTO> botResponseDTOs = new ArrayList<>();
+        if (league.getBots() != null && !league.getBots().isEmpty()) {
+            botResponseDTOs = league.getBots().stream()
+                    .map(botId -> botRepository.findById(botId)
+                            .map(BotMapper::toBotResponseDto)
+                            .orElse(null))
+                    .filter(botResponseDTO -> botResponseDTO != null)
+                    .collect(Collectors.toList());
+        }
+        leagueResponseDto.setBots(botResponseDTOs);
         leagueResponseDto.setState(toEntityState(league.getState()));
-        leagueResponseDto.setUser(league.getUserId().intValue());
 
         return leagueResponseDto;
     }
@@ -108,10 +122,9 @@ public class LigaMapper {
     public static League toAppObject(LeagueDto ligaDto) {
         League league = new League();
         league.setName(ligaDto.getName());
-        league.setUrlImagen(ligaDto.getUrlImagen());
+        league.setUrlImagen(ligaDto.getImageUrl());
         league.setRounds(ligaDto.getRounds());
         league.setMatchTime(ligaDto.getMatchTime());
-        league.setBots(ligaDto.getBots());
         return league;
     }
 

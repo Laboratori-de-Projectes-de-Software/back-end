@@ -17,14 +17,14 @@ public class BotEntity {
 
     // prompt
     @Column(nullable = false, length = 255)
-    private String descripcion;
+    private String quality;
 
     @Column(nullable = false, length = 255)
-    private String urlImagen;
+    private String imageUrl;
 
     // url de datos
     @Column(nullable = false, length = 255)
-    private String endpoint;
+    private String apiUrl;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = true)
@@ -36,20 +36,20 @@ public class BotEntity {
     public BotEntity() {
     }
 
-    public BotEntity(Long id, String name, String descripcion, String urlImagen, String endpoint) {
+    public BotEntity(Long id, String name, String quality, String imageUrl, String apiUrl) {
         this.id = id;
         this.name = name;
-        this.descripcion = descripcion;
-        this.urlImagen = urlImagen;
-        this.endpoint = endpoint;
+        this.quality = quality;
+        this.imageUrl = imageUrl;
+        this.apiUrl = apiUrl;
     }
 
-    public BotEntity(Long id, String name, String descripcion, String urlImagen, String endpoint, UserEntity usuario) {
+    public BotEntity(Long id, String name, String quality, String imageUrl, String apiUrl, UserEntity usuario) {
         this.id = id;
         this.name = name;
-        this.descripcion = descripcion;
-        this.urlImagen = urlImagen;
-        this.endpoint = endpoint;
+        this.quality = quality;
+        this.imageUrl = imageUrl;
+        this.apiUrl = apiUrl;
         this.usuario = usuario;
     }
 
@@ -62,16 +62,16 @@ public class BotEntity {
         return name;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getQuality() {
+        return quality;
     }
 
-    public String getUrlImagen() {
-        return urlImagen;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public String getEndpoint() {
-        return endpoint;
+    public String getApiUrl() {
+        return apiUrl;
     }
 
     public UserEntity getUsuario() {
@@ -91,16 +91,16 @@ public class BotEntity {
         this.name = name;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setQuality(String quality) {
+        this.quality = quality;
     }
 
-    public void setUrlImagen(String urlImagen) {
-        this.urlImagen = urlImagen;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
+    public void setApiUrl(String apiUrl) {
+        this.apiUrl = apiUrl;
     }
 
     public void setUsuario(UserEntity usuario) {

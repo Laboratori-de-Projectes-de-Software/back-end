@@ -21,9 +21,9 @@ public class BotMapper {
         Bot bot = new Bot();
         bot.setId(botEntity.getId());
         bot.setName(botEntity.getName());
-        bot.setDescripcion(botEntity.getDescripcion());
-        bot.setUrlImagen(botEntity.getUrlImagen());
-        bot.setEndpoint(botEntity.getEndpoint());
+        bot.setQuality(botEntity.getQuality());
+        bot.setImageUrl(botEntity.getImageUrl());
+        bot.setApiUrl(botEntity.getApiUrl());
         bot.setUsuario_id(botEntity.getUsuario().getId());
         return bot;
     }
@@ -32,9 +32,9 @@ public class BotMapper {
         BotEntity botEntity = new BotEntity();
         botEntity.setId(bot.getId());
         botEntity.setName(bot.getName());
-        botEntity.setDescripcion(bot.getDescripcion());
-        botEntity.setUrlImagen(bot.getUrlImagen());
-        botEntity.setEndpoint(bot.getEndpoint());
+        botEntity.setQuality(bot.getQuality());
+        botEntity.setImageUrl(bot.getImageUrl());
+        botEntity.setApiUrl(bot.getApiUrl());
         UserEntity userEntity = UserMapper.toEntity(userRepository.getUserById(bot.getUsuario_id()));
         botEntity.setUsuario(userEntity);
         return botEntity;
@@ -42,10 +42,11 @@ public class BotMapper {
 
     public static BotResponseDTO toBotResponseDto(Bot bot) {
         BotResponseDTO toBotResponseDto = new BotResponseDTO();
-        toBotResponseDto.setBotId(bot.getId());
+        toBotResponseDto.setId(bot.getId());
         toBotResponseDto.setName(bot.getName());
-        toBotResponseDto.setDescription(bot.getDescripcion());
-        toBotResponseDto.setUrlImage(bot.getUrlImagen());
+        toBotResponseDto.setQuality(bot.getQuality());
+        toBotResponseDto.setImageUrl(bot.getImageUrl());
+        toBotResponseDto.setApiUrl(bot.getApiUrl());
         toBotResponseDto.setnWins(bot.getnWins());
         toBotResponseDto.setnLosses(bot.getnLosses());
         toBotResponseDto.setnDraws(bot.getnDraws());
@@ -55,9 +56,9 @@ public class BotMapper {
     public static Bot toAppObject(BotDto botDto) {
         Bot bot = new Bot();
         bot.setName(botDto.getName());
-        bot.setDescripcion(botDto.getDescripcion());
-        bot.setUrlImagen(botDto.getUrlImagen());
-        bot.setEndpoint(botDto.getEndpoint());
+        bot.setQuality(botDto.getQuality());
+        bot.setImageUrl(botDto.getImageUrl());
+        bot.setApiUrl(botDto.getApiUrl());
         return bot;
     }
 }
