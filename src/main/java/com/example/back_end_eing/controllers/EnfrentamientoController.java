@@ -2,6 +2,7 @@ package com.example.back_end_eing.controllers;
 
 import com.example.back_end_eing.dto.EnfrentamientoDTO;
 import com.example.back_end_eing.dto.MatchResponseDTO;
+import com.example.back_end_eing.dto.MessageResponseDTO;
 import com.example.back_end_eing.models.Enfrentamiento;
 import com.example.back_end_eing.services.EnfrentamientoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,14 @@ public class EnfrentamientoController {
     private EnfrentamientoService enfrentamientoService;
 
     @GetMapping("/match/{id}")
-    public ResponseEntity<Enfrentamiento> getEnfrentamientoById(@PathVariable("id") Long id) {
-    Enfrentamiento enfrentamiento = enfrentamientoService.obtenerEnfrentamientoConParticipaciones(id);
-    return new ResponseEntity<>(enfrentamiento, HttpStatus.OK);
-}
+    public ResponseEntity<MatchResponseDTO> getEnfrentamientoById(@PathVariable("id") Long id) {
+        MatchResponseDTO matchDTO = enfrentamientoService.getMatchById(id);
+        return new ResponseEntity<>(matchDTO, HttpStatus.OK);
+    }
 
     @GetMapping("/match/{matchId}/message")
-    public ResponseEntity<EnfrentamientoDTO> obtenerConversacion(@PathVariable("matchId") Long matchId) {
-        EnfrentamientoDTO conversacion = enfrentamientoService.obtenerConversacion(matchId);
+    public ResponseEntity<List<MessageResponseDTO>> obtenerConversacion(@PathVariable("matchId") Long matchId) {
+        List<MessageResponseDTO> conversacion = enfrentamientoService.obtenerConversacion(matchId);
         return new ResponseEntity<>(conversacion, HttpStatus.OK);
     }
 
