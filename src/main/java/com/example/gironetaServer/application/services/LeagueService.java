@@ -427,6 +427,17 @@ public class LeagueService implements CreateLeague {
             // Obtener la lista de bots de la liga
             List<BotEntity> bots = new ArrayList<>(ligaEntity.getBots());
             int numBots = bots.size();
+
+            // Si el número de bots es impar, agregar un bot ficticio
+            boolean hasByeBot = false;
+            if (numBots % 2 != 0) {
+                BotEntity byeBot = new BotEntity();
+                byeBot.setId(-1L); // ID ficticio para el bot "bye"
+                bots.add(byeBot);
+                numBots++;
+                hasByeBot = true;
+            }
+
             int totalJornadas = (numBots - 1) * rounds;
 
             // Guardar todos los enfrentamientos previos
@@ -440,14 +451,6 @@ public class LeagueService implements CreateLeague {
 
                 // Crear enfrentamientos únicos para la jornada
                 HashSet<EnfrentamientoEntity> enfrentamientos = new HashSet<>();
-
-                // Si el número de bots es impar, agregar un bot ficticio
-                if (numBots % 2 != 0) {
-                    BotEntity byeBot = new BotEntity();
-                    byeBot.setId(-1L); // ID ficticio para el bot "bye"
-                    bots.add(byeBot);
-                    numBots++;
-                }
 
                 for (int j = 0; j < numBots / 2; j++) {
                     BotEntity bot1 = bots.get(j);
@@ -512,7 +515,11 @@ public class LeagueService implements CreateLeague {
                 }
             }
 
-        } catch (DataIntegrityViolationException e) {
+            // Eliminar el bot ficticio si fue agregado
+            if (hasByeBot) {
+                bots.removeIf(bot -> bot.getId() == -1L);
+            }
+        }  catch (DataIntegrityViolationException e) {
             throw new ConflictException("Error al iniciar la liga: " + e.getMessage());
         } catch (Exception e) {
             throw new RuntimeException("Error inesperado al iniciar la liga: " + e.getMessage());

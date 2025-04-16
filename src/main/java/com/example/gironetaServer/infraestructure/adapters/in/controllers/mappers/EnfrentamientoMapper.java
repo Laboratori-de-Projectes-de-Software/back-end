@@ -12,16 +12,16 @@ public class EnfrentamientoMapper {
     public MatchResponseDTO toMatchResponseDTO(EnfrentamientoEntity enfrentamientoEntity) {
 
         MatchResponseDTO match = new MatchResponseDTO();
-        match.setMatchId(enfrentamientoEntity.getId());
+        match.setId(enfrentamientoEntity.getId());
         match.setState(enfrentamientoEntity.getEstado());
 
         if (enfrentamientoEntity.getPuntuacionLocal() > enfrentamientoEntity.getPuntuacionVisitante()) {
-            match.setResult(1);
+            match.setResult(0);
 
         } else if (enfrentamientoEntity.getPuntuacionLocal() < enfrentamientoEntity.getPuntuacionVisitante()) {
-            match.setResult(2);
+            match.setResult(1);
         } else {
-            match.setResult(0);
+            match.setResult(-1);
         }
 
         // private String[] fighters;

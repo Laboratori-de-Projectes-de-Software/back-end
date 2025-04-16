@@ -14,6 +14,6 @@ public class MessageResponseDTO {
 
     private String text;
     private Long botId;
-    private String time;
+    private String timestamp;
 
 }

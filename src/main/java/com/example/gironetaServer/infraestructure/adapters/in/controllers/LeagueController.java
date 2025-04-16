@@ -159,10 +159,12 @@ public class LeagueController {
     }
 
     @PostMapping("/league/{id}/bot")
-    public ResponseEntity<?> registerBot(@PathVariable Long id, @RequestBody Map<String, Long> request) {
+    public ResponseEntity<?> registerBot(@PathVariable Long id, @RequestBody List<Long> botIds) {
         try {
-            leagueService.registerBotToLeague(id, request.get("botId"));
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            for (Long botId : botIds) {
+                leagueService.registerBotToLeague(id, botId);
+            }
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponseDto("Not Found",
@@ -197,10 +199,8 @@ public class LeagueController {
     @DeleteMapping("/league/{leagueId}")
     public ResponseEntity<?> deleteLeague(@PathVariable Long leagueId) {
         try {
-            League league = leagueService.getLeagueById(leagueId);
-            LeagueResponseDto leagueResponseDto = ligaMapper.toLeagueResponseDto(league);
             leagueService.deleteLeague(leagueId);
-            return ResponseEntity.ok(leagueResponseDto);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponseDto("Not Found",
@@ -232,7 +232,7 @@ public class LeagueController {
     public ResponseEntity<?> startLeague(@PathVariable Long leagueId) {
         try {
             leagueService.startLeague(leagueId);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponseDto("Not Found",
