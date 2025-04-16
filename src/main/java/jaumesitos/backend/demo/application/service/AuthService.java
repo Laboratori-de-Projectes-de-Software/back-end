@@ -27,8 +27,8 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public String login(String email, String password) {
-        Optional<User> userOpt = userRepository.findByEmail(email);
+    public String login(String name, String password) {
+        Optional<User> userOpt = userRepository.findByName(name);
 
         if (userOpt.isEmpty()) {
             throw new RuntimeException("Usuario no encontrado");
@@ -43,8 +43,13 @@ public class AuthService {
         return tokenProvider.generateToken(user.getEmail(), user.getRole());
     }
 
+    public User getUserByName(String name) {
+        return userRepository.findByName(name)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    }
+
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return userRepository.findByName(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 }

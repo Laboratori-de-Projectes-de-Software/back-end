@@ -8,4 +8,5 @@ import java.util.Optional;
 @Repository
 public interface SpringDataUserRepository extends JpaRepository<UserDBO, String> {
     Optional<UserDBO> findByEmail(String email);
+    Optional<UserDBO> findByName(String name);
 }
