@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.debateia.adapter.out.persistence.entities.UserEntity;
+import com.debateia.adapter.out.user.UserEntity;
 import com.debateia.application.ports.out.persistence.UserRepository;
 
 @Configuration

@@ -1,6 +1,6 @@
 package com.debateia.application.jwt;
 
-import com.debateia.adapter.out.persistence.entities.UserEntity;
+import com.debateia.adapter.out.user.UserEntity;
 
 public interface JWTUseCase {
     /**

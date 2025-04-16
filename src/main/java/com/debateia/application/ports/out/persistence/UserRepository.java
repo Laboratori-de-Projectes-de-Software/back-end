@@ -3,7 +3,7 @@ package com.debateia.application.ports.out.persistence;
 import com.debateia.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.debateia.adapter.out.persistence.entities.UserEntity;
+import com.debateia.adapter.out.user.UserEntity;
 
 import java.util.Optional;
 import java.util.List;

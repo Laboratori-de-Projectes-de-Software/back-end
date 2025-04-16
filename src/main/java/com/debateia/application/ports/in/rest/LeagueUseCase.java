@@ -37,7 +37,4 @@ public interface LeagueUseCase {
     
     // Start a league (creates all matches)
     public void startLeague(int leagueId);
-    
-    // Get all matches from a league
-    public void getAllMatches(int leagueId);
 }

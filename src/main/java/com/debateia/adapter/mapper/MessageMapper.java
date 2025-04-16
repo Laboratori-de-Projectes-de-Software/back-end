@@ -1,24 +1,24 @@
 package com.debateia.adapter.mapper;
 
-import com.debateia.adapter.in.web.dto.response.MessageResponseDTO;
-import com.debateia.adapter.out.persistence.entities.MessageEntity;
+import com.debateia.adapter.in.rest.match.MessageResponseDTO;
+import com.debateia.adapter.out.message.MessageEntity;
 import com.debateia.domain.Messages;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-public class MessageMapper {
-    public static Messages toDomain(MessageEntity entity) {
-        Messages dom = new Messages();
-        dom.setBotId(entity.getBot().getId());
-        dom.setContents(entity.getText());
-        dom.setTimestamp(entity.getTime());
-        dom.setMatchId(entity.getMatch().getId());
-        return dom;
-    }
-
-    public static MessageResponseDTO toResponseDTO(Messages dom) {
-        MessageResponseDTO dto = new MessageResponseDTO();
-        dto.setBotId(dom.getBotId());
-        dto.setText(dom.getContents());
-        dto.setTime(dom.getTimestamp().toString());
-        return dto;
-    }
+@Mapper(componentModel = "spring")
+public interface MessageMapper {
+    
+    MessageMapper INSTANCE = Mappers.getMapper(MessageMapper.class);
+    
+    @Mapping(target = "botId", source = "bot.id")
+    @Mapping(target = "contents", source = "text")
+    @Mapping(target = "timestamp", source = "time")
+    @Mapping(target = "matchId", source = "match.id")
+    Messages toDomain(MessageEntity entity);
+    
+    @Mapping(target = "text", source = "contents")
+    @Mapping(target = "time", expression = "java(dom.getTimestamp().toString())")
+    MessageResponseDTO toResponseDTO(Messages dom);
 }

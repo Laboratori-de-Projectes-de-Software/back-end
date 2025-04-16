@@ -1,78 +1,56 @@
 package com.debateia.adapter.mapper;
 
-import com.debateia.adapter.in.web.dto.request.BotDTO;
-import com.debateia.adapter.in.web.dto.response.BotResponseDTO;
-import com.debateia.adapter.in.web.dto.response.BotSummaryResponseDTO;
-import com.debateia.adapter.out.persistence.entities.BotEntity;
-import com.debateia.adapter.out.persistence.entities.UserEntity;
+import com.debateia.adapter.in.rest.bot.BotDTO;
+import com.debateia.adapter.in.rest.bot.BotResponseDTO;
+import com.debateia.adapter.in.rest.bot.BotSummaryResponseDTO;
+import com.debateia.adapter.out.bot.BotEntity;
+import com.debateia.adapter.out.user.UserEntity;
 import com.debateia.domain.Bot;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
 
-public class BotMapper {
+@Mapper(componentModel = "spring")
+public interface BotMapper {
+    
+    BotMapper INSTANCE = Mappers.getMapper(BotMapper.class);
+    
+    BotSummaryResponseDTO toSummaryDTO(Bot bot);
 
-    public static BotSummaryResponseDTO toSummaryDTO(Bot bot) {
-        BotSummaryResponseDTO dto = new BotSummaryResponseDTO();
-        dto.setName(bot.getName());
-        dto.setId(bot.getId());
-        dto.setDescription(bot.getDescription());
-        return dto;
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "NDraws", ignore = true)
+    @Mapping(target = "NLosses", ignore = true)
+    @Mapping(target = "NWins", ignore = true)
+    @Mapping(target = "userId", ignore = true)
+    Bot DTOtoDomain(BotDTO dto);
+    
+
+    @Mapping(target = "userId", source = "user", qualifiedByName = "extractUserId")
+    Bot EntityToDomain(BotEntity entity);
+    
+    @Mapping(target = "user", source = "userId", qualifiedByName = "createUserEntity")
+    @Mapping(target = "nLosses", constant = "0")
+    @Mapping(target = "nWins", constant = "0")
+    @Mapping(target = "nDraws", constant = "0")
+    @Mapping(target = "messages", ignore = true)
+    @Mapping(target = "participations", ignore = true)
+    BotEntity toEntity(Bot bot);
+    
+    @Mapping(target = "botId", source = "id")
+    @Mapping(target = "urlImage", source = "urlImagen")
+    BotResponseDTO toResponseDto(Bot bot);
+    
+    @Named("extractUserId")
+    default Integer extractUserId(UserEntity user) {
+        return user == null ? null : user.getId();
     }
-
-    public static Bot DTOtoDomain(BotDTO dto) {
-        Bot bot = new Bot();
-        bot.setDescription(dto.getDescription());
-        bot.setName(dto.getName());
-        bot.setEndpoint(dto.getEndpoint());
-        bot.setUrlImage(dto.getUrlImagen());
-        return bot;
-    }
-
-    public static Bot EntityToDomain(BotEntity entity) {
-        Bot bot = new Bot();
-        bot.setId(entity.getId());
-        bot.setDraws(entity.getDraws());
-        bot.setLosses(entity.getLosses());
-        bot.setName(entity.getName());
-        bot.setWins(entity.getWins());
-        bot.setEndpoint(entity.getEndpoint());
-        bot.setDescription(entity.getDescription());
-        bot.setUrlImage(entity.getUrl_imagen());
-        if (entity.getUser() == null) {
-            bot.setUserId(null);
-        } else {
-            bot.setUserId(entity.getUser().getId());
-        }
-        return bot;
-    }
-
-    public static BotEntity toEntity(Bot dto) {
-        BotEntity entity = new BotEntity();
-        if (dto.getUserId() == null) {
-            entity.setUser(null);
-        } else {
-            UserEntity dummy = new UserEntity();
-            dummy.setId(dto.getUserId());
-            entity.setUser(dummy);
-        }
-        entity.setDescription(dto.getDescription());
-        entity.setName(dto.getName());
-        entity.setId(dto.getId()); // id = auto increment
-        entity.setUrl_imagen(dto.getUrlImage());
-        entity.setEndpoint(dto.getEndpoint());
-        entity.setLosses(0);
-        entity.setWins(0);
-        entity.setDraws(0);
-        return entity;
-    }
-
-    public static BotResponseDTO toResponseDto(Bot bot) {
-        BotResponseDTO dto = new BotResponseDTO();
-        dto.setBotId(bot.getId());
-        dto.setName(bot.getName());
-        dto.setDescription(bot.getDescription());
-        dto.setUrlImage(bot.getUrlImage());
-        dto.setNLosses(bot.getLosses());
-        dto.setNWins(bot.getWins());
-        dto.setNDraws(bot.getDraws());
-        return dto;
+    
+    @Named("createUserEntity")
+    default UserEntity createUserEntity(Integer userId) {
+        if (userId == null) return null;
+        UserEntity dummy = new UserEntity();
+        dummy.setId(userId);
+        return dummy;
     }
 }

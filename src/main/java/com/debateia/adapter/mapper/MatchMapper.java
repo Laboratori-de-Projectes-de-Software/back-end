@@ -1,46 +1,51 @@
 package com.debateia.adapter.mapper;
 
-import com.debateia.adapter.in.web.dto.State;
-import com.debateia.adapter.in.web.dto.response.LeagueResponseDTO;
-import com.debateia.adapter.in.web.dto.response.MatchResponseDTO;
-import com.debateia.adapter.out.persistence.entities.MatchEntity;
+import com.debateia.adapter.in.rest.league.State;
+import com.debateia.adapter.in.rest.match.MatchResponseDTO;
+import com.debateia.adapter.out.match.MatchEntity;
 import com.debateia.domain.Match;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
 
-public class MatchMapper {
-
-    public static Match toDomain(MatchEntity entity) {
-        Match dom = new Match();
-        dom.setMatchId(entity.getId());
-        dom.setResult(entity.getResult());
-        dom.setState(State.valueOf(entity.getState()));
-        dom.setRoundNumber(entity.getRoundNumber());
-        if (entity.getBot1() != null) {
-            dom.setBot1id(entity.getBot1().getId());
-        }
-        if (entity.getBot2() != null) {
-            dom.setBot2id(entity.getBot2().getId());
-        }
-        if (entity.getLeague() != null) {
-            dom.setLeagueId(entity.getLeague().getId());
-        }
-        return dom;
+@Mapper(componentModel = "spring")
+public interface MatchMapper {
+    MatchMapper INSTANCE = Mappers.getMapper(MatchMapper.class);
+    
+    @Mapping(target = "matchId", source = "id")
+    @Mapping(target = "state", source = "state", qualifiedByName = "stringToState")
+    @Mapping(target = "bot1id", source = "bot1.id")
+    @Mapping(target = "bot2id", source = "bot2.id")
+    @Mapping(target = "leagueId", source = "league.id")
+    @Mapping(target = "messageIds", ignore = true) // <- TODO (!)
+    @Mapping(target = "fighters", ignore = true) // <- The names of the bots cannot be directly obtained
+    Match toDomain(MatchEntity entity);          // from the MatchEntity. We add them after the conversion manually.
+    
+    @Mapping(target = "state", source = "state", qualifiedByName = "stateToString")
+    @Mapping(target = "roundNumber", source = "roundNumber")
+    @Mapping(target = "id", source = "matchId")
+    @Mapping(target = "messages", ignore = true)
+    @Mapping(target = "bot1", ignore = true)
+    @Mapping(target = "bot2", ignore = true)
+    @Mapping(target = "league", ignore = true)
+    MatchEntity toEntity(Match dom);
+    
+    @Mapping(target = "matchId", source = "matchId")
+    @Mapping(target = "state", source = "state")
+    @Mapping(target = "result", source = "result")
+    @Mapping(target = "roundNumber", source = "roundNumber")
+    MatchResponseDTO toResponseDTO(Match dom);
+    
+    @Named("stringToState")
+    default State stringToState(String state) {
+        if (state == null) return null;
+        return State.valueOf(state);
     }
-
-    public static MatchEntity toEntity(Match dom) {
-        MatchEntity entity = new MatchEntity();
-        entity.setResult(dom.getResult());
-        entity.setState(dom.getState().toString());
-        entity.setRoundNumber(dom.getRoundNumber());
-        entity.setId(dom.getMatchId());
-        return entity;
-    }
-
-    public static MatchResponseDTO toResponseDTO(Match dom) {
-        MatchResponseDTO dto = new MatchResponseDTO();
-        dto.setMatchId(dom.getMatchId());
-        dto.setState(dom.getState());
-        dto.setResult(dom.getResult());
-        dto.setRoundNumber(dom.getRoundNumber());
-        return dto;
+    
+    @Named("stateToString")
+    default String stateToString(State state) {
+        if (state == null) return null;
+        return state.toString();
     }
 }

@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.debateia.application.ports.out.persistence.UserRepository;
-import com.debateia.adapter.out.persistence.entities.UserEntity;
+import com.debateia.adapter.out.user.UserEntity;
 import com.debateia.domain.User;
 
 import javax.crypto.SecretKey;

@@ -109,12 +109,13 @@ public class LeagueService implements LeagueUseCase {
         if (league.isEmpty())
             throw new EntityNotFoundException("Liga con ID " + leagueId + " no encontrada");
         
-        matchService.createLeagueMatches(league.get());
-    }
-
-    @Override
-    public void getAllMatches(int leagueId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        League lg = league.get();
+        
+        if (lg.getBotIds().size() > 1)
+            matchService.createLeagueMatches(lg);
+        
+        lg.setState("IN_PROCESS");
+        leagueRepository.saveLeague(lg);
     }
     
 }

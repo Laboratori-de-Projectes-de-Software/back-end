@@ -1,6 +1,6 @@
 package com.debateia.domain;
 
-import com.debateia.adapter.in.web.dto.State;
+import com.debateia.adapter.in.rest.league.State;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

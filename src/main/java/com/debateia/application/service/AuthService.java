@@ -2,9 +2,9 @@ package com.debateia.application.service;
 
 import com.debateia.application.ports.in.rest.AuthUseCase;
 import com.debateia.application.jwt.JwtService;
-import com.debateia.adapter.in.web.dto.request.UpdateCredRequest;
-import com.debateia.adapter.in.web.dto.request.UserDTOLogin;
-import com.debateia.adapter.in.web.dto.request.UserDTORegister;
+import com.debateia.adapter.in.rest.auth.UpdateCredRequest;
+import com.debateia.adapter.in.rest.auth.UserDTOLogin;
+import com.debateia.adapter.in.rest.auth.UserDTORegister;
 import com.debateia.application.jwt.TokenData;
 import com.debateia.application.ports.out.persistence.UserRepository;
 import com.debateia.domain.User;

@@ -1,29 +1,19 @@
 package com.debateia.adapter.mapper;
 
-import com.debateia.adapter.in.web.dto.response.ParticipationResponseDTO;
-import com.debateia.adapter.out.persistence.entities.ParticipationEntity;
+import com.debateia.adapter.in.rest.league.ParticipationResponseDTO;
+import com.debateia.adapter.out.participation.ParticipationEntity;
 import com.debateia.domain.Participation;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-public class PartMapper {
-    public static Participation toDomain(ParticipationEntity e) {
-        Participation d = new Participation();
-        d.setLeagueId(e.getLeagueId());
-        d.setBotId(e.getBotId());
-        d.setPoints(e.getPoints());
-        d.setPosition(e.getPosition());
-        
-        return d;
-    }
+@Mapper(componentModel = "spring")
+public interface PartMapper {
     
-    public static ParticipationResponseDTO toDTO(Participation d) {
-        ParticipationResponseDTO r = new ParticipationResponseDTO();
-        r.setBotId(d.getBotId());
-        r.setPoints(d.getPoints());
-        r.setName(d.getName());
-        r.setNDraws(d.getNDraws());
-        r.setNWins(d.getNWins());
-        r.setNLoses(d.getNLoses());
-        
-        return r;
-    }
+    PartMapper INSTANCE = Mappers.getMapper(PartMapper.class);
+    
+    @Mapping(target = "name", ignore = true) // <- The names of the bot cannot be directly obtained from the
+    Participation toDomain(ParticipationEntity entity); // ParticipationEntity. We add it after the conversion manually.
+    
+    ParticipationResponseDTO toDTO(Participation domain);
 }

@@ -1,117 +1,100 @@
 package com.debateia.adapter.mapper;
 
-import com.debateia.adapter.in.web.dto.State;
-import com.debateia.adapter.in.web.dto.request.LeagueDTO;
-import com.debateia.adapter.in.web.dto.response.LeagueResponseDTO;
-import com.debateia.adapter.out.persistence.entities.BotEntity;
-import com.debateia.adapter.out.persistence.entities.LeagueEntity;
-import com.debateia.adapter.out.persistence.entities.ParticipationEntity;
-import com.debateia.adapter.out.persistence.entities.UserEntity;
+import com.debateia.adapter.in.rest.league.State;
+import com.debateia.adapter.in.rest.league.LeagueDTO;
+import com.debateia.adapter.in.rest.league.LeagueResponseDTO;
+import com.debateia.adapter.out.league.LeagueEntity;
+import com.debateia.adapter.out.participation.ParticipationEntity;
+import com.debateia.adapter.out.user.UserEntity;
 import com.debateia.domain.League;
-import java.util.ArrayList;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- *
- * @author kjorda
- */
-public class LeagueMapper {
-    public static LeagueResponseDTO toLeagueResponseDTO(League l) {
-        LeagueResponseDTO d = new LeagueResponseDTO();
-        d.setLeagueId(l.getLeagueId());
-        d.setState(mapStateToEnum(l.getState()));
-        d.setName(l.getName());
-        d.setUrlImagen(l.getUrlImagen());
-        //if (l.getUserId() != null)
-            d.setUser(l.getUserId());
-        d.setRounds(l.getRounds());
-        d.setMatchTime(l.getMatchTime());
-        d.setBots(l.getBotIds());
-        
-        return d;
-    }
+@Mapper(componentModel = "spring")
+public interface LeagueMapper {
     
-    public static League toDomain(LeagueDTO d) {
-        League l = new League();
-        l.setName(d.getName());
-        l.setUrlImagen(d.getUrlImagen());
-        l.setRounds(d.getRounds());
-        l.setMatchTime(d.getMatchTime());
-        l.setBotIds(d.getBots());
-        l.setState("PENDING");
-
-        return l;
-    }
+    LeagueMapper INSTANCE = Mappers.getMapper(LeagueMapper.class);
     
-    public static League toDomain(LeagueEntity e) {
-        League l = new League();
-        l.setLeagueId(e.getId());
-        l.setName(e.getName());
-        l.setUrlImagen(e.getUrlImagen());
-        l.setRounds(e.getRounds());
-        l.setMatchTime(e.getMatchTime());
-        l.setState(e.getState());
-        l.setMatchIds(e.getMatches().stream()
-                .map(elem -> elem.getId())
-                .collect(Collectors.toList()));
-        
-        l.setBotIds(e.getParticipations().stream()
-                .map(elem -> elem.getBotId())
-                .collect(Collectors.toList()));
-        
-        l.setUserId(e.getUser().getId());
-        
-        return l;
-    }
+    @Mapping(target = "state", source = "state", qualifiedByName = "mapStateToEnum")
+    @Mapping(target = "user", source = "userId")
+    @Mapping(target = "bots", source = "botIds")
+    LeagueResponseDTO toLeagueResponseDTO(League league);
     
-    public static LeagueEntity toEntity(League l) {
-        LeagueEntity e = new LeagueEntity();
-        e.setName(l.getName());
-        e.setUrlImagen(l.getUrlImagen());
-        e.setRounds(l.getRounds());
-        e.setMatchTime(l.getMatchTime());
-        
-        if (l.getUserId() == null) 
-            e.setUser(null);
-        else {
-            UserEntity dummy = new UserEntity();
-            dummy.setId(l.getUserId());
-            e.setUser(dummy);
-        }
-        
-        e.setMatches(new ArrayList<>());
-        
-        List<ParticipationEntity> dummies = l.getBotIds().stream()
-                .map(elem -> {
-                    ParticipationEntity ent = new ParticipationEntity();
-                    ent.setLeagueId(l.getLeagueId());
-                    ent.setBotId(elem);
-                    ent.setPoints(0);
-                    return ent;
-                })
-                .collect(Collectors.toList());
-        
-        e.setParticipations(dummies);
-
-        e.setState(l.getState());
-        
-        // TODO: Añadir records de league_bots basandonos en la lista de botids del dominio
-        
-        return e;
-    }
+    @Mapping(target = "botIds", source = "bots")
+    @Mapping(target = "state", constant = "PENDING")
+    @Mapping(target = "leagueId", ignore = true)
+    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "matchIds", ignore = true)
+    League toDomain(LeagueDTO dto);
     
+    @Mapping(target = "leagueId", source = "id")
+    @Mapping(target = "matchIds", source = "matches", qualifiedByName = "mapMatchesToIds")
+    @Mapping(target = "botIds", source = "participations", qualifiedByName = "mapParticipationsToIds")
+    @Mapping(target = "userId", source = "user.id")
+    League toDomain(LeagueEntity entity);
     
-    private static State mapStateToEnum(String state) {
-//        if (state == null)
-//            return null;
-        
+    @Mapping(target = "user", source = "userId", qualifiedByName = "mapUserIdToEntity")
+    @Mapping(target = "matches", expression = "java(new ArrayList<>())")
+    @Mapping(target = "participations", source = "botIds", qualifiedByName = "mapBotIdsToParticipations")
+    @Mapping(target = "id", ignore = true)
+    LeagueEntity toEntity(League league);
+    
+    @Named("mapStateToEnum")
+    default State mapStateToEnum(String state) {
         try {
             return State.valueOf(state);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    @Named("mapMatchesToIds")
+    default List<Integer> mapMatchesToIds(List<? extends Object> matches) {
+        if (matches == null) return null;
+        return matches.stream()
+                .map(match -> {
+                    try {
+                        return (Integer) match.getClass().getMethod("getId").invoke(match);
+                    } catch (Exception e) {
+                        return null;
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+    
+    @Named("mapParticipationsToIds")
+    default List<Integer> mapParticipationsToIds(List<ParticipationEntity> participations) {
+        if (participations == null) return null;
+        return participations.stream()
+                .map(ParticipationEntity::getBotId)
+                .collect(Collectors.toList());
+    }
+    
+    @Named("mapUserIdToEntity")
+    default UserEntity mapUserIdToEntity(Integer userId) {
+        if (userId == null) return null;
+        UserEntity dummy = new UserEntity();
+        dummy.setId(userId);
+        return dummy;
+    }
+    
+    @Named("mapBotIdsToParticipations")
+    default List<ParticipationEntity> mapBotIdsToParticipations(List<Integer> botIds) {
+        if (botIds == null) return null;
+        return botIds.stream()
+                .map(botId -> {
+                    ParticipationEntity entity = new ParticipationEntity();
+                    entity.setLeagueId(null); // This will be set after the league is created
+                    entity.setBotId(botId);
+                    entity.setPoints(0);
+                    return entity;
+                })
+                .collect(Collectors.toList());
     }
 }

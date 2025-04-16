@@ -1,6 +1,7 @@
 package com.debateia.application.service;
 
-import com.debateia.adapter.in.web.dto.State;
+import com.debateia.adapter.in.rest.league.State;
+import com.debateia.application.ports.in.rest.MatchUseCase;
 import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.MatchRepository;
 import com.debateia.domain.Bot;
@@ -13,14 +14,17 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class MatchService {
+public class MatchService implements MatchUseCase {
     private final MatchRepository matchRepository;
     private final BotRepository botRepository;
 
+    
+    @Override
     public List<Match> getMatchesByLeagueId(Integer leagueId) {
         return matchRepository.findByLeagueId(leagueId);
     }
 
+    @Override
     public List<Match> createLeagueMatches(League league) {
         List<Match> matches = new ArrayList<>(league.getRounds());
         List<String> names = new ArrayList<>(league.getBotIds().size());

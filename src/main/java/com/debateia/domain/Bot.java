@@ -14,11 +14,11 @@ public class Bot {
     private String name;
     private String description;
     private String endpoint;
-    private String urlImage;
-    private int wins;
-    private int draws;
-    private int losses;
+    private String urlImagen;
     private Integer userId;
+    private int nWins;
+    private int nDraws;
+    private int nLosses;
 }
 
 

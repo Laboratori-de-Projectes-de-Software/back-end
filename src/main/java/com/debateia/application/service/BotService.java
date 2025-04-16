@@ -1,14 +1,11 @@
 package com.debateia.application.service;
 
-import com.debateia.adapter.out.persistence.entities.BotEntity;
-import com.debateia.adapter.out.persistence.entities.UserEntity;
+import com.debateia.application.ports.in.rest.BotUseCase;
 import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.UserRepository;
 import com.debateia.domain.Bot;
 import com.debateia.domain.User;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,10 +15,11 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class BotService {
+public class BotService implements BotUseCase {
     private final BotRepository botRepository;
     private final UserRepository userRepository;
 
+    @Override
     public List<Bot> getBots(Optional<Integer> ownerId) {
         if (ownerId.isPresent()) {
             Optional<User> user = userRepository.findById(ownerId.get());
@@ -35,6 +33,7 @@ public class BotService {
     }
 
     @Transactional
+    @Override
     public Bot createBot(Bot bot, Integer userId) {
         Optional<User> owner = userRepository.findById(userId);
         if (owner.isPresent()) { // usuario existe
@@ -47,6 +46,7 @@ public class BotService {
         throw new EntityNotFoundException("El usuario con ID "+userId+" no existe");
     }
 
+    @Override
     public Bot getBotById(Integer botId) {
         Optional<Bot> bot = botRepository.findById(botId);
         if (bot.isEmpty()) {
@@ -55,6 +55,7 @@ public class BotService {
         return bot.get();
     }
 
+    @Override
     public Bot updateBot(Integer botId, Integer userId, Bot newBot) {
         Optional<Bot> currentBot = botRepository.findById(botId);
         if (currentBot.isEmpty()) {
@@ -64,9 +65,9 @@ public class BotService {
         if (user.isEmpty()) {
             throw new EntityNotFoundException("El user con ID \""+userId+"\" propietario del bot no existe");
         }
-        newBot.setWins(currentBot.get().getWins());
-        newBot.setDraws(currentBot.get().getDraws());
-        newBot.setLosses(currentBot.get().getLosses());
+        newBot.setNWins(currentBot.get().getNWins());
+        newBot.setNDraws(currentBot.get().getNDraws());
+        newBot.setNLosses(currentBot.get().getNLosses());
         newBot.setUserId(user.get().getUserId());
         newBot.setId(botId); // IMPORTANTE!!! Para que save haga UPDATE en vez de INSERT
         try {
