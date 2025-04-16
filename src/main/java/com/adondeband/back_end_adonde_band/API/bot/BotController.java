@@ -40,10 +40,7 @@ public class BotController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BotSummaryResponseDTO>> listarBots(@RequestParam(value = "owner", required = false) Long userId) {
-        // Obtiene el nombre del usuario autenticado desde SecurityContextHolder
-        // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // Set UserId en el bot
+    public ResponseEntity<List<BotDTOResponse>> listarBots(@RequestParam(value = "owner", required = false) Long userId) {
         // Obtener listado de bots
         List<Bot> bots;
         try {
@@ -54,12 +51,11 @@ public class BotController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-
-        List<BotSummaryResponseDTO> botsSummaryDTO = bots.stream()
-                .map(botMapper::toSummaryDTO)
+        List<BotDTOResponse> botsDTO = bots.stream()
+                .map(botMapper::toDTO)
                 .toList();
 
-        return ResponseEntity.status(HttpStatus.OK).body(botsSummaryDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(botsDTO);
     }
 
     @PostMapping

@@ -1,15 +1,9 @@
 package com.adondeband.back_end_adonde_band.dominio.liga;
 
-import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
-import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
-import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.Enfrentamiento;
-import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoId;
 import com.adondeband.back_end_adonde_band.dominio.enfrentamiento.EnfrentamientoService;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
-import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
 import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionService;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotService;
-import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import jakarta.transaction.Transactional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,7 +36,7 @@ public class TestLigaService {
         // Arrange
         Liga liga = new Liga();
         liga.setNombre("La liga EA Sports");
-        liga.setEstado(ESTADO.PENDIENTE);
+        liga.setEstado(ESTADO.PENDING);
         liga.setFechaInicio(LocalDateTime.now());
         liga.setFechaFin(LocalDateTime.now());
         liga.setImagen(null);
@@ -71,7 +65,7 @@ public class TestLigaService {
         // Arrange
         Liga liga = new Liga();
         liga.setNombre("La liga EA Sports");
-        liga.setEstado(ESTADO.PENDIENTE);
+        liga.setEstado(ESTADO.PENDING);
         liga.setFechaInicio(LocalDateTime.now());
         liga.setFechaFin(LocalDateTime.now());
         liga.setImagen(null);
@@ -100,7 +94,7 @@ public class TestLigaService {
         for (int i = 1; i <= 5; i++) {
             Liga liga = new Liga();
             liga.setNombre("Liga " + i);
-            liga.setEstado(ESTADO.PENDIENTE);
+            liga.setEstado(ESTADO.PENDING);
             liga.setFechaInicio(LocalDateTime.now());
             liga.setFechaFin(LocalDateTime.now());
             liga.setImagen(null);

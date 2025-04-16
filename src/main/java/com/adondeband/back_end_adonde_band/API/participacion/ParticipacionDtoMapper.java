@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,11 @@ public abstract class ParticipacionDtoMapper {
     public abstract ParticipacionDTO toDTO(Participacion participacion);
 
     public List<Long> toListId(List<ParticipacionId> ids) {
+        if (ids == null || ids.isEmpty()) {
+            // return empty list
+            return new ArrayList<>();
+        }
+
         return ids.stream()
                 .map(participacionService::obtenerParticipacion) // Obtener Participacion
                 .map(Participacion::getBot) // Obtener BotId

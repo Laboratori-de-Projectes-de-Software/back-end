@@ -6,16 +6,13 @@ import com.adondeband.back_end_adonde_band.dominio.authentication.JwtService;
 import com.adondeband.back_end_adonde_band.dominio.exception.UserAlreadyExistsException;
 import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import com.adondeband.back_end_adonde_band.api.ApiApiDelegate;
 
 import java.util.ArrayList;
 
@@ -23,6 +20,7 @@ import java.util.ArrayList;
 // SI ALGUIEN QUIERO TESTEAR HAY QUE CAMBIAR DE VUELTA
 
 //@Controller
+@Slf4j
 @RestController
 @RequestMapping("api/v0/auth")
 public class AuthApiDelegate
@@ -47,10 +45,16 @@ public class AuthApiDelegate
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Usuario> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<UserDTO> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
         try {
             Usuario registeredUser = authenticationService.signup(authenticationDtoMapper.registerUserDtotoDomain(registerUserDto));
-            return ResponseEntity.ok(registeredUser);
+
+            UserDTO userDTO = new UserDTO()
+                    .setUser(registeredUser.getNombre())
+                    .setMail(registeredUser.getCorreo().value())
+                    .setId(registeredUser.getId().value());
+            return ResponseEntity.ok(userDTO);
+
         } catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
@@ -72,7 +76,8 @@ public class AuthApiDelegate
                     .setToken(jwtToken)
                     .setExpiresIn(System.currentTimeMillis() + jwtService.getExpirationTime())
                     .setUser(authenticatedUser.getNombre())
-                    .setUserId(authenticatedUser.getId().value());
+                    .setId(authenticatedUser.getId().value())
+                    .setMail(authenticatedUser.getCorreo().value());
 
             return ResponseEntity.ok(loginResponse);
         }catch (UsernameNotFoundException | BadCredentialsException e){

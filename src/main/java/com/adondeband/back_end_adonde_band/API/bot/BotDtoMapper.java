@@ -14,27 +14,24 @@ public interface BotDtoMapper {
 
     // Mapear de DTO a Dominio
     @Mapping(target = "nombre", source = "name")
-    @Mapping(target = "imagen", source = "urlImage")
-    @Mapping(target = "cualidad", source = "description")
+    @Mapping(target = "imagen", source = "imageUrl")
+    @Mapping(target = "cualidad", source = "quality")
     @Mapping(target = "numVictorias", source = "NWins")
     @Mapping(target = "numEmpates", source = "NDraws")
     @Mapping(target = "numDerrotas", source = "NLosses")
+    @Mapping(target = "endpoint", source = "apiUrl")
     Bot toDomain(BotDTOResponse botDTO);
 
     // Mapea de Bot a BotDTO
-    @Mapping(target = "botId", source = "id")
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "nombre")
-    @Mapping(target = "urlImage", source = "imagen")
-    @Mapping(target = "description", source = "cualidad")
+    @Mapping(target = "imageUrl", source = "imagen")
+    @Mapping(target = "quality", source = "cualidad")
     @Mapping(target = "NWins", source = "numVictorias")
     @Mapping(target = "NDraws", source = "numEmpates")
     @Mapping(target = "NLosses", source = "numDerrotas")
+    @Mapping(target = "apiUrl", source = "endpoint")
     BotDTOResponse toDTO(Bot bot);
-
-    // Mapea de Bot a BotSummaryResponseDTO
-    @Mapping(target = "description", source = "cualidad")
-    @Mapping(target = "name", source = "nombre")
-    BotSummaryResponseDTO toSummaryDTO(Bot bot);
 
     // Mapeo de atributos
     default BotId toBotId(Long id) {

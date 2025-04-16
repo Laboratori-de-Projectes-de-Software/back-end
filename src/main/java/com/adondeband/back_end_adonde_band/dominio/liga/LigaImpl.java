@@ -69,7 +69,7 @@ public class LigaImpl implements LigaService {
     public Liga startLiga(Liga liga, List<EnfrentamientoId> enfrentamientos) {
         // Asignar Enfrentamientos a la Liga
         liga.setEnfrentamientos(enfrentamientos);
-        liga.setEstado(ESTADO.EN_CURSO);
+        liga.setEstado(ESTADO.IN_PROGRESS);
         return crearLiga(liga);
     }
 }

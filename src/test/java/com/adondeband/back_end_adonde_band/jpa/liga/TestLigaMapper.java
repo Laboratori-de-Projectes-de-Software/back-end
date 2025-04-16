@@ -50,7 +50,7 @@ public class TestLigaMapper {
         liga.setNombre("Liga 1");
         liga.setFechaInicio(LocalDateTime.now());
         liga.setFechaFin(LocalDateTime.now());
-        liga.setEstado(ESTADO.PENDIENTE);
+        liga.setEstado(ESTADO.PENDING);
         liga.setMatchTime(120L);
         liga.setImagen(null);
         liga.setUsuario(null);
