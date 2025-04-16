@@ -1,7 +1,6 @@
 package com.adondeband.back_end_adonde_band.dominio.participacion;
 
 import com.adondeband.back_end_adonde_band.dominio.bot.Bot;
-import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotService;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
@@ -35,7 +34,7 @@ public class TestParticipacionService {
         Liga liga = new Liga();
 //        liga.setId(new LigaId(1L));
         liga.setNombre("La liga EA Sports");
-        liga.setEstado(ESTADO.PENDIENTE);
+        liga.setEstado(ESTADO.PENDING);
         liga.setFechaInicio(LocalDateTime.now());
         liga.setFechaFin(LocalDateTime.now());
         liga.setImagen(null);

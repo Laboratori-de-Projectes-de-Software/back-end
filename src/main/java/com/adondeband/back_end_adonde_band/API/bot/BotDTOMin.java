@@ -13,16 +13,16 @@ public class BotDTOMin {
 
     private String name;
 
-    private String description;
+    private String quality;
 
-    private String urlImagen; // luego quizá sea ImagenDTO
+    private String imageUrl; // luego quizá sea ImagenDTO
 
-    private String endpoint;
+    private String apiUrl;
 
     public BotDTOMin(BotDTOResponse botDTO) {
         this.name = botDTO.getName();
-        this.description = botDTO.getDescription();
-        this.urlImagen = botDTO.getUrlImage();
-        this.endpoint = botDTO.getEndpoint();
+        this.quality = botDTO.getQuality();
+        this.imageUrl = botDTO.getImageUrl();
+        this.apiUrl = botDTO.getApiUrl();
     }
 }

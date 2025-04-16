@@ -5,7 +5,6 @@ import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaService;
 import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import com.adondeband.back_end_adonde_band.dominio.estado.ESTADO;
-import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
 import com.adondeband.back_end_adonde_band.dominio.conversacion.Conversacion;
 import com.adondeband.back_end_adonde_band.dominio.exception.NotFoundException;
@@ -58,7 +57,7 @@ public class EnfrentamientoImpl implements EnfrentamientoService {
         for(int i = 0; i < participaciones.size(); i++){
             for(int j = i + 1; j < participaciones.size(); j++){
                 Enfrentamiento enfrentamiento = new Enfrentamiento();
-                enfrentamiento.setEstado(ESTADO.PENDIENTE);
+                enfrentamiento.setEstado(ESTADO.PENDING);
                 enfrentamiento.setLocal(participaciones.get(i).getBot());
                 enfrentamiento.setVisitante(participaciones.get(j).getBot());
                 enfrentamiento.setLigaId(ligaId);

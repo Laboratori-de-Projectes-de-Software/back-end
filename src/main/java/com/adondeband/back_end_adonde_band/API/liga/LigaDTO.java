@@ -12,13 +12,13 @@ import lombok.Setter;
 public class LigaDTO {
 
     private String name;
-    private String urlImagen; // luego quizá se convierta en ImagenDTO
+    private String imageUrl; // luego quizá se convierta en ImagenDTO
     private Integer rounds;
     private Long matchTime;
 
     public LigaDTO(LigaResponseDTO ligaResponseDTO) {
         this.name = ligaResponseDTO.getName();
-        this.urlImagen = ligaResponseDTO.getUrlImagen();
+        this.imageUrl = ligaResponseDTO.getImageUrl();
         this.rounds = ligaResponseDTO.getRounds();
         this.matchTime = ligaResponseDTO.getMatchTime();
     }

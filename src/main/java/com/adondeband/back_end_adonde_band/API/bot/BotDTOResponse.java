@@ -8,15 +8,15 @@ import lombok.*;
 @AllArgsConstructor
 public class BotDTOResponse {
 
-    private Integer botId;
+    private Integer id;
 
     private String name;
 
-    private String description;
+    private String quality;
 
-    private String urlImage; // luego quizá sea ImagenDTO
+    private String imageUrl; // luego quizá sea ImagenDTO
 
-    private String endpoint;
+    private String apiUrl;
 
     private Integer nWins;
 
@@ -26,10 +26,10 @@ public class BotDTOResponse {
 
     public BotDTOResponse(BotDTOMin botDTOMin) {
         this.name = botDTOMin.getName();
-        this.description = botDTOMin.getDescription();
-        this.urlImage = botDTOMin.getUrlImagen();
-        this.endpoint = botDTOMin.getEndpoint();
-        this.botId = null; // botId se asigna en el controlador
+        this.quality = botDTOMin.getQuality();
+        this.imageUrl = botDTOMin.getImageUrl();
+        this.apiUrl = botDTOMin.getApiUrl();
+        this.id = null; // botId se asigna en el controlador
 
         // default de otros atributos
         nLosses = nDraws = nWins = 0;

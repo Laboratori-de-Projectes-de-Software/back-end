@@ -17,18 +17,18 @@ public interface LigaDtoMapper {
     LigaDtoMapper INSTANCE = Mappers.getMapper(LigaDtoMapper.class);
 
     // Mapear de DTO a Dominio
-    @Mapping(target="id", source = "leagueId")
+    @Mapping(target="id", source = "id")
     @Mapping(target = "nombre", source = "name")
     @Mapping(target = "estado", source = "state")
-    @Mapping(target = "imagen", source = "urlImagen")
+    @Mapping(target = "imagen", source = "imageUrl")
     @Mapping(target = "rondas", source = "rounds")
     Liga toDomain(LigaResponseDTO ligaDTO);
 
     // Mapea de Bot a BotDTO
-    @Mapping(target = "leagueId", source = "id")
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "nombre")
     @Mapping(target = "state", source = "estado")
-    @Mapping(target = "urlImagen", source = "imagen")
+    @Mapping(target = "imageUrl", source = "imagen")
     @Mapping(target = "rounds", source = "rondas")
     @Mapping(target = "bots", source = "participaciones")
     LigaResponseDTO toDTO(Liga liga);

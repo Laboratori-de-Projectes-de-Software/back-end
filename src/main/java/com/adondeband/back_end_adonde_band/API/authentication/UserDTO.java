@@ -7,16 +7,10 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class LoginResponse {
-
-    private String token;
-
-    private long expiresIn;
-
+public class UserDTO {
     private String user;
 
     private Long id;
 
     private String mail;
 }
-

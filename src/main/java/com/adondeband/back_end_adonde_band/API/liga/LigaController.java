@@ -19,7 +19,6 @@ import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaImpl;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaService;
 import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
-import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionService;
 import com.adondeband.back_end_adonde_band.dominio.usuario.Usuario;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioId;
 import com.adondeband.back_end_adonde_band.dominio.usuario.UsuarioService;
@@ -31,7 +30,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -67,7 +65,6 @@ public class LigaController {
 
     @GetMapping
     public ResponseEntity<List<LigaResponseDTO>> listarLigas(@RequestParam(value = "owner", required = false) Long userId) {
-        // TODO
         // Obtener listado de ligas
         List<Liga> ligas;
         try {
@@ -136,15 +133,24 @@ public class LigaController {
     }
 
     @PostMapping("/{leagueId}/bot")
-    public ResponseEntity<?> addBotToLiga(@PathVariable Long leagueId, @RequestBody String botId) {
-        try {
-            ligaService.addBotToLiga(new LigaId(leagueId), new BotId(Long.parseLong(botId)));
-            return ResponseEntity.status(HttpStatus.CREATED).body("Bot " + botId + " añadido");
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (BotAlreadyParticipatesException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+    public ResponseEntity<?> addBotToLiga(@PathVariable Long leagueId, @RequestBody List<Long> botIds) {
+        StringBuilder respuesta = new StringBuilder();
+        for (Long botId : botIds) {
+            try {
+                ligaService.addBotToLiga(new LigaId(leagueId), new BotId(botId));
+                respuesta.append("Bot ").append(botId).append(" añadido.\n");
+
+            } catch (NotFoundException e) {
+                if (e.getMessage().contains("bot")) {
+                    respuesta.append("Bot ").append(botId).append(" no añadido (no existe).\n");
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                }
+            } catch (BotAlreadyParticipatesException e) {
+                respuesta.append("Bot ").append(botId).append(" no añadido (ya estaba participando).\n");
+            }
         }
+        return ResponseEntity.status(HttpStatus.CREATED).body(respuesta.toString());
     }
 
     @GetMapping("/{leagueId}/leaderboard")
@@ -190,11 +196,11 @@ public class LigaController {
         if (liga == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        if (liga.getEstado().equals(ESTADO.FINALIZADO)) {
+        if (liga.getEstado().equals(ESTADO.COMPLETED)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Liga ya finalizada");
         }
 
-        if (liga.getEstado().equals(ESTADO.EN_CURSO)) {
+        if (liga.getEstado().equals(ESTADO.IN_PROGRESS)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Liga ya iniciada");
         }
 

@@ -54,7 +54,7 @@ public class EnfrentamientoController {
         //ResponseEntity.status(HttpStatus.OK).body(enfrentamientoDtoMapper.toDTO(enfrentamientoSaved));
     }
 
-    @GetMapping("/{matchId}/messages")
+    @GetMapping("/{matchId}/message")
     public ResponseEntity<List<MensajeDTO>> listarMensajes(@PathVariable Long matchId) {
         // Se obtiene el enfrentamiento, se extrae la conversación y se parsean los mensajes
         if (matchId == null) { return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);}

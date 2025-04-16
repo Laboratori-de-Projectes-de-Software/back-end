@@ -1,6 +1,5 @@
 package com.adondeband.back_end_adonde_band.API.mensaje;
 
-import com.adondeband.back_end_adonde_band.dominio.bot.BotId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class MensajeDTO {
 
-    private String mensaje;
-    private String idBot;
+    private String text;
+    private String botId;
     private LocalDateTime timestamp;
 }
