@@ -70,8 +70,8 @@ public class AuthController {
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody UserDTOLogin dto) {
         try {
-            String token = service.login(dto.getEmail(), dto.getPassword());
-            User user = service.getUserByEmail(dto.getEmail());
+            String token = service.login(dto.getName(), dto.getPassword());
+            User user = service.getUserByName(dto.getName());
 
             UserResponseDTO response = userMapper.toResponseDTO(user);
             response.setToken(token);

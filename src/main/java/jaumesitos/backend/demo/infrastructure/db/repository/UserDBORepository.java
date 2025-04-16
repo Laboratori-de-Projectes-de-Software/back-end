@@ -23,4 +23,9 @@ public class UserDBORepository implements IUserRepository {
     public Optional<User> findByEmail(String email) {
         return springDataRepository.findByEmail(email).map(mapper::toUser);
     }
+
+    @Override
+    public Optional<User> findByName(String name) {
+        return springDataRepository.findByName(name).map(mapper::toUser);
+    }
 }
