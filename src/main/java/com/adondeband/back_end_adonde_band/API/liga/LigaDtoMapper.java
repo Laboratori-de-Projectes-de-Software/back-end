@@ -1,6 +1,7 @@
 package com.adondeband.back_end_adonde_band.API.liga;
 
 import com.adondeband.back_end_adonde_band.API.imagen.ImagenDtoMapper;
+import com.adondeband.back_end_adonde_band.API.participacion.ParticipacionDtoMapper;
 import com.adondeband.back_end_adonde_band.dominio.imagen.Imagen;
 import com.adondeband.back_end_adonde_band.dominio.liga.Liga;
 import com.adondeband.back_end_adonde_band.dominio.liga.LigaId;
@@ -11,7 +12,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses =  {ImagenDtoMapper.class})
+@Mapper(componentModel = "spring", uses =  {ImagenDtoMapper.class, ParticipacionDtoMapper.class})
 public interface LigaDtoMapper {
     LigaDtoMapper INSTANCE = Mappers.getMapper(LigaDtoMapper.class);
 
@@ -29,6 +30,7 @@ public interface LigaDtoMapper {
     @Mapping(target = "state", source = "estado")
     @Mapping(target = "urlImagen", source = "imagen")
     @Mapping(target = "rounds", source = "rondas")
+    @Mapping(target = "bots", source = "participaciones")
     LigaResponseDTO toDTO(Liga liga);
 
     default long toId(LigaId id) {
