@@ -34,8 +34,8 @@ public class AuthenticationService {
 
     public UserEntity signup(UserDTORegister input) {
         UserEntity user = new UserEntity();
-        user.setUsername(input.getUsername());
-        user.setEmail(input.getEmail());
+        user.setUsername(input.getUser());
+        user.setEmail(input.getMail());
         user.setPassword(passwordEncoder.encode(input.getPassword()));
 
         try {
@@ -43,7 +43,7 @@ public class AuthenticationService {
         } catch (DataIntegrityViolationException e) {
             // Check if the exception is due to a unique constraint violation on the email
             if (e.getMessage().contains("Duplicate entry") && e.getMessage().contains("email")) {
-                throw new ConflictException("The email '" + input.getEmail() + "' is already registered");
+                throw new ConflictException("The email '" + input.getMail() + "' is already registered");
             }
             // Rethrow the exception if it's a different integrity violation
             throw e;

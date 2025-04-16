@@ -2,49 +2,49 @@ package com.example.gironetaServer.infraestructure.adapters.in.controllers.dto;
 
 public class BotDto {
     private String name;
-    private String descripcion;
-    private String urlImagen;
-    private String endpoint;
+    private String quality;
+    private String imageUrl;
+    private String apiUrl;
 
     public BotDto() {
     }
 
-    public BotDto(String name, String descripcion, String urlImagen, String endpoint) {
+    public BotDto(String name, String quality, String imageUrl, String apiUrl) {
         this.name = name;
-        this.descripcion = descripcion;
-        this.urlImagen = urlImagen;
-        this.endpoint = endpoint;
+        this.quality = quality;
+        this.imageUrl = imageUrl;
+        this.apiUrl = apiUrl;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getQuality() {
+        return quality;
     }
 
-    public String getUrlImagen() {
-        return urlImagen;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public String getEndpoint() {
-        return endpoint;
+    public String getApiUrl() {
+        return apiUrl;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setQuality(String quality) {
+        this.quality = quality;
     }
 
-    public void setUrlImagen(String urlImagen) {
-        this.urlImagen = urlImagen;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
+    public void setApiUrl(String apiUrl) {
+        this.apiUrl = apiUrl;
     }
 }

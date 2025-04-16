@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class BotResponseDTO {
-    private Long botId;
+    private Long id;
     private String name;
-    private String description;
-    private String urlImage;
+    private String quality;
+    private String imageUrl;
+    private String apiUrl;
     private int nWins;
     private int nLosses;
     private int nDraws;
@@ -17,31 +18,36 @@ public class BotResponseDTO {
     public BotResponseDTO() {
     }
 
-    public BotResponseDTO(Long botId, String name, String description, String urlImage, int nWins, int nLosses,
+    public BotResponseDTO(Long id, String name, String quality, String imageUrl, String apiUrl, int nWins, int nLosses,
             int nDraws) {
-        this.botId = botId;
+        this.id = id;
         this.name = name;
-        this.description = description;
-        this.urlImage = urlImage;
+        this.quality = quality;
+        this.imageUrl = imageUrl;
+        this.apiUrl = apiUrl;
         this.nWins = nWins;
         this.nLosses = nLosses;
         this.nDraws = nDraws;
     }
 
-    public Long getBotId() {
-        return botId;
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getQuality() {
+        return quality;
     }
 
-    public String getUrlImage() {
-        return urlImage;
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getApiUrl() {
+        return apiUrl;
     }
 
     public int getnWins() {
@@ -56,20 +62,24 @@ public class BotResponseDTO {
         return nDraws;
     }
 
-    public void setBotId(Long botId) {
-        this.botId = botId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setQuality(String quality) {
+        this.quality = quality;
     }
 
-    public void setUrlImage(String urlImage) {
-        this.urlImage = urlImage;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setApiUrl(String apiUrl) {
+        this.apiUrl = apiUrl;
     }
 
     public void setnWins(int nWins) {

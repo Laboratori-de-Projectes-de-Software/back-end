@@ -48,9 +48,9 @@ public class BotService implements CreateBot, GetBot, UpdateBot {
         // Validar los campos obligatorios del bot
         if (bot == null ||
                 bot.getName() == null || bot.getName().trim().isEmpty() ||
-                bot.getDescripcion() == null || bot.getDescripcion().trim().isEmpty() ||
-                bot.getUrlImagen() == null || bot.getUrlImagen().trim().isEmpty() ||
-                bot.getEndpoint() == null || bot.getEndpoint().trim().isEmpty()) {
+                bot.getQuality() == null || bot.getQuality().trim().isEmpty() ||
+                bot.getImageUrl() == null || bot.getImageUrl().trim().isEmpty() ||
+                bot.getApiUrl() == null || bot.getApiUrl().trim().isEmpty()) {
             throw new IllegalArgumentException("Todos los campos obligatorios del bot deben ser proporcionados (name, descripcion, urlImagen, endpoint).");
         }
 
@@ -152,9 +152,9 @@ public class BotService implements CreateBot, GetBot, UpdateBot {
             throw new IllegalArgumentException("Los datos del bot para actualizar no pueden ser nulos.");
         }
         if (bot.getName() == null || bot.getName().trim().isEmpty() ||
-                bot.getDescripcion() == null || bot.getDescripcion().trim().isEmpty() ||
-                bot.getUrlImagen() == null || bot.getUrlImagen().trim().isEmpty() ||
-                bot.getEndpoint() == null || bot.getEndpoint().trim().isEmpty()) {
+                bot.getQuality() == null || bot.getQuality().trim().isEmpty() ||
+                bot.getImageUrl() == null || bot.getImageUrl().trim().isEmpty() ||
+                bot.getApiUrl() == null || bot.getApiUrl().trim().isEmpty()) {
             throw new IllegalArgumentException("Todos los campos obligatorios del bot deben ser proporcionados para la actualización (name, descripcion, urlImagen, endpoint).");
         }
 
@@ -175,9 +175,9 @@ public class BotService implements CreateBot, GetBot, UpdateBot {
             }
 
             existingBot.setName(bot.getName());
-            existingBot.setDescripcion(bot.getDescripcion());
-            existingBot.setUrlImagen(bot.getUrlImagen());
-            existingBot.setEndpoint(bot.getEndpoint());
+            existingBot.setQuality(bot.getQuality());
+            existingBot.setImageUrl(bot.getImageUrl());
+            existingBot.setApiUrl(bot.getApiUrl());
 
             try {
                 return botRepository.save(existingBot);

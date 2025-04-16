@@ -1,22 +1,31 @@
 package com.example.gironetaServer.infraestructure.adapters.in.controllers.dto;
 
-public class UserDTORegister {
+public class UserDTORegisterResponse {
+
+    private Long id;
     private String user;
     private String mail;
-    private String password;
 
     // Constructor por defecto
-    public UserDTORegister() {
+    public UserDTORegisterResponse() {
     }
 
     // Constructor
-    public UserDTORegister(String user, String mail, String password) {
+    public UserDTORegisterResponse(Long id, String user, String mail) {
+        this.id = id;
         this.user = user;
         this.mail = mail;
-        this.password = password;
     }
 
     // Getters y setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getUser() {
         return user;
     }
@@ -29,15 +38,8 @@ public class UserDTORegister {
         return mail;
     }
 
-    public void setMail(String email) {
-        this.mail = email;
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
