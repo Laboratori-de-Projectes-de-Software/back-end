@@ -9,7 +9,7 @@ import java.util.Optional;
 //Interfície que defineix les funcions relacionades amb les lligues
 
 public interface ILligaRepository {
-    void postLliga(League lliga);
+    League postLliga(League lliga);
 
     List<League> getLeagues(Integer owner);
 

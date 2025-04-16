@@ -6,6 +6,7 @@ import jaumesitos.backend.demo.domain.Bot;
 import jaumesitos.backend.demo.domain.User;
 import jaumesitos.backend.demo.infrastructure.res.dto.BotDTO;
 import jaumesitos.backend.demo.infrastructure.res.dto.BotResponseDTO;
+import jaumesitos.backend.demo.infrastructure.res.dto.BotSummaryResponseDTO;
 import jaumesitos.backend.demo.infrastructure.res.dto.LeagueDTO;
 import jaumesitos.backend.demo.infrastructure.res.mapper.BotDTOMapper;
 
@@ -70,7 +71,7 @@ public class BotController {
     @Operation(summary = "Get all bots or by user", description = "Returns all bots or those from a specific user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Bots found",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = BotResponseDTO.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = BotSummaryResponseDTO.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
     })
@@ -80,7 +81,7 @@ public class BotController {
             List<Bot> bots = (owner == null)
                     ? botService.getAllBots()
                     : botService.getBotsByOwner(owner);
-            List<BotResponseDTO> response = botMapper.toResponseDTOList(bots);
+            List<BotSummaryResponseDTO> response = botMapper.toSummaryResponse(bots);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting all bots");

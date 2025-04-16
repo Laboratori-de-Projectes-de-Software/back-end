@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDTORegister {
-    private String user;
-    private String mail;
-    private String password;
+public class BotSummaryResponseDTO {
+    private String name;
+    private String description;
+    private Integer id;
 }

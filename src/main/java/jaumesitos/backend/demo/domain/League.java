@@ -13,9 +13,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class League {
     private Integer matchTime;
+    private Integer leagueId;
     private String name;
     private Integer rounds;
-    private String urlImage;
+    private String urlImagen;
     private Boolean state;
     private Integer bots[];
     private Integer userId;

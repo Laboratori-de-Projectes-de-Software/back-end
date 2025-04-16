@@ -29,10 +29,11 @@ public class LligaDBORepository implements ILligaRepository {
     private final LLigaDBOMapper mapper;
 
     @Override
-    public void postLliga(League lliga) {
+    public League postLliga(League lliga) {
         try {
             LeagueDBO dbo = mapper.toDBO(lliga);
-            springdata.save(dbo);
+            LeagueDBO saved = springdata.save(dbo);
+            return mapper.toDomain(saved);
         } catch(Exception error){
             throw error;
         }
