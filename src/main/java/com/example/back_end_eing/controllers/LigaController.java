@@ -47,7 +47,7 @@ public class LigaController {
         }
 
         try {
-
+            leagueDTO.setUrlImagen(urlImagenCloudinary);
             LeagueResponseDTO responseDTO = ligaService.LigaRegistro(leagueDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (Exception e) {
@@ -132,6 +132,7 @@ public class LigaController {
         }
 
         try {
+            leagueDTO.setUrlImagen(urlImagenCloudinary);
             LeagueResponseDTO responseDTO = ligaService.actualizarLiga(leagueDTO, leagueId);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (Exception e) {

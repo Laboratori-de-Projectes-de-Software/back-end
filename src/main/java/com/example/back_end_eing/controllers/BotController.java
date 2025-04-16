@@ -36,12 +36,13 @@ public class BotController {
             urlFoto = null;
         }else {
             try {
+
                 urlFoto = cloudinaryService.uploadBase64(botdto.getUrlImagen());
             } catch (IOException e) {
                 return ResponseEntity.status(500).body(new BotResponseDTO());
             }
         }
-
+        botdto.setUrlImagen(urlFoto);
         BotResponseDTO responseDTO = botService.BotRegistro(botdto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
@@ -68,8 +69,9 @@ public class BotController {
         if (botdto.getUrlImagen() == null || botdto.getUrlImagen().isEmpty()) {
             urlFoto = null;
         }else {
-            cloudinaryService.uploadBase64(botdto.getUrlImagen());
+            urlFoto = cloudinaryService.uploadBase64(botdto.getUrlImagen());
         }
+        botdto.setUrlImagen(urlFoto);
         BotResponseDTO responseDTO = botService.actualizarBot(botdto, botId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);

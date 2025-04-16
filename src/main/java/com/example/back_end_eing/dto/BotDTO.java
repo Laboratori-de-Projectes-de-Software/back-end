@@ -10,8 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BotDTO {
     private String name;
-    private String description;
     private String urlImagen;
+    private String description;
     private String endpoint;
     private int userId;
 
