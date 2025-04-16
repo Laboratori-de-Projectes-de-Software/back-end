@@ -41,7 +41,7 @@ public interface LeagueMapper {
     @Mapping(target = "user", source = "userId", qualifiedByName = "mapUserIdToEntity")
     @Mapping(target = "matches", expression = "java(new ArrayList<>())")
     @Mapping(target = "participations", source = "botIds", qualifiedByName = "mapBotIdsToParticipations")
-    @Mapping(target = "id", source = "leagueId")
+    @Mapping(target = "id", ignore = true)
     LeagueEntity toEntity(League league);
     
     @Named("mapStateToEnum")
@@ -93,6 +93,10 @@ public interface LeagueMapper {
                     entity.setLeagueId(null); // This will be set after the league is created
                     entity.setBotId(botId);
                     entity.setPoints(0);
+                    entity.setPosition(0);
+                    entity.setNDraws(0);
+                    entity.setNWins(0);
+                    entity.setNLoses(0);
                     return entity;
                 })
                 .collect(Collectors.toList());
