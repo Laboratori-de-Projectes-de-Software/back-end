@@ -40,7 +40,7 @@ public class LeaguesController {
     @Qualifier("matchDTOMapper")
     private final MatchDTOMapper matchmapper;
 
-    @Operation(summary = "Post one league", description = "Post one league given its DTO")
+    @Operation(summary = "Create a new league", description = "This endpoint allows a user to create a new league")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "League posted successfully", content = @Content),
             @ApiResponse(responseCode = "409", description = "The league already exists", content = @Content),
