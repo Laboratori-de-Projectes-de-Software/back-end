@@ -2,12 +2,16 @@ package com.example.back_end_eing.services.impl;
 
 import com.example.back_end_eing.dto.EnfrentamientoDTO;
 import com.example.back_end_eing.dto.MatchResponseDTO;
+import com.example.back_end_eing.dto.MessageResponseDTO;
 import com.example.back_end_eing.models.*;
 import com.example.back_end_eing.exceptions.*;
 import com.example.back_end_eing.repositories.*;
 import com.example.back_end_eing.services.EnfrentamientoService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import netscape.javascript.JSObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.util.*;
 
@@ -36,28 +40,18 @@ public class EnfrentamientoServiceImpl implements EnfrentamientoService {
         this.clasificacionRepository = clasificacionRepository;
     }
 
-    @Override
-    public Enfrentamiento obtenerEnfrentamiento(Long id) {
-        return enfrentamientoRepository.findById(id)
-                .orElseThrow(() -> new EnfrentamientoNotFoundException(id));
-    }
-
-    @Override
-    public Enfrentamiento obtenerEnfrentamientoConParticipaciones(Long id) {
-    // Fetch enfrentamiento with eager loading of participaciones
-    Enfrentamiento enfrentamiento = enfrentamientoRepository.findById(id)
-            .orElseThrow(() -> new EnfrentamientoNotFoundException(id));
-    
-    // Explicitly load participaciones if they're lazily loaded
-    // This will force loading the participaciones and bots
-    enfrentamiento.getParticipaciones().size();
-    
-    return enfrentamiento;
-}
-
-    public EnfrentamientoDTO obtenerConversacion(Long id) {
-        Enfrentamiento enfrentamiento = obtenerEnfrentamiento(id);
-        return new EnfrentamientoDTO(enfrentamiento.getClasificacion());
+    public List<MessageResponseDTO> obtenerConversacion(Long id) {
+        Enfrentamiento enfrentamiento =  enfrentamientoRepository.findById(id).orElseThrow(() -> new EnfrentamientoNotFoundException(id));
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonConversacion = enfrentamiento.getClasificacion();
+        try {
+            return objectMapper.readValue(
+                    jsonConversacion,
+                    new TypeReference<List<MessageResponseDTO>>() {}
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Error al parsear la conversación JSON", e);
+        }
     }
 
     @Transactional
@@ -100,8 +94,9 @@ public class EnfrentamientoServiceImpl implements EnfrentamientoService {
                 Bot bot2 = listaRotativa.get(listaRotativa.size() - k);
 
                 if (bot1 != null && bot2 != null) {
-                    Enfrentamiento enfremamiento = crearEnfrentamiento(jornadaGuardada, bot1, bot2);
-                    enfrentamientos.add(enfremamiento);
+                    Enfrentamiento enfrentamiento = crearEnfrentamiento(jornadaGuardada, bot1, bot2);
+                    enfrentamiento.setClasificacion("{}");
+                    enfrentamientos.add(enfrentamiento);
                 }
             }
 
@@ -145,6 +140,22 @@ public class EnfrentamientoServiceImpl implements EnfrentamientoService {
         }
 
         return matches;
+    }
+
+    public MatchResponseDTO getMatchById(Long matchId){
+        Enfrentamiento enfrentamiento = enfrentamientoRepository.findById(matchId).orElseThrow(() -> new EnfrentamientoNotFoundException(matchId));
+        List<String> bots = enfrentamiento.getParticipaciones()
+                .stream()
+                .map(p -> p.getBot().getNombreBot())
+                .toList();
+
+        return  MatchResponseDTO.builder()
+                    .matchId(enfrentamiento.getId().intValue())
+                    .state(enfrentamiento.getResultado()!=null ? "FINALIZADO" : "")
+                    .result(enfrentamiento.getResultado())
+                    .fighters(bots.toArray(new String[0]))
+                    .roundNumber(enfrentamiento.getJornada().getNumJornada())
+                    .build();
     }
 
     //PRIVATE METHODS
