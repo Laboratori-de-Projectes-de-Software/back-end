@@ -13,21 +13,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LigaResponseDTO {
-    private Long id;
+    private Long leagueId;
     private String name;
     private ESTADO state;
-    private String imageUrl; // luego quizá se convierta en ImagenDTO
+    private String urlImagen; // luego quizá se convierta en ImagenDTO
     private List<Long> bots;
     private Integer rounds;
     private Long matchTime;
 
     public LigaResponseDTO(LigaDTO ligaDTO) {
         this.name = ligaDTO.getName();
-        this.imageUrl = ligaDTO.getImageUrl();
+        this.urlImagen = ligaDTO.getUrlImagen();
         this.rounds = ligaDTO.getRounds();
         this.matchTime = ligaDTO.getMatchTime();
         this.bots = null;               // al crear la liga no tiene bots
-        this.id = null;                 // ligaId se asigna en el controlador
+        this.leagueId = null;                 // ligaId se asigna en el controlador
         this.state = ESTADO.PENDIENTE; // default de otros atributos
     }
 }
