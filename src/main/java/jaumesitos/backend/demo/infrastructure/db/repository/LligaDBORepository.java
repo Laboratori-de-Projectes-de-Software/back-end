@@ -33,9 +33,7 @@ public class LligaDBORepository implements ILligaRepository {
         try {
             LeagueDBO dbo = mapper.toDBO(lliga);
             springdata.save(dbo);
-        } catch (DataIntegrityViolationException e) {
-            throw new DuplicateEntityException("Lliga ja existent", e);
-        }catch(Exception error){
+        } catch(Exception error){
             throw error;
         }
 

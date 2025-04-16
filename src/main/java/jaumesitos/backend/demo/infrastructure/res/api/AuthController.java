@@ -49,13 +49,13 @@ public class AuthController {
     //SWAGGER:
     //http://localhost:8080/swagger-ui/index.html#/
 
-    @Operation(summary = "INSERT SUMMARY", description = "INSERT DESCRIPTION")
+    @Operation(summary = "get all users", description = "Obtenim tots els usuaris registrats")
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
         return new ResponseEntity<>("Endpoint /api/users/getallUsers", HttpStatus.ACCEPTED);
     }
 
-    @Operation(summary = "INSERT SUMMARY", description = "INSERT DESCRIPTION")
+    @Operation(summary = "Register a user", description = "Registram un usuari nou")
     @PostMapping("/auth/register")
     public ResponseEntity<?> register(@RequestBody UserDTORegister dto) {
         try {
@@ -69,7 +69,7 @@ public class AuthController {
         }
     }
 
-    @Operation(summary = "INSERT SUMMARY", description = "INSERT DESCRIPTION")
+    @Operation(summary = "Login de user", description = "Log donat un usuari i contrasenya")
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody UserDTOLogin dto) {
         try {
