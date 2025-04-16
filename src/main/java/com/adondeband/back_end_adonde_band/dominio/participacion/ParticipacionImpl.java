@@ -15,4 +15,8 @@ public class ParticipacionImpl implements ParticipacionService {
     public Participacion insertarParticipacion(Participacion participacion) {
         return participacionPort.save(participacion);
     }
+
+    public Participacion obtenerParticipacion(ParticipacionId id) {
+        return participacionPort.findById(id);
+    }
 }

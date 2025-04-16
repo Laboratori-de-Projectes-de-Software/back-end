@@ -1,6 +1,7 @@
 package com.adondeband.back_end_adonde_band.jpa.participacion;
 
 import com.adondeband.back_end_adonde_band.dominio.participacion.Participacion;
+import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionId;
 import com.adondeband.back_end_adonde_band.dominio.participacion.ParticipacionPort;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
@@ -26,5 +27,12 @@ public class ParticipacionJpaAdapter implements ParticipacionPort {
         return participacionMapper.toDomain(
                 participacionJpaRepository.save(
                         participacionMapper.toEntity(participacion)));
+    }
+
+    @Override
+    @Transactional
+    public Participacion findById(ParticipacionId id) {
+        ParticipacionEntity participacionEntity = participacionJpaRepository.findById(id.value()).orElse(null);
+        return participacionMapper.toDomain(participacionEntity);
     }
 }
