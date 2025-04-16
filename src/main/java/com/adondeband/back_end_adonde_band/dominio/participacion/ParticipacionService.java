@@ -5,4 +5,5 @@ import java.util.List;
 public interface ParticipacionService {
 
     Participacion insertarParticipacion(Participacion participacion);
+    Participacion obtenerParticipacion(ParticipacionId id);
 }
