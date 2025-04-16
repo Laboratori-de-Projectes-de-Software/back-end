@@ -5,16 +5,19 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jaumesitos.backend.demo.application.service.AuthService;
 import jaumesitos.backend.demo.application.service.ParticipationService;
 import jaumesitos.backend.demo.application.service.LligaService;
 import jaumesitos.backend.demo.application.service.MatchService;
 import jaumesitos.backend.demo.config.DuplicateEntityException;
 import jaumesitos.backend.demo.domain.League;
 import jaumesitos.backend.demo.domain.Participation;
+import jaumesitos.backend.demo.domain.User;
 import jaumesitos.backend.demo.infrastructure.res.dto.*;
 import jaumesitos.backend.demo.infrastructure.res.mapper.LligaDTOMapper;
 import jaumesitos.backend.demo.infrastructure.res.mapper.MatchDTOMapper;
 import jaumesitos.backend.demo.infrastructure.res.mapper.ParticipationResponseDTOMapper;
+import jaumesitos.backend.demo.infrastructure.security.AuthUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
@@ -37,26 +40,32 @@ public class LeaguesController {
     private final ParticipationService classificationservice;
     private final ParticipationResponseDTOMapper participationMapper;
     private final MatchService matchService;
+    private final AuthService authService;
     @Qualifier("matchDTOMapper")
     private final MatchDTOMapper matchmapper;
 
     @Operation(summary = "Create a new league", description = "This endpoint allows a user to create a new league")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "202", description = "League posted successfully", content = @Content),
+            @ApiResponse(responseCode = "202", description = "League posted successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = LeagueResponseDTO.class))),
             @ApiResponse(responseCode = "409", description = "The league already exists", content = @Content),
             @ApiResponse(responseCode = "500", description = "Algun dels camps passats es incorrecte", content = @Content)
     })
     @PostMapping("/league")
     public ResponseEntity<?> postLeague(@RequestBody LeagueDTO dto) {
         try{
+            String email = AuthUtil.getCurrentUserEmail();
+            User user = authService.getUserByEmail(email);
+
             League l = mapper.toDomain(dto);
-            leagueservice.postLliga(l);
+            l.setUserId(user.getId());
+            LeagueResponseDTO creada =  mapper.toResponseDTO(leagueservice.postLliga(l));
+            return ResponseEntity.ok(creada);
+
         }catch(DuplicateEntityException e){
             return new ResponseEntity<>("La lliga ja existeix", HttpStatus.CONFLICT);
         }catch(Exception error){
             return new ResponseEntity<>("Algun dels camps no és correcte",HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>("LLiga creada correctament", HttpStatus.ACCEPTED);
     }
 
 

@@ -6,6 +6,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 public class UserDTOLogin {
-    private String name;
+    private String user;
     private String password;
 }

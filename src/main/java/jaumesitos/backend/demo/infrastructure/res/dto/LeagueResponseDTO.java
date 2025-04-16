@@ -14,7 +14,8 @@ public class LeagueResponseDTO {
     private Integer matchTime;
     private String name;
     private Integer rounds;
-    private String urlImage;
+    private String urlImagen;
     private String state;
     private Integer user;
+    private Integer [] bots;
 }

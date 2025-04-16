@@ -11,8 +11,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ParticipationResponseDTO {
     Integer botid;
+    String name;
     Integer points;
-    Integer matches;
+    Integer position;
     Integer wins;
     Integer draws;
     Integer losses;

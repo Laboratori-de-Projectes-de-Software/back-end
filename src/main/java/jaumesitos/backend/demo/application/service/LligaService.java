@@ -15,8 +15,8 @@ public class LligaService {
         this.illigarepository = illigarepository;
     }
 
-    public void postLliga(League lliga){
-        illigarepository.postLliga(lliga);
+    public League postLliga(League lliga){
+        return illigarepository.postLliga(lliga);
     }
 
     public List<League> getLeagues(Integer owner){

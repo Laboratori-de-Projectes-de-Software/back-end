@@ -23,7 +23,7 @@ public class LeagueDBO {
     private String name;
     private Integer rounds;
     @Column(name = "url_image")
-    private String urlImage;
+    private String urlImagen;
     private String state;
     @Convert(converter = IntegerArrayToJsonConverter.class)
     private Integer bots[];

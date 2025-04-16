@@ -8,10 +8,17 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserDTOMapper {
+
+    @Mapping(source = "user", target = "name")
+    @Mapping(source = "mail", target = "email")
     User toDomain(UserDTORegister userDTO);
-    UserDTORegister toDTO(User user);
 
     @Mapping(source = "name", target = "user")
+    @Mapping(source = "email", target = "mail")
+    UserDTORegister toDTO(User user);
+
+
     @Mapping(source = "id", target = "userId")
+    @Mapping(source = "name", target = "user")
     UserResponseDTO toResponseDTO(User user);
 }
