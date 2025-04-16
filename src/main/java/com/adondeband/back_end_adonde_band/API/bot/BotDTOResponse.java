@@ -1,5 +1,6 @@
 package com.adondeband.back_end_adonde_band.API.bot;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Getter
@@ -18,10 +19,13 @@ public class BotDTOResponse {
 
     private String apiUrl;
 
+    @JsonProperty("nWins") // Asegura que el nombre en JSON sea "nWins" en lugar de "nwins"
     private Integer nWins;
 
+    @JsonProperty("nDraws")
     private Integer nDraws;
 
+    @JsonProperty("nLosses")
     private Integer nLosses;
 
     public BotDTOResponse(BotDTOMin botDTOMin) {
