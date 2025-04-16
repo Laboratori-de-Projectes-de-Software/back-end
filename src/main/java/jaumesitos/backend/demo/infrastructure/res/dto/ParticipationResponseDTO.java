@@ -10,11 +10,20 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 public class ParticipationResponseDTO {
-    Integer botid;
+    Integer botId;
     String name;
     Integer points;
     Integer position;
-    Integer wins;
-    Integer draws;
-    Integer losses;
+    Integer nWins;
+    Integer nDraws;
+    Integer nLosses;
+
+    public Integer getnWins() { return nWins; }
+    public Integer getnDraws() { return nDraws; }
+    public Integer getnLosses() { return nLosses; }
+
+    public void setnWins(Integer nWins) { this.nWins = nWins; }
+    public void setnDraws(Integer nDraws) { this.nDraws = nDraws; }
+    public void setnLosses(Integer nLosses) { this.nLosses = nLosses; }
+
 }

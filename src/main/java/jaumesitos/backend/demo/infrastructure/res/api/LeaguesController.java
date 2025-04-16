@@ -133,8 +133,9 @@ public class LeaguesController {
     @DeleteMapping("/league/{leagueId}")
     public ResponseEntity<?> deleteLeagueById(@PathVariable int leagueId) {
         try {
-            leagueservice.deleteLeagueById(leagueId);
-            return ResponseEntity.ok("Liga eliminada correctamente");
+            LeagueResponseDTO retorn =  mapper.toResponseDTO(leagueservice.deleteLeagueById(leagueId));
+            return ResponseEntity.ok(retorn);
+
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
