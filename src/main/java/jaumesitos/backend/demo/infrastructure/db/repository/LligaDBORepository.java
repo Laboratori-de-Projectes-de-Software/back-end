@@ -55,12 +55,13 @@ public class LligaDBORepository implements ILligaRepository {
 
 
     @Override
-    public boolean deleteById(int id) {
+    public Optional<League> deleteById(int id) {
         if (springdata.existsById(id)) {
+            Optional<LeagueDBO> dbo = springdata.findById(id);
             springdata.deleteById(id);
-            return true;
+            return dbo.map(mapper::toDomain);
         }
-        return false;
+        return null;
     }
 
 }

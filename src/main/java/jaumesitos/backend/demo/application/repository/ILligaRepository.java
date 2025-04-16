@@ -15,5 +15,5 @@ public interface ILligaRepository {
 
     Optional<League> findById(int id);
 
-    boolean deleteById(int id);
+    Optional<League> deleteById(int id);
 }

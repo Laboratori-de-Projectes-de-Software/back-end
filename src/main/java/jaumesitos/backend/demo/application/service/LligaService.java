@@ -6,6 +6,7 @@ import jaumesitos.backend.demo.infrastructure.res.dto.LeagueResponseDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LligaService {
@@ -27,10 +28,8 @@ public class LligaService {
         return illigarepository.findById(id).orElseThrow(() -> new RuntimeException("Liga no encontrada"));
     }
 
-    public void deleteLeagueById(int id) {
-        if (!illigarepository.deleteById(id)) {
-            throw new RuntimeException("No existe esta liga");
-        }
+    public League deleteLeagueById(int id) {
+        return illigarepository.deleteById(id).orElseThrow(() -> new RuntimeException("Liga no encontrada"));
     }
 
 }
