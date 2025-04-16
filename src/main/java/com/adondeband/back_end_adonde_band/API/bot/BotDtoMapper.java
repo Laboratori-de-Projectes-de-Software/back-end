@@ -31,6 +31,11 @@ public interface BotDtoMapper {
     @Mapping(target = "NLosses", source = "numDerrotas")
     BotDTOResponse toDTO(Bot bot);
 
+    // Mapea de Bot a BotSummaryResponseDTO
+    @Mapping(target = "description", source = "cualidad")
+    @Mapping(target = "name", source = "nombre")
+    BotSummaryResponseDTO toSummaryDTO(Bot bot);
+
     // Mapeo de atributos
     default BotId toBotId(Long id) {
         return new BotId(id);}
