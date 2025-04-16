@@ -1,7 +1,9 @@
 package com.debateia.application.service;
 
 import com.debateia.adapter.in.web.dto.State;
+import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.MatchRepository;
+import com.debateia.domain.Bot;
 import com.debateia.domain.League;
 import com.debateia.domain.Match;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MatchService {
     private final MatchRepository matchRepository;
+    private final BotRepository botRepository;
 
     public List<Match> getMatchesByLeagueId(Integer leagueId) {
         return matchRepository.findByLeagueId(leagueId);
@@ -20,14 +23,15 @@ public class MatchService {
 
     public List<Match> createLeagueMatches(League league) {
         List<Match> matches = new ArrayList<>(league.getRounds());
-        matches = generarCombatesBalanceados(matches, league.getBotIds(), league.getRounds());
-
-        // @TODO cuando se use la tabla tbl_league_bots, consultarla y pasar por parametro a la funcion anterior para hacer setFighters
-        /* @TODO
-        * @TODO
-        * @TODO
-        * @TODO
-        * */
+        List<String> names = new ArrayList<>(league.getBotIds().size());
+        
+        for (Integer id : league.getBotIds()) { // TODO: COMPROBAR SI FUNCIONA
+            Bot bot = botRepository.findById(id).get();
+            names.add(bot.getName());
+        }
+        
+        matches = generarCombatesBalanceados(matches, league.getBotIds(), names, league.getRounds());
+        
 
         matches.forEach(match -> {
             match.setLeagueId(league.getLeagueId());
@@ -47,7 +51,7 @@ public class MatchService {
      * se reparten aleatoriamente entre los bots.
      * @return Lista de Matches con SOLO bot1id, bot2id setteados
      */
-    private List<Match> generarCombatesBalanceados(List<Match> matches, List<Integer> botIds, int rounds) {
+    private List<Match> generarCombatesBalanceados(List<Match> matches, List<Integer> botIds, List<String> botNames, int rounds) {
         int nbots = botIds.size();
         int maxMatchesPorBot = rounds / nbots;
         int extraMatches = rounds % nbots;
@@ -78,7 +82,7 @@ public class MatchService {
                 Match match = new Match();
                 match.setBot1id(botA);
                 match.setBot2id(botB);
-                // @TODO setFighters
+                match.setFighters(List.of(botNames.get(botA), botNames.get(botB)));
                 matches.add(match);
 
                 combatesPorBot.put(botA, combatesPorBot.get(botA) - 1); // reducir combates restantes

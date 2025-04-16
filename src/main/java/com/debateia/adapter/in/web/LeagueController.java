@@ -6,10 +6,12 @@ import com.debateia.adapter.in.web.dto.response.ParticipationResponseDTO;
 import com.debateia.application.jwt.JwtService;
 import com.debateia.adapter.mapper.LeagueMapper;
 import com.debateia.adapter.mapper.MatchMapper;
+import com.debateia.adapter.mapper.PartMapper;
 import com.debateia.application.ports.in.rest.LeagueUseCase;
 import com.debateia.application.service.MatchService;
 import com.debateia.domain.League;
 import com.debateia.domain.Match;
+import com.debateia.domain.Participation;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 
@@ -138,10 +141,23 @@ public class LeagueController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-    
+    // Convertimos l
     @GetMapping("/{id}/leaderboard")
     public ResponseEntity<List<ParticipationResponseDTO>> getScores(@PathVariable Integer id) {
-        return ResponseEntity.ok(null);
+        try {
+            List<Participation> scores = leagueUseCase.getScores(id);
+            
+            // Convertimos lista de participaciones a lista de ParticipationResponseDTO
+            List<ParticipationResponseDTO> response = scores.stream()
+                .map(elem -> PartMapper.toDTO(elem))
+                .collect(Collectors.toList());
+            
+            return ResponseEntity.ok(response);
+        }
+        catch (EntityNotFoundException e) { // liga no existe
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
     
     @DeleteMapping("/{id}")

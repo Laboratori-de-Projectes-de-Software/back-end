@@ -1,7 +1,6 @@
 package com.debateia.application.ports.out.persistence;
 
 
-import com.debateia.adapter.out.persistence.entities.BotEntity;
 import com.debateia.domain.Bot;
 
 import java.util.List;

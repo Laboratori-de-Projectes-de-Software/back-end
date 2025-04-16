@@ -1,5 +1,6 @@
 package com.debateia.adapter.mapper;
 
+import com.debateia.adapter.in.web.dto.response.ParticipationResponseDTO;
 import com.debateia.adapter.out.persistence.entities.ParticipationEntity;
 import com.debateia.domain.Participation;
 
@@ -12,5 +13,17 @@ public class PartMapper {
         d.setPosition(e.getPosition());
         
         return d;
+    }
+    
+    public static ParticipationResponseDTO toDTO(Participation d) {
+        ParticipationResponseDTO r = new ParticipationResponseDTO();
+        r.setBotId(d.getBotId());
+        r.setPoints(d.getPoints());
+        r.setName(d.getName());
+        r.setNDraws(d.getNDraws());
+        r.setNWins(d.getNWins());
+        r.setNLoses(d.getNLoses());
+        
+        return r;
     }
 }

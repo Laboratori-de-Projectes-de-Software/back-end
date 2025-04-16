@@ -32,4 +32,9 @@ public class ParticipationRepo implements ParticipationRepository {
         return partJpa.findById(new LeagueBotsId(leagueId, botId)).map(PartMapper::toDomain);
     }
     
+    @Override
+    public List<Participation> findByLeagueId(Integer leagueId) {
+        List<ParticipationEntity> entities = partJpa.findByLeagueId(leagueId);
+        return entities.stream().map(PartMapper::toDomain).toList();
+    }
 }

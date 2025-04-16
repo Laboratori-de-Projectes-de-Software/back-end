@@ -77,7 +77,16 @@ public class LeagueService implements LeagueUseCase {
 
     @Override
     public List<Participation> getScores(int leagueId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Optional<League> lg = leagueRepository.findById(leagueId);
+        if (lg.isEmpty()) 
+            throw new EntityNotFoundException("Liga con ID " + leagueId + " no encontrada");
+        
+        List<Participation> list = partRepository.findByLeagueId(leagueId);
+        for (Participation p : list) {
+            Bot b = botRepository.findById(p.getBotId()).get();
+            p.setName(b.getName());
+        }
+        return list;
     }
 
     @Override

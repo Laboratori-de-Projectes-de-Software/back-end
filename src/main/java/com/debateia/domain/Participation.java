@@ -12,4 +12,8 @@ public class Participation {
     private Integer botId;
     private Integer points;
     private Integer position;
+    private String name;
+    private int nWins;
+    private int nDraws;
+    private int nLoses;
 }
