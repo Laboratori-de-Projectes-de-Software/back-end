@@ -18,6 +18,6 @@ public class MatchResponseDTO {
     // Si es 0, es empate. Si es 1, el bot local gana. Si es 2, el bot visitante
     // gana.
     private int result;
-    private String[] fighters;
+    private BotResponseDTO[] fighters;
     private int roundNumber;
 }

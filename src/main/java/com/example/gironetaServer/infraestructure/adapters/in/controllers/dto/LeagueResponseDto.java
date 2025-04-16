@@ -10,14 +10,14 @@ public class LeagueResponseDto {
     private String imageUrl;
     private Integer rounds;
     private Long matchTime;
-    private List<Integer> bots;
+    private List<BotResponseDTO> bots;
     private LeagueEntity.State state;
 
     public LeagueResponseDto() {
     }
 
     public LeagueResponseDto(int id, LeagueEntity.State state, String name, String imageUrl,
-            Integer rounds, Long matchTime, List<Integer> bots) {
+            Integer rounds, Long matchTime, List<BotResponseDTO> bots) {
         this.id = id;
         this.state = state;
         this.name = name;
@@ -44,7 +44,6 @@ public class LeagueResponseDto {
         return imageUrl;
     }
 
-
     public Integer getRounds() {
         return rounds;
     }
@@ -53,7 +52,7 @@ public class LeagueResponseDto {
         return matchTime;
     }
 
-    public List<Integer> getBots() {
+    public List<BotResponseDTO> getBots() {
         return bots;
     }
 
@@ -82,7 +81,7 @@ public class LeagueResponseDto {
         this.matchTime = matchTime;
     }
 
-    public void setBots(List<Integer> bots) {
+    public void setBots(List<BotResponseDTO> bots) {
         this.bots = bots;
     }
 }
