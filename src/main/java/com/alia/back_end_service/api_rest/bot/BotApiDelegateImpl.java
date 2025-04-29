@@ -1,0 +1,69 @@
+package com.alia.back_end_service.api_rest.bot;
+
+import com.alia.back_end_service.api.BotApiDelegate;
+import com.alia.back_end_service.api_model.BotDTO;
+import com.alia.back_end_service.api_model.BotSummaryResponseDTO;
+import com.alia.back_end_service.domain.bot.Bot;
+import com.alia.back_end_service.domain.bot.port.BotGetAllPortAPI;
+import com.alia.back_end_service.domain.bot.port.BotGetPortApi;
+import com.alia.back_end_service.domain.bot.port.BotRegistrationPortAPI;
+import com.alia.back_end_service.domain.bot.port.BotUpdatePortAPI;
+import com.alia.back_end_service.domain.bot.port.BotGetAllByUserPortAPI;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@Log4j2
+@RequiredArgsConstructor
+public class BotApiDelegateImpl implements BotApiDelegate {
+    private final BotRegistrationPortAPI botRegistrationPortAPI;
+    private final BotGetAllPortAPI botGetAllPortAPI;
+    private final BotGetPortApi botGetPortApi;
+    private final BotGetAllByUserPortAPI botGetAllByUserPortAPI;
+    private final BotUpdatePortAPI botUpdatePortAPI;
+    private final BotMapperAPI botMapperPortAPI;
+
+    @Override
+    public ResponseEntity<BotSummaryResponseDTO> botBotIdGet(Integer botId) {
+        return ResponseEntity.status(HttpStatus.OK).body(botMapperPortAPI.toApiResponseSummary(botGetPortApi.findById(botId)));
+    }
+
+    @Override
+    public ResponseEntity<Void> botBotIdPut(Integer botId, BotDTO botDTO) {
+        botUpdatePortAPI.update(botMapperPortAPI.toDomainRegister(botDTO),botId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Override
+    public ResponseEntity<List<BotSummaryResponseDTO>> botGet(String owner) {
+        List<Bot> bots;
+
+        if (owner != null && !owner.isBlank()) {
+            bots = botGetAllByUserPortAPI.getAllUserBots(owner);
+        } else {
+            bots = botGetAllPortAPI.getAllBots();
+        }
+
+        List<BotSummaryResponseDTO> botDTOs = bots.stream()
+                .map(botMapperPortAPI::toApiResponseSummary)
+                .toList();
+
+        return ResponseEntity.ok(botDTOs);
+    }
+
+    @Override
+    public ResponseEntity<Void> botPost(BotDTO botDTO) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Bot bot = botMapperPortAPI.toDomainRegister(botDTO);
+        bot.setUserId(username);
+        botRegistrationPortAPI.registerBot(bot); // No he puesto devolver el bot porque no lo han definido los compañeros :)
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+}

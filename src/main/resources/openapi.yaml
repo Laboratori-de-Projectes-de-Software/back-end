@@ -1,0 +1,645 @@
+openapi: 3.0.3
+info:
+  title: Service-Client
+  description: Communication between service and client.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/{version}
+    variables:
+      version:
+        default: api/v0
+        description: API version prefix
+
+paths:
+  /auth/login:
+    post:
+      summary: Loggin user
+      description: Authenticates a user and returns a JWT token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTOLogin'
+      responses:
+        '200':
+          description: User Logged
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDTO'
+        '400':
+          description: Invalid username or password
+        '404':
+          description: User not found
+      security:
+        - BearerAuth: []
+
+  /auth/register:
+    post:
+      summary: Create a user
+      description: Registers a new user with email validation and password security requirements.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTORegister'
+      responses:
+        '201':
+          description: User created
+        '400':
+          description: Invalid input data
+        '409':
+          description: Username or email already exists
+  #Bots
+  /bot:
+    post:
+      summary: Post one bot
+      description: Registers a new bot associated with the authenticated user.
+      security:
+        - BearerAuth: []  # Se requiere autenticación con JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BotDTO'
+      responses:
+        '201':
+          description: Bot created
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: Bot not found
+        '408':
+          description: Time out
+        '409':
+          description: Bot already exists
+        '500':
+          description: Internal Server error
+
+    get:
+      summary: Get all bots
+      description: Returns all bots, or only those owned by a specific user if the `owner` query parameter is provided.
+      parameters:
+        - name: owner
+          in: query
+          required: false
+          schema:
+            type: string
+            description: Optional user ID to filter bots by owner
+      security:
+        - BearearAuth: []
+      responses:
+        '200':
+          description: "Bots found"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BotSummaryResponseDTO'
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: Bot not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+
+  /bot/{botId}:
+    get:
+      summary: Get one bot
+      description: Retrieves a specific bot by ID.
+      parameters:
+        - name: botId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Bot details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BotSummaryResponseDTO'
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: Bot not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+
+    put:
+      summary: Update one bot
+      description: Update one bot
+      parameters:
+        - name: botId
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - BearerAuth: [ ]  # Se requiere autenticación con JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BotDTO'
+      responses:
+        '200':
+          description: Bot updated
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: Bot not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+
+  /league:
+    post:
+      summary: Post one league
+      description: Post one league
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueDTO'
+      responses:
+        '201':
+          description: League created
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: League not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+    get:
+      summary: Get all leagues
+      description: Get all leagues, or only those owned by a specific user if the `owner` query parameter is provided.
+      parameters:
+        - name: owner
+          in: query
+          required: false
+          schema:
+            type: string
+            description: Optional user ID to filter leagues by owner
+      security:
+        - BearearAuth: [ ]
+      responses:
+        '200':
+          description: "Leagues found"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LeagueResponseDTO'
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: League not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+
+  /league/{leagueId}:
+    get:
+      summary: Get one league
+      description: Get one league
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - BearerAuth: []  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: League found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueResponseDTO'
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: League not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+
+    put:
+      summary: Update one league
+      description: Update one league
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - BearerAuth: []  # Se requiere autenticación con JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueDTO'
+      responses:
+        '200':
+          description: League updated
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: League not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+
+    delete:
+      summary: Delete one league
+      description: Delete one league
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - BearerAuth: [ ]  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: League deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueResponseDTO'
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: League not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+
+  /league/{leagueId}/bot:
+    post:
+      summary: Register bot to league
+      description: Registre de bot en lliga
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                botId:
+                  type: integer
+                  description: ID del bot a registrar en la liga
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '201':
+          description: Bot registered
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: League or Bot not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+
+  /league/{leagueId}/leaderboard:
+    get:
+      summary: Get classification from a league
+      description: Get classification from a league
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - BearerAuth: [ ]  # Se requiere autenticación con JWT
+      responses:
+        '200':
+          description: League found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClassificationResponseDTO'
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: Classification not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+
+  /league/{leagueId}/start:
+    post:
+      summary: Start a league (creates all matches)
+      description: Start a league (creates all matches)
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '201':
+          description: League started
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '403':
+          description: Forbidden
+        '404':
+          description: League not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+
+  /league/{leagueId}/match:
+    get:
+      summary: Get all matches from a league
+      description: Get all matches from a league
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Matches found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchResponseDTO'
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: Match not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+
+  /match/{matchId}/message:
+    get:
+      summary: Get all messages from a match
+      description: Get all messages from a match
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Match found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageResponseDTO'
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: Match not found
+        '408':
+          description: Time out
+        '500':
+          description: Internal Server error
+
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UserDTOLogin:
+      type: object
+      required:
+        - user
+        - password
+      properties:
+        user:
+          type: string
+          example: 'user123'
+        password:
+          type: string
+          format: password
+          example: 'securePassword123'
+    UserDTORegister:
+      type: object
+      required:
+        - user
+        - mail
+        - password
+      properties:
+        user:
+          type: string
+          example: 'newuser123'
+        mail:
+          type: string
+          format: email
+          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+          example: 'user@example.com'
+        password:
+          type: string
+          format: password
+          pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$"
+          example: 'StrongPass123'
+    UserResponseDTO:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+
+    BotDTO:
+      type: object
+      required:
+        - name
+        - description
+        - urlImagen
+        - endpoint
+      properties:
+        endpoint:
+          type: string
+          format: uri
+          example: "https://api.example.com/bot-webhook"
+        name:
+          type: string
+          example: "MyBot"
+        description:
+          type: string
+          example: "An AI-powered chatbot that responds to user queries."
+        urlImagen:
+          type: string
+          format: uri
+
+    BotSummaryResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: "MyBot"
+        description:
+          type: string
+          example: "An AI-powered chatbot that responds to user queries."
+        username:
+          type: string
+          example: "User"
+        endpoint:
+          type: string
+          format: uri
+          example: "https://api.example.com/bot-webhook"
+
+    LeagueDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        matchTime:
+          type: integer
+        rounds:
+          type: integer
+        bots:
+          type: array
+          items:
+            type: integer
+
+    LeagueResponseDTO:
+      type: object
+      properties:
+        leagueId:
+          type: integer
+        name:
+          type: string
+        matchTime:
+          type: integer
+        rounds:
+          type: integer
+        bots:
+          type: array
+          items:
+            type: integer
+        owner:
+          type: string
+        state:
+          type: string
+
+    ClassificationResponseDTO:
+      type: object
+      properties:
+        botId:
+          type: integer
+        name:
+          type: string
+        points:
+          type: integer
+        position:
+          type: integer
+        nWins:
+          type: integer
+        nLosses:
+          type: integer
+        nDraws:
+          type: integer
+
+
+    MatchResponseDTO:
+      type: object
+      properties:
+        state:
+          type: string
+        result:
+          type: integer
+        fighters:
+          type: array
+          items:
+            type: integer
+        roundNumber:
+          type: integer
+
+    MessageResponseDTO:
+      type: object
+      properties:
+        text:
+          type: string
+        botId:
+          type: string
+        time:
+          type: string
+          format: date-time
