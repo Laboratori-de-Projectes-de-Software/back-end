@@ -1,0 +1,76 @@
+package com.example.back_end_eing.models;
+
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import com.example.back_end_eing.dto.BotDTO;
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@Entity
+@Table(name = "bot")
+public class Bot {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String nombreBot;
+
+    @Column
+    private String descripcionBot;
+
+    @Column
+    private String fotoBot;
+
+    @Column
+    private Integer numVictorias;
+
+    @Column
+    private Integer numJornadas;
+
+    @Column(unique = true, nullable = false)
+    private String apiKey;
+
+
+    //******* CONSTRUCTORES *******
+    public Bot() {}
+    public Bot(BotDTO botdto, Usuario user) {
+        nombreBot = botdto.getName();
+        descripcionBot = botdto.getDescription();
+        fotoBot = botdto.getUrlImagen();
+        numVictorias = 0;
+        numJornadas = 0;
+        apiKey = botdto.getEndpoint();
+        usuario = user;
+    }
+
+    //******* RELACIONES CON OTRAS CLASES *******
+    @ManyToOne
+    @JoinColumn(
+            name = "usuario_id",
+            nullable = false)
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "bot", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Participacion> participaciones;
+
+    @OneToMany(
+            mappedBy = "bot",
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+
+    private Set<Clasificacion> clasificaciones = new HashSet<>();
+
+}
