@@ -1,0 +1,23 @@
+package org.example.backend.databaseapi.application.usecase.liga;
+
+import lombok.RequiredArgsConstructor;
+import org.example.backend.databaseapi.application.exception.ResourceAlreadyExistsException;
+import org.example.backend.databaseapi.application.port.in.liga.AltaLigaPort;
+import org.example.backend.databaseapi.application.port.out.liga.CreateLigaPort;
+import org.example.backend.databaseapi.domain.liga.Liga;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class CreateLigaUseCase implements AltaLigaPort {
+
+    private final CreateLigaPort createLigaPort;
+
+    @Override
+    public Liga altaLiga(Liga liga) {
+        System.out.println(liga.getMatchTime());
+        return createLigaPort.createLiga(liga)
+                .orElseThrow(()->new ResourceAlreadyExistsException("Ya existe una liga con ese nombre"));
+    }
+}

@@ -1,0 +1,49 @@
+package org.example.backend.databaseapi.jpa.partida;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import org.example.backend.databaseapi.application.dto.partida.Result;
+import org.example.backend.databaseapi.domain.partida.Estado;
+import org.example.backend.databaseapi.jpa.liga.LigaJpaEntity;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.annotation.CreatedBy;
+
+
+import java.time.LocalDateTime;
+
+
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
+@Table(name="partida")
+public class PartidaJpaEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @CreatedBy
+    @Column(name="id_partida")
+    private Integer partidaId;
+
+    @Enumerated(EnumType.STRING)
+    private Estado estado;
+
+    @Column(name="round_number")
+    private Integer roundNumber;
+
+    @Enumerated(EnumType.STRING)
+    private Result resultado;
+
+    @ManyToOne(optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name="id_liga")
+    private LigaJpaEntity liga;
+
+    @Column(name="duracion_total")
+    private Long duracionTotal;
+
+}
