@@ -1,0 +1,823 @@
+openapi: 3.0.4
+info:
+  title: BotSports
+  description: |-
+    Una especificación de OpenAPI para la página de BotSports
+  version: 1.0.0
+servers:
+  - url: test
+paths:
+  /api/hola:
+    post:
+      tags:
+        - test
+      summary: Test
+      operationId: test
+      responses:
+        '200':
+          description: Hola
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/auth/register:
+    post:
+      tags:
+        - auth
+      summary: Registrar un usuario
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              items:
+                $ref: '#/components/schemas/UserDTORegister'
+      responses:
+        '200':
+          description: Usuario registrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Usuario registrado con éxito"
+        '401':
+          description: Usuario ya registrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/auth/login:
+    post:
+      tags:
+        - auth
+      summary: Acceder a la cuenta de un usuario
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              items:
+                $ref: '#/components/schemas/UserDTOLogin'
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/UserResponseDTO'
+  /api/bot:
+    get:
+      tags:
+        - bot
+      summary: Listar todos bots
+      description: Lista los bots del usuario recibido. Si no se recibe usuario, lista todos los bots.
+      operationId: getBots
+      parameters:
+        - name: owner
+          description: Id del usuario propietario de los bots.
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Bots encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BotResponseDTO'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado ningún bot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - bot
+      summary: Crea bot.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              items:
+                $ref: '#/components/schemas/BotDTO'
+      responses:
+        '201':
+          description: Bot creado
+          content:
+            application/json:
+              schema:
+                # array of objects
+                type: array
+                items:
+                  $ref: '#/components/schemas/BotSummaryResponseDTO'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/bot/{botId}:
+    summary: Llamadas a API para obtener la información de un bot dado su id.
+    get:
+      tags:
+        - bot
+      summary: Encuentra bot por su ID.
+      description: Devuelve un único bot.
+      parameters:
+        - name: botId
+          description: Id del bot correspondiente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BotResponseDTO'
+
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Bot not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/league:
+    get:
+      tags:
+        - liga
+      summary: Listar todas las ligas
+      operationId: getLigas
+      parameters:
+        - name: owner
+          description: Id del usuario propietario de las ligas.
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Ligas encontradas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LeagueResponseDTO'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado ninguna liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - liga
+      summary: Crear una liga
+      operationId: createLiga
+      responses:
+        '201':
+          description: Liga creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueResponseDTO'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/league/{leagueId}:
+    summary: Llamadas a APIs relacionadas con la gestión de ligas
+    get:
+      tags:
+        - liga
+      summary: Devolver información de una liga concreta o información reducida de todas las ligas
+      operationId: getLiga
+      parameters:
+        - name: leagueId
+          description: Id de la liga correspondiente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Liga encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueResponseDTO'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado la liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - liga
+      operationId: modifyLiga
+      parameters:
+        - name: leagueId
+          description: Id de la liga correspondiente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Liga modificada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueResponseDTO'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado ninguna liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - liga
+      operationId: deleteLiga
+      parameters:
+        - name: leagueId
+          description: Id de la liga correspondiente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Liga eliminada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueResponseDTO'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado la liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/league/{leagueId}/bot:
+    post:
+      tags:
+        - liga
+      summary: Añadir un bot a una liga
+      operationId: addBot
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: botId
+              description: Id del bot a añadir
+              type: integer
+              format: int64
+      responses:
+        '201':
+            description: Bot añadido a la liga
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: "Bot añadido a la liga correctamente"
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado bot o liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '409':
+          description: Conflict (Bot ya estaba registado)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/league/{leagueId}/leaderboard:
+    summary: Devolver la clasificación de una liga
+    get:
+      tags:
+        - liga
+      operationId: getClassification
+      parameters:
+        - name: leagueId
+          description: Id de la liga correspondiente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Clasificación encontrada
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ParticipationResponseDTO'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado la liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/league/{leagueId}/start:
+    summary: Iniciar Liga
+    post:
+      tags:
+        - liga
+      operationId: startLiga
+      parameters:
+        - name: leagueId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '201':
+          description: Liga iniciada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                      type: string
+                      example: "Liga iniciada correctamente"
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado la liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/league/{leagueId}/match:
+    summary: Devolver los partidos de una liga
+    get:
+      tags:
+        - liga
+      operationId: getPartidosLiga
+      parameters:
+        - name: leagueId
+          description: Id de la liga correspondiente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Partidos encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchResponseDTO'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado la liga
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/match/{matchId}/message:
+    summary: Devolver los mensajes de un partido
+    get:
+      tags:
+        - partido
+      operationId: getMessages
+      parameters:
+        - name: matchId
+          description: Id del partido correspondiente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Mensajes encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageResponseDTO'
+        '401':
+          description: No hay permisos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: No se ha encontrado el partido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '408':
+          description: Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    UserDTORegister:
+      type: object
+      properties:
+        user:
+          type: string
+          description: "Nombre de usuario"
+        mail:
+          type: string
+          description: "Dirección de correo electrónico"
+        password:
+          type: string
+          description: "Contraseña"
+      required:
+        - user
+        - password
+    UserDTOLogin:
+      type: object
+      properties:
+        user:
+          type: string
+          description: "Nombre de usuario"
+        password:
+          type: string
+          description: "Contraseña"
+      required:
+        - user
+        - password
+    UserResponseDTO:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG9uZWJveSIsImlhdCI6MTY4NTQ2NzYwMCwiZXhwIjoxNjg1NTU0MDAwfQ
+        expiresIn:
+          type: integer
+          format: int32
+          example: 3600
+        user:
+          type: string
+          example: adondeboy
+    BotDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Nombre del bot a añadir"
+        description:
+          type: string
+          description: "Cualidad del bot"
+        urlImagen:
+          type: string
+          description: "URL de la imagen"
+        endpoint:
+          type: string
+          description: "URL del endpoint del bot"
+      required:
+        - name
+        - description
+        - endpoint
+    BotResponseDTO:
+      type: object
+      properties:
+        botId:
+          type: integer
+          format: int64
+        name:
+          type: string
+          description: "Nombre del bot"
+        description:
+          type: string
+          description: "Descripción del bot"
+        urlImage:
+          type: string
+          description: "URL de la imagen del bot"
+        nWins:
+          type: integer
+          format: int32
+        nDraws:
+          type: integer
+          format: int32
+        nLosses:
+          type: integer
+          format: int32
+    BotSummaryResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          description: "Nombre del bot"
+        description:
+          type: string
+          description: "Descripción del bot"
+    LeagueDTO:
+      properties:
+        name:
+          type: string
+          example: LaLiga EA Sports
+        urlImagen:
+          type: string
+        rounds:
+          type: integer
+          format: int32
+        matchTime:
+          type: integer
+          format: int64
+        bots:
+          type: array
+          description: "Lista de los ids de los bots de la liga"
+          items:
+            type: integer
+            format: int64
+    LeagueResponseDTO:
+      properties:
+        leagueId:
+          type: integer
+          format: int64
+        state:
+          $ref: '#/components/schemas/Status'
+        name:
+          type: string
+          example: LaLiga EA Sports
+        urlImage:
+          type: string
+        rounds:
+          type: integer
+          format: int32
+        matchTime:
+          type: integer
+          format: int64
+        bots:
+          type: array
+          description: "Lista de los ids de los bots de la liga"
+          items:
+            type: integer
+            format: int64
+    MatchResponseDTO:
+      properties:
+        matchId:
+          type: integer
+          format: int64
+        state:
+          $ref: '#/components/schemas/Status'
+        result:
+          $ref: '#/components/schemas/Result'
+        fighters:
+          type: array
+          items:
+            # BotIds
+            type: integer
+            format: int64
+        roundNumber:
+          type: integer
+          format: int32
+    MessageResponseDTO:
+      properties:
+        text:
+          type: string
+          description: "Texto del mensaje"
+        botId:
+          type: integer
+          format: int64
+        time:
+          type: string
+          format: date-time
+    ParticipationResponseDTO:
+      properties:
+        botId:
+          type: integer
+          format: int64
+        name:
+          type: string
+          description: "Nombre del bot"
+        position:
+          type: integer
+          format: int32
+        points:
+          type: integer
+          format: int32
+        nWins:
+          type: integer
+          format: int32
+        nDraws:
+          type: integer
+          format: int32
+        nLosses:
+          type: integer
+          format: int32
+    Status:
+      type: string
+      description: Estado de la liga
+      enum:
+        - PENDING
+        - IN_PROGRESS
+        - COMPLETED
+    Result:
+      type: string
+      description: Ganador del partido
+      enum:
+          - LOCAL
+          - VISITING
+          - DRAW
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
