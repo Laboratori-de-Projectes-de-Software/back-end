@@ -26,7 +26,6 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class TestCreateMatches {
 
-
     @Mock
     private MatchRepository matchRepository;
 
@@ -36,25 +35,28 @@ public class TestCreateMatches {
     @InjectMocks
     private MatchService matchService;
 
+    /**En aquest test comporvarem la lògica de negoci de la funció createLeaguesMatches
+    *Necessitarem utilitzar mocks per les classes de infraestructura  botRepository i matchService
+    *Simularem una lliga que conté 4 bots amb ids i noms diferents
+    *Definirem 4 rones
+    *Si la funció createLeaguesMatches funciona bé retornarà un nombre de matches donat per la funció
+        *bots_combinations = (nbots * (nbots - 1)) / 2
+        *matches = nrounds * bots_combinations
+    */
+    // També comprovarem que cada bot està assignat al mateix nombre de matches com a local i com a visitant
     @Test
     public void generarPartidosDevuelveResultadosEsperados() {
         League league = new League();
+        int rounds = 4;
+        int nbots = 4;
+
         league.setLeagueId(1);
-        league.setBotIds(List.of(1, 2, 3));
-        league.setRounds(2);
+        league.setBotIds(List.of(1, 2, 3 ,4));
+        league.setRounds(rounds);
 
-        List<Match> expectedResult = new ArrayList<>();
+        int numberOfMatches = rounds * (nbots * (nbots-1) / 2);
 
-        for(int i=0; i<league.getBotIds().size(); i++){
-            for(int j=0; j<league.getBotIds().size(); j++){
-                Match match = new Match();
-
-            }
-        }
-
-
-        List<Match> partidosFalsos = List.of(new Match());
-
+        //bots simulats
         Bot bot1 = new Bot();
         bot1.setId(1);
         bot1.setName("Bot1");
@@ -67,24 +69,41 @@ public class TestCreateMatches {
         bot3.setId(3);
         bot3.setName("Bot3");
 
+        Bot bot4 = new Bot();
+        bot4.setId(4);
+        bot4.setName("Bot4");
 
+        //definim el comportament que han de tenir els mocks
         when(botRepository.findById(1)).thenReturn(Optional.of(bot1));
         when(botRepository.findById(2)).thenReturn(Optional.of(bot2));
         when(botRepository.findById(3)).thenReturn(Optional.of(bot3));
+        when(botRepository.findById(4)).thenReturn(Optional.of(bot4));
 
-        Match match = new Match(); // create a dummy Match instance
+        Match match = new Match();
+
+        /*ignorarem la crida a aquest mock, ja que no ens interessa comprovar el funcionament a nivell de BDD, només
+          ens interessa comprovar la lògica de negoci
+        */
         when(matchRepository.saveAll(any())).thenReturn(List.of(match));
 
-        //List <Match> matches = matchService.createLeagueMatches(league);
+        List <Match> matches = matchService.createLeagueMatches(league);
 
+        assertEquals(numberOfMatches,matches.size()); //comprovam que el nombre de matches és correcte
 
-        //assertEquals(matches,expectedResult);
-        assertEquals(1,1);
+        //comprovarem també que cada bot té tants de match en local com a visitant.
+        for(int botId : league.getBotIds()){
+            int locals = 0;
+            int visitants = 0;
+            for (Match m : matches){ //cercam l'id del bot a tots els match
+                if(m.getBot1id() == botId){
+                    locals += 1;
+                }
+                if(m.getBot2id() == botId){
+                    visitants += 1;
+                }
+            }
+            assertEquals(locals,visitants);
+        }
 
-        /*mockMvc.perform(get(""))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].jugador1").value("Jugador1"));*/
-
-        // Agrega tus asserts aquí según lo que esperas de createLeagueMatches
     }
 }

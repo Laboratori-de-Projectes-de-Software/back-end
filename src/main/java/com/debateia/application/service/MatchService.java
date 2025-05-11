@@ -35,7 +35,7 @@ public class MatchService implements MatchUseCase {
             Bot bot = botRepository.findById(id).get();
             names.put(id, bot.getName());
         }
-        
+
         matches = generateMatches(league.getBotIds(), names, league.getRounds());
         
 
@@ -50,6 +50,10 @@ public class MatchService implements MatchUseCase {
         return matches;
     }
 
+    public void res(){
+        botRepository.findById(1);
+    }
+
     /**
      * Crea rounds Matches entre Bots repitiendo según el número de rounds.
      * Cada bot tendra rounds Matches.
@@ -57,10 +61,11 @@ public class MatchService implements MatchUseCase {
      * @return Lista de Matches con SOLO bot1id, bot2id setteados
      */
     private List<Match> generateMatches(List<Integer> botIds, HashMap<Integer, String> botNames, int rounds) {
-        int nbots = botIds.size();
-        int matchesPerLeague = nbots * (nbots - 1);
 
-        List<Match> matches = new ArrayList<>(rounds * matchesPerLeague);
+        int nbots = botIds.size();
+        int matchesPerRound = (nbots * (nbots - 1))/2;
+
+        List<Match> matches = new ArrayList<>(rounds * matchesPerRound);
 
         List<int[]> oddCombinations = new ArrayList<>();
         List<int[]> evenCombinations = new ArrayList<>();
@@ -73,7 +78,7 @@ public class MatchService implements MatchUseCase {
             }
         }
 
-        for (int i = 1; i < rounds; i++) {
+        for (int i = 1; i <= rounds; i++) {
             if(i % 2 == 0){
                 combinations.addAll(oddCombinations);
             } else {
@@ -81,10 +86,10 @@ public class MatchService implements MatchUseCase {
             }
         }
 
-
         for (int[] par : combinations) { // iterar combinaciones de Matches
-            int botA = par[0];
-            int botB = par[1];
+            int botA = botIds.get(par[0]);
+            int botB = botIds.get(par[1]);
+
             Match match = new Match();
             match.setBot1id(botA);
             match.setBot2id(botB);
