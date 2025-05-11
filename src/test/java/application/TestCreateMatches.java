@@ -101,6 +101,8 @@ public class TestCreateMatches {
                 if(m.getBot2id() == botId){
                     visitants += 1;
                 }
+
+
             }
             assertEquals(locals,visitants);
         }
