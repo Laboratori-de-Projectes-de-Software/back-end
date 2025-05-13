@@ -14,6 +14,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+
 public class MatchService implements MatchUseCase {
     private final MatchRepository matchRepository;
     private final BotRepository botRepository;
@@ -26,15 +27,16 @@ public class MatchService implements MatchUseCase {
 
     @Override
     public List<Match> createLeagueMatches(League league) {
-        List<Match> matches = new ArrayList<>(league.getRounds());
+
+        List<Match> matches;
         HashMap<Integer, String> names = new HashMap<>();
         
         for (Integer id : league.getBotIds()) {
             Bot bot = botRepository.findById(id).get();
             names.put(id, bot.getName());
         }
-        
-        matches = generarCombatesBalanceados(matches, league.getBotIds(), names, league.getRounds());
+
+        matches = generateMatches(league.getBotIds(), names, league.getRounds());
         
 
         matches.forEach(match -> {
@@ -44,56 +46,55 @@ public class MatchService implements MatchUseCase {
             match.setResult(null);
             match.setMatchId(null);
         });
-        return matchRepository.saveAll(matches);
+        matchRepository.saveAll(matches);
+        return matches;
+    }
+
+    public void res(){
+        botRepository.findById(1);
     }
 
     /**
-     * Crea rounds Matches entre Bots sin repeticion de forma balanceada.
-     * La maxima diferencia de matches entre bots es 1
-     *
-     * Cada bot tendra rounds/nbots Matches como minimo, y los rounds%nbots sobrantes (si hay)
-     * se reparten aleatoriamente entre los bots.
+     * Crea rounds Matches entre Bots repitiendo según el número de rounds.
+     * Cada bot tendra rounds Matches.
+     * El orden de local y visitante variará entre rounds dependiendo de si es una ronda par o impar.
      * @return Lista de Matches con SOLO bot1id, bot2id setteados
      */
-    private List<Match> generarCombatesBalanceados(List<Match> matches, List<Integer> botIds, HashMap<Integer, String> botNames, int rounds) {
+    private List<Match> generateMatches(List<Integer> botIds, HashMap<Integer, String> botNames, int rounds) {
+
         int nbots = botIds.size();
-        int maxMatchesPorBot = rounds / nbots;
-        int extraMatches = rounds % nbots;
+        int matchesPerRound = (nbots * (nbots - 1))/2;
 
-        Map<Integer, Integer> combatesPorBot = new HashMap<>(); // limite de combates
-        for (Integer id : botIds) {
-            combatesPorBot.put(id, maxMatchesPorBot);
-        }
+        List<Match> matches = new ArrayList<>(rounds * matchesPerRound);
 
-        List<Integer> shuffledIds = new ArrayList<>(botIds); // combates extras
-        Collections.shuffle(shuffledIds);
-        for (int i = 0; i < extraMatches; i++) {
-            combatesPorBot.put(shuffledIds.get(i), combatesPorBot.get(shuffledIds.get(i)) + 1);
-        }
+        List<int[]> oddCombinations = new ArrayList<>();
+        List<int[]> evenCombinations = new ArrayList<>();
+        List<int[]> combinations = new ArrayList<>();
 
-        List<int[]> combinaciones = new ArrayList<>();
         for (int i = 0; i < nbots; i++) { // generar combinaciones de bots
             for (int j = i + 1; j < nbots; j++) {
-                combinaciones.add(new int[]{botIds.get(i), botIds.get(j)});
+                oddCombinations.add(new int[]{i, j});
+                evenCombinations.add(new int[]{j, i});
             }
         }
-        Collections.shuffle(combinaciones); // barajar combinaciones
 
-        for (int[] par : combinaciones) { // iterar combinaciones de Matches
-            int botA = par[0];
-            int botB = par[1];
-            if (combatesPorBot.get(botA) > 0 && combatesPorBot.get(botB) > 0) { // no pasarse de Matches por Bot
-                Match match = new Match();
-                match.setBot1id(botA);
-                match.setBot2id(botB);
-                match.setFighters(List.of(botNames.get(botA), botNames.get(botB)));
-                matches.add(match);
-
-                combatesPorBot.put(botA, combatesPorBot.get(botA) - 1); // reducir combates restantes
-                combatesPorBot.put(botB, combatesPorBot.get(botB) - 1);
-
-                if (matches.size() == rounds) break; // suficientes Match generados
+        for (int i = 1; i <= rounds; i++) {
+            if(i % 2 == 0){
+                combinations.addAll(oddCombinations);
+            } else {
+                combinations.addAll(evenCombinations);
             }
+        }
+
+        for (int[] par : combinations) { // iterar combinaciones de Matches
+            int botA = botIds.get(par[0]);
+            int botB = botIds.get(par[1]);
+
+            Match match = new Match();
+            match.setBot1id(botA);
+            match.setBot2id(botB);
+            match.setFighters(List.of(botNames.get(botA), botNames.get(botB)));
+            matches.add(match);
         }
         return matches;
     }
