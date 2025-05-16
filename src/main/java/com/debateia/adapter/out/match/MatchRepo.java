@@ -1,6 +1,5 @@
 package com.debateia.adapter.out.match;
 
-import com.debateia.adapter.out.match.MatchJpaRepository;
 import com.debateia.adapter.mapper.MatchMapper;
 import com.debateia.application.ports.out.persistence.MatchRepository;
 import com.debateia.domain.Match;
@@ -8,12 +7,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class MatchRepo implements MatchRepository {
     private final MatchJpaRepository matchJpaRepository;
     private final MatchMapper matchMapper;
+
+    // TODO: findById
 
     @Override
     public List<Match> findByLeagueId(Integer leagueId) {
@@ -26,4 +28,5 @@ public class MatchRepo implements MatchRepository {
                 .stream().map(matchMapper::toDomain).toList();
     }
 
+    // TODO: actualizar Match
 }

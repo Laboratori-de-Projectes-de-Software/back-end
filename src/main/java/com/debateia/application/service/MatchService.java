@@ -7,8 +7,11 @@ import com.debateia.application.ports.out.persistence.MatchRepository;
 import com.debateia.domain.Bot;
 import com.debateia.domain.League;
 import com.debateia.domain.Match;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 
 import java.util.*;
 
@@ -18,6 +21,9 @@ import java.util.*;
 public class MatchService implements MatchUseCase {
     private final MatchRepository matchRepository;
     private final BotRepository botRepository;
+    // TODO: incluir interface
+    // private final BotMessagingPort botMessagingPort;
+    // private final BotMessageReceiverPort botMessageReceiverPort;
 
     
     @Override
@@ -97,5 +103,33 @@ public class MatchService implements MatchUseCase {
             matches.add(match);
         }
         return matches;
+    }
+
+    @Override
+    public void startMatch(int matchId) {
+        final String PROMPT = "eres un bot hecho para discutir";
+
+        // Obtener Match por ID
+        // TODO: buscar match por ID
+
+        // buscar match en la BD
+
+        // obtener match
+        Match match = null;
+        // cambiar estado a in process
+        match.setState(State.IN_PROCESS);
+
+        // Actualizar match
+        // TODO: persistir match
+
+        Bot bot1 = botRepository.findById(match.getBot1id()).orElseThrow();
+
+
+        // Hemos mirado la PR que no se ha implementado, pero no podemos seguir hasta que no se implementen
+
+        // TODO Algo para crear el mensaje
+        //messageService.crearMessage(PROMPT, bot1.getId(), match.getMatchId());
+
+        //botPort.sendMessageBot(message, bot1.getEndpoint());
     }
 }
