@@ -8,12 +8,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class MatchRepo implements MatchRepository {
     private final MatchJpaRepository matchJpaRepository;
     private final MatchMapper matchMapper;
+
+    public Optional<Match> findById(Integer matchId) {
+        return matchJpaRepository.findById(matchId).map(matchMapper::toDomain);
+    }
 
     @Override
     public List<Match> findByLeagueId(Integer leagueId) {

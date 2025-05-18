@@ -3,10 +3,13 @@ package com.debateia.application.service;
 import com.debateia.adapter.in.rest.league.State;
 import com.debateia.application.ports.in.rest.MatchUseCase;
 import com.debateia.application.ports.out.persistence.BotRepository;
+import com.debateia.application.ports.out.persistence.LeagueRepository;
 import com.debateia.application.ports.out.persistence.MatchRepository;
+import com.debateia.application.ports.out.persistence.MessageRepository;
 import com.debateia.domain.Bot;
 import com.debateia.domain.League;
 import com.debateia.domain.Match;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +21,28 @@ import java.util.*;
 public class MatchService implements MatchUseCase {
     private final MatchRepository matchRepository;
     private final BotRepository botRepository;
+    private final LeagueRepository leagueRepository;
+    private final MessageRepository messageRepository;
+    // Token placeholders
+    private final static Set<String> VALID_END_TOKENS = Set.of("LOCAL", "VISITING", "DRAW");
 
-    
+
     @Override
     public List<Match> getMatchesByLeagueId(Integer leagueId) {
         return matchRepository.findByLeagueId(leagueId);
+    }
+
+    @Override
+    public boolean isMatchFinished(Integer matchId, String token) {
+        if (token != null && VALID_END_TOKENS.contains(token)) { // placeholder
+            return true;
+        }
+        Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new EntityNotFoundException("Match con ID \""+matchId+"\" no encontrado"));
+        long n_messages = messageRepository.countByMatchId(match.getMatchId());
+        League league = leagueRepository.findById(match.getLeagueId())
+                .orElseThrow(() -> new EntityNotFoundException("League con ID \""+match.getLeagueId()+"\" no encontrado"));
+        return n_messages >= league.getMatchMaxMessages();
     }
 
     @Override

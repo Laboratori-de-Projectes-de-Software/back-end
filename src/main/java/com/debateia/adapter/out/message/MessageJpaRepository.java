@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface MessageJpaRepository extends JpaRepository<MessageEntity, Integer> {
     List<MessageEntity> findByMatchId(Integer matchId);
+    long countByMatch_Id(int matchId);
 }

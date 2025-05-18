@@ -19,4 +19,9 @@ public class MessageRepo implements MessageRepository {
     public List<Messages> findMessagesByMatch(Integer matchId) {
         return messageJpaRepository.findByMatchId(matchId).stream().map(messageMapper::toDomain).toList();
     }
+
+    @Override
+    public long countByMatchId(int matchId) {
+        return messageJpaRepository.countByMatch_Id(matchId);
+    }
 }
