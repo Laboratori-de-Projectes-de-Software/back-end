@@ -1,24 +1,47 @@
 package com.debateia.adapter.mapper;
 
 import com.debateia.adapter.in.rest.match.MessageResponseDTO;
+import com.debateia.adapter.out.bot.BotEntity;
+import com.debateia.adapter.out.match.MatchEntity;
 import com.debateia.adapter.out.message.MessageEntity;
 import com.debateia.domain.Messages;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface MessageMapper {
-    
-    MessageMapper INSTANCE = Mappers.getMapper(MessageMapper.class);
-    
+
     @Mapping(target = "botId", source = "bot.id")
     @Mapping(target = "contents", source = "text")
     @Mapping(target = "timestamp", source = "time")
     @Mapping(target = "matchId", source = "match.id")
     Messages toDomain(MessageEntity entity);
-    
+
     @Mapping(target = "text", source = "contents")
     @Mapping(target = "time", expression = "java(dom.getTimestamp().toString())")
     MessageResponseDTO toResponseDTO(Messages dom);
+
+    @Mapping(target = "bot", source = "botId", qualifiedByName = "mapBotIdToEntity")
+    @Mapping(target = "match", source = "matchId", qualifiedByName = "mapMatchIdToEntity")
+    @Mapping(target = "text", source = "contents")
+    @Mapping(target = "time", source = "timestamp")
+    MessageEntity toEntity(Messages messages);
+
+    @Named("mapBotIdToEntity")
+    default BotEntity mapBotIdToEntity(Integer botId) {
+        if (botId == null) return null;
+        BotEntity bot = new BotEntity();
+        bot.setId(botId);
+        return bot;
+    }
+
+    @Named("mapMatchIdToEntity")
+    default MatchEntity mapMatchIdToEntity(Integer matchId) {
+        if (matchId == null) return null;
+        MatchEntity match = new MatchEntity();
+        match.setId(matchId);
+        return match;
+    }
 }

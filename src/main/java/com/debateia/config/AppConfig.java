@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.debateia.adapter.out.user.UserEntity;
 import com.debateia.application.ports.out.persistence.UserRepository;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @RequiredArgsConstructor
@@ -52,5 +53,8 @@ public class AppConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public RestTemplate restTemplate() { return new RestTemplate(); }
 
 }
