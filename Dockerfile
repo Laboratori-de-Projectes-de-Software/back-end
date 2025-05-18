@@ -13,6 +13,6 @@ WORKDIR /app
 
 COPY --from=builder /app/target/debateia-0.0.1-SNAPSHOT.jar app.jar
 
-EXPOSE 8080
+EXPOSE 5173
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
