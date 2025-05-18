@@ -2,13 +2,11 @@ package com.debateia.application.service;
 
 import com.debateia.adapter.in.rest.league.State;
 import com.debateia.application.ports.in.rest.MatchUseCase;
-import com.debateia.application.ports.out.persistence.BotRepository;
-import com.debateia.application.ports.out.persistence.LeagueRepository;
-import com.debateia.application.ports.out.persistence.MatchRepository;
-import com.debateia.application.ports.out.persistence.MessageRepository;
+import com.debateia.application.ports.out.persistence.*;
 import com.debateia.domain.Bot;
 import com.debateia.domain.League;
 import com.debateia.domain.Match;
+import com.debateia.domain.Participation;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,9 +21,15 @@ public class MatchService implements MatchUseCase {
     private final BotRepository botRepository;
     private final LeagueRepository leagueRepository;
     private final MessageRepository messageRepository;
+    private final ParticipationRepository participationRepository;
     // Token placeholders
-    private final static Set<String> VALID_END_TOKENS = Set.of("LOCAL", "VISITING", "DRAW");
-
+    private final static String TOKEN_LOCAL_WIN = "LOCAL";
+    private final static String TOKEN_VISITING_WIN = "VISITING";
+    private final static String TOKEN_DRAW = "DRAW";
+    private final static Set<String> VALID_END_TOKENS = Set.of(TOKEN_LOCAL_WIN, TOKEN_VISITING_WIN, TOKEN_DRAW);
+    private final static int POINTS_WIN = 3;
+    private final static int POINTS_DRAW = 1;
+    private final static int POINTS_LOSE = 0;
 
     @Override
     public List<Match> getMatchesByLeagueId(Integer leagueId) {
@@ -43,6 +47,61 @@ public class MatchService implements MatchUseCase {
         League league = leagueRepository.findById(match.getLeagueId())
                 .orElseThrow(() -> new EntityNotFoundException("League con ID \""+match.getLeagueId()+"\" no encontrado"));
         return n_messages >= league.getMatchMaxMessages();
+    }
+
+    @Override
+    public void finalizeMatch(Integer matchId, String token, Integer botId) {
+        Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new EntityNotFoundException("Match con ID \""+matchId+"\" no encontrado"));
+        Participation participation1 = participationRepository.findById(match.getLeagueId(), match.getBot1id())
+                .orElseThrow(() -> new EntityNotFoundException("Participation de bot "+match.getBot1id()
+                        +" en liga " +match.getLeagueId()+" no encontrado"));
+        Participation participation2 = participationRepository.findById(match.getLeagueId(), match.getBot2id())
+                .orElseThrow(() -> new EntityNotFoundException("Participation de bot "+match.getBot2id()
+                        +" en liga " +match.getLeagueId()+" no encontrado"));
+
+        boolean isSenderLocal = (match.getBot1id().equals(botId)); // asume bot1id es el local
+        Participation sender = isSenderLocal ? participation1 : participation2;
+        Participation other = isSenderLocal ? participation2 : participation1;
+        int result = 0;
+        switch (token) {
+            case TOKEN_LOCAL_WIN:
+                applyWinLoss(sender, other, isSenderLocal);
+                result = 1;
+                break;
+            case TOKEN_VISITING_WIN:
+                applyWinLoss(sender, other, !isSenderLocal);
+                result = -1;
+                break;
+            case TOKEN_DRAW:
+                applyDraw(sender, other);
+        }
+        match.setResult(result);
+        participationRepository.save(sender);
+        participationRepository.save(other);
+        match.setState(State.COMPLETED);
+        matchRepository.save(match);
+    }
+
+    private void applyWinLoss(Participation sender, Participation other, boolean senderWon) {
+        if (senderWon) {
+            sender.setNWins(sender.getNWins()+1);
+            sender.setPoints(sender.getPoints()+POINTS_WIN);
+            other.setNLoses(other.getNLoses()+1);
+            other.setPoints(other.getPoints()+POINTS_LOSE);
+        } else {
+            sender.setNLoses(sender.getNLoses()+1);
+            sender.setPoints(sender.getPoints()+POINTS_LOSE);
+            other.setNWins(other.getNWins()+1);
+            other.setPoints(other.getPoints()+POINTS_WIN);
+        }
+    }
+
+    private void applyDraw(Participation sender, Participation other) {
+        sender.setNDraws(sender.getNDraws()+1);
+        sender.setPoints(sender.getPoints()+POINTS_DRAW);
+        other.setNDraws(other.getNDraws()+1);
+        other.setPoints(other.getPoints()+POINTS_DRAW);
     }
 
     @Override

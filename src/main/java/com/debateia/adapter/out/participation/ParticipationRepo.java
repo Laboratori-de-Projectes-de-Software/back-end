@@ -14,7 +14,12 @@ public class ParticipationRepo implements ParticipationRepository {
 
     private final ParticipationJpaRepository partJpa;
     private final PartMapper partMapper;
-    
+
+    @Override
+    public Participation save(Participation participation) {
+        return partMapper.toDomain(partJpa.save(partMapper.toEntity(participation)));
+    }
+
     @Override
     public void createParticipation(Integer leagueId, Integer botId) {
         ParticipationEntity part = ParticipationEntity.builder()
@@ -29,7 +34,7 @@ public class ParticipationRepo implements ParticipationRepository {
         
         partJpa.save(part);
     }
-    
+
     @Override
     public Optional<Participation> findById(Integer leagueId, Integer botId) {
         return partJpa.findById(new ParticipationId(leagueId, botId)).map(partMapper::toDomain);

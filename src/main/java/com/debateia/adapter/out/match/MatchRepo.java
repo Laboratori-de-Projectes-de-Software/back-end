@@ -31,4 +31,8 @@ public class MatchRepo implements MatchRepository {
                 .stream().map(matchMapper::toDomain).toList();
     }
 
+    public Match save(Match match) {
+        return matchMapper.toDomain(matchJpaRepository.save(matchMapper.toEntity(match)));
+    }
+
 }

@@ -15,5 +15,9 @@ public interface PartMapper {
     @Mapping(target = "name", ignore = true) // <- The names of the bot cannot be directly obtained from the
     Participation toDomain(ParticipationEntity entity); // ParticipationEntity. We add it after the conversion manually.
     
-    ParticipationDTO toDTO(Participation domain);
+    ParticipationResponseDTO toDTO(Participation domain);
+
+    @Mapping(target = "league", ignore = true)
+    @Mapping(target = "bot", ignore = true)
+    ParticipationEntity toEntity(Participation domain);
 }
