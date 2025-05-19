@@ -34,7 +34,7 @@ public interface MatchMapper {
     @Mapping(target = "league", source = "leagueId", qualifiedByName = "mapLeagueIdToEntity")
     MatchEntity toEntity(Match dom);
     
-    @Mapping(target = "matchId", source = "matchId")
+    @Mapping(target = "id", source = "matchId")
     @Mapping(target = "state", source = "state")
     @Mapping(target = "result", source = "result")
     @Mapping(target = "roundNumber", source = "roundNumber")

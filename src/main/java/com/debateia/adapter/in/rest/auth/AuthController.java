@@ -24,9 +24,7 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody UserDTORegister request) {
         try {
             User user = authUseCase.register(request);
-            TokenData td = authUseCase.generateTokens(user);
-            UserResponseDTO response = new UserResponseDTO(
-                    td.accessToken(), td.expiresIn(), user.getUsername(), user.getUserId());
+            UserDTO response = new UserDTO(user.getUserId(), user.getUsername(), user.getMail());
             return ResponseEntity.ok(response);
         } catch (DataIntegrityViolationException e) {
             System.err.println(e.getMessage());
@@ -39,14 +37,10 @@ public class AuthController {
         try {
             User user = authUseCase.authenticate(loginRequest);
             TokenData td = authUseCase.generateTokens(user);
-            UserResponseDTO response = new UserResponseDTO(td.accessToken(), td.expiresIn(), user.getUsername(), user.getUserId());
+            UserResponseDTO response = new UserResponseDTO(td.accessToken(), td.expiresIn(), user.getUsername(), user.getUserId(), user.getMail());
             return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno");
         }
     }
 
@@ -58,7 +52,7 @@ public class AuthController {
         User updatedUser = authUseCase.updateCred(authentication, request);
         try {
             TokenData td = authUseCase.generateTokens(updatedUser);
-            final UserResponseDTO response = new UserResponseDTO(td.accessToken(), td.expiresIn(), updatedUser.getUsername(), updatedUser.getUserId());
+            final UserResponseDTO response = new UserResponseDTO(td.accessToken(), td.expiresIn(), updatedUser.getUsername(), updatedUser.getUserId(), updatedUser.getMail());
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Registration failed: Invalid request.");
@@ -71,7 +65,7 @@ public class AuthController {
         try {
             User user = authUseCase.refreshToken(authentication);
             TokenData td = authUseCase.generateTokens(user);
-            return ResponseEntity.ok(new UserResponseDTO(td.accessToken(), td.expiresIn(), user.getUsername(), user.getUserId()));
+            return ResponseEntity.ok(new UserResponseDTO(td.accessToken(), td.expiresIn(), user.getUsername(), user.getUserId(), user.getMail()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();  // Puedes retornar un mensaje de error si lo prefieres
         }

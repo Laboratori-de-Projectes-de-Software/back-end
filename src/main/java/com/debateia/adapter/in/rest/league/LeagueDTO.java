@@ -13,7 +13,6 @@ public class LeagueDTO implements Serializable {
     private String name;
     private String urlImagen;
     private Integer rounds;
-    private long matchTime;
-    private List<Integer> bots;
+    private long maxMatchMessages;
     //private int userId;
 }

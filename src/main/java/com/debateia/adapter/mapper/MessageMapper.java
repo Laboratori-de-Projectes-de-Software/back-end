@@ -19,6 +19,6 @@ public interface MessageMapper {
     Messages toDomain(MessageEntity entity);
     
     @Mapping(target = "text", source = "contents")
-    @Mapping(target = "time", expression = "java(dom.getTimestamp().toString())")
+    @Mapping(target = "timestamp", expression = "java(dom.getTimestamp().toString())")
     MessageResponseDTO toResponseDTO(Messages dom);
 }

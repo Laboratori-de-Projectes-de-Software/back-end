@@ -79,10 +79,10 @@ public class LeagueController {
         return ResponseEntity.ok(response);
     }
     
-    @GetMapping("/{id}")
-    public ResponseEntity<LeagueResponseDTO> getLeague(@PathVariable Integer id) {
+    @GetMapping("/{leagueId}")
+    public ResponseEntity<LeagueResponseDTO> getLeague(@PathVariable Integer leagueId) {
         try {
-            League lg = leagueUseCase.getLeague(id);
+            League lg = leagueUseCase.getLeague(leagueId);
             return ResponseEntity.ok(leagueMapper.toLeagueResponseDTO(lg));
         }
         catch (EntityNotFoundException e) { // liga no existe
@@ -91,9 +91,9 @@ public class LeagueController {
         }
     }
     
-    @PutMapping("/{id}")
+    @PutMapping("/{leagueId}")
     public ResponseEntity<LeagueResponseDTO> updateLeague(
-            @PathVariable Integer id,
+            @PathVariable Integer leagueId,
             @RequestBody LeagueDTO league,
             @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication) {
         
@@ -107,22 +107,18 @@ public class LeagueController {
         try {
             League newLeague = leagueMapper.toDomain(league);
             newLeague.setUserId(userId);
-            League updated = leagueUseCase.updateLeague(id, userId, newLeague);
+            League updated = leagueUseCase.updateLeague(leagueId, userId, newLeague);
             return ResponseEntity.ok(leagueMapper.toLeagueResponseDTO(updated));
         }
         catch (EntityNotFoundException e) { // liga no existe
             System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        catch (DataIntegrityViolationException e) { // El userId de la liga no es el del token
-            System.err.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
     }
     
-    @PostMapping("/{id}/bot")
+    @PostMapping("/{leagueId}/bot")
     public ResponseEntity<?> registerBot(
-            @PathVariable Integer id,
+            @PathVariable Integer leagueId,
             @RequestBody Integer botId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication) {
         
@@ -133,20 +129,25 @@ public class LeagueController {
         final Integer userId = jwtUseCase.extractUserId(authToken);
         
         try {
-            leagueUseCase.registerBot(id, botId, userId);
+            leagueUseCase.registerBot(leagueId, botId, userId);
             return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
+        catch (EntityNotFoundException e) { // El userId de la liga no es el del token
+            System.err.println(e.getMessage());
+//            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         catch (DataIntegrityViolationException e) { // El userId de la liga no es el del token
             e.printStackTrace();
 //            System.err.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
     // Convertimos l
-    @GetMapping("/{id}/leaderboard")
-    public ResponseEntity<List<ParticipationResponseDTO>> getScores(@PathVariable Integer id) {
+    @GetMapping("/{leagueId}/leaderboard")
+    public ResponseEntity<List<ParticipationResponseDTO>> getScores(@PathVariable Integer leagueId) {
         try {
-            List<Participation> scores = leagueUseCase.getScores(id);
+            List<Participation> scores = leagueUseCase.getScores(leagueId);
             
             // Convertimos lista de participaciones a lista de ParticipationResponseDTO
             List<ParticipationResponseDTO> response = scores.stream()
@@ -161,9 +162,9 @@ public class LeagueController {
         }
     }
     
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{leagueId}")
     public ResponseEntity<LeagueResponseDTO> deleteLeague(
-            @PathVariable Integer id,
+            @PathVariable Integer leagueId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication) {
         
         if (authentication == null || !authentication.startsWith("Bearer ")) {
@@ -173,23 +174,19 @@ public class LeagueController {
         final Integer userId = jwtUseCase.extractUserId(authToken);
         
         try {
-            League deleted = leagueUseCase.deleteLeague(id, userId);
+            League deleted = leagueUseCase.deleteLeague(leagueId, userId);
             return ResponseEntity.ok(leagueMapper.toLeagueResponseDTO(deleted));
         }
         catch (EntityNotFoundException e) { // liga no existe
             System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        catch (DataIntegrityViolationException e) { // El userId de la liga no es el del token
-            System.err.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
     }
     
-    @PostMapping("/{id}/start")
-    public ResponseEntity<?> startLeague(@PathVariable Integer id) {
+    @PostMapping("/{leagueId}/start")
+    public ResponseEntity<?> startLeague(@PathVariable Integer leagueId) {
         try {
-            leagueUseCase.startLeague(id);
+            leagueUseCase.startLeague(leagueId);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }
         catch (EntityNotFoundException e) { // liga no existe
@@ -198,12 +195,17 @@ public class LeagueController {
         }
     }
 
-    @GetMapping("/{id}/match")
-    public ResponseEntity<List<MatchResponseDTO>> getMatchesLeague(@PathVariable Integer id) {
+    @GetMapping("/{leagueId}/match")
+    public ResponseEntity<List<MatchResponseDTO>> getMatchesLeague(@PathVariable Integer leagueId) {
         //@TODO esto en la API pone que es en /league pero es un findMatchesByLeagueId, igual deberia ir en MatchController?
         // ante la duda lo programo en matchService, seria super facil cambiarlo
-        List<Match> matches = matchUseCase.getMatchesByLeagueId(id);
-        return ResponseEntity.ok(matches.stream().map(matchMapper::toResponseDTO).toList());
+        try {
+            List<Match> matches = matchUseCase.getMatchesByLeagueId(leagueId);
+            return ResponseEntity.ok(matches.stream().map(matchMapper::toResponseDTO).toList());
+        } catch (EntityNotFoundException e) { // liga no existe
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 }

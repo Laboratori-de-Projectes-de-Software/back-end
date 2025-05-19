@@ -154,7 +154,7 @@ public User updateCred(@NotNull final String authentication, UpdateCredRequest r
             throw new IllegalArgumentException("Invalid refresh token");
         }
 
-        // Generar un nuevo accessToken
+        // Generar un nuevo token
         return user;
     }
 

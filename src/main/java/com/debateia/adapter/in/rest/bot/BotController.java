@@ -57,9 +57,6 @@ public class BotController {
         } catch (DataIntegrityViolationException e) { // bot ya existia
             System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } catch (EntityNotFoundException e) { // anadir bot para usuario que no existe
-            System.err.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         BotResponseDTO botResponse = botMapper.toResponseDto(bot);
         return ResponseEntity.status(HttpStatus.CREATED).body(botResponse);
@@ -95,9 +92,6 @@ public class BotController {
         } catch (EntityNotFoundException e) { // bot/usuario asociado no existe
             System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch (DataIntegrityViolationException e) { // usuario (es unico) seria repetido tras actualizar
-            System.err.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 

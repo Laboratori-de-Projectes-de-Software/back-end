@@ -21,11 +21,9 @@ public interface LeagueMapper {
     LeagueMapper INSTANCE = Mappers.getMapper(LeagueMapper.class);
     
     @Mapping(target = "state", source = "state", qualifiedByName = "mapStateToEnum")
-    @Mapping(target = "user", source = "userId")
     @Mapping(target = "bots", source = "botIds")
     LeagueResponseDTO toLeagueResponseDTO(League league);
     
-    @Mapping(target = "botIds", source = "bots")
     @Mapping(target = "state", constant = "PENDING")
     @Mapping(target = "leagueId", ignore = true)
     @Mapping(target = "userId", ignore = true)

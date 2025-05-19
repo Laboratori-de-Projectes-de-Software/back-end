@@ -10,7 +10,7 @@ import java.io.Serializable;
 @JsonTypeName("BotDTO")
 public class BotDTO implements Serializable {
     private String name;
-    private String description;
-    private String urlImagen;
-    private String endpoint;
+    private String quality;
+    private String imageUrl;
+    private String apiUrl;
 }

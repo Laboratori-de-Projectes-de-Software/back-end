@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @JsonTypeName("MatchResponseDTO")
 public class MatchResponseDTO implements Serializable {
-    private int matchId;
+    private int id;
     private State state;
     private int result;
     private List<String> fighters; // nombre de los bots

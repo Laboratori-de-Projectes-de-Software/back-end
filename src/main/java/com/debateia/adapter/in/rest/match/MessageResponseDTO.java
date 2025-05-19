@@ -7,7 +7,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 public class MessageResponseDTO implements Serializable {
-    private String text;
     private int botId;
-    private String time;
+    private String text;
+    private String timestamp;
 }

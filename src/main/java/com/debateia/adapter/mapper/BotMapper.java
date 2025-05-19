@@ -37,8 +37,8 @@ public interface BotMapper {
     @Mapping(target = "participations", ignore = true)
     BotEntity toEntity(Bot bot);
     
-    @Mapping(target = "botId", source = "id")
-    @Mapping(target = "urlImage", source = "urlImagen")
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "imageUrl", source = "urlImagen")
     BotResponseDTO toResponseDto(Bot bot);
     
     @Named("extractUserId")

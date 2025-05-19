@@ -11,12 +11,11 @@ import java.util.List;
 @Data
 @JsonTypeName("LeagueResponseDTO")
 public class LeagueResponseDTO implements Serializable {
-    private int leagueId;
-    private State state;
+    private int id;
     private String name;
-    private String urlImagen;
-    private int user;
+    private String imageUrl;
     private Integer rounds;
-    private long matchTime;
+    private long matchMaxMessages;
     private List<Integer> bots;
+    private State state;
 }

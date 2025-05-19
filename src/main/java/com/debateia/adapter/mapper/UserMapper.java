@@ -31,7 +31,7 @@ public interface UserMapper {
     User entityToDomain(UserEntity entity);
     
     @Mapping(target = "user", source = "username")
-    @Mapping(target = "accessToken", source = "token")
+    @Mapping(target = "token", source = "token")
     UserResponseDTO toResponseDTO(User user);
     
     @Named("leagueIdToEntity")

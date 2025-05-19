@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @JsonTypeName("ParticipationResponseDTO")
 public class ParticipationResponseDTO implements Serializable {
     private int botId;
-    private String name;
+    private String botName;
     private int points;
     private int position;
     private int nWins;
