@@ -7,18 +7,24 @@ import com.debateia.application.ports.out.persistence.MatchRepository;
 import com.debateia.domain.Bot;
 import com.debateia.domain.League;
 import com.debateia.domain.Match;
+import com.debateia.domain.Messages;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 
 public class MatchService implements MatchUseCase {
+    // PROMPT
+    final String PROMPT = "eres un bot hecho para discutir";
+
     private final MatchRepository matchRepository;
     private final BotRepository botRepository;
     // TODO: incluir interface
@@ -106,30 +112,66 @@ public class MatchService implements MatchUseCase {
     }
 
     @Override
-    public void startMatch(int matchId) {
-        final String PROMPT = "eres un bot hecho para discutir";
-
+    public Match startMatch(int matchId) {
         // Obtener Match por ID
-        // TODO: buscar match por ID
+        Match match = getMatch(matchId);
 
-        // buscar match en la BD
+        // comprobar que el partido no haya sido iniciado
+        if (match.getState() != State.PENDING)
+            throw new RuntimeException("El partido ya fue iniciado. (Estado actual: " + match.getState() + ")");
 
-        // obtener match
-        Match match = null;
         // cambiar estado a in process
         match.setState(State.IN_PROCESS);
 
         // Actualizar match
-        // TODO: persistir match
+        matchRepository.updateMatch(matchId, match);
 
-        Bot bot1 = botRepository.findById(match.getBot1id()).orElseThrow();
+        // buscar bots
+        Optional <Bot> bot1_found = botRepository.findById(match.getBot1id());
+        if (bot1_found.isEmpty())
+            throw new EntityNotFoundException("Bot con id " + match.getBot1id() + " no encontrado");
 
+        Optional <Bot> bot2_found = botRepository.findById(match.getBot2id());
+        if (bot2_found.isEmpty())
+            throw new EntityNotFoundException("Bot con id " + match.getBot2id() + " no encontrado");
 
-        // Hemos mirado la PR que no se ha implementado, pero no podemos seguir hasta que no se implementen
+        Bot bot1 = bot1_found.get();
+        Bot bot2 = bot2_found.get();
 
-        // TODO Algo para crear el mensaje
-        //messageService.crearMessage(PROMPT, bot1.getId(), match.getMatchId());
+        // crear mensaje
+        Messages msg = new Messages(PROMPT, LocalDateTime.now(), match.getBot1id(), matchId);
+        // enviar mensaje (se persistirá a través del botPort
+        // botMessagingPort.sendMessageBot(msg, bot1.getEndpoint());
 
-        //botPort.sendMessageBot(message, bot1.getEndpoint());
+        // recibir respuesta y reenviar al segundo bot
+        mensajeSegundoBot(matchId, bot2);
+        return match;
+    }
+
+    private Match getMatch (Integer matchId) {
+        // buscar match en la BD
+        Optional <Match> matchFound = matchRepository.findById(matchId);
+        if (matchFound.isEmpty())
+            throw new EntityNotFoundException("Match con id " + matchId + " no encontrado");
+
+        return matchFound.get();
+    }
+
+    @Async
+    protected void mensajeSegundoBot(Integer matchId, Bot bot2) {
+        // recibir mensaje
+        Messages msg_received = new Messages();     // suponiendo que es un parámetro de salida
+        // botMessageReceiverPort.receiveBotMessage(msg_received);
+
+        // enviar mensaje al segundo bot con el prompt y la respuesta del primer bot
+        // crear Mensaje
+        Messages msg_bot2 = new Messages(
+                PROMPT + "\n\nLa siguiente es la respuesta de tu contrincante:\n\n" + msg_received.getContents(),
+                LocalDateTime.now(),
+                bot2.getId(),
+                matchId);
+
+        // enviar mensaje al bot2
+        // botMessagingPort.sendMessageBot(msg_bot2, bot2.getEndpoint());
     }
 }

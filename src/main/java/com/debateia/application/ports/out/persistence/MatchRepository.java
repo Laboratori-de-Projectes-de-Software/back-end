@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MatchRepository {
-    // TODO: findById
+    Optional<Match> findById(Integer id);
     List<Match> findByLeagueId(Integer leagueId);
     List<Match> saveAll(List<Match> matches);
-    // TODO: actualizar Match
+    Match updateMatch(Integer id, Match match);
 }
