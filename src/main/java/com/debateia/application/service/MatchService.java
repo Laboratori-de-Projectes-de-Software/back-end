@@ -3,6 +3,7 @@ package com.debateia.application.service;
 import com.debateia.adapter.in.rest.league.State;
 import com.debateia.application.ports.in.rest.BotUseCase;
 import com.debateia.application.ports.in.rest.MatchUseCase;
+import com.debateia.application.ports.out.bot_messaging.BotMessagingPort;
 import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.MatchRepository;
 import com.debateia.domain.Bot;
@@ -29,7 +30,6 @@ public class MatchService implements MatchUseCase {
     private final BotUseCase botService;
     // TODO: incluir interface
     private final BotMessagingPort botMessagingPort;
-    private final BotMessageReceiverPort botMessageReceiverPort;
 
     
     @Override
@@ -132,7 +132,7 @@ public class MatchService implements MatchUseCase {
         // crear mensaje
         Messages msg = new Messages(PROMPT, LocalDateTime.now(), bot1.getId(), matchId);
         // enviar mensaje (se persistirá a través del BotMessagingPort)
-        botMessagingPort.sendMessageBot(msg, bot1.getEndpoint());
+        botMessagingPort.sendMessageToBot(msg, bot1.getEndpoint());
 
         // devolver match
         return match;
