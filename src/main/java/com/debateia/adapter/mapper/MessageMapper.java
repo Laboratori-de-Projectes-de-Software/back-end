@@ -1,5 +1,6 @@
 package com.debateia.adapter.mapper;
 
+import com.debateia.adapter.in.rest.bot.BotMessageDTO;
 import com.debateia.adapter.in.rest.match.MessageResponseDTO;
 import com.debateia.adapter.out.bot.BotEntity;
 import com.debateia.adapter.out.match.MatchEntity;
@@ -10,6 +11,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
+import java.time.LocalDateTime;
+
 @Mapper(componentModel = "spring")
 public interface MessageMapper {
 
@@ -18,6 +21,11 @@ public interface MessageMapper {
     @Mapping(target = "timestamp", source = "time")
     @Mapping(target = "matchId", source = "match.id")
     Messages toDomain(MessageEntity entity);
+
+    @Mapping(source = "text", target = "contents")
+    @Mapping(source = "timestamp", target = "timestamp", qualifiedByName = "stringToLocalDateTime")
+    @Mapping(source = "botId", target = "botId")
+    Messages DTOtoDomain(BotMessageDTO dto);
 
     @Mapping(target = "text", source = "contents")
     @Mapping(target = "time", expression = "java(dom.getTimestamp().toString())")
@@ -43,5 +51,16 @@ public interface MessageMapper {
         MatchEntity match = new MatchEntity();
         match.setId(matchId);
         return match;
+    }
+
+    @Named("stringToLocalDateTime")
+    default LocalDateTime stringToLocalDateTime(String timestamp) {
+        return LocalDateTime.parse(timestamp); // Use DateTimeFormatter if needed
+    }
+
+    default Messages toDomainWithMatchId(BotMessageDTO dto, Integer matchId) {
+        Messages message = DTOtoDomain(dto);
+        message.setMatchId(matchId);
+        return message;
     }
 }
