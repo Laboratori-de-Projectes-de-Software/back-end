@@ -17,8 +17,8 @@ public class MatchRepo implements MatchRepository {
     private final MatchMapper matchMapper;
 
     @Override
-    public Optional<Match> findById(Integer id) {
-        return matchJpaRepository.findById(id).map(matchMapper::toDomain);
+    public Optional<Match> findById(Integer matchId) {
+        return matchJpaRepository.findById(matchId).map(matchMapper::toDomain);
     }
 
     @Override
