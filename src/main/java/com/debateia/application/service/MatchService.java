@@ -1,6 +1,7 @@
 package com.debateia.application.service;
 
 import com.debateia.adapter.in.rest.league.State;
+import com.debateia.application.ports.in.rest.BotUseCase;
 import com.debateia.application.ports.in.rest.MatchUseCase;
 import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.MatchRepository;
@@ -10,8 +11,6 @@ import com.debateia.domain.Match;
 import com.debateia.domain.Messages;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 
@@ -27,9 +26,10 @@ public class MatchService implements MatchUseCase {
 
     private final MatchRepository matchRepository;
     private final BotRepository botRepository;
+    private final BotUseCase botService;
     // TODO: incluir interface
-    // private final BotMessagingPort botMessagingPort;
-    // private final BotMessageReceiverPort botMessageReceiverPort;
+    private final BotMessagingPort botMessagingPort;
+    private final BotMessageReceiverPort botMessageReceiverPort;
 
     
     @Override
@@ -113,8 +113,8 @@ public class MatchService implements MatchUseCase {
 
     @Override
     public Match startMatch(int matchId) {
-        // Obtener Match por ID
-        Match match = getMatch(matchId);
+        // obtener Match por ID
+        Match match = getMatchById(matchId);
 
         // comprobar que el partido no haya sido iniciado
         if (match.getState() != State.PENDING)
@@ -123,55 +123,27 @@ public class MatchService implements MatchUseCase {
         // cambiar estado a in process
         match.setState(State.IN_PROCESS);
 
-        // Actualizar match
-        matchRepository.updateMatch(matchId, match);
+        // actualizar match
+        match = matchRepository.updateMatch(matchId, match);
 
-        // buscar bots
-        Optional <Bot> bot1_found = botRepository.findById(match.getBot1id());
-        if (bot1_found.isEmpty())
-            throw new EntityNotFoundException("Bot con id " + match.getBot1id() + " no encontrado");
-
-        Optional <Bot> bot2_found = botRepository.findById(match.getBot2id());
-        if (bot2_found.isEmpty())
-            throw new EntityNotFoundException("Bot con id " + match.getBot2id() + " no encontrado");
-
-        Bot bot1 = bot1_found.get();
-        Bot bot2 = bot2_found.get();
+        // obtener bot1
+        Bot bot1 = botService.getBotById(match.getBot1id());
 
         // crear mensaje
-        Messages msg = new Messages(PROMPT, LocalDateTime.now(), match.getBot1id(), matchId);
-        // enviar mensaje (se persistirá a través del botPort
-        // botMessagingPort.sendMessageBot(msg, bot1.getEndpoint());
+        Messages msg = new Messages(PROMPT, LocalDateTime.now(), bot1.getId(), matchId);
+        // enviar mensaje (se persistirá a través del BotMessagingPort)
+        botMessagingPort.sendMessageBot(msg, bot1.getEndpoint());
 
-        // recibir respuesta y reenviar al segundo bot
-        mensajeSegundoBot(matchId, bot2);
+        // devolver match
         return match;
     }
 
-    private Match getMatch (Integer matchId) {
+    private Match getMatchById (Integer matchId) {
         // buscar match en la BD
         Optional <Match> matchFound = matchRepository.findById(matchId);
         if (matchFound.isEmpty())
             throw new EntityNotFoundException("Match con id " + matchId + " no encontrado");
 
         return matchFound.get();
-    }
-
-    @Async
-    protected void mensajeSegundoBot(Integer matchId, Bot bot2) {
-        // recibir mensaje
-        Messages msg_received = new Messages();     // suponiendo que es un parámetro de salida
-        // botMessageReceiverPort.receiveBotMessage(msg_received);
-
-        // enviar mensaje al segundo bot con el prompt y la respuesta del primer bot
-        // crear Mensaje
-        Messages msg_bot2 = new Messages(
-                PROMPT + "\n\nLa siguiente es la respuesta de tu contrincante:\n\n" + msg_received.getContents(),
-                LocalDateTime.now(),
-                bot2.getId(),
-                matchId);
-
-        // enviar mensaje al bot2
-        // botMessagingPort.sendMessageBot(msg_bot2, bot2.getEndpoint());
     }
 }

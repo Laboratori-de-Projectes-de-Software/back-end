@@ -44,7 +44,7 @@ public class MatchController {
         } catch (RuntimeException e) {
             // El Match ya fue iniciado anteriormente
             System.err.println(e.getMessage());
-            return ResponseEntity.status(400).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 }
