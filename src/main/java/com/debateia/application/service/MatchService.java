@@ -22,14 +22,17 @@ public class MatchService implements MatchUseCase {
     private final LeagueRepository leagueRepository;
     private final MessageRepository messageRepository;
     private final ParticipationRepository participationRepository;
+    private final static int POINTS_WIN = 3;
+    private final static int POINTS_DRAW = 1;
+    private final static int POINTS_LOSE = 0;
+    private final static int RESULT_LOCAL_WIN = 1;
+    private final static int RESULT_DRAW = 0;
+    private final static int RESULT_VISITING_WIN = -1;
     // Token placeholders
     private final static String TOKEN_LOCAL_WIN = "LOCAL";
     private final static String TOKEN_VISITING_WIN = "VISITING";
     private final static String TOKEN_DRAW = "DRAW";
     private final static Set<String> VALID_END_TOKENS = Set.of(TOKEN_LOCAL_WIN, TOKEN_VISITING_WIN, TOKEN_DRAW);
-    private final static int POINTS_WIN = 3;
-    private final static int POINTS_DRAW = 1;
-    private final static int POINTS_LOSE = 0;
 
     @Override
     public List<Match> getMatchesByLeagueId(Integer leagueId) {
@@ -60,48 +63,77 @@ public class MatchService implements MatchUseCase {
                 .orElseThrow(() -> new EntityNotFoundException("Participation de bot "+match.getBot2id()
                         +" en liga " +match.getLeagueId()+" no encontrado"));
 
+        applyMatchResult(participation1, participation2, match, token, botId);
+    }
+
+    private void applyMatchResult(Participation p1, Participation p2, Match match, String token, Integer botId) {
         boolean isSenderLocal = (match.getBot1id().equals(botId)); // asume bot1id es el local
-        Participation sender = isSenderLocal ? participation1 : participation2;
-        Participation other = isSenderLocal ? participation2 : participation1;
-        int result = 0;
+        Participation sender = isSenderLocal ? p1 : p2;
+        Participation other = isSenderLocal ? p2 : p1;
+        int result = RESULT_DRAW;
         switch (token) {
             case TOKEN_LOCAL_WIN:
                 applyWinLoss(sender, other, isSenderLocal);
-                result = 1;
+                result = RESULT_LOCAL_WIN;
                 break;
             case TOKEN_VISITING_WIN:
                 applyWinLoss(sender, other, !isSenderLocal);
-                result = -1;
+                result = RESULT_VISITING_WIN;
                 break;
             case TOKEN_DRAW:
                 applyDraw(sender, other);
         }
         match.setResult(result);
-        participationRepository.save(sender);
-        participationRepository.save(other);
         match.setState(State.COMPLETED);
         matchRepository.save(match);
     }
 
     private void applyWinLoss(Participation sender, Participation other, boolean senderWon) {
+        Bot senderBot = botRepository.findById(sender.getBotId())
+                .orElseThrow(() -> new EntityNotFoundException("Bot "+sender.getBotId()+"no encontrado"));
+        Bot otherBot = botRepository.findById(other.getBotId())
+            .orElseThrow(() -> new EntityNotFoundException("Bot "+other.getBotId()+"no encontrado"));
         if (senderWon) {
             sender.setNWins(sender.getNWins()+1);
+            senderBot.setNWins(senderBot.getNWins()+1);
             sender.setPoints(sender.getPoints()+POINTS_WIN);
+
             other.setNLoses(other.getNLoses()+1);
             other.setPoints(other.getPoints()+POINTS_LOSE);
+            otherBot.setNLosses(other.getNLoses()+1);
         } else {
             sender.setNLoses(sender.getNLoses()+1);
+            senderBot.setNLosses(senderBot.getNLosses()+1);
             sender.setPoints(sender.getPoints()+POINTS_LOSE);
+
             other.setNWins(other.getNWins()+1);
+            otherBot.setNWins(otherBot.getNWins()+1);
             other.setPoints(other.getPoints()+POINTS_WIN);
         }
+        saveParticipationAndBot(sender, senderBot);
+        saveParticipationAndBot(other, otherBot);
     }
 
     private void applyDraw(Participation sender, Participation other) {
+        Bot senderBot = botRepository.findById(sender.getBotId())
+                .orElseThrow(() -> new EntityNotFoundException("Bot "+sender.getBotId()+"no encontrado"));
+        Bot otherBot = botRepository.findById(other.getBotId())
+                .orElseThrow(() -> new EntityNotFoundException("Bot "+other.getBotId()+"no encontrado"));
         sender.setNDraws(sender.getNDraws()+1);
         sender.setPoints(sender.getPoints()+POINTS_DRAW);
+        senderBot.setNDraws(senderBot.getNDraws()+1);
+
         other.setNDraws(other.getNDraws()+1);
         other.setPoints(other.getPoints()+POINTS_DRAW);
+        otherBot.setNDraws(otherBot.getNDraws()+1);
+
+        saveParticipationAndBot(sender, senderBot);
+        saveParticipationAndBot(other, otherBot);
+    }
+
+    private void saveParticipationAndBot(Participation p1, Bot b1) {
+        participationRepository.save(p1);
+        botRepository.save(b1);
     }
 
     @Override
