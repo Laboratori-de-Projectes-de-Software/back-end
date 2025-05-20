@@ -1,6 +1,7 @@
 package com.debateia.adapter.mapper;
 
 import com.debateia.adapter.in.rest.bot.BotMessageDTO;
+import com.debateia.adapter.in.rest.bot.GeneratedMessageDTO;
 import com.debateia.adapter.in.rest.match.MessageResponseDTO;
 import com.debateia.adapter.out.bot.BotEntity;
 import com.debateia.adapter.out.match.MatchEntity;
@@ -9,7 +10,6 @@ import com.debateia.domain.Messages;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDateTime;
 
@@ -22,10 +22,24 @@ public interface MessageMapper {
     @Mapping(target = "matchId", source = "match.id")
     Messages toDomain(MessageEntity entity);
 
-    @Mapping(source = "text", target = "contents")
-    @Mapping(source = "timestamp", target = "timestamp", qualifiedByName = "stringToLocalDateTime")
-    @Mapping(source = "botId", target = "botId")
-    Messages DTOtoDomain(BotMessageDTO dto);
+    @Mapping(target = "contents", source = "message")
+    @Mapping(target = "timestamp", source = "timestamp", qualifiedByName = "stringToLocalDateTime")
+    @Mapping(target = "botId", source = "botId")
+    @Mapping(target = "matchId", source = "matchId")
+    Messages toDomain(BotMessageDTO dto);
+
+    @Mapping(target = "contents", source = "generatedMessage")
+    @Mapping(target = "timestamp", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "botId", source = "botId")
+    @Mapping(target = "matchId", source = "matchId")
+    Messages toDomain(GeneratedMessageDTO dto);
+
+    @Mapping(target = "botId", source = "message.botId")
+    @Mapping(target = "matchId", source = "message.matchId")
+    @Mapping(target = "message", source = "message.contents")
+    @Mapping(target = "system_message", source = "systemMessage")
+    @Mapping(target = "timestamp", source = "message.timestamp", qualifiedByName = "localDateTimeToString")
+    BotMessageDTO toBotMessage(Messages message, String systemMessage);
 
     @Mapping(target = "text", source = "contents")
     @Mapping(target = "time", expression = "java(dom.getTimestamp().toString())")
@@ -55,12 +69,11 @@ public interface MessageMapper {
 
     @Named("stringToLocalDateTime")
     default LocalDateTime stringToLocalDateTime(String timestamp) {
-        return LocalDateTime.parse(timestamp); // Use DateTimeFormatter if needed
+        return LocalDateTime.parse(timestamp);
     }
 
-    default Messages toDomainWithMatchId(BotMessageDTO dto, Integer matchId) {
-        Messages message = DTOtoDomain(dto);
-        message.setMatchId(matchId);
-        return message;
+    @Named("localDateTimeToString")
+    default String localDateTimeToString(LocalDateTime timestamp) {
+        return timestamp.toString();
     }
 }

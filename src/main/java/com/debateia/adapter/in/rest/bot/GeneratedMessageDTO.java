@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BotMessageDTO {
+public class GeneratedMessageDTO {
     private Integer botId;
     private Integer matchId;
-    private String message;
-    private String system_message;
-    private String timestamp;
+    private String generatedMessage;
 }

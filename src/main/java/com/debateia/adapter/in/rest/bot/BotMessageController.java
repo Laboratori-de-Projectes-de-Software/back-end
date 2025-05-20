@@ -11,10 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 @RestController
-@RequestMapping("/message")
+@RequestMapping("/bot")
 @RequiredArgsConstructor
 public class BotMessageController {
 
@@ -23,18 +21,15 @@ public class BotMessageController {
     private final BotRepository botRepository;
     private final BotMessagingAdapter botMessaging;
 
-    @PostMapping("/{matchId}")
-    public ResponseEntity<Void> receiveMessageFromBot(
-            @PathVariable Integer matchId,
-            @RequestBody BotMessageDTO dto) {
-        Messages message = messageMapper.toDomainWithMatchId(dto, matchId);
-
+    @PostMapping("/message")
+    public ResponseEntity<Void> receiveMessageFromBot(@RequestBody BotMessageDTO dto) {
+        Messages message = messageMapper.toDomain(dto);
         botMessageReceiver.receiveBotMessage(message);
 
-        Bot bot = botRepository.findById(message.getBotId()).orElseThrow(() -> new EntityNotFoundException("Bot no encontrado para id " + dto.getBotId()));
-        String botApiUrl = bot.getEndpoint();
-        botMessaging.sendMessageToBot(message, botApiUrl);
+        Bot bot = botRepository.findById(message.getBotId())
+                .orElseThrow(() -> new EntityNotFoundException("Bot no encontrado para id " + dto.getBotId()));
 
+        botMessaging.sendMessageToBot(message, dto.getSystem_message(), bot.getEndpoint());
         return ResponseEntity.ok().build();
     }
 }
