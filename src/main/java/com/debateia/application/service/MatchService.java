@@ -1,6 +1,8 @@
 package com.debateia.application.service;
 
 import com.debateia.adapter.in.rest.league.State;
+import com.debateia.application.ports.in.rest.BotUseCase;
+import com.debateia.application.ports.in.rest.LeagueUseCase;
 import com.debateia.application.ports.in.rest.MatchUseCase;
 import com.debateia.application.ports.out.persistence.*;
 import com.debateia.domain.Bot;
@@ -19,9 +21,10 @@ import java.util.*;
 public class MatchService implements MatchUseCase {
     private final MatchRepository matchRepository;
     private final BotRepository botRepository;
-    private final LeagueRepository leagueRepository;
     private final MessageRepository messageRepository;
     private final ParticipationRepository participationRepository;
+    private final BotUseCase botUseCase;
+    private final LeagueUseCase leagueUseCase;
     private final static int POINTS_WIN = 3;
     private final static int POINTS_DRAW = 1;
     private final static int POINTS_LOSE = 0;
@@ -44,25 +47,17 @@ public class MatchService implements MatchUseCase {
         if (token != null && VALID_END_TOKENS.contains(token)) { // placeholder
             return true;
         }
-        Match match = matchRepository.findById(matchId)
-                .orElseThrow(() -> new EntityNotFoundException("Match con ID \""+matchId+"\" no encontrado"));
+        Match match = getMatchById(matchId);
         long n_messages = messageRepository.countByMatchId(match.getMatchId());
-        League league = leagueRepository.findById(match.getLeagueId())
-                .orElseThrow(() -> new EntityNotFoundException("League con ID \""+match.getLeagueId()+"\" no encontrado"));
+        League league = leagueUseCase.getLeague(match.getLeagueId());
         return n_messages >= league.getMatchMaxMessages();
     }
 
     @Override
     public void finalizeMatch(Integer matchId, String token, Integer botId) {
-        Match match = matchRepository.findById(matchId)
-                .orElseThrow(() -> new EntityNotFoundException("Match con ID \""+matchId+"\" no encontrado"));
-        Participation participation1 = participationRepository.findById(match.getLeagueId(), match.getBot1id())
-                .orElseThrow(() -> new EntityNotFoundException("Participation de bot "+match.getBot1id()
-                        +" en liga " +match.getLeagueId()+" no encontrado"));
-        Participation participation2 = participationRepository.findById(match.getLeagueId(), match.getBot2id())
-                .orElseThrow(() -> new EntityNotFoundException("Participation de bot "+match.getBot2id()
-                        +" en liga " +match.getLeagueId()+" no encontrado"));
-
+        Match match = getMatchById(matchId);
+        Participation participation1 = getParticipation(match.getLeagueId(), match.getBot1id());
+        Participation participation2 = getParticipation(match.getLeagueId(), match.getBot2id());
         applyMatchResult(participation1, participation2, match, token, botId);
     }
 
@@ -81,7 +76,8 @@ public class MatchService implements MatchUseCase {
                 result = RESULT_VISITING_WIN;
                 break;
             case TOKEN_DRAW:
-                applyDraw(sender, other);
+                applyDraw(sender);
+                applyDraw(other);
         }
         match.setResult(result);
         match.setState(State.COMPLETED);
@@ -89,10 +85,8 @@ public class MatchService implements MatchUseCase {
     }
 
     private void applyWinLoss(Participation sender, Participation other, boolean senderWon) {
-        Bot senderBot = botRepository.findById(sender.getBotId())
-                .orElseThrow(() -> new EntityNotFoundException("Bot "+sender.getBotId()+"no encontrado"));
-        Bot otherBot = botRepository.findById(other.getBotId())
-            .orElseThrow(() -> new EntityNotFoundException("Bot "+other.getBotId()+"no encontrado"));
+        Bot senderBot = botUseCase.getBotById(sender.getBotId());
+        Bot otherBot = botUseCase.getBotById(other.getBotId());
         if (senderWon) {
             sender.setNWins(sender.getNWins()+1);
             senderBot.setNWins(senderBot.getNWins()+1);
@@ -114,26 +108,29 @@ public class MatchService implements MatchUseCase {
         saveParticipationAndBot(other, otherBot);
     }
 
-    private void applyDraw(Participation sender, Participation other) {
-        Bot senderBot = botRepository.findById(sender.getBotId())
-                .orElseThrow(() -> new EntityNotFoundException("Bot "+sender.getBotId()+"no encontrado"));
-        Bot otherBot = botRepository.findById(other.getBotId())
-                .orElseThrow(() -> new EntityNotFoundException("Bot "+other.getBotId()+"no encontrado"));
-        sender.setNDraws(sender.getNDraws()+1);
-        sender.setPoints(sender.getPoints()+POINTS_DRAW);
-        senderBot.setNDraws(senderBot.getNDraws()+1);
+    private void applyDraw(Participation participation) {
+        Bot bot = botUseCase.getBotById(participation.getBotId());
+        participation.setNDraws(participation.getNDraws()+1);
+        participation.setPoints(participation.getPoints()+POINTS_DRAW);
+        bot.setNDraws(bot.getNDraws()+1);
 
-        other.setNDraws(other.getNDraws()+1);
-        other.setPoints(other.getPoints()+POINTS_DRAW);
-        otherBot.setNDraws(otherBot.getNDraws()+1);
-
-        saveParticipationAndBot(sender, senderBot);
-        saveParticipationAndBot(other, otherBot);
+        saveParticipationAndBot(participation, bot);
     }
 
     private void saveParticipationAndBot(Participation p1, Bot b1) {
         participationRepository.save(p1);
         botRepository.save(b1);
+    }
+
+    private Participation getParticipation(Integer leagueId, Integer botId) { // No hay service/useCase definido
+        return participationRepository.findById(leagueId, botId)
+                .orElseThrow(() -> new EntityNotFoundException("Participation de bot "+botId
+                        +" en liga " +leagueId+" no encontrado"));
+    }
+
+    private Match getMatchById(Integer matchId) {
+        return matchRepository.findById(matchId)
+                .orElseThrow(() -> new EntityNotFoundException("Match con ID \"" + matchId + "\" no encontrado"));
     }
 
     @Override
