@@ -1,6 +1,5 @@
 package com.debateia.adapter.out.message;
 
-import com.debateia.adapter.out.message.MessageJpaRepository;
 import com.debateia.adapter.mapper.MessageMapper;
 import com.debateia.application.ports.out.persistence.MessageRepository;
 import com.debateia.domain.Messages;
@@ -22,6 +21,6 @@ public class MessageRepo implements MessageRepository {
 
     @Override
     public long countByMatchId(int matchId) {
-        return messageJpaRepository.countByMatch_Id(matchId);
+        return messageJpaRepository.countByMatchId(matchId);
     }
 }
