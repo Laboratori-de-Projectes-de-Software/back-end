@@ -85,27 +85,21 @@ public class MatchService implements MatchUseCase {
     }
 
     private void applyWinLoss(Participation sender, Participation other, boolean senderWon) {
-        Bot senderBot = botUseCase.getBotById(sender.getBotId());
-        Bot otherBot = botUseCase.getBotById(other.getBotId());
-        if (senderWon) {
-            sender.setNWins(sender.getNWins()+1);
-            senderBot.setNWins(senderBot.getNWins()+1);
-            sender.setPoints(sender.getPoints()+POINTS_WIN);
+        Participation winner = senderWon ? sender : other;
+        Participation loser = senderWon ? other : sender;
+        Bot botWinner = botUseCase.getBotById(winner.getBotId());
+        Bot botLoser = botUseCase.getBotById(loser.getBotId());
 
-            other.setNLoses(other.getNLoses()+1);
-            other.setPoints(other.getPoints()+POINTS_LOSE);
-            otherBot.setNLosses(other.getNLoses()+1);
-        } else {
-            sender.setNLoses(sender.getNLoses()+1);
-            senderBot.setNLosses(senderBot.getNLosses()+1);
-            sender.setPoints(sender.getPoints()+POINTS_LOSE);
+        winner.setNWins(winner.getNWins()+1);
+        botWinner.setNWins(botWinner.getNWins()+1);
+        winner.setPoints(winner.getPoints()+POINTS_WIN);
 
-            other.setNWins(other.getNWins()+1);
-            otherBot.setNWins(otherBot.getNWins()+1);
-            other.setPoints(other.getPoints()+POINTS_WIN);
-        }
-        saveParticipationAndBot(sender, senderBot);
-        saveParticipationAndBot(other, otherBot);
+        loser.setNLoses(loser.getNLoses()+1);
+        botLoser.setNLosses(botLoser.getNLosses()+1);
+        loser.setPoints(loser.getPoints()+POINTS_LOSE);
+
+        saveParticipationAndBot(winner, botWinner);
+        saveParticipationAndBot(loser, botLoser);
     }
 
     private void applyDraw(Participation participation) {
