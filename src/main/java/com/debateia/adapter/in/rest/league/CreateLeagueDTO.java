@@ -4,17 +4,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.List;
 
 @NoArgsConstructor
 @Data
-@JsonTypeName("LeagueDTO")
-public class LeagueDTO implements Serializable {
-    private int id;
+@JsonTypeName("CreateLeagueDTO")
+public class CreateLeagueDTO implements Serializable {
     private String name;
-    private String imageUrl;
+    private String urlImagen;
     private Integer rounds;
     private long matchMaxMessages;
-    private List<Integer> bots;
-    private State state;
+    //private int userId;
 }

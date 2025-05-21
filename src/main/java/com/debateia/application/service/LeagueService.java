@@ -1,6 +1,7 @@
 package com.debateia.application.service;
 
 import com.debateia.application.ports.in.rest.LeagueUseCase;
+import com.debateia.application.ports.in.rest.MatchUseCase;
 import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.LeagueRepository;
 import com.debateia.application.ports.out.persistence.ParticipationRepository;
@@ -24,7 +25,7 @@ public class LeagueService implements LeagueUseCase {
     private final BotRepository botRepository;
     private final UserRepository userRepository;
     private final ParticipationRepository partRepository;
-    private final MatchService matchService;
+    private final MatchUseCase matchUseCase;
     
     @Override
     public League postLeague(League l) throws DataIntegrityViolationException {
@@ -112,7 +113,7 @@ public class LeagueService implements LeagueUseCase {
         League lg = league.get();
         
         if (lg.getBotIds().size() > 1)
-            matchService.createLeagueMatches(lg);
+            matchUseCase.createLeagueMatches(lg);
         
         lg.setState("IN_PROCESS");
         leagueRepository.saveLeague(lg);

@@ -1,18 +1,16 @@
 package com.debateia.adapter.in.rest.bot;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.*;
 
 import java.io.Serializable;
 
 @NoArgsConstructor
 @Data
-public class BotDTO implements Serializable {
-    private int id;
+@JsonTypeName("BotDTO")
+public class CreateBotDTO implements Serializable {
     private String name;
     private String quality;
     private String imageUrl;
     private String apiUrl;
-    private int nWins;
-    private int nLosses;
-    private int nDraws;
 }

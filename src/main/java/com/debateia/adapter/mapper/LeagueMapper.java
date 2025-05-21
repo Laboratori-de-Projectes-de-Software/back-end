@@ -1,8 +1,8 @@
 package com.debateia.adapter.mapper;
 
 import com.debateia.adapter.in.rest.league.State;
+import com.debateia.adapter.in.rest.league.CreateLeagueDTO;
 import com.debateia.adapter.in.rest.league.LeagueDTO;
-import com.debateia.adapter.in.rest.league.LeagueResponseDTO;
 import com.debateia.adapter.out.league.LeagueEntity;
 import com.debateia.adapter.out.participation.ParticipationEntity;
 import com.debateia.adapter.out.user.UserEntity;
@@ -21,16 +21,14 @@ public interface LeagueMapper {
     LeagueMapper INSTANCE = Mappers.getMapper(LeagueMapper.class);
     
     @Mapping(target = "state", source = "state", qualifiedByName = "mapStateToEnum")
-    @Mapping(target = "user", source = "userId")
     @Mapping(target = "bots", source = "botIds")
-    LeagueResponseDTO toLeagueResponseDTO(League league);
+    LeagueDTO toLeagueResponseDTO(League league);
     
-    @Mapping(target = "botIds", source = "bots")
     @Mapping(target = "state", constant = "PENDING")
     @Mapping(target = "leagueId", ignore = true)
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "matchIds", ignore = true)
-    League toDomain(LeagueDTO dto);
+    League toDomain(CreateLeagueDTO dto);
     
     @Mapping(target = "leagueId", source = "id")
     @Mapping(target = "matchIds", source = "matches", qualifiedByName = "mapMatchesToIds")

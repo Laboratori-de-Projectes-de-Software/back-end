@@ -20,6 +20,6 @@ public class Match {
     private Integer result;
     private Integer roundNumber;
     
-    private List<String> fighters; // nombre de los bots (bot.name)
+    private List<Bot> fighters; // nombre de los bots (bot.name)
 
 }
