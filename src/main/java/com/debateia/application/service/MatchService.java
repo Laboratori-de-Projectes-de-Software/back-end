@@ -22,15 +22,16 @@ public class MatchService implements MatchUseCase {
     private final MatchRepository matchRepository;
     private final BotRepository botRepository;
     private final MessageRepository messageRepository;
+    private final LeagueRepository leagueRepository;
     private final ParticipationRepository participationRepository;
     private final BotUseCase botUseCase;
-    private final LeagueUseCase leagueUseCase;
+
     private final static int POINTS_WIN = 3;
     private final static int POINTS_DRAW = 1;
     private final static int POINTS_LOSE = 0;
-    private final static int RESULT_LOCAL_WIN = 1;
-    private final static int RESULT_DRAW = 0;
-    private final static int RESULT_VISITING_WIN = -1;
+    private final static int RESULT_LOCAL_WIN = 0;
+    private final static int RESULT_DRAW = -1;
+    private final static int RESULT_VISITING_WIN = 1;
     // Token placeholders
     private final static String TOKEN_LOCAL_WIN = "LOCAL";
     private final static String TOKEN_VISITING_WIN = "VISITING";
@@ -49,7 +50,8 @@ public class MatchService implements MatchUseCase {
         }
         Match match = getMatchById(matchId);
         long n_messages = messageRepository.countByMatchId(match.getMatchId());
-        League league = leagueUseCase.getLeague(match.getLeagueId());
+        League league = leagueRepository.findById(match.getLeagueId())
+                .orElseThrow(() -> new EntityNotFoundException("Liga con ID " + match.getMatchId() + " no encontrado"));
         return n_messages >= league.getMatchMaxMessages();
     }
 
