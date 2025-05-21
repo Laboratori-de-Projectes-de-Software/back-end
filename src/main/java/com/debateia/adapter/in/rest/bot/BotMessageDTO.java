@@ -11,6 +11,5 @@ public class BotMessageDTO {
     private Integer botId;
     private Integer matchId;
     private String message;
-    private String system_message;
     private String timestamp;
 }

@@ -24,8 +24,6 @@ public interface MessageMapper {
 
     @Mapping(target = "contents", source = "message")
     @Mapping(target = "timestamp", source = "timestamp", qualifiedByName = "stringToLocalDateTime")
-    @Mapping(target = "botId", source = "botId")
-    @Mapping(target = "matchId", source = "matchId")
     Messages toDomain(BotMessageDTO dto);
 
     @Mapping(target = "contents", source = "generatedMessage")
@@ -34,12 +32,9 @@ public interface MessageMapper {
     @Mapping(target = "matchId", source = "matchId")
     Messages toDomain(GeneratedMessageDTO dto);
 
-    @Mapping(target = "botId", source = "message.botId")
-    @Mapping(target = "matchId", source = "message.matchId")
-    @Mapping(target = "message", source = "message.contents")
-    @Mapping(target = "system_message", source = "systemMessage")
-    @Mapping(target = "timestamp", source = "message.timestamp", qualifiedByName = "localDateTimeToString")
-    BotMessageDTO toBotMessage(Messages message, String systemMessage);
+    @Mapping(target = "message", source = "contents")
+    @Mapping(target = "timestamp", source = "timestamp", qualifiedByName = "localDateTimeToString")
+    BotMessageDTO toBotMessage(Messages message);
 
     @Mapping(target = "text", source = "contents")
     @Mapping(target = "time", expression = "java(dom.getTimestamp().toString())")

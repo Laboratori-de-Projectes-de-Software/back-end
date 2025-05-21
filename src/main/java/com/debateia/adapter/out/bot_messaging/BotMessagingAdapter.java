@@ -16,9 +16,9 @@ public class BotMessagingAdapter implements BotMessagingPort {
     private final MessageMapper messageMapper;
 
     @Override
-    public void sendMessageToBot(Messages messages, String systemMesage, String botEndPoint) {
+    public void sendMessageToBot(Messages messages, String botEndPoint) {
         String url = botEndPoint + "/bot/message";
-        BotMessageDTO requestDTO = messageMapper.toBotMessage(messages, systemMesage);
+        BotMessageDTO requestDTO = messageMapper.toBotMessage(messages);
         restTemplate.postForEntity(url, requestDTO, Void.class);
     }
 }
