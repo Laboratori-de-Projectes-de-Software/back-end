@@ -25,12 +25,6 @@ public interface MessageMapper {
     @Mapping(target = "timestamp", source = "timestamp", qualifiedByName = "stringToLocalDateTime")
     Messages toDomain(BotMessageDTO dto);
 
-    @Mapping(target = "contents", source = "generatedMessage")
-    @Mapping(target = "timestamp", expression = "java(LocalDateTime.now())")
-    @Mapping(target = "botId", source = "botId")
-    @Mapping(target = "matchId", source = "matchId")
-    Messages toDomain(GeneratedMessageDTO dto);
-
     @Mapping(target = "message", source = "contents")
     @Mapping(target = "timestamp", source = "timestamp", qualifiedByName = "localDateTimeToString")
     BotMessageDTO toBotMessage(Messages message);
