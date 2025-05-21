@@ -1,5 +1,5 @@
 package com.debateia.adapter.in.rest.league;
-import com.debateia.adapter.in.rest.match.MatchResponseDTO;
+import com.debateia.adapter.in.rest.match.MatchDTO;
 import com.debateia.adapter.mapper.LeagueMapper;
 import com.debateia.adapter.mapper.MatchMapper;
 import com.debateia.adapter.mapper.PartMapper;
@@ -34,8 +34,8 @@ public class LeagueController {
     private final MatchMapper matchMapper;
     
     @PostMapping
-    public ResponseEntity<LeagueResponseDTO> postLeague(
-            @RequestBody LeagueDTO league,
+    public ResponseEntity<LeagueDTO> postLeague(
+            @RequestBody CreateLeagueDTO league,
             @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication) {
         
         if (authentication == null || !authentication.startsWith("Bearer ")) {
@@ -60,7 +60,7 @@ public class LeagueController {
     }
     
     @GetMapping
-    public ResponseEntity<List<LeagueResponseDTO>> getAllLeagues(
+    public ResponseEntity<List<LeagueDTO>> getAllLeagues(
             @RequestParam(name = "owner", required = false) Integer ownerId) {
         
         List<League> leagues;
@@ -72,7 +72,7 @@ public class LeagueController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         
-        List<LeagueResponseDTO> response = leagues.stream()
+        List<LeagueDTO> response = leagues.stream()
                 .map(leagueMapper::toLeagueResponseDTO)
                 .toList(); // conversion a DTO muy prog funcional :3
         
@@ -80,7 +80,7 @@ public class LeagueController {
     }
     
     @GetMapping("/{leagueId}")
-    public ResponseEntity<LeagueResponseDTO> getLeague(@PathVariable Integer leagueId) {
+    public ResponseEntity<LeagueDTO> getLeague(@PathVariable Integer leagueId) {
         try {
             League lg = leagueUseCase.getLeague(leagueId);
             return ResponseEntity.ok(leagueMapper.toLeagueResponseDTO(lg));
@@ -92,9 +92,9 @@ public class LeagueController {
     }
     
     @PutMapping("/{leagueId}")
-    public ResponseEntity<LeagueResponseDTO> updateLeague(
+    public ResponseEntity<LeagueDTO> updateLeague(
             @PathVariable Integer leagueId,
-            @RequestBody LeagueDTO league,
+            @RequestBody CreateLeagueDTO league,
             @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication) {
         
         if (authentication == null || !authentication.startsWith("Bearer ")) {
@@ -145,12 +145,12 @@ public class LeagueController {
     }
     // Convertimos l
     @GetMapping("/{leagueId}/leaderboard")
-    public ResponseEntity<List<ParticipationResponseDTO>> getScores(@PathVariable Integer leagueId) {
+    public ResponseEntity<List<ParticipationDTO>> getScores(@PathVariable Integer leagueId) {
         try {
             List<Participation> scores = leagueUseCase.getScores(leagueId);
             
             // Convertimos lista de participaciones a lista de ParticipationResponseDTO
-            List<ParticipationResponseDTO> response = scores.stream()
+            List<ParticipationDTO> response = scores.stream()
                 .map(elem -> partMapper.toDTO(elem))
                 .collect(Collectors.toList());
             
@@ -163,7 +163,7 @@ public class LeagueController {
     }
     
     @DeleteMapping("/{leagueId}")
-    public ResponseEntity<LeagueResponseDTO> deleteLeague(
+    public ResponseEntity<LeagueDTO> deleteLeague(
             @PathVariable Integer leagueId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication) {
         
@@ -196,7 +196,7 @@ public class LeagueController {
     }
 
     @GetMapping("/{leagueId}/match")
-    public ResponseEntity<List<MatchResponseDTO>> getMatchesLeague(@PathVariable Integer leagueId) {
+    public ResponseEntity<List<MatchDTO>> getMatchesLeague(@PathVariable Integer leagueId) {
         //@TODO esto en la API pone que es en /league pero es un findMatchesByLeagueId, igual deberia ir en MatchController?
         // ante la duda lo programo en matchService, seria super facil cambiarlo
         try {

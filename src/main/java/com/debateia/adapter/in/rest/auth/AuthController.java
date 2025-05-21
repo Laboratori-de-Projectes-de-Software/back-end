@@ -9,7 +9,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -33,11 +32,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserDTOLogin loginRequest) {
+    public ResponseEntity<?> login(@RequestBody UserLoginDTO loginRequest) {
         try {
             User user = authUseCase.authenticate(loginRequest);
             TokenData td = authUseCase.generateTokens(user);
-            UserResponseDTO response = new UserResponseDTO(td.accessToken(), td.expiresIn(), user.getUsername(), user.getUserId(), user.getMail());
+            AuthenticatedUserDTO response = new AuthenticatedUserDTO(td.accessToken(), td.expiresIn(), user.getUsername(), user.getUserId(), user.getMail());
             return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
@@ -52,7 +51,7 @@ public class AuthController {
         User updatedUser = authUseCase.updateCred(authentication, request);
         try {
             TokenData td = authUseCase.generateTokens(updatedUser);
-            final UserResponseDTO response = new UserResponseDTO(td.accessToken(), td.expiresIn(), updatedUser.getUsername(), updatedUser.getUserId(), updatedUser.getMail());
+            final AuthenticatedUserDTO response = new AuthenticatedUserDTO(td.accessToken(), td.expiresIn(), updatedUser.getUsername(), updatedUser.getUserId(), updatedUser.getMail());
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Registration failed: Invalid request.");
@@ -60,12 +59,12 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<UserResponseDTO> refreshToken(
+    public ResponseEntity<AuthenticatedUserDTO> refreshToken(
             @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication) {
         try {
             User user = authUseCase.refreshToken(authentication);
             TokenData td = authUseCase.generateTokens(user);
-            return ResponseEntity.ok(new UserResponseDTO(td.accessToken(), td.expiresIn(), user.getUsername(), user.getUserId(), user.getMail()));
+            return ResponseEntity.ok(new AuthenticatedUserDTO(td.accessToken(), td.expiresIn(), user.getUsername(), user.getUserId(), user.getMail()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();  // Puedes retornar un mensaje de error si lo prefieres
         }

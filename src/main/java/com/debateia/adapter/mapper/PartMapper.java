@@ -1,6 +1,6 @@
 package com.debateia.adapter.mapper;
 
-import com.debateia.adapter.in.rest.league.ParticipationResponseDTO;
+import com.debateia.adapter.in.rest.league.ParticipationDTO;
 import com.debateia.adapter.out.participation.ParticipationEntity;
 import com.debateia.domain.Participation;
 import org.mapstruct.Mapper;
@@ -15,5 +15,5 @@ public interface PartMapper {
     @Mapping(target = "name", ignore = true) // <- The names of the bot cannot be directly obtained from the
     Participation toDomain(ParticipationEntity entity); // ParticipationEntity. We add it after the conversion manually.
     
-    ParticipationResponseDTO toDTO(Participation domain);
+    ParticipationDTO toDTO(Participation domain);
 }

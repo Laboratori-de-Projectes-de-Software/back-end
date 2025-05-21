@@ -1,7 +1,7 @@
 package com.debateia.adapter.mapper;
 
+import com.debateia.adapter.in.rest.bot.CreateBotDTO;
 import com.debateia.adapter.in.rest.bot.BotDTO;
-import com.debateia.adapter.in.rest.bot.BotResponseDTO;
 import com.debateia.adapter.in.rest.bot.BotSummaryResponseDTO;
 import com.debateia.adapter.out.bot.BotEntity;
 import com.debateia.adapter.out.user.UserEntity;
@@ -23,7 +23,7 @@ public interface BotMapper {
     @Mapping(target = "NWins", constant = "0")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)
-    Bot DTOtoDomain(BotDTO dto);
+    Bot DTOtoDomain(CreateBotDTO dto);
     
 
     @Mapping(target = "userId", source = "user", qualifiedByName = "extractUserId")
@@ -39,7 +39,7 @@ public interface BotMapper {
     
     @Mapping(target = "id", source = "id")
     @Mapping(target = "imageUrl", source = "urlImagen")
-    BotResponseDTO toResponseDto(Bot bot);
+    BotDTO toResponseDto(Bot bot);
     
     @Named("extractUserId")
     default Integer extractUserId(UserEntity user) {

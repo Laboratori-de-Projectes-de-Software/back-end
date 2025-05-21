@@ -7,13 +7,10 @@ import java.io.Serializable;
 
 @NoArgsConstructor
 @Data
-public class BotResponseDTO implements Serializable {
-    private int id;
+@JsonTypeName("BotDTO")
+public class CreateBotDTO implements Serializable {
     private String name;
     private String quality;
     private String imageUrl;
     private String apiUrl;
-    private int nWins;
-    private int nLosses;
-    private int nDraws;
 }

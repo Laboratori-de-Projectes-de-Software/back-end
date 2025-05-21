@@ -42,10 +42,10 @@ public class BotController {
     }
 
     @PostMapping
-    public ResponseEntity<BotResponseDTO> createBot(
+    public ResponseEntity<BotDTO> createBot(
             @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication,
-            @RequestBody BotDTO botDto) {
-        Bot botIn = botMapper.DTOtoDomain(botDto);
+            @RequestBody CreateBotDTO createBotDto) {
+        Bot botIn = botMapper.DTOtoDomain(createBotDto);
         Bot bot;
         if (authentication == null || !authentication.startsWith("Bearer ")) {
             throw new IllegalArgumentException("Invalid auth header");
@@ -58,12 +58,12 @@ public class BotController {
             System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-        BotResponseDTO botResponse = botMapper.toResponseDto(bot);
+        BotDTO botResponse = botMapper.toResponseDto(bot);
         return ResponseEntity.status(HttpStatus.CREATED).body(botResponse);
     }
 
     @GetMapping("/{botId}")
-    public ResponseEntity<BotResponseDTO> getBotById(
+    public ResponseEntity<BotDTO> getBotById(
             @PathVariable Integer botId) {
         try {
             Bot bot = botUseCase.getBotById(botId);
@@ -75,11 +75,11 @@ public class BotController {
     }
 
     @PutMapping("/{botId}")
-    public ResponseEntity<BotResponseDTO> updateBot(
+    public ResponseEntity<BotDTO> updateBot(
             @RequestHeader(HttpHeaders.AUTHORIZATION) final String authentication,
             @PathVariable Integer botId,
-            @RequestBody BotDTO botDto) {
-        Bot botIn = botMapper.DTOtoDomain(botDto);
+            @RequestBody CreateBotDTO createBotDto) {
+        Bot botIn = botMapper.DTOtoDomain(createBotDto);
         if (authentication == null || !authentication.startsWith("Bearer ")) {
             throw new IllegalArgumentException("Invalid auth header");
         }
@@ -87,7 +87,7 @@ public class BotController {
         final Integer userId = jwtUseCase.extractUserId(authToken);
         try {
             Bot botUpdate = botUseCase.updateBot(botId, userId, botIn);
-            BotResponseDTO response = botMapper.toResponseDto(botUpdate);
+            BotDTO response = botMapper.toResponseDto(botUpdate);
             return ResponseEntity.ok(response);
         } catch (EntityNotFoundException e) { // bot/usuario asociado no existe
             System.err.println(e.getMessage());

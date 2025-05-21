@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-@JsonTypeName("ParticipationResponseDTO")
-public class ParticipationResponseDTO implements Serializable {
+@JsonTypeName("ParticipationDTO")
+public class ParticipationDTO implements Serializable {
     private int botId;
     private String botName;
     private int points;
