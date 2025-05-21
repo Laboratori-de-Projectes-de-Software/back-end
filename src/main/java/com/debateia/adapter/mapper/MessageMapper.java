@@ -1,7 +1,6 @@
 package com.debateia.adapter.mapper;
 
 import com.debateia.adapter.in.rest.bot.BotMessageDTO;
-import com.debateia.adapter.in.rest.bot.GeneratedMessageDTO;
 import com.debateia.adapter.in.rest.match.MessageResponseDTO;
 import com.debateia.adapter.out.bot.BotEntity;
 import com.debateia.adapter.out.match.MatchEntity;

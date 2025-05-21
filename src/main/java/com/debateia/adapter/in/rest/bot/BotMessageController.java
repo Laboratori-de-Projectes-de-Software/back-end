@@ -6,12 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/bot")
+@RequestMapping("/message")
 @RequiredArgsConstructor
 public class BotMessageController {
     private final BotMessageReceiverUseCase useCase;
 
-    @PostMapping("/bot/message")
+    @PostMapping("/{matchId}")
     public ResponseEntity<Void> receiveMessage(@RequestBody BotMessageDTO dto) {
         useCase.receiveAndProcessBotMessage(dto);
         return ResponseEntity.ok().build();
