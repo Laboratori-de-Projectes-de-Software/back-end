@@ -113,33 +113,24 @@ public class MatchService implements MatchUseCase {
 
     @Override
     public Match startMatch(int matchId) {
-        // obtener Match por ID
         Match match = getMatchById(matchId);
 
-        // comprobar que el partido no haya sido iniciado
         if (match.getState() != State.PENDING)
             throw new RuntimeException("El partido ya fue iniciado. (Estado actual: " + match.getState() + ")");
 
-        // cambiar estado a in process
         match.setState(State.IN_PROCESS);
-
-        // actualizar match
         match = matchRepository.updateMatch(matchId, match);
 
-        // obtener bot1
         Bot bot1 = botService.getBotById(match.getBot1id());
 
-        // crear mensaje
         Messages msg = new Messages(PROMPT, LocalDateTime.now(), bot1.getId(), matchId);
         // enviar mensaje (se persistirá a través del BotMessagingPort)
         botMessagingPort.sendMessageToBot(msg, bot1.getEndpoint());
 
-        // devolver match
         return match;
     }
 
     private Match getMatchById (Integer matchId) {
-        // buscar match en la BD
         Optional <Match> matchFound = matchRepository.findById(matchId);
         if (matchFound.isEmpty())
             throw new EntityNotFoundException("Match con id " + matchId + " no encontrado");

@@ -9,5 +9,5 @@ public interface MatchRepository {
     Optional<Match> findById(Integer matchId);
     List<Match> findByLeagueId(Integer leagueId);
     List<Match> saveAll(List<Match> matches);
-    Match updateMatch(Integer id, Match match);
+    Match updateMatch(Match match);
 }

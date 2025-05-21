@@ -32,7 +32,7 @@ public class MatchController {
                 .stream().map(messageMapper::toResponseDTO).toList());
     }
 
-    @GetMapping("/{matchId}/start")
+    @PostMapping("/{matchId}/start")
     public ResponseEntity<MatchResponseDTO> startMatch(@PathVariable Integer matchId) {
         try {
             return ResponseEntity.ok(matchMapper.toResponseDTO(matchUseCase.startMatch(matchId)));

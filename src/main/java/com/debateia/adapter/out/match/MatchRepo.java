@@ -33,12 +33,8 @@ public class MatchRepo implements MatchRepository {
     }
 
     @Override
-    public Match updateMatch(Integer id, Match match) {
-        MatchEntity toSave = matchMapper.toEntity(match);
-
-        toSave.setId(id);
-        MatchEntity saved = matchJpaRepository.save(toSave);
-
+    public Match updateMatch(Match match) {
+        MatchEntity saved = matchJpaRepository.save(matchMapper.toEntity(match));
         return matchMapper.toDomain(saved);
     }
 }
