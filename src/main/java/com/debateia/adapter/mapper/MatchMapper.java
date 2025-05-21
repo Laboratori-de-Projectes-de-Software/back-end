@@ -1,11 +1,10 @@
 package com.debateia.adapter.mapper;
 
 import com.debateia.adapter.in.rest.league.State;
-import com.debateia.adapter.in.rest.match.MatchResponseDTO;
+import com.debateia.adapter.in.rest.match.MatchDTO;
 import com.debateia.adapter.out.bot.BotEntity;
 import com.debateia.adapter.out.league.LeagueEntity;
 import com.debateia.adapter.out.match.MatchEntity;
-import com.debateia.domain.Bot;
 import com.debateia.domain.Match;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -34,11 +33,11 @@ public interface MatchMapper {
     @Mapping(target = "league", source = "leagueId", qualifiedByName = "mapLeagueIdToEntity")
     MatchEntity toEntity(Match dom);
     
-    @Mapping(target = "matchId", source = "matchId")
+    @Mapping(target = "id", source = "matchId")
     @Mapping(target = "state", source = "state")
     @Mapping(target = "result", source = "result")
     @Mapping(target = "roundNumber", source = "roundNumber")
-    MatchResponseDTO toResponseDTO(Match dom);
+    MatchDTO toResponseDTO(Match dom);
     
     @Named("stringToState")
     default State stringToState(String state) {

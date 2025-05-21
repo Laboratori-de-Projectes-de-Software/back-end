@@ -2,7 +2,7 @@ package com.debateia.application.service;
 
 import com.debateia.application.ports.in.rest.AuthUseCase;
 import com.debateia.adapter.in.rest.auth.UpdateCredRequest;
-import com.debateia.adapter.in.rest.auth.UserDTOLogin;
+import com.debateia.adapter.in.rest.auth.UserLoginDTO;
 import com.debateia.adapter.in.rest.auth.UserDTORegister;
 import com.debateia.adapter.in.rest.auth.TokenData;
 import com.debateia.application.ports.in.rest.JWTUseCase;
@@ -60,7 +60,7 @@ public class AuthService implements AuthUseCase {
 
 
     @Override
-    public User authenticate(final UserDTOLogin request) {
+    public User authenticate(final UserLoginDTO request) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -154,7 +154,7 @@ public User updateCred(@NotNull final String authentication, UpdateCredRequest r
             throw new IllegalArgumentException("Invalid refresh token");
         }
 
-        // Generar un nuevo accessToken
+        // Generar un nuevo token
         return user;
     }
 
