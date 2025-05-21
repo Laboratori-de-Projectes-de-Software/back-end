@@ -87,13 +87,13 @@ public class MatchService implements MatchUseCase {
         }
 
         for (int[] par : combinations) { // iterar combinaciones de Matches
-            int botA = botIds.get(par[0]);
-            int botB = botIds.get(par[1]);
+            Bot botA = botRepository.findById(botIds.get(par[0])).get();
+            Bot botB = botRepository.findById(botIds.get(par[1])).get();
 
             Match match = new Match();
-            match.setBot1id(botA);
-            match.setBot2id(botB);
-            match.setFighters(List.of(botNames.get(botA), botNames.get(botB)));
+            match.setBot1id(botA.getId());
+            match.setBot2id(botB.getId());
+            match.setFighters(List.of(botA, botB));
             matches.add(match);
         }
         return matches;

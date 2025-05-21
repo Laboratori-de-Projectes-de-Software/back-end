@@ -15,6 +15,6 @@ public class MatchDTO implements Serializable {
     private int id;
     private State state;
     private int result;
-    private List<String> fighters; // nombre de los bots
+    private List<BotDTO> fighters; // nombre de los bots
     private int roundNumber;
 }
