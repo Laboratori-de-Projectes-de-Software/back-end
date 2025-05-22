@@ -11,4 +11,5 @@ import java.util.List;
 public interface MatchUseCase {
     public List<Match> getMatchesByLeagueId(Integer leagueId);
     public List<Match> createLeagueMatches(League league);
+    Match getMatchById(Integer matchId);
 }

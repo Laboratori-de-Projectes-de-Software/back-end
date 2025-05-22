@@ -7,6 +7,7 @@ import com.debateia.application.ports.out.persistence.MatchRepository;
 import com.debateia.domain.Bot;
 import com.debateia.domain.League;
 import com.debateia.domain.Match;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,12 @@ public class MatchService implements MatchUseCase {
         });
         matchRepository.saveAll(matches);
         return matches;
+    }
+
+    @Override
+    public Match getMatchById(Integer matchId) {
+        return matchRepository.findById(matchId)
+                .orElseThrow(() -> new EntityNotFoundException("Match no encontrada con id: " + matchId));
     }
 
     public void res(){
