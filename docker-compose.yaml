@@ -19,7 +19,7 @@ services:
       dockerfile: Dockerfile
     container_name: debateia-app
     ports:
-      - "5173:5173"
+      - "8081:8081"
     environment:
       SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/human_traits?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
       SPRING_DATASOURCE_USERNAME: "root"
