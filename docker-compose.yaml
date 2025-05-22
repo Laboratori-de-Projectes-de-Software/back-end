@@ -28,7 +28,8 @@ services:
     networks:
       - lab-network
     depends_on:
-      - db
+      db: 
+        condition: service_started
     restart: always
 
 networks:
