@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8
+    container_name: debateia-db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=putauib777
+      - MYSQL_DATABASE=human_traits
+    networks:
+      - lab-network
+    restart: always
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: debateia-app
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/human_traits?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "putauib777"
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: "com.mysql.cj.jdbc.Driver"
+    networks:
+      - lab-network
+    depends_on:
+      db: 
+        condition: service_started
+    restart: always
+
+networks:
+  lab-network:
+    driver: bridge
