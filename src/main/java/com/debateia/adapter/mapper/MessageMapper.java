@@ -21,12 +21,12 @@ public interface MessageMapper {
     @Mapping(target = "matchId", source = "match.id")
     Messages toDomain(MessageEntity entity);
 
-    @Mapping(target = "contents", source = "message")
-    @Mapping(target = "timestamp", source = "timestamp", qualifiedByName = "stringToLocalDateTime")
+    @Mapping(target = "contents", source = "text")
+    @Mapping(target = "timestamp", source = "time", qualifiedByName = "stringToLocalDateTime")
     Messages toDomain(BotMessageDTO dto);
 
-    @Mapping(target = "message", source = "contents")
-    @Mapping(target = "timestamp", source = "timestamp", qualifiedByName = "localDateTimeToString")
+    @Mapping(target = "text", source = "contents")
+    @Mapping(target = "time", source = "timestamp", qualifiedByName = "localDateTimeToString")
     BotMessageDTO toBotMessage(Messages message);
 
     @Mapping(target = "text", source = "contents")

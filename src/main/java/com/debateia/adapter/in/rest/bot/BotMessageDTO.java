@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BotMessageDTO {
     private Integer botId;
-    private Integer matchId;
-    private String message;
-    private String timestamp;
+    private String text;
+    private String time;
 }
