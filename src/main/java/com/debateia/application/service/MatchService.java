@@ -27,7 +27,7 @@ public class MatchService implements MatchUseCase {
 
     private final MatchRepository matchRepository;
     private final BotRepository botRepository;
-    private final BotUseCase botService;
+    private final BotUseCase botUseCase;
     // TODO: incluir interface
     private final BotMessagingPort botMessagingPort;
 
@@ -121,7 +121,7 @@ public class MatchService implements MatchUseCase {
         match.setState(State.IN_PROCESS);
         match = matchRepository.updateMatch(matchId, match);
 
-        Bot bot1 = botService.getBotById(match.getBot1id());
+        Bot bot1 = botUseCase.getBotById(match.getBot1id());
 
         Messages msg = new Messages(PROMPT, LocalDateTime.now(), bot1.getId(), matchId);
         // enviar mensaje (se persistirá a través del BotMessagingPort)
