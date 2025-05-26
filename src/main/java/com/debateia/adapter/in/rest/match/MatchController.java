@@ -2,6 +2,8 @@ package com.debateia.adapter.in.rest.match;
 
 
 import com.debateia.adapter.mapper.MessageMapper;
+import com.debateia.adapter.mapper.MatchMapper;
+import com.debateia.application.ports.in.rest.MatchUseCase;
 import com.debateia.application.ports.in.rest.MessageUseCase;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,8 @@ import java.util.List;
 public class MatchController {
     private final MessageUseCase messageUseCase;
     private final MessageMapper messageMapper;
+    private final MatchUseCase matchUseCase;
+    private final MatchMapper matchMapper;
 
     @GetMapping("/{matchId}/message")
     public ResponseEntity<List<MessageDTO>> getMatchMessages(@PathVariable Integer matchId) {
@@ -31,6 +35,22 @@ public class MatchController {
         } catch (EntityNotFoundException e) {
             System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/{matchId}/start")
+    public ResponseEntity<MatchResponseDTO> startMatch(@PathVariable Integer matchId) {
+        try {
+            return ResponseEntity.ok(matchMapper.toResponseDTO(matchUseCase.startMatch(matchId)));
+
+        } catch (EntityNotFoundException e) {
+            // Match o bot no encontrados
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (RuntimeException e) {
+            // El Match ya fue iniciado anteriormente
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 }
