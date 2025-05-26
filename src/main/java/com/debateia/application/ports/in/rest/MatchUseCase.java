@@ -13,4 +13,5 @@ public interface MatchUseCase {
     public List<Match> createLeagueMatches(League league);
     public boolean isMatchFinished(Integer matchId, String token);
     public void finalizeMatch(Integer matchId, String token, Integer botId);
+    public Match startMatch(int matchId);
 }

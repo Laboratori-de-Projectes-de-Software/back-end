@@ -2,23 +2,33 @@ package com.debateia.application.service;
 
 import com.debateia.adapter.in.rest.league.State;
 import com.debateia.application.ports.in.rest.BotUseCase;
-import com.debateia.application.ports.in.rest.LeagueUseCase;
 import com.debateia.application.ports.in.rest.MatchUseCase;
-import com.debateia.application.ports.out.persistence.*;
+import com.debateia.application.ports.out.bot_messaging.BotMessagingPort;
+import com.debateia.application.ports.out.persistence.BotRepository;
+import com.debateia.application.ports.out.persistence.LeagueRepository;
+import com.debateia.application.ports.out.persistence.MatchRepository;
+import com.debateia.application.ports.out.persistence.MessageRepository;
+import com.debateia.application.ports.out.persistence.ParticipationRepository;
 import com.debateia.domain.Bot;
 import com.debateia.domain.League;
 import com.debateia.domain.Match;
+import com.debateia.domain.Messages;
 import com.debateia.domain.Participation;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 
 public class MatchService implements MatchUseCase {
+    // PROMPT
+    final String PROMPT = "eres un bot hecho para discutir";
+
     private final MatchRepository matchRepository;
     private final BotRepository botRepository;
     private final MessageRepository messageRepository;
@@ -37,6 +47,7 @@ public class MatchService implements MatchUseCase {
     private final static String TOKEN_VISITING_WIN = "VISITING";
     private final static String TOKEN_DRAW = "DRAW";
     private final static Set<String> VALID_END_TOKENS = Set.of(TOKEN_LOCAL_WIN, TOKEN_VISITING_WIN, TOKEN_DRAW);
+    private final BotMessagingPort botMessagingPort;
 
     @Override
     public List<Match> getMatchesByLeagueId(Integer leagueId) {
@@ -201,5 +212,24 @@ public class MatchService implements MatchUseCase {
             matches.add(match);
         }
         return matches;
+    }
+
+    @Override
+    public Match startMatch(int matchId) {
+        Match match = getMatchById(matchId);
+
+        if (match.getState() != State.PENDING)
+            throw new RuntimeException("El partido ya fue iniciado. (Estado actual: " + match.getState() + ")");
+
+        match.setState(State.IN_PROGRESS);
+        match = matchRepository.updateMatch(match);
+
+        Bot bot1 = botUseCase.getBotById(match.getBot1id());
+
+        Messages msg = new Messages(PROMPT, LocalDateTime.now(), bot1.getId(), matchId);
+        // enviar mensaje (se persistirá a través del BotMessagingPort)
+        botMessagingPort.sendMessageToBot(msg, bot1.getEndpoint());
+
+        return match;
     }
 }
