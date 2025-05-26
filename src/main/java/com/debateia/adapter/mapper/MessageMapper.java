@@ -1,6 +1,6 @@
 package com.debateia.adapter.mapper;
 
-import com.debateia.adapter.in.rest.match.MessageResponseDTO;
+import com.debateia.adapter.in.rest.match.MessageDTO;
 import com.debateia.adapter.out.message.MessageEntity;
 import com.debateia.domain.Messages;
 import org.mapstruct.Mapper;
@@ -19,6 +19,6 @@ public interface MessageMapper {
     Messages toDomain(MessageEntity entity);
     
     @Mapping(target = "text", source = "contents")
-    @Mapping(target = "time", expression = "java(dom.getTimestamp().toString())")
-    MessageResponseDTO toResponseDTO(Messages dom);
+    @Mapping(target = "timestamp", expression = "java(dom.getTimestamp().toString())")
+    MessageDTO toResponseDTO(Messages dom);
 }
