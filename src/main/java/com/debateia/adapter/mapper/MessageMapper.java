@@ -40,6 +40,7 @@ public abstract class MessageMapper {
     public abstract BotMessageDTO toBotMessage(Messages message);
 
     @Mapping(target = "text", source = "contents")
+  
     @Mapping(target = "time", expression = "java(dom.getTimestamp().toString())")
     public abstract MessageResponseDTO toResponseDTO(Messages dom);
 
