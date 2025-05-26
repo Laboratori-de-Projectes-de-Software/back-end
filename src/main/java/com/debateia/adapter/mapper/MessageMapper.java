@@ -28,6 +28,7 @@ public interface MessageMapper {
     BotMessageDTO toBotMessage(Messages message);
 
     @Mapping(target = "text", source = "contents")
+  
     @Mapping(target = "time", expression = "java(dom.getTimestamp().toString())")
     MessageResponseDTO toResponseDTO(Messages dom);
 

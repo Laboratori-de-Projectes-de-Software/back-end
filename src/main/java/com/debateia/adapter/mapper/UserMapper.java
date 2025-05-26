@@ -1,6 +1,6 @@
 package com.debateia.adapter.mapper;
 
-import com.debateia.adapter.in.rest.auth.UserResponseDTO;
+import com.debateia.adapter.in.rest.auth.AuthenticatedUserDTO;
 import com.debateia.adapter.out.bot.BotEntity;
 import com.debateia.adapter.out.league.LeagueEntity;
 import com.debateia.adapter.out.user.UserEntity;
@@ -31,8 +31,8 @@ public interface UserMapper {
     User entityToDomain(UserEntity entity);
     
     @Mapping(target = "user", source = "username")
-    @Mapping(target = "accessToken", source = "token")
-    UserResponseDTO toResponseDTO(User user);
+    @Mapping(target = "token", source = "token")
+    AuthenticatedUserDTO toResponseDTO(User user);
     
     @Named("leagueIdToEntity")
     default LeagueEntity leagueIdToEntity(Integer leagueId) {

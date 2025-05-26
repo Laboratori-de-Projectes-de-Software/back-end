@@ -1,5 +1,6 @@
 package com.debateia.adapter.in.rest.match;
 
+import com.debateia.adapter.in.rest.bot.BotDTO;
 import com.debateia.adapter.in.rest.league.State;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.*;
@@ -9,11 +10,11 @@ import java.util.List;
 
 @NoArgsConstructor
 @Data
-@JsonTypeName("MatchResponseDTO")
-public class MatchResponseDTO implements Serializable {
-    private int matchId;
+@JsonTypeName("MatchDTO")
+public class MatchDTO implements Serializable {
+    private int id;
     private State state;
     private int result;
-    private List<String> fighters; // nombre de los bots
+    private List<BotDTO> fighters; // nombre de los bots
     private int roundNumber;
 }

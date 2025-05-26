@@ -1,24 +1,35 @@
 package com.debateia.application.service;
 
 import com.debateia.adapter.in.rest.league.State;
+import com.debateia.application.ports.in.rest.BotUseCase;
 import com.debateia.application.ports.in.rest.MatchUseCase;
+import com.debateia.application.ports.out.bot_messaging.BotMessagingPort;
 import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.MatchRepository;
 import com.debateia.domain.Bot;
 import com.debateia.domain.League;
 import com.debateia.domain.Match;
+import com.debateia.domain.Messages;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 
 public class MatchService implements MatchUseCase {
+    // PROMPT
+    final String PROMPT = "eres un bot hecho para discutir";
+
     private final MatchRepository matchRepository;
     private final BotRepository botRepository;
+    private final BotUseCase botUseCase;
+    // TODO: incluir interface
+    private final BotMessagingPort botMessagingPort;
 
     
     @Override
@@ -94,15 +105,42 @@ public class MatchService implements MatchUseCase {
         }
 
         for (int[] par : combinations) { // iterar combinaciones de Matches
-            int botA = botIds.get(par[0]);
-            int botB = botIds.get(par[1]);
+            Bot botA = botRepository.findById(botIds.get(par[0])).get();
+            Bot botB = botRepository.findById(botIds.get(par[1])).get();
 
             Match match = new Match();
-            match.setBot1id(botA);
-            match.setBot2id(botB);
-            match.setFighters(List.of(botNames.get(botA), botNames.get(botB)));
+            match.setBot1id(botA.getId());
+            match.setBot2id(botB.getId());
+            match.setFighters(List.of(botA, botB));
             matches.add(match);
         }
         return matches;
+    }
+
+    @Override
+    public Match startMatch(int matchId) {
+        Match match = getMatchById(matchId);
+
+        if (match.getState() != State.PENDING)
+            throw new RuntimeException("El partido ya fue iniciado. (Estado actual: " + match.getState() + ")");
+
+        match.setState(State.IN_PROCESS);
+        match = matchRepository.updateMatch(matchId, match);
+
+        Bot bot1 = botUseCase.getBotById(match.getBot1id());
+
+        Messages msg = new Messages(PROMPT, LocalDateTime.now(), bot1.getId(), matchId);
+        // enviar mensaje (se persistirá a través del BotMessagingPort)
+        botMessagingPort.sendMessageToBot(msg, bot1.getEndpoint());
+
+        return match;
+    }
+
+    private Match getMatchById (Integer matchId) {
+        Optional <Match> matchFound = matchRepository.findById(matchId);
+        if (matchFound.isEmpty())
+            throw new EntityNotFoundException("Match con id " + matchId + " no encontrado");
+
+        return matchFound.get();
     }
 }
