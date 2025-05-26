@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/match")
@@ -39,7 +40,7 @@ public class MatchController {
     }
 
     @PostMapping("/{matchId}/start")
-    public ResponseEntity<MatchResponseDTO> startMatch(@PathVariable Integer matchId) {
+    public ResponseEntity<MatchDTO> startMatch(@PathVariable Integer matchId) {
         try {
             return ResponseEntity.ok(matchMapper.toResponseDTO(matchUseCase.startMatch(matchId)));
 

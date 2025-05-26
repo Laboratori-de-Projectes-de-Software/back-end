@@ -35,6 +35,7 @@ public class MatchService implements MatchUseCase {
     private final LeagueRepository leagueRepository;
     private final ParticipationRepository participationRepository;
     private final BotUseCase botUseCase;
+    private final BotMessagingPort botMessagingPort;
 
     private final static int POINTS_WIN = 3;
     private final static int POINTS_DRAW = 1;
@@ -47,7 +48,6 @@ public class MatchService implements MatchUseCase {
     private final static String TOKEN_VISITING_WIN = "VISITING";
     private final static String TOKEN_DRAW = "DRAW";
     private final static Set<String> VALID_END_TOKENS = Set.of(TOKEN_LOCAL_WIN, TOKEN_VISITING_WIN, TOKEN_DRAW);
-    private final BotMessagingPort botMessagingPort;
 
     @Override
     public List<Match> getMatchesByLeagueId(Integer leagueId) {
