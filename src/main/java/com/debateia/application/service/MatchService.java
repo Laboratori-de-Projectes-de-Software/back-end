@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class MatchService implements MatchUseCase {
     private final ParticipationRepository participationRepository;
     private final BotUseCase botUseCase;
     private final BotMessagingPort botMessagingPort;
+    private final BotService botService;
 
     private final static int POINTS_WIN = 3;
     private final static int POINTS_DRAW = 1;
@@ -146,19 +148,15 @@ public class MatchService implements MatchUseCase {
 
         List<Match> matches;
         HashMap<Integer, String> names = new HashMap<>();
-        
-        for (Integer id : league.getBotIds()) {
-            Bot bot = botRepository.findById(id).get();
-            names.put(id, bot.getName());
-        }
+        List<Bot> bots = league.getBotIds().stream()
+                .map(botService::getBotById)
+                .toList();
 
-        matches = generateMatches(league.getBotIds(), names, league.getRounds());
-        
+        matches = generateMatches(bots, league.getRounds());
 
         matches.forEach(match -> {
             match.setLeagueId(league.getLeagueId());
             match.setState(State.PENDING);
-            match.setRoundNumber(league.getRounds());
             match.setResult(null);
             match.setMatchId(null);
         });
@@ -176,43 +174,38 @@ public class MatchService implements MatchUseCase {
      * El orden de local y visitante variará entre rounds dependiendo de si es una ronda par o impar.
      * @return Lista de Matches con SOLO bot1id, bot2id setteados
      */
-    private List<Match> generateMatches(List<Integer> botIds, HashMap<Integer, String> botNames, int rounds) {
+    private List<Match> generateMatches(List<Bot> bots, int rounds) {
+        return Stream.iterate(1, round -> round <= rounds, round -> round + 1)
+                .map(round -> generateRoundMatches(bots, round))
+                .flatMap(List::stream)
+                .toList();
+    }
 
-        int nbots = botIds.size();
-        int matchesPerRound = (nbots * (nbots - 1))/2;
-
-        List<Match> matches = new ArrayList<>(rounds * matchesPerRound);
-
-        List<int[]> oddCombinations = new ArrayList<>();
-        List<int[]> evenCombinations = new ArrayList<>();
-        List<int[]> combinations = new ArrayList<>();
-
-        for (int i = 0; i < nbots; i++) { // generar combinaciones de bots
-            for (int j = i + 1; j < nbots; j++) {
-                oddCombinations.add(new int[]{i, j});
-                evenCombinations.add(new int[]{j, i});
+    private List<Match> generateRoundMatches(List<Bot> bots, int round) {
+        List<Match> matches = new ArrayList<>();
+        for(int i = 0; i < bots.size() - 1; i++) {
+            for(int j = i + 1; j < bots.size(); j++) {
+                matches.add(
+                    createMatchWithBots(bots.get(i), bots.get(j), round)
+                );
             }
         }
+        return matches;
+    }
 
-        for (int i = 1; i <= rounds; i++) {
-            if(i % 2 == 0){
-                combinations.addAll(oddCombinations);
-            } else {
-                combinations.addAll(evenCombinations);
-            }
-        }
-
-        for (int[] par : combinations) { // iterar combinaciones de Matches
-            Bot botA = botRepository.findById(botIds.get(par[0])).get();
-            Bot botB = botRepository.findById(botIds.get(par[1])).get();
-
-            Match match = new Match();
+    private static Match createMatchWithBots(Bot botA, Bot botB, int round) {
+        Match match = new Match();
+        match.setRoundNumber(round);
+        if(round % 2 == 0) {
             match.setBot1id(botA.getId());
             match.setBot2id(botB.getId());
             match.setFighters(List.of(botA, botB));
-            matches.add(match);
+        } else {
+            match.setBot1id(botB.getId());
+            match.setBot2id(botA.getId());
+            match.setFighters(List.of(botB, botA));
         }
-        return matches;
+        return match;
     }
 
     @Override
@@ -229,7 +222,7 @@ public class MatchService implements MatchUseCase {
 
         Messages msg = new Messages(PROMPT, LocalDateTime.now(), bot1.getId(), matchId);
         // enviar mensaje (se persistirá a través del BotMessagingPort)
-        botMessagingPort.sendMessageToBot(msg, bot1.getEndpoint());
+        botMessagingPort.sendMessageToBot(msg, bot1);
 
         return match;
     }

@@ -6,10 +6,7 @@ import com.debateia.application.ports.out.persistence.BotRepository;
 import com.debateia.application.ports.out.persistence.LeagueRepository;
 import com.debateia.application.ports.out.persistence.ParticipationRepository;
 import com.debateia.application.ports.out.persistence.UserRepository;
-import com.debateia.domain.Bot;
-import com.debateia.domain.League;
-import com.debateia.domain.Participation;
-import com.debateia.domain.User;
+import com.debateia.domain.*;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +23,7 @@ public class LeagueService implements LeagueUseCase {
     private final UserRepository userRepository;
     private final ParticipationRepository partRepository;
     private final MatchUseCase matchUseCase;
+    private final BotService botService;
     
     @Override
     public League postLeague(League l) throws DataIntegrityViolationException {
@@ -84,7 +82,7 @@ public class LeagueService implements LeagueUseCase {
         
         List<Participation> list = partRepository.findByLeagueId(leagueId);
         for (Participation p : list) {
-            Bot b = botRepository.findById(p.getBotId()).get();
+            Bot b = botService.getBotById(p.getBotId());
             p.setName(b.getName());
         }
         return list;
@@ -111,9 +109,13 @@ public class LeagueService implements LeagueUseCase {
             throw new EntityNotFoundException("Liga con ID " + leagueId + " no encontrada");
         
         League lg = league.get();
-        
-        if (lg.getBotIds().size() > 1)
-            matchUseCase.createLeagueMatches(lg);
+
+        // TODO Check if league is already started!
+
+        if (lg.getBotIds().size() > 1) {
+            List<Match> matches = matchUseCase.createLeagueMatches(lg);
+            lg.setMatchIds(matches.stream().map(Match::getMatchId).toList());
+        }
         
         lg.setState("IN_PROCESS");
         leagueRepository.saveLeague(lg);

@@ -3,6 +3,7 @@ package com.debateia.adapter.out.bot_messaging;
 import com.debateia.adapter.in.rest.bot.BotMessageDTO;
 import com.debateia.adapter.mapper.MessageMapper;
 import com.debateia.application.ports.out.bot_messaging.BotMessagingPort;
+import com.debateia.domain.Bot;
 import com.debateia.domain.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,8 +17,8 @@ public class BotMessagingAdapter implements BotMessagingPort {
     private final MessageMapper messageMapper;
 
     @Override
-    public void sendMessageToBot(Messages messages, String botEndPoint) {
-        String url = botEndPoint + "/message/" + messages.getMatchId();
+    public void sendMessageToBot(Messages messages, Bot bot) {
+        String url = bot.getEndpoint() + "/message/" + messages.getMatchId();
         BotMessageDTO requestDTO = messageMapper.toBotMessage(messages);
         restTemplate.postForEntity(url, requestDTO, Void.class);
     }

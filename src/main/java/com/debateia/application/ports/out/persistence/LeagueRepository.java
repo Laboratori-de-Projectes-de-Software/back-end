@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LeagueRepository {
-    public Optional<League> findById(Integer leagueId);
-    public League saveLeague(League l);
-    public void deleteById(Integer leagueId);
-    public League updateLeague(Integer leagueId, League l);
+    Optional<League> findById(Integer leagueId);
+    League saveLeague(League l);
+    void deleteById(Integer leagueId);
+    League updateLeague(Integer leagueId, League l);
     List<League> findAll();
     List<League> findByUserId(Integer userId);
 }

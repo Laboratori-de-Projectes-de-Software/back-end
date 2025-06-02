@@ -1,7 +1,8 @@
 package com.debateia.application.ports.out.bot_messaging;
 
+import com.debateia.domain.Bot;
 import com.debateia.domain.Messages;
 
 public interface BotMessagingPort {
-    void sendMessageToBot(Messages messages, String botEndPoint);
+    void sendMessageToBot(Messages messages, Bot bot);
 }

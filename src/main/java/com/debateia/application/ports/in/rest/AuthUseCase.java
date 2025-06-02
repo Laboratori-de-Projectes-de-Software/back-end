@@ -19,5 +19,5 @@ public interface AuthUseCase {
 
     User refreshToken(@NotNull final String authentication);
     
-    public TokenData generateTokens(User user);
+    TokenData generateTokens(User user);
 }

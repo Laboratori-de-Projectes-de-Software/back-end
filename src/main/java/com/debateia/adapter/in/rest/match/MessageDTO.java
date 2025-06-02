@@ -1,6 +1,5 @@
 package com.debateia.adapter.in.rest.match;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.*;
 
 import java.io.Serializable;

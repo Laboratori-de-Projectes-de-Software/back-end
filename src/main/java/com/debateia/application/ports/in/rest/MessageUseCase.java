@@ -8,5 +8,5 @@ import java.util.List;
  * @author kjorda
  */
 public interface MessageUseCase {
-    public List<Messages> getMatchMessages(Integer matchId);
+    List<Messages> getMatchMessages(Integer matchId);
 }

@@ -1,7 +1,6 @@
 package com.debateia.adapter.out.match;
 
 import com.debateia.adapter.mapper.MatchMapper;
-import com.debateia.adapter.out.league.LeagueEntity;
 import com.debateia.application.ports.out.persistence.MatchRepository;
 import com.debateia.domain.Match;
 import lombok.RequiredArgsConstructor;

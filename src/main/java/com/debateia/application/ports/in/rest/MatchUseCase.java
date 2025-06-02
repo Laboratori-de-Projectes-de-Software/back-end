@@ -9,11 +9,11 @@ import java.util.List;
  * @author kjorda
  */
 public interface MatchUseCase {
-    public List<Match> getMatchesByLeagueId(Integer leagueId);
-    public List<Match> createLeagueMatches(League league);
-    public boolean isMatchFinished(Integer matchId, String token);
-    public void finalizeMatch(Integer matchId, String token, Integer botId);
+    List<Match> getMatchesByLeagueId(Integer leagueId);
+    List<Match> createLeagueMatches(League league);
+    boolean isMatchFinished(Integer matchId, String token);
+    void finalizeMatch(Integer matchId, String token, Integer botId);
     Match getMatchById(Integer matchId);
-    public Match startMatch(int matchId);
+    Match startMatch(int matchId);
 }
 

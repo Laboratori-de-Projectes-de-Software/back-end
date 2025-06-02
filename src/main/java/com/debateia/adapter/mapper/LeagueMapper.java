@@ -1,49 +1,59 @@
 package com.debateia.adapter.mapper;
 
-import com.debateia.adapter.in.rest.league.State;
 import com.debateia.adapter.in.rest.league.CreateLeagueDTO;
 import com.debateia.adapter.in.rest.league.LeagueDTO;
+import com.debateia.adapter.in.rest.league.State;
 import com.debateia.adapter.out.league.LeagueEntity;
+import com.debateia.adapter.out.match.MatchEntity;
 import com.debateia.adapter.out.participation.ParticipationEntity;
+import com.debateia.adapter.out.participation.ParticipationJpaRepository;
 import com.debateia.adapter.out.user.UserEntity;
+import com.debateia.adapter.out.user.UserJpaRepository;
+import com.debateia.adapter.out.user.UserRepo;
 import com.debateia.domain.League;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
-public interface LeagueMapper {
-    
-    LeagueMapper INSTANCE = Mappers.getMapper(LeagueMapper.class);
+public abstract class LeagueMapper {
+
+    @Autowired
+    protected UserJpaRepository userJpaRepository;
+
+    @Autowired
+    protected ParticipationJpaRepository participationJpaRepository;
     
     @Mapping(target = "state", source = "state", qualifiedByName = "mapStateToEnum")
     @Mapping(target = "bots", source = "botIds")
-    LeagueDTO toLeagueResponseDTO(League league);
+    public abstract LeagueDTO toLeagueResponseDTO(League league);
     
     @Mapping(target = "state", constant = "PENDING")
     @Mapping(target = "leagueId", ignore = true)
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "matchIds", ignore = true)
-    League toDomain(CreateLeagueDTO dto);
+    public abstract League toDomain(CreateLeagueDTO dto);
     
     @Mapping(target = "leagueId", source = "id")
     @Mapping(target = "matchIds", source = "matches", qualifiedByName = "mapMatchesToIds")
     @Mapping(target = "botIds", source = "participations", qualifiedByName = "mapParticipationsToIds")
     @Mapping(target = "userId", source = "user.id")
-    League toDomain(LeagueEntity entity);
+    public abstract League toDomain(LeagueEntity entity);
     
     @Mapping(target = "user", source = "userId", qualifiedByName = "mapUserIdToEntity")
     @Mapping(target = "matches", expression = "java(new ArrayList<>())")
-    @Mapping(target = "participations", source = "botIds", qualifiedByName = "mapBotIdsToParticipations")
+    @Mapping(target = "participations", expression = "java(this.mapBotIdsToParticipations(league.getBotIds(), league.getLeagueId()))")
     @Mapping(target = "id", source = "leagueId")
-    LeagueEntity toEntity(League league);
+    public abstract LeagueEntity toEntity(League league);
     
     @Named("mapStateToEnum")
-    default State mapStateToEnum(String state) {
+    protected State mapStateToEnum(String state) {
         try {
             return State.valueOf(state);
         } catch (Exception e) {
@@ -53,21 +63,15 @@ public interface LeagueMapper {
     }
     
     @Named("mapMatchesToIds")
-    default List<Integer> mapMatchesToIds(List<? extends Object> matches) {
+    protected List<Integer> mapMatchesToIds(List<MatchEntity> matches) {
         if (matches == null) return null;
         return matches.stream()
-                .map(match -> {
-                    try {
-                        return (Integer) match.getClass().getMethod("getId").invoke(match);
-                    } catch (Exception e) {
-                        return null;
-                    }
-                })
+                .map(MatchEntity::getId)
                 .collect(Collectors.toList());
     }
     
     @Named("mapParticipationsToIds")
-    default List<Integer> mapParticipationsToIds(List<ParticipationEntity> participations) {
+    protected List<Integer> mapParticipationsToIds(List<ParticipationEntity> participations) {
         if (participations == null) return null;
         return participations.stream()
                 .map(ParticipationEntity::getBotId)
@@ -75,27 +79,19 @@ public interface LeagueMapper {
     }
     
     @Named("mapUserIdToEntity")
-    default UserEntity mapUserIdToEntity(Integer userId) {
+    protected UserEntity mapUserIdToEntity(Integer userId) {
         if (userId == null) return null;
-        UserEntity dummy = new UserEntity();
-        dummy.setId(userId);
-        return dummy;
+        return userJpaRepository.findById(userId)
+                .orElseThrow(EntityNotFoundException::new);
     }
     
     @Named("mapBotIdsToParticipations")
-    default List<ParticipationEntity> mapBotIdsToParticipations(List<Integer> botIds) {
+    protected List<ParticipationEntity> mapBotIdsToParticipations(List<Integer> botIds, Integer leagueId) {
         if (botIds == null) return null;
         return botIds.stream()
                 .map(botId -> {
-                    ParticipationEntity entity = new ParticipationEntity();
-                    entity.setLeagueId(null); // This will be set after the league is created
-                    entity.setBotId(botId);
-                    entity.setPoints(0);
-                    entity.setPosition(0);
-                    entity.setNDraws(0);
-                    entity.setNWins(0);
-                    entity.setNLoses(0);
-                    return entity;
+                    return participationJpaRepository.findByLeagueIdAndBotId(leagueId, botId)
+                            .orElseThrow(EntityNotFoundException::new);
                 })
                 .collect(Collectors.toList());
     }

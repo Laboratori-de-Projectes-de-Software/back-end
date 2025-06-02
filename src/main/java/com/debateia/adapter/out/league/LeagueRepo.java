@@ -27,19 +27,9 @@ public class LeagueRepo implements LeagueRepository {
     @Override
     public League saveLeague(League lg) {
         LeagueEntity toSave = leagueMapper.toEntity(lg);
-        
-        List<ParticipationEntity> parts = toSave.getParticipations();
-        toSave.setParticipations(new ArrayList<>());
-        
-        LeagueEntity saved = leagueJpa.save(toSave); // Get league id
-        for (ParticipationEntity part : parts) {
-            part.setLeagueId(saved.getId()); // Set league id in participations
-        }
-        
-        saved.setParticipations(parts);
-        saved = leagueJpa.save(saved); // Update league (save with same id). Will create participations in DB.
-        
-        return leagueMapper.toDomain(saved);
+
+        return leagueMapper.toDomain(
+                leagueJpa.save(toSave));
     }
     
     

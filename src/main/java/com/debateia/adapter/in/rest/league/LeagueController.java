@@ -151,7 +151,7 @@ public class LeagueController {
             
             // Convertimos lista de participaciones a lista de ParticipationResponseDTO
             List<ParticipationDTO> response = scores.stream()
-                .map(elem -> partMapper.toDTO(elem))
+                .map(partMapper::toDTO)
                 .collect(Collectors.toList());
             
             return ResponseEntity.ok(response);

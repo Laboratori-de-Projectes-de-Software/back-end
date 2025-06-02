@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BotUseCase {
-    public List<Bot> getBots(Optional<Integer> ownerId);
-    public Bot createBot(Bot bot, Integer userId);
-    public Bot getBotById(Integer botId);
-    public Bot updateBot(Integer botId, Integer userId, Bot newBot);
+    List<Bot> getBots(Optional<Integer> ownerId);
+    Bot createBot(Bot bot, Integer userId);
+    Bot getBotById(Integer botId);
+    Bot updateBot(Integer botId, Integer userId, Bot newBot);
 }

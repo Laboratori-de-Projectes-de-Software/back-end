@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -41,8 +42,8 @@ public class LeagueEntity {
     private Long matchMaxMessages;
 
     @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<MatchEntity> matches;
+    private List<MatchEntity> matches = new ArrayList<>();
     
     @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ParticipationEntity> participations;
+    private List<ParticipationEntity> participations = new ArrayList<>();
 }

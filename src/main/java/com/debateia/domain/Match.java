@@ -1,10 +1,8 @@
 package com.debateia.domain;
 
 import com.debateia.adapter.in.rest.league.State;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 

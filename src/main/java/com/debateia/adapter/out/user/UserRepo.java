@@ -7,12 +7,16 @@ import java.util.Optional;
 
 import com.debateia.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class UserRepo implements UserRepository {
+
     private final UserJpaRepository userJpaRepository;
+
     private final UserMapper userMapper;
 
     @Override

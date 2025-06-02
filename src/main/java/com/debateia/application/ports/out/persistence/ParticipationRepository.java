@@ -6,8 +6,8 @@ import java.util.Optional;
 
 
 public interface ParticipationRepository {
-    public Participation save(Participation participation);
-    public void createParticipation(Integer leagueId, Integer botId);
-    public Optional<Participation> findById(Integer leagueId, Integer botId);
+    Participation save(Participation participation);
+    void createParticipation(Integer leagueId, Integer botId);
+    Optional<Participation> findById(Integer leagueId, Integer botId);
     List<Participation> findByLeagueId(Integer leagueId);
 }

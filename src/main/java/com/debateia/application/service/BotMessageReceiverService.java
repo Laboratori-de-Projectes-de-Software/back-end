@@ -40,6 +40,6 @@ public class BotMessageReceiverService implements BotMessageReceiverUseCase {
 
         Bot opponentBot = botUseCase.getBotById(opponentBotId);
 
-        messagingPort.sendMessageToBot(message, opponentBot.getEndpoint());
+        messagingPort.sendMessageToBot(message, opponentBot);
     }
 }

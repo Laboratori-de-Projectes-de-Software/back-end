@@ -1,6 +1,5 @@
 package com.debateia.adapter.out.match;
 
-import com.debateia.domain.Match;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

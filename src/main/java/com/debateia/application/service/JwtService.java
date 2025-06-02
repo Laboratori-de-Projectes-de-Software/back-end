@@ -19,11 +19,15 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class JwtService implements JWTUseCase {
+
     private final UserRepository repository;
+
     @Value("${spring.application.security.jwt.secret-key}")
     private String secretKey;
+
     @Value("${spring.application.security.jwt.expiration}")
     private long jwtExpiration;
+
     @Value("${spring.application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
 
