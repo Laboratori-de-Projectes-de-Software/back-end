@@ -1,7 +1,7 @@
 package com.debateia.adapter.mapper;
 
 import com.debateia.adapter.in.rest.bot.BotMessageDTO;
-import com.debateia.adapter.in.rest.match.MessageResponseDTO;
+import com.debateia.adapter.in.rest.match.MessageDTO;
 import com.debateia.adapter.out.bot.BotEntity;
 import com.debateia.adapter.out.bot.BotJpaRepository;
 import com.debateia.adapter.out.match.MatchEntity;
@@ -41,8 +41,8 @@ public abstract class MessageMapper {
 
     @Mapping(target = "text", source = "contents")
   
-    @Mapping(target = "time", expression = "java(dom.getTimestamp().toString())")
-    public abstract MessageResponseDTO toResponseDTO(Messages dom);
+    @Mapping(target = "timestamp", expression = "java(dom.getTimestamp().toString())")
+    public abstract MessageDTO toResponseDTO(Messages dom);
 
     @Mapping(target = "bot", source = "botId", qualifiedByName = "mapBotIdToEntity")
     @Mapping(target = "match", source = "matchId", qualifiedByName = "mapMatchIdToEntity")

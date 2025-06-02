@@ -35,11 +35,6 @@ public class MatchRepo implements MatchRepository {
         return matchMapper.toDomain(matchJpaRepository.save(matchMapper.toEntity(match)));
     }
 
-    @Override
-    public Optional<Match> findById(Integer matchId) {
-        return matchJpaRepository.findById(matchId).map(matchMapper::toDomain);
-    }
-
     public Match updateMatch(Match match) {
         MatchEntity saved = matchJpaRepository.save(matchMapper.toEntity(match));
         return matchMapper.toDomain(saved);
