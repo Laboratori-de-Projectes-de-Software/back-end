@@ -165,6 +165,12 @@ public class MatchService implements MatchUseCase {
         return matches;
     }
 
+    @Override
+    public Match getMatchById(Integer matchId) {
+        return matchRepository.findById(matchId)
+                .orElseThrow(() -> new EntityNotFoundException("Match no encontrada con id: " + matchId));
+    }
+
     public void res(){
         botRepository.findById(1);
     }

@@ -23,4 +23,10 @@ public class MessageRepo implements MessageRepository {
     public long countByMatchId(int matchId) {
         return messageJpaRepository.countByMatchId(matchId);
     }
+
+    public void save(Messages message) {
+        MessageEntity entity = messageMapper.toEntity(message);
+        messageJpaRepository.save(entity);
+    }
 }
+
