@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Messages {
+    private Integer id;
     /* Anadir atributos necesarios para trabajar con el dominio que esten en las Entities/DTOs */
     private String contents;
     private LocalDateTime timestamp;

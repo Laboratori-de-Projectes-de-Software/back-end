@@ -23,6 +23,7 @@ public interface BotMapper {
     @Mapping(target = "NWins", constant = "0")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "description", source = "quality")
     Bot DTOtoDomain(CreateBotDTO dto);
     
 
@@ -39,6 +40,7 @@ public interface BotMapper {
     
     @Mapping(target = "id", source = "id")
     @Mapping(target = "imageUrl", source = "urlImagen")
+    @Mapping(target = "quality", source = "description")
     BotDTO toResponseDto(Bot bot);
     
     @Named("extractUserId")

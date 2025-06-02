@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
@@ -22,10 +23,9 @@ public class BotMessageReceiverService implements BotMessageReceiverUseCase {
     private final BotUseCase botUseCase;
     private final MessageRepository messageRepo;
     private final BotMessagingPort messagingPort;
+    private final PromptProvider promptProvider;
 
     public void receiveAndProcessBotMessage(int matchId, Messages message) {
-
-        messageRepo.save(message);
         Match match = matchUseCase.getMatchById(matchId);
         Integer botId = message.getBotId();
 
@@ -40,6 +40,20 @@ public class BotMessageReceiverService implements BotMessageReceiverUseCase {
 
         Bot opponentBot = botUseCase.getBotById(opponentBotId);
 
-        messagingPort.sendMessageToBot(message, opponentBot);
+        messagingPort.sendMessageToBot(buildMessageForOpponent(message, opponentBot, match.getMessageIds().size() == 1), opponentBot);
     }
+
+    private Messages buildMessageForOpponent(Messages message, Bot opponentBot, boolean isFirstMessage) {
+        Messages newMessage = new Messages();
+        newMessage.setBotId(opponentBot.getId());
+        newMessage.setMatchId(message.getMatchId());
+        newMessage.setTimestamp(LocalDateTime.now());
+        if(isFirstMessage) {
+            newMessage.setContents(promptProvider.provideFollowingStatementForBot(opponentBot, message.getContents()));
+        } else {
+            newMessage.setContents(promptProvider.provideRegularMessageForBot(opponentBot, message.getContents()));
+        }
+        return newMessage;
+    }
+
 }

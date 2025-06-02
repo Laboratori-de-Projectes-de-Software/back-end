@@ -30,6 +30,7 @@ public class MessageEntity {
     @JoinColumn(name = "bot_id", nullable = false)
     private BotEntity bot;
 
+    @Column(columnDefinition = "TEXT")
     private String text;
 
     private LocalDateTime time;

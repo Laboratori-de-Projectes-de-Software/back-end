@@ -27,8 +27,6 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 
 public class MatchService implements MatchUseCase {
-    // PROMPT
-    final String PROMPT = "eres un bot hecho para discutir";
 
     private final MatchRepository matchRepository;
     private final BotRepository botRepository;
@@ -38,6 +36,7 @@ public class MatchService implements MatchUseCase {
     private final BotUseCase botUseCase;
     private final BotMessagingPort botMessagingPort;
     private final BotService botService;
+    private final PromptProvider promptProvider;
 
     private final static int POINTS_WIN = 3;
     private final static int POINTS_DRAW = 1;
@@ -220,8 +219,13 @@ public class MatchService implements MatchUseCase {
 
         Bot bot1 = botUseCase.getBotById(match.getBot1id());
 
-        Messages msg = new Messages(PROMPT, LocalDateTime.now(), bot1.getId(), matchId);
-        // enviar mensaje (se persistirá a través del BotMessagingPort)
+        Messages msg = new Messages(
+                null,
+                promptProvider.provideOpeningPromptForBot(bot1),
+                LocalDateTime.now(),
+                bot1.getId(),
+                matchId);
+
         botMessagingPort.sendMessageToBot(msg, bot1);
 
         return match;

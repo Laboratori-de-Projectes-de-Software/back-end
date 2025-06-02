@@ -8,6 +8,7 @@ import com.debateia.adapter.out.match.MatchEntity;
 import com.debateia.adapter.out.match.MatchJpaRepository;
 import com.debateia.adapter.out.message.MessageEntity;
 import com.debateia.domain.Messages;
+import jakarta.persistence.EntityExistsException;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -64,29 +65,15 @@ public abstract class MessageMapper {
     public BotEntity mapBotIdToEntity(Integer botId) {
         if (botId == null) return null;
 
-        Optional<BotEntity> existingBot = botRepository.findById(botId);
-
-        if (existingBot.isPresent()) {
-            return existingBot.get();
-        }
-
-        BotEntity bot = new BotEntity();
-        bot.setId(botId);
-        return bot;
+        return botRepository.findById(botId)
+                .orElseThrow(EntityExistsException::new);
     }
 
     @Named("mapMatchIdToEntity")
     public MatchEntity mapMatchIdToEntity(Integer matchId) {
         if (matchId == null) return null;
 
-        Optional<MatchEntity> existingMatch = matchRepository.findById(matchId);
-
-        if (existingMatch.isPresent()) {
-            return existingMatch.get();
-        }
-
-        MatchEntity match = new MatchEntity();
-        match.setId(matchId);
-        return match;
+        return matchRepository.findById(matchId)
+                .orElseThrow(EntityExistsException::new);
     }
 }
