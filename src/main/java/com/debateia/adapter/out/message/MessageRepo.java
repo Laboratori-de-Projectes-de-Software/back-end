@@ -19,4 +19,10 @@ public class MessageRepo implements MessageRepository {
     public List<Messages> findMessagesByMatch(Integer matchId) {
         return messageJpaRepository.findByMatchId(matchId).stream().map(messageMapper::toDomain).toList();
     }
+
+    @Override
+    public void save(Messages message) {
+        MessageEntity entity = messageMapper.toEntity(message);
+        messageJpaRepository.save(entity);
+    }
 }

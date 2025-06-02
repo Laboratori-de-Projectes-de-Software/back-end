@@ -10,4 +10,5 @@ import java.util.List;
  */
 public interface MessageRepository {
     List<Messages> findMessagesByMatch(Integer matchId);
+    void save(Messages message);
 }
