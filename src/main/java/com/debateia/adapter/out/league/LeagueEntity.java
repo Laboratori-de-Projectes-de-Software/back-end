@@ -38,7 +38,7 @@ public class LeagueEntity {
     private Integer rounds;
 
     @Column(name = "match_time")
-    private Long matchTime;
+    private Long matchMaxMessages;
 
     @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<MatchEntity> matches;

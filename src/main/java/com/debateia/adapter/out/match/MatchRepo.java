@@ -16,7 +16,6 @@ public class MatchRepo implements MatchRepository {
     private final MatchJpaRepository matchJpaRepository;
     private final MatchMapper matchMapper;
 
-    @Override
     public Optional<Match> findById(Integer matchId) {
         return matchJpaRepository.findById(matchId).map(matchMapper::toDomain);
     }
@@ -30,6 +29,10 @@ public class MatchRepo implements MatchRepository {
     public List<Match> saveAll(List<Match> matches) {
         return matchJpaRepository.saveAll(matches.stream().map(matchMapper::toEntity).toList())
                 .stream().map(matchMapper::toDomain).toList();
+    }
+
+    public Match save(Match match) {
+        return matchMapper.toDomain(matchJpaRepository.save(matchMapper.toEntity(match)));
     }
 
     @Override

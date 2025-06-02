@@ -1,6 +1,5 @@
 package com.debateia.domain;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -16,7 +15,7 @@ public class League {
     private String name;
     private String urlImagen;
     private Integer rounds;
-    private Long matchTime;
+    private Long matchMaxMessages;
     
     private List<Integer> matchIds;
     private List<Integer> botIds;
